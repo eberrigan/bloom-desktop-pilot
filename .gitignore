@@ -1,0 +1,52 @@
+# General OS generated files #
+###########################
+.DS_Store               # macOS folder custom attributes
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db             # Windows generated images thumbnails
+Thumbs.db
+Desktop.ini             # Windows folder settings
+
+# Editor directories and files #
+################################
+.vscode/                 # Visual Studio Code
+.idea/                   # IntelliJ, PyCharm, etc
+*.sublime-workspace      # Sublime Text
+*.sublime-project        # Sublime Text
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.bak
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+
+# Environment files #
+#####################
+.env
+.env.local
+.env.*.local
+
+# Ignore all markdown files except README
+*.md
+!README.md
+
+# Other common ignores #
+#######################
+/coverage                # Coverage reports
+/.vs                    # Visual Studio state files
+/.history
+*.tmp
+*.temp
+
+# Exclude specific files or directories (examples) #
+####################################################
+# /path/to/file.txt      # Exclude a specific file
+# /some_temp_directory/  # Exclude a specific directory
