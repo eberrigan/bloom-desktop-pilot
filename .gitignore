@@ -35,8 +35,8 @@ Desktop.ini             # Windows folder settings
 .env.*.local
 
 # Ignore all markdown files except README
-*.md
-!README.md
+# *.md
+# !README.md
 
 # Other common ignores #
 #######################
