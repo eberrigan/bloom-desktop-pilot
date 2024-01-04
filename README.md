@@ -11,7 +11,7 @@ To set up the environment for the pylon camera portion of the application, you n
 
 1. Create the `bloom-desktop` environment: `mamba create --name bloom-desktop`
 2. Activate the environment: `mamba activate bloom-desktop`
-3. Navigate to the `\pylon` directory in the repo: `cd bloom-desktop\pylon`
+3. Navigate to the `\pylon` directory in the repo: `cd bloom-desktop-pilot\pylon`
 4. Install the requirements using pip:
    `pip install -r requirements.txt`
 
