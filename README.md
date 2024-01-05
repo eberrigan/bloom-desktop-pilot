@@ -4,12 +4,15 @@
 This is a pilot project designed to interface with a camera and DAQ (Data Acquisition System) from an Electron-React application.
 
 ## Requirements
-This project is divided into two main parts: the pylon camera interface and the National Instruments DAQ (NI-DAQ) control.
+This project is divided into three main parts: the Pylon camera interface, the National Instruments DAQ (NI-DAQ) control, and the Electron desktop app.
 
-### Pylon Camera Interface
-To set up the environment for the pylon camera portion of the application, you need to install the necessary Python packages.
+You'll need to install some Python and Node packages to run these three components.
 
-Install the requirements using pip: `pip install -r requirements.txt`
+1. Create the `bloom-desktop` environment: `mamba create --name bloom-desktop`
+2. Activate the environment: `mamba activate bloom-desktop`
+3. Install conda requirements: `mamba install python=3.8 nodejs nidaqmx`
+3. Install pip requirements:
+   `pip install -r requirements.txt`
 
 ### NI-DAQ Control
 For controlling the NI-DAQ, you need to install some additional software from National Instruments.
@@ -19,3 +22,4 @@ For controlling the NI-DAQ, you need to install some additional software from Na
 
 **National Instruments DAQmx Driver:**
 - Install the latest NI-DAQmx driver from [NI-DAQmx Download](https://www.ni.com/en/support/downloads/drivers/download.ni-daq-mx.html#494676). The driver comes with NI Measurement & Automation Explorer (MAX), which is used to configure NI hardware devices.
+
