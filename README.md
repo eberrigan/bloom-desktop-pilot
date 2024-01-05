@@ -9,9 +9,7 @@ This project is divided into two main parts: the pylon camera interface and the 
 ### Pylon Camera Interface
 To set up the environment for the pylon camera portion of the application, you need to install the necessary Python packages.
 
-1. Navigate to the `\pylon` directory.
-2. Install the requirements using pip:
-   `pip install -r requirements.txt`
+Install the requirements using pip: `pip install -r requirements.txt`
 
 ### NI-DAQ Control
 For controlling the NI-DAQ, you need to install some additional software from National Instruments.
@@ -21,8 +19,3 @@ For controlling the NI-DAQ, you need to install some additional software from Na
 
 **National Instruments DAQmx Driver:**
 - Install the latest NI-DAQmx driver from [NI-DAQmx Download](https://www.ni.com/en/support/downloads/drivers/download.ni-daq-mx.html#494676). The driver comes with NI Measurement & Automation Explorer (MAX), which is used to configure NI hardware devices.
-
-**Python DAQmx Interface:**
-- Install the `nidaqmx` Python package:
-`pip install nidaqmx`
-

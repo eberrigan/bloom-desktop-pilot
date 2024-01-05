@@ -6,6 +6,12 @@ import time
 import imageio as iio
 from pypylon import pylon
 
+# Slow Scanner @ GH
+# ip_address = '10.0.0.45'
+
+# Scanner @ PBIO
+ip_address = '10.0.0.23'
+
 def grab_frames(n):
 
     # camera = pylon.InstantCamera(pylon.TlFactory.GetInstance().CreateFirstDevice())
@@ -13,7 +19,7 @@ def grab_frames(n):
     tlf = pylon.TlFactory.GetInstance()
     tl = tlf.CreateTl('BaslerGigE')
     cam_info = tl.CreateDeviceInfo()
-    cam_info.SetIpAddress('10.0.0.45')
+    cam_info.SetIpAddress(ip_address)
     camera = pylon.InstantCamera(tlf.CreateDevice(cam_info))
 
     camera.Open()

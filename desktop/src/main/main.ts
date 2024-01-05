@@ -32,8 +32,15 @@ ipcMain.on('ipc-example', async (event, arg) => {
   event.reply('ipc-example', msgTemplate('pong'));
 });
 
-const python = 'C:\\Users\\PBIOB-GH.PBIOB-GH-05\\.conda\\envs\\pylon\\python.exe'
-const pylon = 'C:\\Users\\PBIOB-GH.PBIOB-GH-05\\Documents\\bloom\\pylon\\pylon.py'
+// Settings for the Slow Scanner @ Greenhouse
+// const python = 'C:\\Users\\PBIOB-GH.PBIOB-GH-05\\.conda\\envs\\pylon\\python.exe'
+// const pylon = 'C:\\Users\\PBIOB-GH.PBIOB-GH-05\\Documents\\bloom\\pylon\\pylon.py'
+// const image_dir = 'C:\\Users\\PBIOB-GH.PBIOB-GH-05\\Documents\\scans\\' + 'foobar'
+
+// Settings for the Scanner @ PBIO
+const python = 'C:\\Users\\Salk Root Imager\\.conda\\envs\\bloom-desktop\\python.exe'
+const pylon = 'C:\\repos\\bloom-desktop-pilot\\pylon\\pylon.py'
+const image_dir = 'C:\\Users\\Salk Root Imager\\bloom-data\\images'
 
 ipcMain.on('grab-frames', async (event, arg) => {
 
@@ -41,7 +48,7 @@ ipcMain.on('grab-frames', async (event, arg) => {
 
   const grab_frames = spawn(python, [
     pylon,
-    'C:\\Users\\PBIOB-GH.PBIOB-GH-05\\Documents\\scans\\' + 'foobar'
+    image_dir
   ])
 
   grab_frames.stdout.on('data', (data) => {
