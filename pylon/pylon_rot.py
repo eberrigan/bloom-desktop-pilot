@@ -16,17 +16,29 @@ ip_address = '10.0.0.23'
 
 
 def grab_frames(n):
+    print('START', flush=True)
 
-    # setup constants for the DAQ
-    Fs = 40_000  # Sampling rate (Hz)
+    # input params
+    time_per_rev = 10  # seconds
     n_photos = n
-    microsteps_per_rev = 20_000
-    microsteps_betw_photos = microsteps_per_rev // n_photos
-    time_per_rev = 2  # seconds
+    # setup constants for DAQ / Cyth Scanner
+    Fs = 40_000  # DAQ sampling rate (Hz)
+    turntable_gear_teeth = 60
+    motor_gear_teeth = 42
+    microsteps_per_motor_rev = 20_000
+    microsteps_per_rev = int(microsteps_per_motor_rev * turntable_gear_teeth / motor_gear_teeth)
+    microsteps_betw_photos = int(microsteps_per_rev / n_photos)
     time_between_photos = time_per_rev / n_photos
     samples_between_photos = int(time_between_photos * Fs)
-    samples_per_microstep = samples_between_photos // microsteps_betw_photos
-    half_samples_per_microstep = samples_per_microstep // 2
+    samples_per_microstep = int(samples_between_photos / microsteps_betw_photos)
+    half_samples_per_microstep = int(samples_per_microstep / 2)
+
+    # The following calculations would let us "make up" any
+    #   missing microsteps to reach one full rotation
+
+    # missing_microsteps = microsteps_per_rev - (microsteps_betw_photos * n_photos)
+    # print(f'missing_microsteps = {missing_microsteps}')
+
     samples = []
     for i in range(microsteps_betw_photos):
         samples = samples + half_samples_per_microstep * [0.0]
@@ -49,7 +61,7 @@ def grab_frames(n):
         pylon.Cleanup_Delete
     )
 
-    camera.MaxNumBuffer.Value = 72  # defaults to 10
+    camera.MaxNumBuffer.Value = n_photos  # defaults to 10
 
     camera.Open()
     camera.StartGrabbing(pylon.GrabStrategy_OneByOne)  # requires software triggering
@@ -58,7 +70,7 @@ def grab_frames(n):
 
     try:
         task = nidaqmx.Task("test_write_task")
-        print(f"Created task: {task}")
+        # print(f"Created task: {task}")
 
         # Create channel in the task.
         # Type: Digital output
@@ -69,12 +81,12 @@ def grab_frames(n):
             line_grouping=nidaqmx.constants.LineGrouping.CHAN_PER_LINE,  # CHAN_PER_LINE or CHAN_FOR_ALL_LINES
             # line_grouping=nidaqmx.constants.LineGrouping.CHAN_FOR_ALL_LINES,  # CHAN_PER_LINE or CHAN_FOR_ALL_LINES
         )
-        print(f"Added channel: {stepper_channel}")
+        # print(f"Added channel: {stepper_channel}")
 
         # Control task(?)
         # Action: reserve
         task.control(nidaqmx.constants.TaskMode.TASK_RESERVE)
-        print(f"Set task to TASK_RESERVE mode.")
+        # print(f"Set task to TASK_RESERVE mode.")
 
         # Set timing.
         task.timing.cfg_samp_clk_timing(
@@ -82,7 +94,7 @@ def grab_frames(n):
             sample_mode=nidaqmx.constants.AcquisitionType.FINITE,  # FINITE or CONTINUOUS
             samps_per_chan=data.shape[1],
         )
-        print(f"Set timing sample clock rate to {Fs}.")
+        # print(f"Set timing sample clock rate to {Fs}.")
 
         t0_all = time()
         for i in range(n_photos):
@@ -93,7 +105,7 @@ def grab_frames(n):
             # print(f"Wrote data to output channels.")
 
             # Go!
-            print(f"[{i + 1} / {n_photos}] Starting task...", end=" ")
+            print(f"MOVE_MOTOR_START", flush=True)
             task.start()
 
             # Poll until finished.
@@ -110,23 +122,23 @@ def grab_frames(n):
                 except:
                     continue
 
+            print(f"MOVE_MOTOR_END", flush=True)
+
+            print(f"TRIGGER_CAMERA", flush=True)
             # Capture image from camera
             if camera.WaitForFrameTriggerReady(200, pylon.TimeoutHandling_ThrowException):
                 camera.ExecuteSoftwareTrigger()
             
-            grabResult = camera.RetrieveResult(200, pylon.TimeoutHandling_ThrowException)
+            # grabResult = camera.RetrieveResult(200, pylon.TimeoutHandling_ThrowException)
 
-            # replace this with DAQ code to move stepper motor
-            sleep(0.1)
+            # if grabResult.GrabSucceeded():
+            #     img = grabResult.Array
+            #     frames.append(img.copy())
 
-            if grabResult.GrabSucceeded():
-                img = grabResult.Array
-                frames.append(img.copy())
-
-            grabResult.Release()
+            # grabResult.Release()
                 
             dt = time() - t0
-            print(f"Finished task in {dt:.3f} secs.")
+            # print(f"Finished task in {dt:.3f} secs.")
 
             # Stop task.
             # print("Stopping task...", end=" ")
@@ -134,7 +146,17 @@ def grab_frames(n):
             # print("Stopped.")
 
         dt_all = time() - t0_all
-        print(f"Finished all {n_photos} in {dt_all:.3f} secs.")
+        # print(f"Finished all {n_photos} in {dt_all:.3f} secs.")
+
+        print('RETRIEVE_IMAGES_START', flush=True)
+        for _ in range(n_photos):
+            grabResult = camera.RetrieveResult(200, pylon.TimeoutHandling_ThrowException)
+            if grabResult.GrabSucceeded():
+                img = grabResult.Array
+                frames.append(img.copy())
+
+            grabResult.Release()
+        print('RETRIEVE_IMAGES_END', flush=True)
 
     finally:
         task.close()
@@ -155,4 +177,4 @@ if __name__ == '__main__':
     for (i, frame) in enumerate(frames):
         fname = output_path / f'{i + 1:03d}.png'
         iio.imwrite(str(fname), frame)
-        print(str(fname), flush=True)
+        print("IMAGE_PATH " + str(fname), flush=True)
