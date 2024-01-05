@@ -23,3 +23,8 @@ For controlling the NI-DAQ, you need to install some additional software from Na
 **National Instruments DAQmx Driver:**
 - Install the latest NI-DAQmx driver from [NI-DAQmx Download](https://www.ni.com/en/support/downloads/drivers/download.ni-daq-mx.html#494676). The driver comes with NI Measurement & Automation Explorer (MAX), which is used to configure NI hardware devices.
 
+### Basler Pylon
+To capture images from the camera, you'll need to install additional software from Basler.
+
+** Pylon **
+- Install the latest version of Pylon from [Basler](https://www2.baslerweb.com/en/downloads/software-downloads/).
