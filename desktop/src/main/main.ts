@@ -39,7 +39,7 @@ ipcMain.on('ipc-example', async (event, arg) => {
 
 // Settings for the Scanner @ PBIO
 const python = 'C:\\Users\\Salk Root Imager\\.conda\\envs\\bloom-desktop\\python.exe'
-const pylon = 'C:\\repos\\bloom-desktop-pilot\\pylon\\pylon.py'
+const pylon = 'C:\\repos\\bloom-desktop-pilot\\pylon\\pylon_rot.py'
 const image_dir = 'C:\\Users\\Salk Root Imager\\bloom-data\\images'
 
 ipcMain.on('grab-frames', async (event, arg) => {
@@ -53,8 +53,11 @@ ipcMain.on('grab-frames', async (event, arg) => {
 
   grab_frames.stdout.on('data', (data) => {
     console.log('printing')
-    console.log(data.toString())
-    event.reply('grab-frames', data.toString());
+    const str = data.toString()
+    console.log(str)
+    if (str.slice(0, 10) === 'IMAGE_PATH') {
+      event.reply('grab-frames', str.slice(11));
+    }
   })
 
 });
