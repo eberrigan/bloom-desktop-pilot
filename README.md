@@ -26,5 +26,5 @@ For controlling the NI-DAQ, you need to install some additional software from Na
 ### Basler Pylon
 To capture images from the camera, you'll need to install additional software from Basler.
 
-** Pylon **
+**Pylon**
 - Install the latest version of Pylon from [Basler](https://www2.baslerweb.com/en/downloads/software-downloads/).
