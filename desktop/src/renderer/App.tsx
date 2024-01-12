@@ -2,6 +2,8 @@ import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import icon from '../../assets/icon.svg';
 import './App.css';
 import { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+
 
 const ipcRenderer = window.electron.ipcRenderer;
 
@@ -44,10 +46,29 @@ function Hello() {
 
 export default function App() {
 
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Scanner />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export function Scanner() {
+  // 📷💾
+
+  const nImages = 72;
+
   const [images, setImages] = useState<string[]>([]);
+  const [isScanning, setIsScanning] = useState<boolean>(false);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [numCaptured, setNumCaptured] = useState<number>(0)
+  const [scanName, setScanName] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<number>(0);
 
   useEffect(() => {
-    return ipcRenderer.on('grab-frames', (arg) => {
+    return ipcRenderer.on('image-saved', (arg) => {
       const imagePath: string = arg as string;
       // eslint-disable-next-line no-console
       console.log(imagePath);
@@ -56,17 +77,40 @@ export default function App() {
   }, [images])
 
   useEffect(() => {
-    ipcRenderer.sendMessage('grab-frames', ['ping']);
-  }, []);
+    return ipcRenderer.on('image-captured', () => {
+      const newNumCaptured = numCaptured + 1;
+      setNumCaptured(newNumCaptured);
+      if (newNumCaptured == nImages) {
+        setIsScanning(false);
+        setIsSaving(true);
+      }
+    });
+  }, [numCaptured])
 
-  
+  const startScan = () => {
+    if (!isScanning) {
+      const name = 'scan_' + uuidv4();
+      setScanName(name);
+      setImages([]);
+      setNumCaptured(0);
+      setIsSaving(false);
+      setIsScanning(true);
+      setSelectedImage(0);
+      ipcRenderer.sendMessage('start-scan', [name]);
+    }
+  }
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Scan images={images} />} />
-      </Routes>
-    </Router>
-  );
+    <>
+      <button onClick={(e) => startScan()}>Start Scan</button>
+      <div>{ isScanning ? 'scanning' : 'not scanning'  }</div>
+      <div>{ isSaving ? 'saving' : 'not saving' }</div>
+      <div>numCaptured: { numCaptured }</div>
+      <div>scanName: { scanName }</div>
+      <div>selectedImage: { selectedImage }</div>
+      <Scan images={images} />
+    </>
+  )
 }
 
 export function Scan({images}: {images: string[]}) {

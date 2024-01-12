@@ -42,21 +42,26 @@ const python = 'C:\\Users\\Salk Root Imager\\.conda\\envs\\bloom-desktop\\python
 const pylon = 'C:\\repos\\bloom-desktop-pilot\\pylon\\pylon_rot.py'
 const image_dir = 'C:\\Users\\Salk Root Imager\\bloom-data\\images'
 
-ipcMain.on('grab-frames', async (event, arg) => {
+ipcMain.on('start-scan', async (event, arg) => {
 
-  // event.reply('grab-frames', `main received data: ${arg}`);
+  // event.reply('start-scan', `main received data: ${arg}`);
 
   const grab_frames = spawn(python, [
     pylon,
-    image_dir
+    image_dir + '\\' + arg
   ])
 
   grab_frames.stdout.on('data', (data) => {
-    console.log('printing')
+    console.log('JS received data from python')
     const str = data.toString()
     console.log(str)
+    if (str.slice(0, 14) === 'TRIGGER_CAMERA') {
+      console.log('data matches TRIGGER_CAMERA')
+      event.reply('image-captured')
+    }
     if (str.slice(0, 10) === 'IMAGE_PATH') {
-      event.reply('grab-frames', str.slice(11));
+      console.log('data matches IMAGE_PATH')
+      event.reply('image-saved', str.slice(11));
     }
   })
 

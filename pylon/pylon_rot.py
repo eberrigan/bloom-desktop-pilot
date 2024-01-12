@@ -105,7 +105,6 @@ def grab_frames(n):
             # print(f"Wrote data to output channels.")
 
             # Go!
-            print(f"MOVE_MOTOR_START", flush=True)
             task.start()
 
             # Poll until finished.
@@ -121,9 +120,7 @@ def grab_frames(n):
                     done = True
                 except:
                     continue
-
-            print(f"MOVE_MOTOR_END", flush=True)
-
+            
             print(f"TRIGGER_CAMERA", flush=True)
             # Capture image from camera
             if camera.WaitForFrameTriggerReady(200, pylon.TimeoutHandling_ThrowException):
