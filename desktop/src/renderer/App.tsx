@@ -56,7 +56,6 @@ export default function App() {
 }
 
 export function Scanner() {
-  // 📷💾
 
   const nImages = 72;
 
@@ -72,7 +71,11 @@ export function Scanner() {
       const imagePath: string = arg as string;
       // eslint-disable-next-line no-console
       console.log(imagePath);
-      setImages([...images, imagePath])
+      const newImages = [...images, imagePath];
+      setImages(newImages);
+      if (newImages.length === nImages) {
+        setIsSaving(false);
+      }
     });
   }, [images])
 
@@ -80,7 +83,7 @@ export function Scanner() {
     return ipcRenderer.on('image-captured', () => {
       const newNumCaptured = numCaptured + 1;
       setNumCaptured(newNumCaptured);
-      if (newNumCaptured == nImages) {
+      if (newNumCaptured === nImages) {
         setIsScanning(false);
         setIsSaving(true);
       }
@@ -100,16 +103,84 @@ export function Scanner() {
     }
   }
 
+  function mod(n: number, m: number) {
+    return ((n % m) + m) % m;
+  }
+
+  const nextImage = () => {
+    const nextIndex = mod(selectedImage + 1, images.length)
+    setSelectedImage(nextIndex)
+  }
+
+  const prevImage = () => {
+    const nextIndex = mod(selectedImage - 1, images.length)
+    setSelectedImage(nextIndex)
+  }
+
   return (
-    <>
-      <button onClick={(e) => startScan()}>Start Scan</button>
-      <div>{ isScanning ? 'scanning' : 'not scanning'  }</div>
-      <div>{ isSaving ? 'saving' : 'not saving' }</div>
-      <div>numCaptured: { numCaptured }</div>
-      <div>scanName: { scanName }</div>
-      <div>selectedImage: { selectedImage }</div>
-      <Scan images={images} />
-    </>
+    <div className='flex flex-col'>
+        {
+          <div className=''>
+            <div
+              className='text-center'
+              style={{width: '500px'}}
+              >
+              <button  
+                className=''
+                onClick={(e) => startScan()}
+                disabled={isScanning || isSaving}
+                >
+                Start Scan
+              </button>  
+            </div>      
+          </div>
+        }
+        {
+          isScanning
+          ?
+            <div className=''>
+              <div className=''>📷 Scanning... { numCaptured } / {nImages}</div>
+            </div>
+          :
+          null
+        }
+        {
+          isSaving
+          ?
+            <div className=''>
+              <div
+                className=''
+                style={{width: '500px'}}>
+                💾 Saving... { images.length } / {nImages}
+              </div>
+            </div>
+          :
+          null
+        }
+      <div className=''>
+        <div className=''>
+        {
+          images.length > 0
+          ?
+          <img
+            src={'file://' + images[selectedImage].replaceAll('\\', '/')}
+            style={{width: '500px'}} />
+          :
+          <div style={{width: '500px', height: '250px'}} >
+          </div>
+        }
+        </div>
+      </div>
+      <div className=''>
+        <div className=''>
+          <button onClick={(e) => {prevImage()}}>&larr; Prev</button>
+          &nbsp;
+          <button onClick={(e) => {nextImage()}}>Next &rarr;</button>
+          &nbsp;
+          <span className='px-4'>{selectedImage + 1} / { images.length }</span>
+        </div>
+      </div>
+    </div>
   )
 }
 
