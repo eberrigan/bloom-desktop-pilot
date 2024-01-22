@@ -33,38 +33,43 @@ ipcMain.on('ipc-example', async (event, arg) => {
 });
 
 // Settings for the Slow Scanner @ Greenhouse
+
 // const python = 'C:\\Users\\PBIOB-GH.PBIOB-GH-05\\.conda\\envs\\pylon\\python.exe'
 // const pylon = 'C:\\Users\\PBIOB-GH.PBIOB-GH-05\\Documents\\bloom\\pylon\\pylon.py'
 // const image_dir = 'C:\\Users\\PBIOB-GH.PBIOB-GH-05\\Documents\\scans\\' + 'foobar'
 
 // Settings for the Scanner @ PBIO
-const python = 'C:\\Users\\Salk Root Imager\\.conda\\envs\\bloom-desktop\\python.exe'
-const pylon = 'C:\\repos\\bloom-desktop-pilot\\pylon\\pylon_rot.py'
-const image_dir = 'C:\\Users\\Salk Root Imager\\bloom-data\\images'
 
-ipcMain.on('start-scan', async (event, arg) => {
+// const python = 'C:\\Users\\Salk Root Imager\\.conda\\envs\\bloom-desktop\\python.exe'
+// const pylon = 'C:\\repos\\bloom-desktop-pilot\\pylon\\pylon_rot.py'
+// const image_dir = 'C:\\Users\\Salk Root Imager\\bloom-data\\images'
 
+// Settings for Dan's Mac
+
+const python = '/Users/djbutler/anaconda3/envs/salk-tm/bin/python';
+const pylon = '/Users/djbutler/dev/bloom-desktop-pilot/pylon/pylon_fake.py';
+const image_dir = '/Users/djbutler/dev/bloom-data/cyth';
+
+ipcMain.on('start-scan', async (event, args) => {
   // event.reply('start-scan', `main received data: ${arg}`);
 
-  const grab_frames = spawn(python, [
-    pylon,
-    image_dir + '\\' + arg
-  ])
+  const [scan_name] = args;
+
+  const grab_frames = spawn(python, [pylon, path.join(image_dir, scan_name)]);
 
   grab_frames.stdout.on('data', (data) => {
-    console.log('JS received data from python')
-    const str = data.toString()
-    console.log(str)
+    console.log('JS received data from python');
+    const str = data.toString();
+    console.log(str);
     if (str.slice(0, 14) === 'TRIGGER_CAMERA') {
-      console.log('data matches TRIGGER_CAMERA')
-      event.reply('image-captured')
+      console.log('data matches TRIGGER_CAMERA');
+      event.reply('image-captured');
     }
     if (str.slice(0, 10) === 'IMAGE_PATH') {
-      console.log('data matches IMAGE_PATH')
+      console.log('data matches IMAGE_PATH');
       event.reply('image-saved', str.slice(11));
     }
-  })
-
+  });
 });
 
 if (process.env.NODE_ENV === 'production') {
