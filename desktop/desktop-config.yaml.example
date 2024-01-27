@@ -1,0 +1,6 @@
+# this file should be located in $HOME/.bloom
+
+python: /Users/djbutler/anaconda3/envs/salk-tm/bin/python
+capture_scan_py: /Users/djbutler/dev/bloom-desktop-pilot/pylon/pylon_fake.py
+scans_dir: /Users/djbutler/dev/bloom-data/cyth
+

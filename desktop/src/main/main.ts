@@ -15,6 +15,9 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import { spawn } from 'node:child_process';
+import * as os from 'node:os';
+import * as fs from 'node:fs';
+import * as yaml from 'js-yaml';
 
 class AppUpdater {
   constructor() {
@@ -44,18 +47,31 @@ ipcMain.on('ipc-example', async (event, arg) => {
 // const pylon = 'C:\\repos\\bloom-desktop-pilot\\pylon\\pylon_rot.py'
 // const image_dir = 'C:\\Users\\Salk Root Imager\\bloom-data\\images'
 
-// Settings for Dan's Mac
+const homedir = os.homedir();
+const config_yaml = path.join(homedir, '.bloom', 'desktop-config.yaml');
+console.log(config_yaml);
 
-const python = '/Users/djbutler/anaconda3/envs/salk-tm/bin/python';
-const pylon = '/Users/djbutler/dev/bloom-desktop-pilot/pylon/pylon_fake.py';
-const image_dir = '/Users/djbutler/dev/bloom-data/cyth';
+// Load config.yaml
+const config = yaml.load(fs.readFileSync(config_yaml, 'utf8')) as {
+  python: string;
+  capture_scan_py: string;
+  scans_dir: string;
+};
+console.log(config);
+
+const python = config.python;
+const capture_scan_py = config.capture_scan_py;
+const scans_dir = config.scans_dir;
 
 ipcMain.on('start-scan', async (event, args) => {
   // event.reply('start-scan', `main received data: ${arg}`);
 
   const [scan_name] = args;
 
-  const grab_frames = spawn(python, [pylon, path.join(image_dir, scan_name)]);
+  const grab_frames = spawn(python, [
+    capture_scan_py,
+    path.join(scans_dir, scan_name),
+  ]);
 
   grab_frames.stdout.on('data', (data) => {
     console.log('JS received data from python');
