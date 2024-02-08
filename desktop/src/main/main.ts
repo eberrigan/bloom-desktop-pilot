@@ -14,10 +14,13 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { spawn } from 'node:child_process';
+import { createBloomRetriever } from './bloom';
 import * as os from 'node:os';
 import * as fs from 'node:fs';
 import * as yaml from 'js-yaml';
+import { createScanner } from './scanner';
+import { Scan } from '../renderer/CaptureScan';
+import { createScanStore } from './scanstore';
 
 class AppUpdater {
   constructor() {
@@ -29,64 +32,85 @@ class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
+// ********************** Bloom core logic **********************
+
+// Create a BloomRetriever object
+createBloomRetriever().then((bloom_retriever) => {
+  ipcMain.handle('bloom:get-people', bloom_retriever.getPeople);
 });
 
-// Settings for the Slow Scanner @ Greenhouse
-
-// const python = 'C:\\Users\\PBIOB-GH.PBIOB-GH-05\\.conda\\envs\\pylon\\python.exe'
-// const pylon = 'C:\\Users\\PBIOB-GH.PBIOB-GH-05\\Documents\\bloom\\pylon\\pylon.py'
-// const image_dir = 'C:\\Users\\PBIOB-GH.PBIOB-GH-05\\Documents\\scans\\' + 'foobar'
-
-// Settings for the Scanner @ PBIO
-
-// const python = 'C:\\Users\\Salk Root Imager\\.conda\\envs\\bloom-desktop\\python.exe'
-// const pylon = 'C:\\repos\\bloom-desktop-pilot\\pylon\\pylon_rot.py'
-// const image_dir = 'C:\\Users\\Salk Root Imager\\bloom-data\\images'
-
+// Load config.yaml and create a Scanner object
 const homedir = os.homedir();
 const config_yaml = path.join(homedir, '.bloom', 'desktop-config.yaml');
-console.log(config_yaml);
-
-// Load config.yaml
 const config = yaml.load(fs.readFileSync(config_yaml, 'utf8')) as {
   python: string;
   capture_scan_py: string;
   scans_dir: string;
 };
-console.log(config);
 
-const python = config.python;
-const capture_scan_py = config.capture_scan_py;
-const scans_dir = config.scans_dir;
-
-ipcMain.on('start-scan', async (event, args) => {
-  // event.reply('start-scan', `main received data: ${arg}`);
-
-  const [scan_name] = args;
-
-  const grab_frames = spawn(python, [
-    capture_scan_py,
-    path.join(scans_dir, scan_name),
-  ]);
-
-  grab_frames.stdout.on('data', (data) => {
-    console.log('JS received data from python');
-    const str = data.toString();
-    console.log(str);
-    if (str.slice(0, 14) === 'TRIGGER_CAMERA') {
-      console.log('data matches TRIGGER_CAMERA');
+const scanner = createScanner(config);
+ipcMain.handle('scanner:get-person-id', scanner.getPersonId);
+ipcMain.handle('scanner:set-person-id', async (event, args) => {
+  scanner.setPersonId(args[0]);
+});
+ipcMain.handle('scanner:get-plant-qr-code', scanner.getPlantQrCode);
+ipcMain.handle('scanner:set-plant-qr-code', async (event, args) => {
+  scanner.setPlantQrCode(args[0]);
+});
+ipcMain.handle('scanner:get-scan-data', scanner.getScanData);
+scanner.onScanUpdate = () => {
+  mainWindow?.webContents.send('scanner:scan-update');
+};
+ipcMain.on('scanner:start-scan', (event, args) => {
+  scanner.startScan({
+    onCaptureImage: () => {
       event.reply('image-captured');
-    }
-    if (str.slice(0, 10) === 'IMAGE_PATH') {
-      console.log('data matches IMAGE_PATH');
-      event.reply('image-saved', str.slice(11));
-    }
+    },
+    onImageSaved: (imagePath: string) => {
+      event.reply('image-saved', imagePath);
+    },
   });
 });
+
+// Create a ScanStore object
+createScanStore().then((scanStore) => {
+  scanner.onScanComplete = (scan: Scan) => {
+    scanStore.addScan(scan);
+  };
+  ipcMain.handle('scan-store:get-scans', scanStore.getScans);
+  ipcMain.handle(
+    'scan-store:get-scans-with-email',
+    scanStore.getScansWithEmail,
+  );
+  ipcMain.handle('scan-store:get-scan', async (event, args) => {
+    return scanStore.getScan(args[0]);
+  });
+  ipcMain.handle('scan-store:get-scan-with-email', async (event, args) => {
+    return scanStore.getScanWithEmail(args[0]);
+  });
+});
+
+// If no 'scanner:start-scan' event for 5 minutes, emit a 'main:idle' event
+let idleTimer: NodeJS.Timeout;
+let idleTime = 10 * 60 * 1000;
+const resetIdleTimer = () => {
+  console.log('resetIdleTimer() called');
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => {
+    console.log('idleTimer expired');
+    mainWindow?.webContents.send('main:idle');
+    resetIdleTimer();
+  }, idleTime);
+};
+ipcMain.on('scanner:start-scan', (event, args) => {
+  resetIdleTimer();
+});
+ipcMain.on('scanner:set-person-id', (event, args) => {
+  resetIdleTimer();
+});
+resetIdleTimer();
+
+// *************************************************************
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -132,7 +156,7 @@ const createWindow = async () => {
     height: 728,
     icon: getAssetPath('icon.png'),
     webPreferences: {
-      webSecurity: false,
+      webSecurity: false, // TODO: remove this
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),
