@@ -50,7 +50,7 @@ const config = yaml.load(fs.readFileSync(config_yaml, 'utf8')) as {
 
 const scanner = createScanner(config);
 ipcMain.handle('scanner:get-person-id', scanner.getPersonId);
-ipcMain.handle('scanner:set-person-id', async (event, args) => {
+ipcMain.on('scanner:set-person-id', async (event, args) => {
   scanner.setPersonId(args[0]);
 });
 ipcMain.handle('scanner:get-plant-qr-code', scanner.getPlantQrCode);
