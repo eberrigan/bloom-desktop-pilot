@@ -32,6 +32,7 @@ const electronHandler = {
     getPeople: () => ipcRenderer.invoke('bloom:get-people'),
   },
   scanner: {
+    getScannerId: () => ipcRenderer.invoke('scanner:get-scanner-id'),
     getPersonId: () => ipcRenderer.invoke('scanner:get-person-id'),
     setPersonId: (personId: number | null) =>
       ipcRenderer.send('scanner:set-person-id', [personId]),

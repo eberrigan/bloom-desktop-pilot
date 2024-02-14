@@ -3,10 +3,10 @@
 python: /Users/djbutler/anaconda3/envs/salk-tm/bin/python
 capture_scan_py: /Users/djbutler/dev/bloom-desktop-pilot/pylon/pylon_fake.py
 scans_dir: /Users/djbutler/dev/bloom-data/cyth
+scanner_id: <scanner_id>
 
 bloom_scanner_username: <scanner>@salk.edu
 bloom_scanner_password: <password>
-bloom_scanner_id: <scanner_id>
 
 # Settings for the Slow Scanner @ Greenhouse
 

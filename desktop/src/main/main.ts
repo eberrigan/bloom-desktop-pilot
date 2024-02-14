@@ -46,9 +46,11 @@ const config = yaml.load(fs.readFileSync(config_yaml, 'utf8')) as {
   python: string;
   capture_scan_py: string;
   scans_dir: string;
+  scanner_id: string;
 };
 
 const scanner = createScanner(config);
+ipcMain.handle('scanner:get-scanner-id', scanner.getScannerId);
 ipcMain.handle('scanner:get-person-id', scanner.getPersonId);
 ipcMain.on('scanner:set-person-id', async (event, args) => {
   scanner.setPersonId(args[0]);

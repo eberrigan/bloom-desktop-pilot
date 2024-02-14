@@ -2,6 +2,7 @@ type ScannerConfig = {
   python: string;
   capture_scan_py: string;
   scans_dir: string;
+  scanner_id: string;
 };
 
 type ScanMetadata = Readonly<{

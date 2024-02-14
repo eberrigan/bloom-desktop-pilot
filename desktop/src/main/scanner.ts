@@ -11,6 +11,7 @@ class Scanner {
   private python: string;
   private capture_scan_py: string;
   private scans_dir: string;
+  private scanner_id: string;
   private scanMetadata: ScanMetadata | null = null;
   private scanProgress: ScanProgress | null = defaultProgress();
   private images: ScanImages = [];
@@ -23,6 +24,7 @@ class Scanner {
     this.python = config.python;
     this.capture_scan_py = config.capture_scan_py;
     this.scans_dir = config.scans_dir;
+    this.scanner_id = config.scanner_id;
   }
 
   startScan = (options: {
@@ -58,6 +60,10 @@ class Scanner {
         this.imageSaved(imagePath);
       }
     });
+  };
+
+  getScannerId = () => {
+    return this.scanner_id;
   };
 
   getPersonId = () => {
