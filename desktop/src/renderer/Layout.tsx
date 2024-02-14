@@ -37,7 +37,7 @@ export function Layout() {
       </div>
       <div className="absolute right-12 top-8">
         <div className="flex flex-col">
-          <span className="text-xs font-bold">Cyth Scanner</span>
+          <span className="text-xs font-bold">Device</span>
           <span>{scannerId === null ? '...' : `${scannerId}`}</span>
         </div>
       </div>
