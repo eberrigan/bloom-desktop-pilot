@@ -65,7 +65,7 @@ import Database from "better-sqlite3";
 import { electrify } from "electric-sql/node";
 
 // Import your generated database schema.
-import { schema } from "./generated/client";
+import { schema } from "../generated/client";
 
 // Define your config with at least an auth token.
 // See Usage -> Authentication for more details.
@@ -76,9 +76,7 @@ const config = {
 // Create the better-sqlite3 database connection. The first
 // argument is your database name. Changing this will
 // create/use a new local database file.
-const conn = new Database(
-  "/Users/djbutler/dev/bloom-desktop-pilot/desktop-sync/example.db"
-);
+const conn = new Database("/Users/djbutler/.bloom/bloom.db");
 
 // Follow the library recommendation to enable WAL mode to
 // increase performance. As per:
@@ -91,10 +89,12 @@ electrify(conn, schema, config)
     console.log("Connected to the database");
     const { db } = electric;
 
+    db.scans.sync({ include: { phenotypers: true } });
+
     // Resolves when the shape subscription has been established.
-    const shape = await db.scans.sync({ include: { phenotypers: true } });
+    // const shape = await db.scans.sync({ include: { phenotypers: true } });
     // Resolves when the data has been synced into the local database.
-    await shape.synced;
+    // await shape.synced;
 
     // Subscribe to data changes.
     electric.notifier.subscribeToDataChanges((changeNotification) => {
