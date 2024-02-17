@@ -1,11 +1,11 @@
-import path from 'path';
-import { v4 as uuidv4 } from 'uuid';
-import { spawn } from 'node:child_process';
+import path from "path";
+import { v4 as uuidv4 } from "uuid";
+import { spawn } from "node:child_process";
 
 const numFrames = 72;
 
 class Scanner {
-  private personId: number | null = null;
+  private phenotyperId: string | null = null;
   private scanPath: string | null = null;
   private plantQrCode: string | null = null;
   private python: string;
@@ -33,28 +33,32 @@ class Scanner {
   }) => {
     this.images = [];
 
-    const scan_name = 'scan_' + uuidv4();
+    const scan_name = uuidv4();
     this.scanPath = path.join(this.scans_dir, scan_name);
 
     this.captureMetadata();
     this.resetProgress();
+
+    console.log(
+      `calling: ${this.python} ${this.capture_scan_py} ${this.scanPath}`
+    );
 
     const grab_frames = spawn(this.python, [
       this.capture_scan_py,
       this.scanPath,
     ]);
 
-    grab_frames.stdout.on('data', (data) => {
-      console.log('JS received data from python');
+    grab_frames.stdout.on("data", (data) => {
+      console.log("JS received data from python");
       const str = data.toString();
       console.log(str);
-      if (str.slice(0, 14) === 'TRIGGER_CAMERA') {
-        console.log('data matches TRIGGER_CAMERA');
+      if (str.slice(0, 14) === "TRIGGER_CAMERA") {
+        console.log("data matches TRIGGER_CAMERA");
         options.onCaptureImage();
         this.imageCaptured();
       }
-      if (str.slice(0, 10) === 'IMAGE_PATH') {
-        console.log('data matches IMAGE_PATH');
+      if (str.slice(0, 10) === "IMAGE_PATH") {
+        console.log("data matches IMAGE_PATH");
         const imagePath = str.slice(11);
         options.onImageSaved(imagePath);
         this.imageSaved(imagePath);
@@ -66,12 +70,12 @@ class Scanner {
     return this.scanner_id;
   };
 
-  getPersonId = () => {
-    return this.personId;
+  getPhenotyperId = () => {
+    return this.phenotyperId;
   };
 
-  setPersonId = (personId: number | null) => {
-    this.personId = personId;
+  setPhenotyperId = (phenotyperId: string | null) => {
+    this.phenotyperId = phenotyperId;
   };
 
   getPlantQrCode = () => {
@@ -96,27 +100,29 @@ class Scanner {
   };
 
   captureMetadata = () => {
-    if (this.personId === null) {
-      throw new Error('personId is null');
+    if (this.phenotyperId === null) {
+      throw new Error("personId is null");
     }
     if (this.scanPath === null) {
-      throw new Error('scanPath is null');
+      throw new Error("scanPath is null");
     }
     if (this.plantQrCode === null) {
-      throw new Error('plantQrCode is null');
+      throw new Error("plantQrCode is null");
     }
     const metadata = {
-      scanId: 'scan_' + uuidv4(),
-      personId: this.personId,
-      plantQrCode: this.plantQrCode,
+      id: uuidv4(),
+      phenotyper_id: this.phenotyperId,
+      scanner_id: this.scanner_id,
+      plant_qr_code: this.plantQrCode,
       path: this.scanPath,
-      date: new Date().toISOString(),
-      numFrames,
-      exposureTime: 0,
+      capture_date: new Date().toISOString(),
+      num_frames: 72,
+      exposure_time: 0,
       gain: 0,
       brightness: 0,
       contrast: 0,
       gamma: 0,
+      seconds_per_rot: 0,
     };
     this.scanMetadata = metadata;
     this.onScanUpdate();
@@ -124,31 +130,31 @@ class Scanner {
 
   resetProgress = () => {
     this.scanProgress = defaultProgress();
-    this.scanProgress.status = 'capturing';
+    this.scanProgress.status = "capturing";
     this.onScanUpdate();
   };
 
   imageCaptured = () => {
     if (this.scanProgress === null) {
-      throw new Error('scanProgress is null');
+      throw new Error("scanProgress is null");
     }
     this.scanProgress.nImagesCaptured += 1;
-    this.scanProgress.status = 'capturing';
+    this.scanProgress.status = "capturing";
     this.onScanUpdate();
   };
 
   imageSaved = (imagePath: string) => {
     if (this.scanMetadata === null) {
-      throw new Error('scanMetadata is null');
+      throw new Error("scanMetadata is null");
     }
     if (this.scanProgress === null) {
-      throw new Error('scanProgress is null');
+      throw new Error("scanProgress is null");
     }
     this.images.push(imagePath);
     this.scanProgress.nImagesSaved += 1;
-    this.scanProgress.status = 'saving';
-    if (this.scanProgress.nImagesSaved === this.scanMetadata.numFrames) {
-      this.scanProgress.status = 'complete';
+    this.scanProgress.status = "saving";
+    if (this.scanProgress.nImagesSaved === this.scanMetadata.num_frames) {
+      this.scanProgress.status = "complete";
       this.onScanComplete(makeScan(this.scanMetadata, this.images));
     }
     this.onScanUpdate();
@@ -166,7 +172,7 @@ function defaultProgress(): ScanProgress {
   return {
     nImagesCaptured: 0,
     nImagesSaved: 0,
-    status: 'idle',
+    status: "idle",
   };
 }
 

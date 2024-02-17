@@ -24,11 +24,11 @@ export type Images = {
   /**
    * @zod.string.uuid()
    */
-  scanid: string | null
+  scan_id: string | null
   /**
    * @zod.number.int().gte(-2147483648).lte(2147483647)
    */
-  framenumber: number | null
+  frame_number: number | null
   path: string | null
   url: string | null
   status: string | null
@@ -59,18 +59,19 @@ export type Scans = {
   /**
    * @zod.string.uuid()
    */
-  phenotyperid: string | null
-  plantqrcode: string | null
+  phenotyper_id: string | null
+  scanner_id: string | null
+  plant_qr_code: string | null
   path: string | null
-  capturedate: Date | null
+  capture_date: Date | null
   /**
    * @zod.number.int().gte(-2147483648).lte(2147483647)
    */
-  numframes: number | null
+  num_frames: number | null
   /**
    * @zod.number.int().gte(-2147483648).lte(2147483647)
    */
-  exposuretime: number | null
+  exposure_time: number | null
   /**
    * @zod.custom.use(z.number().or(z.nan()))
    */
@@ -90,7 +91,7 @@ export type Scans = {
   /**
    * @zod.custom.use(z.number().or(z.nan()))
    */
-  secondsperrotation: number | null
+  seconds_per_rot: number | null
 }
 
 
@@ -997,17 +998,17 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   }
 
   export type ImagesAvgAggregateOutputType = {
-    framenumber: number | null
+    frame_number: number | null
   }
 
   export type ImagesSumAggregateOutputType = {
-    framenumber: number | null
+    frame_number: number | null
   }
 
   export type ImagesMinAggregateOutputType = {
     id: string | null
-    scanid: string | null
-    framenumber: number | null
+    scan_id: string | null
+    frame_number: number | null
     path: string | null
     url: string | null
     status: string | null
@@ -1015,8 +1016,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ImagesMaxAggregateOutputType = {
     id: string | null
-    scanid: string | null
-    framenumber: number | null
+    scan_id: string | null
+    frame_number: number | null
     path: string | null
     url: string | null
     status: string | null
@@ -1024,8 +1025,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ImagesCountAggregateOutputType = {
     id: number
-    scanid: number
-    framenumber: number
+    scan_id: number
+    frame_number: number
     path: number
     url: number
     status: number
@@ -1034,17 +1035,17 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
 
   export type ImagesAvgAggregateInputType = {
-    framenumber?: true
+    frame_number?: true
   }
 
   export type ImagesSumAggregateInputType = {
-    framenumber?: true
+    frame_number?: true
   }
 
   export type ImagesMinAggregateInputType = {
     id?: true
-    scanid?: true
-    framenumber?: true
+    scan_id?: true
+    frame_number?: true
     path?: true
     url?: true
     status?: true
@@ -1052,8 +1053,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ImagesMaxAggregateInputType = {
     id?: true
-    scanid?: true
-    framenumber?: true
+    scan_id?: true
+    frame_number?: true
     path?: true
     url?: true
     status?: true
@@ -1061,8 +1062,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ImagesCountAggregateInputType = {
     id?: true
-    scanid?: true
-    framenumber?: true
+    scan_id?: true
+    frame_number?: true
     path?: true
     url?: true
     status?: true
@@ -1163,8 +1164,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ImagesGroupByOutputType = {
     id: string
-    scanid: string | null
-    framenumber: number | null
+    scan_id: string | null
+    frame_number: number | null
     path: string | null
     url: string | null
     status: string | null
@@ -1191,8 +1192,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ImagesSelect = {
     id?: boolean
-    scanid?: boolean
-    framenumber?: boolean
+    scan_id?: boolean
+    frame_number?: boolean
     path?: boolean
     url?: boolean
     status?: boolean
@@ -3026,135 +3027,141 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   }
 
   export type ScansAvgAggregateOutputType = {
-    numframes: number | null
-    exposuretime: number | null
+    num_frames: number | null
+    exposure_time: number | null
     gain: number | null
     brightness: number | null
     contrast: number | null
     gamma: number | null
-    secondsperrotation: number | null
+    seconds_per_rot: number | null
   }
 
   export type ScansSumAggregateOutputType = {
-    numframes: number | null
-    exposuretime: number | null
+    num_frames: number | null
+    exposure_time: number | null
     gain: number | null
     brightness: number | null
     contrast: number | null
     gamma: number | null
-    secondsperrotation: number | null
+    seconds_per_rot: number | null
   }
 
   export type ScansMinAggregateOutputType = {
     id: string | null
-    phenotyperid: string | null
-    plantqrcode: string | null
+    phenotyper_id: string | null
+    scanner_id: string | null
+    plant_qr_code: string | null
     path: string | null
-    capturedate: Date | null
-    numframes: number | null
-    exposuretime: number | null
+    capture_date: Date | null
+    num_frames: number | null
+    exposure_time: number | null
     gain: number | null
     brightness: number | null
     contrast: number | null
     gamma: number | null
-    secondsperrotation: number | null
+    seconds_per_rot: number | null
   }
 
   export type ScansMaxAggregateOutputType = {
     id: string | null
-    phenotyperid: string | null
-    plantqrcode: string | null
+    phenotyper_id: string | null
+    scanner_id: string | null
+    plant_qr_code: string | null
     path: string | null
-    capturedate: Date | null
-    numframes: number | null
-    exposuretime: number | null
+    capture_date: Date | null
+    num_frames: number | null
+    exposure_time: number | null
     gain: number | null
     brightness: number | null
     contrast: number | null
     gamma: number | null
-    secondsperrotation: number | null
+    seconds_per_rot: number | null
   }
 
   export type ScansCountAggregateOutputType = {
     id: number
-    phenotyperid: number
-    plantqrcode: number
+    phenotyper_id: number
+    scanner_id: number
+    plant_qr_code: number
     path: number
-    capturedate: number
-    numframes: number
-    exposuretime: number
+    capture_date: number
+    num_frames: number
+    exposure_time: number
     gain: number
     brightness: number
     contrast: number
     gamma: number
-    secondsperrotation: number
+    seconds_per_rot: number
     _all: number
   }
 
 
   export type ScansAvgAggregateInputType = {
-    numframes?: true
-    exposuretime?: true
+    num_frames?: true
+    exposure_time?: true
     gain?: true
     brightness?: true
     contrast?: true
     gamma?: true
-    secondsperrotation?: true
+    seconds_per_rot?: true
   }
 
   export type ScansSumAggregateInputType = {
-    numframes?: true
-    exposuretime?: true
+    num_frames?: true
+    exposure_time?: true
     gain?: true
     brightness?: true
     contrast?: true
     gamma?: true
-    secondsperrotation?: true
+    seconds_per_rot?: true
   }
 
   export type ScansMinAggregateInputType = {
     id?: true
-    phenotyperid?: true
-    plantqrcode?: true
+    phenotyper_id?: true
+    scanner_id?: true
+    plant_qr_code?: true
     path?: true
-    capturedate?: true
-    numframes?: true
-    exposuretime?: true
+    capture_date?: true
+    num_frames?: true
+    exposure_time?: true
     gain?: true
     brightness?: true
     contrast?: true
     gamma?: true
-    secondsperrotation?: true
+    seconds_per_rot?: true
   }
 
   export type ScansMaxAggregateInputType = {
     id?: true
-    phenotyperid?: true
-    plantqrcode?: true
+    phenotyper_id?: true
+    scanner_id?: true
+    plant_qr_code?: true
     path?: true
-    capturedate?: true
-    numframes?: true
-    exposuretime?: true
+    capture_date?: true
+    num_frames?: true
+    exposure_time?: true
     gain?: true
     brightness?: true
     contrast?: true
     gamma?: true
-    secondsperrotation?: true
+    seconds_per_rot?: true
   }
 
   export type ScansCountAggregateInputType = {
     id?: true
-    phenotyperid?: true
-    plantqrcode?: true
+    phenotyper_id?: true
+    scanner_id?: true
+    plant_qr_code?: true
     path?: true
-    capturedate?: true
-    numframes?: true
-    exposuretime?: true
+    capture_date?: true
+    num_frames?: true
+    exposure_time?: true
     gain?: true
     brightness?: true
     contrast?: true
     gamma?: true
-    secondsperrotation?: true
+    seconds_per_rot?: true
     _all?: true
   }
 
@@ -3252,17 +3259,18 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ScansGroupByOutputType = {
     id: string
-    phenotyperid: string | null
-    plantqrcode: string | null
+    phenotyper_id: string | null
+    scanner_id: string | null
+    plant_qr_code: string | null
     path: string | null
-    capturedate: Date | null
-    numframes: number | null
-    exposuretime: number | null
+    capture_date: Date | null
+    num_frames: number | null
+    exposure_time: number | null
     gain: number | null
     brightness: number | null
     contrast: number | null
     gamma: number | null
-    secondsperrotation: number | null
+    seconds_per_rot: number | null
     _count: ScansCountAggregateOutputType | null
     _avg: ScansAvgAggregateOutputType | null
     _sum: ScansSumAggregateOutputType | null
@@ -3286,17 +3294,18 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ScansSelect = {
     id?: boolean
-    phenotyperid?: boolean
-    plantqrcode?: boolean
+    phenotyper_id?: boolean
+    scanner_id?: boolean
+    plant_qr_code?: boolean
     path?: boolean
-    capturedate?: boolean
-    numframes?: boolean
-    exposuretime?: boolean
+    capture_date?: boolean
+    num_frames?: boolean
+    exposure_time?: boolean
     gain?: boolean
     brightness?: boolean
     contrast?: boolean
     gamma?: boolean
-    secondsperrotation?: boolean
+    seconds_per_rot?: boolean
     images?: boolean | Scans$imagesArgs
     phenotypers?: boolean | PhenotypersArgs
     _count?: boolean | ScansCountOutputTypeArgs
@@ -4156,8 +4165,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export const ImagesScalarFieldEnum: {
     id: 'id',
-    scanid: 'scanid',
-    framenumber: 'framenumber',
+    scan_id: 'scan_id',
+    frame_number: 'frame_number',
     path: 'path',
     url: 'url',
     status: 'status'
@@ -4185,17 +4194,18 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export const ScansScalarFieldEnum: {
     id: 'id',
-    phenotyperid: 'phenotyperid',
-    plantqrcode: 'plantqrcode',
+    phenotyper_id: 'phenotyper_id',
+    scanner_id: 'scanner_id',
+    plant_qr_code: 'plant_qr_code',
     path: 'path',
-    capturedate: 'capturedate',
-    numframes: 'numframes',
-    exposuretime: 'exposuretime',
+    capture_date: 'capture_date',
+    num_frames: 'num_frames',
+    exposure_time: 'exposure_time',
     gain: 'gain',
     brightness: 'brightness',
     contrast: 'contrast',
     gamma: 'gamma',
-    secondsperrotation: 'secondsperrotation'
+    seconds_per_rot: 'seconds_per_rot'
   };
 
   export type ScansScalarFieldEnum = (typeof ScansScalarFieldEnum)[keyof typeof ScansScalarFieldEnum]
@@ -4229,8 +4239,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     OR?: Enumerable<ImagesWhereInput>
     NOT?: Enumerable<ImagesWhereInput>
     id?: UuidFilter | string
-    scanid?: UuidNullableFilter | string | null
-    framenumber?: IntNullableFilter | number | null
+    scan_id?: UuidNullableFilter | string | null
+    frame_number?: IntNullableFilter | number | null
     path?: StringNullableFilter | string | null
     url?: StringNullableFilter | string | null
     status?: StringNullableFilter | string | null
@@ -4239,8 +4249,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ImagesOrderByWithRelationInput = {
     id?: SortOrder
-    scanid?: SortOrder
-    framenumber?: SortOrder
+    scan_id?: SortOrder
+    frame_number?: SortOrder
     path?: SortOrder
     url?: SortOrder
     status?: SortOrder
@@ -4253,8 +4263,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ImagesOrderByWithAggregationInput = {
     id?: SortOrder
-    scanid?: SortOrder
-    framenumber?: SortOrder
+    scan_id?: SortOrder
+    frame_number?: SortOrder
     path?: SortOrder
     url?: SortOrder
     status?: SortOrder
@@ -4270,8 +4280,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     OR?: Enumerable<ImagesScalarWhereWithAggregatesInput>
     NOT?: Enumerable<ImagesScalarWhereWithAggregatesInput>
     id?: UuidWithAggregatesFilter | string
-    scanid?: UuidNullableWithAggregatesFilter | string | null
-    framenumber?: IntNullableWithAggregatesFilter | number | null
+    scan_id?: UuidNullableWithAggregatesFilter | string | null
+    frame_number?: IntNullableWithAggregatesFilter | number | null
     path?: StringNullableWithAggregatesFilter | string | null
     url?: StringNullableWithAggregatesFilter | string | null
     status?: StringNullableWithAggregatesFilter | string | null
@@ -4321,34 +4331,36 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     OR?: Enumerable<ScansWhereInput>
     NOT?: Enumerable<ScansWhereInput>
     id?: UuidFilter | string
-    phenotyperid?: UuidNullableFilter | string | null
-    plantqrcode?: StringNullableFilter | string | null
+    phenotyper_id?: UuidNullableFilter | string | null
+    scanner_id?: StringNullableFilter | string | null
+    plant_qr_code?: StringNullableFilter | string | null
     path?: StringNullableFilter | string | null
-    capturedate?: DateTimeNullableFilter | Date | string | null
-    numframes?: IntNullableFilter | number | null
-    exposuretime?: IntNullableFilter | number | null
+    capture_date?: DateTimeNullableFilter | Date | string | null
+    num_frames?: IntNullableFilter | number | null
+    exposure_time?: IntNullableFilter | number | null
     gain?: FloatNullableFilter | number | null
     brightness?: FloatNullableFilter | number | null
     contrast?: FloatNullableFilter | number | null
     gamma?: FloatNullableFilter | number | null
-    secondsperrotation?: FloatNullableFilter | number | null
+    seconds_per_rot?: FloatNullableFilter | number | null
     images?: ImagesListRelationFilter
     phenotypers?: XOR<PhenotypersRelationFilter, PhenotypersWhereInput> | null
   }
 
   export type ScansOrderByWithRelationInput = {
     id?: SortOrder
-    phenotyperid?: SortOrder
-    plantqrcode?: SortOrder
+    phenotyper_id?: SortOrder
+    scanner_id?: SortOrder
+    plant_qr_code?: SortOrder
     path?: SortOrder
-    capturedate?: SortOrder
-    numframes?: SortOrder
-    exposuretime?: SortOrder
+    capture_date?: SortOrder
+    num_frames?: SortOrder
+    exposure_time?: SortOrder
     gain?: SortOrder
     brightness?: SortOrder
     contrast?: SortOrder
     gamma?: SortOrder
-    secondsperrotation?: SortOrder
+    seconds_per_rot?: SortOrder
     images?: ImagesOrderByRelationAggregateInput
     phenotypers?: PhenotypersOrderByWithRelationInput
   }
@@ -4359,17 +4371,18 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ScansOrderByWithAggregationInput = {
     id?: SortOrder
-    phenotyperid?: SortOrder
-    plantqrcode?: SortOrder
+    phenotyper_id?: SortOrder
+    scanner_id?: SortOrder
+    plant_qr_code?: SortOrder
     path?: SortOrder
-    capturedate?: SortOrder
-    numframes?: SortOrder
-    exposuretime?: SortOrder
+    capture_date?: SortOrder
+    num_frames?: SortOrder
+    exposure_time?: SortOrder
     gain?: SortOrder
     brightness?: SortOrder
     contrast?: SortOrder
     gamma?: SortOrder
-    secondsperrotation?: SortOrder
+    seconds_per_rot?: SortOrder
     _count?: ScansCountOrderByAggregateInput
     _avg?: ScansAvgOrderByAggregateInput
     _max?: ScansMaxOrderByAggregateInput
@@ -4382,22 +4395,23 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     OR?: Enumerable<ScansScalarWhereWithAggregatesInput>
     NOT?: Enumerable<ScansScalarWhereWithAggregatesInput>
     id?: UuidWithAggregatesFilter | string
-    phenotyperid?: UuidNullableWithAggregatesFilter | string | null
-    plantqrcode?: StringNullableWithAggregatesFilter | string | null
+    phenotyper_id?: UuidNullableWithAggregatesFilter | string | null
+    scanner_id?: StringNullableWithAggregatesFilter | string | null
+    plant_qr_code?: StringNullableWithAggregatesFilter | string | null
     path?: StringNullableWithAggregatesFilter | string | null
-    capturedate?: DateTimeNullableWithAggregatesFilter | Date | string | null
-    numframes?: IntNullableWithAggregatesFilter | number | null
-    exposuretime?: IntNullableWithAggregatesFilter | number | null
+    capture_date?: DateTimeNullableWithAggregatesFilter | Date | string | null
+    num_frames?: IntNullableWithAggregatesFilter | number | null
+    exposure_time?: IntNullableWithAggregatesFilter | number | null
     gain?: FloatNullableWithAggregatesFilter | number | null
     brightness?: FloatNullableWithAggregatesFilter | number | null
     contrast?: FloatNullableWithAggregatesFilter | number | null
     gamma?: FloatNullableWithAggregatesFilter | number | null
-    secondsperrotation?: FloatNullableWithAggregatesFilter | number | null
+    seconds_per_rot?: FloatNullableWithAggregatesFilter | number | null
   }
 
   export type ImagesCreateInput = {
     id: string
-    framenumber?: number | null
+    frame_number?: number | null
     path?: string | null
     url?: string | null
     status?: string | null
@@ -4406,8 +4420,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ImagesUncheckedCreateInput = {
     id: string
-    scanid?: string | null
-    framenumber?: number | null
+    scan_id?: string | null
+    frame_number?: number | null
     path?: string | null
     url?: string | null
     status?: string | null
@@ -4415,7 +4429,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ImagesUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    framenumber?: NullableIntFieldUpdateOperationsInput | number | null
+    frame_number?: NullableIntFieldUpdateOperationsInput | number | null
     path?: NullableStringFieldUpdateOperationsInput | string | null
     url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableStringFieldUpdateOperationsInput | string | null
@@ -4424,8 +4438,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ImagesUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    scanid?: NullableStringFieldUpdateOperationsInput | string | null
-    framenumber?: NullableIntFieldUpdateOperationsInput | number | null
+    scan_id?: NullableStringFieldUpdateOperationsInput | string | null
+    frame_number?: NullableIntFieldUpdateOperationsInput | number | null
     path?: NullableStringFieldUpdateOperationsInput | string | null
     url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableStringFieldUpdateOperationsInput | string | null
@@ -4433,8 +4447,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ImagesCreateManyInput = {
     id: string
-    scanid?: string | null
-    framenumber?: number | null
+    scan_id?: string | null
+    frame_number?: number | null
     path?: string | null
     url?: string | null
     status?: string | null
@@ -4442,7 +4456,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ImagesUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    framenumber?: NullableIntFieldUpdateOperationsInput | number | null
+    frame_number?: NullableIntFieldUpdateOperationsInput | number | null
     path?: NullableStringFieldUpdateOperationsInput | string | null
     url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableStringFieldUpdateOperationsInput | string | null
@@ -4450,8 +4464,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ImagesUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    scanid?: NullableStringFieldUpdateOperationsInput | string | null
-    framenumber?: NullableIntFieldUpdateOperationsInput | number | null
+    scan_id?: NullableStringFieldUpdateOperationsInput | string | null
+    frame_number?: NullableIntFieldUpdateOperationsInput | number | null
     path?: NullableStringFieldUpdateOperationsInput | string | null
     url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableStringFieldUpdateOperationsInput | string | null
@@ -4505,110 +4519,117 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ScansCreateInput = {
     id: string
-    plantqrcode?: string | null
+    scanner_id?: string | null
+    plant_qr_code?: string | null
     path?: string | null
-    capturedate?: Date | string | null
-    numframes?: number | null
-    exposuretime?: number | null
+    capture_date?: Date | string | null
+    num_frames?: number | null
+    exposure_time?: number | null
     gain?: number | null
     brightness?: number | null
     contrast?: number | null
     gamma?: number | null
-    secondsperrotation?: number | null
+    seconds_per_rot?: number | null
     images?: ImagesCreateNestedManyWithoutScansInput
     phenotypers?: PhenotypersCreateNestedOneWithoutScansInput
   }
 
   export type ScansUncheckedCreateInput = {
     id: string
-    phenotyperid?: string | null
-    plantqrcode?: string | null
+    phenotyper_id?: string | null
+    scanner_id?: string | null
+    plant_qr_code?: string | null
     path?: string | null
-    capturedate?: Date | string | null
-    numframes?: number | null
-    exposuretime?: number | null
+    capture_date?: Date | string | null
+    num_frames?: number | null
+    exposure_time?: number | null
     gain?: number | null
     brightness?: number | null
     contrast?: number | null
     gamma?: number | null
-    secondsperrotation?: number | null
+    seconds_per_rot?: number | null
     images?: ImagesUncheckedCreateNestedManyWithoutScansInput
   }
 
   export type ScansUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    plantqrcode?: NullableStringFieldUpdateOperationsInput | string | null
+    scanner_id?: NullableStringFieldUpdateOperationsInput | string | null
+    plant_qr_code?: NullableStringFieldUpdateOperationsInput | string | null
     path?: NullableStringFieldUpdateOperationsInput | string | null
-    capturedate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    numframes?: NullableIntFieldUpdateOperationsInput | number | null
-    exposuretime?: NullableIntFieldUpdateOperationsInput | number | null
+    capture_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    num_frames?: NullableIntFieldUpdateOperationsInput | number | null
+    exposure_time?: NullableIntFieldUpdateOperationsInput | number | null
     gain?: NullableFloatFieldUpdateOperationsInput | number | null
     brightness?: NullableFloatFieldUpdateOperationsInput | number | null
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
-    secondsperrotation?: NullableFloatFieldUpdateOperationsInput | number | null
+    seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
     images?: ImagesUpdateManyWithoutScansNestedInput
     phenotypers?: PhenotypersUpdateOneWithoutScansNestedInput
   }
 
   export type ScansUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    phenotyperid?: NullableStringFieldUpdateOperationsInput | string | null
-    plantqrcode?: NullableStringFieldUpdateOperationsInput | string | null
+    phenotyper_id?: NullableStringFieldUpdateOperationsInput | string | null
+    scanner_id?: NullableStringFieldUpdateOperationsInput | string | null
+    plant_qr_code?: NullableStringFieldUpdateOperationsInput | string | null
     path?: NullableStringFieldUpdateOperationsInput | string | null
-    capturedate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    numframes?: NullableIntFieldUpdateOperationsInput | number | null
-    exposuretime?: NullableIntFieldUpdateOperationsInput | number | null
+    capture_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    num_frames?: NullableIntFieldUpdateOperationsInput | number | null
+    exposure_time?: NullableIntFieldUpdateOperationsInput | number | null
     gain?: NullableFloatFieldUpdateOperationsInput | number | null
     brightness?: NullableFloatFieldUpdateOperationsInput | number | null
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
-    secondsperrotation?: NullableFloatFieldUpdateOperationsInput | number | null
+    seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
     images?: ImagesUncheckedUpdateManyWithoutScansNestedInput
   }
 
   export type ScansCreateManyInput = {
     id: string
-    phenotyperid?: string | null
-    plantqrcode?: string | null
+    phenotyper_id?: string | null
+    scanner_id?: string | null
+    plant_qr_code?: string | null
     path?: string | null
-    capturedate?: Date | string | null
-    numframes?: number | null
-    exposuretime?: number | null
+    capture_date?: Date | string | null
+    num_frames?: number | null
+    exposure_time?: number | null
     gain?: number | null
     brightness?: number | null
     contrast?: number | null
     gamma?: number | null
-    secondsperrotation?: number | null
+    seconds_per_rot?: number | null
   }
 
   export type ScansUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    plantqrcode?: NullableStringFieldUpdateOperationsInput | string | null
+    scanner_id?: NullableStringFieldUpdateOperationsInput | string | null
+    plant_qr_code?: NullableStringFieldUpdateOperationsInput | string | null
     path?: NullableStringFieldUpdateOperationsInput | string | null
-    capturedate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    numframes?: NullableIntFieldUpdateOperationsInput | number | null
-    exposuretime?: NullableIntFieldUpdateOperationsInput | number | null
+    capture_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    num_frames?: NullableIntFieldUpdateOperationsInput | number | null
+    exposure_time?: NullableIntFieldUpdateOperationsInput | number | null
     gain?: NullableFloatFieldUpdateOperationsInput | number | null
     brightness?: NullableFloatFieldUpdateOperationsInput | number | null
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
-    secondsperrotation?: NullableFloatFieldUpdateOperationsInput | number | null
+    seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type ScansUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    phenotyperid?: NullableStringFieldUpdateOperationsInput | string | null
-    plantqrcode?: NullableStringFieldUpdateOperationsInput | string | null
+    phenotyper_id?: NullableStringFieldUpdateOperationsInput | string | null
+    scanner_id?: NullableStringFieldUpdateOperationsInput | string | null
+    plant_qr_code?: NullableStringFieldUpdateOperationsInput | string | null
     path?: NullableStringFieldUpdateOperationsInput | string | null
-    capturedate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    numframes?: NullableIntFieldUpdateOperationsInput | number | null
-    exposuretime?: NullableIntFieldUpdateOperationsInput | number | null
+    capture_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    num_frames?: NullableIntFieldUpdateOperationsInput | number | null
+    exposure_time?: NullableIntFieldUpdateOperationsInput | number | null
     gain?: NullableFloatFieldUpdateOperationsInput | number | null
     brightness?: NullableFloatFieldUpdateOperationsInput | number | null
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
-    secondsperrotation?: NullableFloatFieldUpdateOperationsInput | number | null
+    seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type UuidFilter = {
@@ -4668,21 +4689,21 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ImagesCountOrderByAggregateInput = {
     id?: SortOrder
-    scanid?: SortOrder
-    framenumber?: SortOrder
+    scan_id?: SortOrder
+    frame_number?: SortOrder
     path?: SortOrder
     url?: SortOrder
     status?: SortOrder
   }
 
   export type ImagesAvgOrderByAggregateInput = {
-    framenumber?: SortOrder
+    frame_number?: SortOrder
   }
 
   export type ImagesMaxOrderByAggregateInput = {
     id?: SortOrder
-    scanid?: SortOrder
-    framenumber?: SortOrder
+    scan_id?: SortOrder
+    frame_number?: SortOrder
     path?: SortOrder
     url?: SortOrder
     status?: SortOrder
@@ -4690,15 +4711,15 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ImagesMinOrderByAggregateInput = {
     id?: SortOrder
-    scanid?: SortOrder
-    framenumber?: SortOrder
+    scan_id?: SortOrder
+    frame_number?: SortOrder
     path?: SortOrder
     url?: SortOrder
     status?: SortOrder
   }
 
   export type ImagesSumOrderByAggregateInput = {
-    framenumber?: SortOrder
+    frame_number?: SortOrder
   }
 
   export type UuidWithAggregatesFilter = {
@@ -4832,67 +4853,70 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ScansCountOrderByAggregateInput = {
     id?: SortOrder
-    phenotyperid?: SortOrder
-    plantqrcode?: SortOrder
+    phenotyper_id?: SortOrder
+    scanner_id?: SortOrder
+    plant_qr_code?: SortOrder
     path?: SortOrder
-    capturedate?: SortOrder
-    numframes?: SortOrder
-    exposuretime?: SortOrder
+    capture_date?: SortOrder
+    num_frames?: SortOrder
+    exposure_time?: SortOrder
     gain?: SortOrder
     brightness?: SortOrder
     contrast?: SortOrder
     gamma?: SortOrder
-    secondsperrotation?: SortOrder
+    seconds_per_rot?: SortOrder
   }
 
   export type ScansAvgOrderByAggregateInput = {
-    numframes?: SortOrder
-    exposuretime?: SortOrder
+    num_frames?: SortOrder
+    exposure_time?: SortOrder
     gain?: SortOrder
     brightness?: SortOrder
     contrast?: SortOrder
     gamma?: SortOrder
-    secondsperrotation?: SortOrder
+    seconds_per_rot?: SortOrder
   }
 
   export type ScansMaxOrderByAggregateInput = {
     id?: SortOrder
-    phenotyperid?: SortOrder
-    plantqrcode?: SortOrder
+    phenotyper_id?: SortOrder
+    scanner_id?: SortOrder
+    plant_qr_code?: SortOrder
     path?: SortOrder
-    capturedate?: SortOrder
-    numframes?: SortOrder
-    exposuretime?: SortOrder
+    capture_date?: SortOrder
+    num_frames?: SortOrder
+    exposure_time?: SortOrder
     gain?: SortOrder
     brightness?: SortOrder
     contrast?: SortOrder
     gamma?: SortOrder
-    secondsperrotation?: SortOrder
+    seconds_per_rot?: SortOrder
   }
 
   export type ScansMinOrderByAggregateInput = {
     id?: SortOrder
-    phenotyperid?: SortOrder
-    plantqrcode?: SortOrder
+    phenotyper_id?: SortOrder
+    scanner_id?: SortOrder
+    plant_qr_code?: SortOrder
     path?: SortOrder
-    capturedate?: SortOrder
-    numframes?: SortOrder
-    exposuretime?: SortOrder
+    capture_date?: SortOrder
+    num_frames?: SortOrder
+    exposure_time?: SortOrder
     gain?: SortOrder
     brightness?: SortOrder
     contrast?: SortOrder
     gamma?: SortOrder
-    secondsperrotation?: SortOrder
+    seconds_per_rot?: SortOrder
   }
 
   export type ScansSumOrderByAggregateInput = {
-    numframes?: SortOrder
-    exposuretime?: SortOrder
+    num_frames?: SortOrder
+    exposure_time?: SortOrder
     gain?: SortOrder
     brightness?: SortOrder
     contrast?: SortOrder
     gamma?: SortOrder
-    secondsperrotation?: SortOrder
+    seconds_per_rot?: SortOrder
   }
 
   export type DateTimeNullableWithAggregatesFilter = {
@@ -5256,32 +5280,34 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ScansCreateWithoutImagesInput = {
     id: string
-    plantqrcode?: string | null
+    scanner_id?: string | null
+    plant_qr_code?: string | null
     path?: string | null
-    capturedate?: Date | string | null
-    numframes?: number | null
-    exposuretime?: number | null
+    capture_date?: Date | string | null
+    num_frames?: number | null
+    exposure_time?: number | null
     gain?: number | null
     brightness?: number | null
     contrast?: number | null
     gamma?: number | null
-    secondsperrotation?: number | null
+    seconds_per_rot?: number | null
     phenotypers?: PhenotypersCreateNestedOneWithoutScansInput
   }
 
   export type ScansUncheckedCreateWithoutImagesInput = {
     id: string
-    phenotyperid?: string | null
-    plantqrcode?: string | null
+    phenotyper_id?: string | null
+    scanner_id?: string | null
+    plant_qr_code?: string | null
     path?: string | null
-    capturedate?: Date | string | null
-    numframes?: number | null
-    exposuretime?: number | null
+    capture_date?: Date | string | null
+    num_frames?: number | null
+    exposure_time?: number | null
     gain?: number | null
     brightness?: number | null
     contrast?: number | null
     gamma?: number | null
-    secondsperrotation?: number | null
+    seconds_per_rot?: number | null
   }
 
   export type ScansCreateOrConnectWithoutImagesInput = {
@@ -5296,61 +5322,65 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ScansUpdateWithoutImagesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    plantqrcode?: NullableStringFieldUpdateOperationsInput | string | null
+    scanner_id?: NullableStringFieldUpdateOperationsInput | string | null
+    plant_qr_code?: NullableStringFieldUpdateOperationsInput | string | null
     path?: NullableStringFieldUpdateOperationsInput | string | null
-    capturedate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    numframes?: NullableIntFieldUpdateOperationsInput | number | null
-    exposuretime?: NullableIntFieldUpdateOperationsInput | number | null
+    capture_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    num_frames?: NullableIntFieldUpdateOperationsInput | number | null
+    exposure_time?: NullableIntFieldUpdateOperationsInput | number | null
     gain?: NullableFloatFieldUpdateOperationsInput | number | null
     brightness?: NullableFloatFieldUpdateOperationsInput | number | null
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
-    secondsperrotation?: NullableFloatFieldUpdateOperationsInput | number | null
+    seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
     phenotypers?: PhenotypersUpdateOneWithoutScansNestedInput
   }
 
   export type ScansUncheckedUpdateWithoutImagesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    phenotyperid?: NullableStringFieldUpdateOperationsInput | string | null
-    plantqrcode?: NullableStringFieldUpdateOperationsInput | string | null
+    phenotyper_id?: NullableStringFieldUpdateOperationsInput | string | null
+    scanner_id?: NullableStringFieldUpdateOperationsInput | string | null
+    plant_qr_code?: NullableStringFieldUpdateOperationsInput | string | null
     path?: NullableStringFieldUpdateOperationsInput | string | null
-    capturedate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    numframes?: NullableIntFieldUpdateOperationsInput | number | null
-    exposuretime?: NullableIntFieldUpdateOperationsInput | number | null
+    capture_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    num_frames?: NullableIntFieldUpdateOperationsInput | number | null
+    exposure_time?: NullableIntFieldUpdateOperationsInput | number | null
     gain?: NullableFloatFieldUpdateOperationsInput | number | null
     brightness?: NullableFloatFieldUpdateOperationsInput | number | null
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
-    secondsperrotation?: NullableFloatFieldUpdateOperationsInput | number | null
+    seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type ScansCreateWithoutPhenotypersInput = {
     id: string
-    plantqrcode?: string | null
+    scanner_id?: string | null
+    plant_qr_code?: string | null
     path?: string | null
-    capturedate?: Date | string | null
-    numframes?: number | null
-    exposuretime?: number | null
+    capture_date?: Date | string | null
+    num_frames?: number | null
+    exposure_time?: number | null
     gain?: number | null
     brightness?: number | null
     contrast?: number | null
     gamma?: number | null
-    secondsperrotation?: number | null
+    seconds_per_rot?: number | null
     images?: ImagesCreateNestedManyWithoutScansInput
   }
 
   export type ScansUncheckedCreateWithoutPhenotypersInput = {
     id: string
-    plantqrcode?: string | null
+    scanner_id?: string | null
+    plant_qr_code?: string | null
     path?: string | null
-    capturedate?: Date | string | null
-    numframes?: number | null
-    exposuretime?: number | null
+    capture_date?: Date | string | null
+    num_frames?: number | null
+    exposure_time?: number | null
     gain?: number | null
     brightness?: number | null
     contrast?: number | null
     gamma?: number | null
-    secondsperrotation?: number | null
+    seconds_per_rot?: number | null
     images?: ImagesUncheckedCreateNestedManyWithoutScansInput
   }
 
@@ -5385,22 +5415,23 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     OR?: Enumerable<ScansScalarWhereInput>
     NOT?: Enumerable<ScansScalarWhereInput>
     id?: UuidFilter | string
-    phenotyperid?: UuidNullableFilter | string | null
-    plantqrcode?: StringNullableFilter | string | null
+    phenotyper_id?: UuidNullableFilter | string | null
+    scanner_id?: StringNullableFilter | string | null
+    plant_qr_code?: StringNullableFilter | string | null
     path?: StringNullableFilter | string | null
-    capturedate?: DateTimeNullableFilter | Date | string | null
-    numframes?: IntNullableFilter | number | null
-    exposuretime?: IntNullableFilter | number | null
+    capture_date?: DateTimeNullableFilter | Date | string | null
+    num_frames?: IntNullableFilter | number | null
+    exposure_time?: IntNullableFilter | number | null
     gain?: FloatNullableFilter | number | null
     brightness?: FloatNullableFilter | number | null
     contrast?: FloatNullableFilter | number | null
     gamma?: FloatNullableFilter | number | null
-    secondsperrotation?: FloatNullableFilter | number | null
+    seconds_per_rot?: FloatNullableFilter | number | null
   }
 
   export type ImagesCreateWithoutScansInput = {
     id: string
-    framenumber?: number | null
+    frame_number?: number | null
     path?: string | null
     url?: string | null
     status?: string | null
@@ -5408,7 +5439,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ImagesUncheckedCreateWithoutScansInput = {
     id: string
-    framenumber?: number | null
+    frame_number?: number | null
     path?: string | null
     url?: string | null
     status?: string | null
@@ -5462,8 +5493,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     OR?: Enumerable<ImagesScalarWhereInput>
     NOT?: Enumerable<ImagesScalarWhereInput>
     id?: UuidFilter | string
-    scanid?: UuidNullableFilter | string | null
-    framenumber?: IntNullableFilter | number | null
+    scan_id?: UuidNullableFilter | string | null
+    frame_number?: IntNullableFilter | number | null
     path?: StringNullableFilter | string | null
     url?: StringNullableFilter | string | null
     status?: StringNullableFilter | string | null
@@ -5488,65 +5519,69 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ScansCreateManyPhenotypersInput = {
     id: string
-    plantqrcode?: string | null
+    scanner_id?: string | null
+    plant_qr_code?: string | null
     path?: string | null
-    capturedate?: Date | string | null
-    numframes?: number | null
-    exposuretime?: number | null
+    capture_date?: Date | string | null
+    num_frames?: number | null
+    exposure_time?: number | null
     gain?: number | null
     brightness?: number | null
     contrast?: number | null
     gamma?: number | null
-    secondsperrotation?: number | null
+    seconds_per_rot?: number | null
   }
 
   export type ScansUpdateWithoutPhenotypersInput = {
     id?: StringFieldUpdateOperationsInput | string
-    plantqrcode?: NullableStringFieldUpdateOperationsInput | string | null
+    scanner_id?: NullableStringFieldUpdateOperationsInput | string | null
+    plant_qr_code?: NullableStringFieldUpdateOperationsInput | string | null
     path?: NullableStringFieldUpdateOperationsInput | string | null
-    capturedate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    numframes?: NullableIntFieldUpdateOperationsInput | number | null
-    exposuretime?: NullableIntFieldUpdateOperationsInput | number | null
+    capture_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    num_frames?: NullableIntFieldUpdateOperationsInput | number | null
+    exposure_time?: NullableIntFieldUpdateOperationsInput | number | null
     gain?: NullableFloatFieldUpdateOperationsInput | number | null
     brightness?: NullableFloatFieldUpdateOperationsInput | number | null
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
-    secondsperrotation?: NullableFloatFieldUpdateOperationsInput | number | null
+    seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
     images?: ImagesUpdateManyWithoutScansNestedInput
   }
 
   export type ScansUncheckedUpdateWithoutPhenotypersInput = {
     id?: StringFieldUpdateOperationsInput | string
-    plantqrcode?: NullableStringFieldUpdateOperationsInput | string | null
+    scanner_id?: NullableStringFieldUpdateOperationsInput | string | null
+    plant_qr_code?: NullableStringFieldUpdateOperationsInput | string | null
     path?: NullableStringFieldUpdateOperationsInput | string | null
-    capturedate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    numframes?: NullableIntFieldUpdateOperationsInput | number | null
-    exposuretime?: NullableIntFieldUpdateOperationsInput | number | null
+    capture_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    num_frames?: NullableIntFieldUpdateOperationsInput | number | null
+    exposure_time?: NullableIntFieldUpdateOperationsInput | number | null
     gain?: NullableFloatFieldUpdateOperationsInput | number | null
     brightness?: NullableFloatFieldUpdateOperationsInput | number | null
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
-    secondsperrotation?: NullableFloatFieldUpdateOperationsInput | number | null
+    seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
     images?: ImagesUncheckedUpdateManyWithoutScansNestedInput
   }
 
   export type ScansUncheckedUpdateManyWithoutScansInput = {
     id?: StringFieldUpdateOperationsInput | string
-    plantqrcode?: NullableStringFieldUpdateOperationsInput | string | null
+    scanner_id?: NullableStringFieldUpdateOperationsInput | string | null
+    plant_qr_code?: NullableStringFieldUpdateOperationsInput | string | null
     path?: NullableStringFieldUpdateOperationsInput | string | null
-    capturedate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    numframes?: NullableIntFieldUpdateOperationsInput | number | null
-    exposuretime?: NullableIntFieldUpdateOperationsInput | number | null
+    capture_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    num_frames?: NullableIntFieldUpdateOperationsInput | number | null
+    exposure_time?: NullableIntFieldUpdateOperationsInput | number | null
     gain?: NullableFloatFieldUpdateOperationsInput | number | null
     brightness?: NullableFloatFieldUpdateOperationsInput | number | null
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
-    secondsperrotation?: NullableFloatFieldUpdateOperationsInput | number | null
+    seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type ImagesCreateManyScansInput = {
     id: string
-    framenumber?: number | null
+    frame_number?: number | null
     path?: string | null
     url?: string | null
     status?: string | null
@@ -5554,7 +5589,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ImagesUpdateWithoutScansInput = {
     id?: StringFieldUpdateOperationsInput | string
-    framenumber?: NullableIntFieldUpdateOperationsInput | number | null
+    frame_number?: NullableIntFieldUpdateOperationsInput | number | null
     path?: NullableStringFieldUpdateOperationsInput | string | null
     url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableStringFieldUpdateOperationsInput | string | null
@@ -5562,7 +5597,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ImagesUncheckedUpdateWithoutScansInput = {
     id?: StringFieldUpdateOperationsInput | string
-    framenumber?: NullableIntFieldUpdateOperationsInput | number | null
+    frame_number?: NullableIntFieldUpdateOperationsInput | number | null
     path?: NullableStringFieldUpdateOperationsInput | string | null
     url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableStringFieldUpdateOperationsInput | string | null
@@ -5570,7 +5605,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ImagesUncheckedUpdateManyWithoutImagesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    framenumber?: NullableIntFieldUpdateOperationsInput | number | null
+    frame_number?: NullableIntFieldUpdateOperationsInput | number | null
     path?: NullableStringFieldUpdateOperationsInput | string | null
     url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableStringFieldUpdateOperationsInput | string | null

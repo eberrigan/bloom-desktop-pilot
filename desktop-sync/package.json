@@ -1,6 +1,6 @@
 {
   "name": "bloom-desktop-pilot-2",
-  "productName": "bloom-desktop-pilot-2",
+  "productName": "Bloom Desktop",
   "version": "1.0.0",
   "description": "My Electron application description",
   "main": ".webpack/main",
@@ -18,8 +18,8 @@
     "client:generate": "npx electric-sql generate --service http://localhost:5133 --proxy postgresql://prisma:proxy_password@localhost:65432/postgres",
     "client:generate:debug": "npx electric-sql generate --service http://localhost:5133 --proxy postgresql://prisma:proxy_password@localhost:65432/postgres --debug",
     "client:watch": "npm run client:generate --watch",
-    "db:reset": "supabase db reset --db-url postgresql://postgres:proxy_password@localhost:65432/postgres",
-    "db:migrate": "npx supabase@beta db push --db-url postgresql://postgres:proxy_password@localhost:65432/postgres",
+    "db:reset": "npx supabase db reset --db-url postgresql://postgres:proxy_password@localhost:65432/postgres",
+    "db:migrate": "npx supabase db push --db-url postgresql://postgres:proxy_password@localhost:65432/postgres",
     "db:load-data": "node ./db/load-data.js"
   },
   "keywords": [],

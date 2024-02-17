@@ -6,20 +6,22 @@ type ScannerConfig = {
 };
 
 type ScanMetadata = Readonly<{
-  scanId: string;
-  personId: number;
-  plantQrCode: string;
+  id: string;
+  phenotyper_id: string;
+  scanner_id: string;
+  plant_qr_code: string;
   path: string;
-  date: string;
-  numFrames: number;
-  exposureTime: number;
+  capture_date: string;
+  num_frames: number;
+  exposure_time: number;
   gain: number;
   brightness: number;
   contrast: number;
   gamma: number;
+  seconds_per_rot: number;
 }>;
 
-type ScanStatus = 'idle' | 'capturing' | 'saving' | 'complete';
+type ScanStatus = "idle" | "capturing" | "saving" | "complete";
 
 type ScanProgress = {
   nImagesCaptured: number;
@@ -36,10 +38,20 @@ type Scan = {
 
 // extend the ScanMetadata type to include the email field
 type ScanMetadataWithEmail = ScanMetadata & {
-  personEmail: string;
+  email: string;
 };
 
 type ScanWithEmail = {
   metadata: ScanMetadataWithEmail;
   images: ScanImages;
 };
+
+type Phenotyper = {
+  id: string;
+  name: string;
+  email: string;
+};
+
+interface PhenotyperRetriever {
+  getPhenotypers: () => [Phenotyper];
+}

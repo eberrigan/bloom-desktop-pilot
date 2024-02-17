@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   BrowserRouter,
   Routes,
   Route,
   NavLink,
   Outlet,
-} from 'react-router-dom';
-import logo from './logo.png';
+} from "react-router-dom";
+import logo from "./logo.png";
+import { ElectricStatusBadge } from "./ElectricStatusBadge";
 
 const links = [
   {
-    to: '/',
-    label: 'Capture scan',
+    to: "/",
+    label: "Capture scan",
   },
   {
-    to: '/browse-scans',
-    label: 'Browse scans',
+    to: "/browse-scans",
+    label: "Browse scans",
   },
 ];
 
@@ -36,9 +37,17 @@ export function Layout() {
         <img src={logo} className="h-12 inline" />
       </div>
       <div className="absolute right-12 top-8">
-        <div className="flex flex-col">
-          <span className="text-xs font-bold">Device</span>
-          <span>{scannerId === null ? '...' : `${scannerId}`}</span>
+        <div className="flex flex-row">
+          <div className="flex flex-col">
+            <span className="text-xs font-bold">Device</span>
+            <span>{scannerId === null ? "..." : `${scannerId}`}</span>
+          </div>
+          <div className="ml-4 flex flex-col">
+            {/* <span className="text-xs font-bold">Electric</span> */}
+            <span>
+              <ElectricStatusBadge />
+            </span>
+          </div>
         </div>
       </div>
       <div className="mt-20 flex flex-col">
@@ -51,8 +60,8 @@ export function Layout() {
                     to={link.to}
                     className={({ isActive, isPending }) => {
                       return (
-                        'p-4 rounded-md text-gray-600 hover:text-gray-900 ' +
-                        (isActive ? 'bg-stone-200' : isPending ? 'pending' : '')
+                        "p-4 rounded-md text-gray-600 hover:text-gray-900 " +
+                        (isActive ? "bg-stone-200" : isPending ? "pending" : "")
                       );
                     }}
                   >

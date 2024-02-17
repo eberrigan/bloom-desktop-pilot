@@ -1,22 +1,22 @@
-import { useEffect, useState } from 'react';
-
-import { Database } from '../types/database.types';
+import { useEffect, useState } from "react";
 
 const ipcRenderer = window.electron.ipcRenderer;
 
-type Person = Database['public']['Tables']['people']['Row'];
-
-const getPeople = window.electron.bloom.getPeople;
-const getPersonId = window.electron.scanner.getPersonId;
-const setPersonId = window.electron.scanner.setPersonId;
+const getPeople = window.electron.electric.getPhenotypers;
+const getPhenotyperId = window.electron.scanner.getPhenotyperId;
+const setPhenotyperId = window.electron.scanner.setPhenotyperId;
 
 export function PersonChooser({
-  personIdChanged,
+  phenotyperIdChanged,
 }: {
-  personIdChanged: (personId: number | null) => void;
+  phenotyperIdChanged: (phenotyperId: string | null) => void;
 }) {
-  const [selectedPersonId, setSelectedPersonId] = useState<number | null>(null);
-  const [personOptions, setPersonOptions] = useState<Person[]>([]);
+  const [selectedPhenotyperId, setSelectedPhenotyperId] = useState<
+    string | null
+  >(null);
+  const [phenotyperOptions, setPhenotyperOptions] = useState<
+    Phenotyper[] | null
+  >(null);
   const [displayIdleMessage, setDisplayIdleMessage] = useState<boolean>(false);
 
   // Show a message when the scanner is idle
@@ -27,77 +27,92 @@ export function PersonChooser({
     }, 3000);
   };
 
-  const setAllPersonIds = (personId: number | null) => {
-    personIdChanged(personId);
-    setSelectedPersonId(personId);
-    setPersonId(personId);
+  const setAllPhenotyperIds = (phenotyperId: string | null) => {
+    phenotyperIdChanged(phenotyperId);
+    setSelectedPhenotyperId(phenotyperId);
+    setPhenotyperId(phenotyperId);
   };
 
   useEffect(() => {
-    return ipcRenderer.on('main:idle', () => {
-      console.log('received main:idle');
-      personIdChanged(null);
-      setSelectedPersonId(null);
-      setPersonId(null);
+    return ipcRenderer.on("main:idle", () => {
+      console.log("received main:idle");
+      phenotyperIdChanged(null);
+      setSelectedPhenotyperId(null);
+      setPhenotyperId(null);
       showIdleMessage();
     });
   }, []);
 
   useEffect(() => {
-    getPeople().then((response) => {
-      const people = response as Person[];
-      setPersonOptions(people);
-    });
+    // Get the list of people from the database every 10 seconds
+    const interval = setInterval(() => {
+      getPeople()
+        .then((response) => {
+          const people = response as Phenotyper[];
+          setPhenotyperOptions(people);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }, 10000);
+
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
-    getPersonId().then((response: number) => {
-      const personId = response as number;
-      setSelectedPersonId(personId);
-      personIdChanged(personId);
+    getPhenotyperId().then((response: string) => {
+      const phenotyperId = response;
+      setSelectedPhenotyperId(phenotyperId);
+      phenotyperIdChanged(phenotyperId);
     });
   }, []);
 
   const onChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const personId = parseInt(event.target.value, 10) || null;
-    personIdChanged(personId);
-    setSelectedPersonId(personId);
-    setPersonId(personId);
+    const phenotyperId = event.target.value || null;
+    phenotyperIdChanged(phenotyperId);
+    setSelectedPhenotyperId(phenotyperId);
+    setPhenotyperId(phenotyperId);
     setDisplayIdleMessage(false);
   };
 
   return (
     <div>
-      <div className="flex flex-row items-center">
-        <select
-          value={selectedPersonId || ''}
-          onChange={onChange}
-          className="rounded-md border border-gray-300 px-2 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-        >
-          <option value="">Choose a person</option>
-          {personOptions.map((person) => (
-            <option key={person.id} value={person.id}>
-              {person.name}
-            </option>
-          ))}
-        </select>
-        {selectedPersonId !== null ? (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6 cursor-pointer ml-2"
-            onClick={() => setAllPersonIds(null)}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 18 18 6M6 6l12 12"
-            />
-          </svg>
-        ) : null}
+      <div>
+        {phenotyperOptions === null ? (
+          <span>Loading phenotypers...</span>
+        ) : (
+          <div className="flex flex-row items-center">
+            <select
+              value={selectedPhenotyperId || ""}
+              onChange={onChange}
+              className="rounded-md border border-gray-300 px-2 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+            >
+              <option value="">Choose a person</option>
+              {phenotyperOptions.map((person) => (
+                <option key={person.id} value={person.id}>
+                  {person.name}
+                </option>
+              ))}
+            </select>
+            {selectedPhenotyperId !== null ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6 cursor-pointer ml-2"
+                onClick={() => setAllPhenotyperIds(null)}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18 18 6M6 6l12 12"
+                />
+              </svg>
+            ) : null}
+          </div>
+        )}
       </div>
       {displayIdleMessage ? (
         <div className="text-xs text-yellow-600">

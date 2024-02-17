@@ -21,10 +21,20 @@ export class BloomRetriever {
   };
 }
 
-async function createBloomRetriever() {
+export async function createBloomRetriever() {
   const bloom_retriever = new BloomRetriever();
   await bloom_retriever.init();
   return bloom_retriever;
+}
+
+export async function getSupabaseJWT() {
+  const supabase = await getSupabaseClient();
+  const { data } = await supabase.auth.getSession();
+  const token = data.session?.access_token;
+  if (!token) {
+    throw new Error("No token");
+  }
+  return token;
 }
 
 async function getSupabaseClient() {
@@ -67,5 +77,3 @@ async function getSupabaseClient() {
 
   return supabase;
 }
-
-export { createBloomRetriever };

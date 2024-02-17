@@ -1,6 +1,7 @@
 // Disable no-unused-vars, broken for spread args
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
+import { Scans, Phenotypers } from "../generated/client";
 
 export type Channels =
   | "ipc-example"
@@ -28,14 +29,14 @@ const electronHandler = {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
     },
   },
-  bloom: {
-    getPeople: () => ipcRenderer.invoke("bloom:get-people"),
-  },
+  // bloom: {
+  //   getPeople: () => ipcRenderer.invoke("bloom:get-people"),
+  // },
   scanner: {
     getScannerId: () => ipcRenderer.invoke("scanner:get-scanner-id"),
-    getPersonId: () => ipcRenderer.invoke("scanner:get-person-id"),
-    setPersonId: (personId: number | null) =>
-      ipcRenderer.send("scanner:set-person-id", [personId]),
+    getPhenotyperId: () => ipcRenderer.invoke("scanner:get-phenotyper-id"),
+    setPhenotyperId: (phenotyperId: string | null) =>
+      ipcRenderer.send("scanner:set-phenotyper-id", [phenotyperId]),
     getPlantQrCode: () => ipcRenderer.invoke("scanner:get-plant-qr-code"),
     setPlantQrCode: (plantQrCode: string | null) =>
       ipcRenderer.invoke("scanner:set-plant-qr-code", [plantQrCode]),
@@ -43,16 +44,18 @@ const electronHandler = {
     getScanData: () => ipcRenderer.invoke("scanner:get-scan-data"),
   },
   scanStore: {
-    getScans: () => ipcRenderer.invoke("scan-store:get-scans"),
-    getScansWithEmail: () =>
-      ipcRenderer.invoke("scan-store:get-scans-with-email"),
+    getScans: () =>
+      ipcRenderer.invoke("scan-store:get-scans") as Promise<
+        (Scans & {
+          phenotypers: Phenotypers;
+        })[]
+      >,
     getScan: (scanId: string) =>
-      ipcRenderer.invoke("scan-store:get-scan", [scanId]),
-    getScanWithEmail: (scanId: string) =>
-      ipcRenderer.invoke("scan-store:get-scan-with-email", [scanId]),
+      ipcRenderer.invoke("scan-store:get-scan", [scanId]) as Promise<Scans>,
   },
-  scans: {
-    getAll: () => ipcRenderer.invoke("scans:get-all"),
+  electric: {
+    getPhenotypers: () => ipcRenderer.invoke("electric:get-phenotypers"),
+    getStatus: () => ipcRenderer.invoke("electric:get-status"),
   },
 };
 

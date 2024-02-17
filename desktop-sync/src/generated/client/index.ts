@@ -12,13 +12,13 @@ import migrations from './migrations';
 // ENUMS
 /////////////////////////////////////////
 
-export const ImagesScalarFieldEnumSchema = z.enum(['id','scanid','framenumber','path','url','status']);
+export const ImagesScalarFieldEnumSchema = z.enum(['id','scan_id','frame_number','path','url','status']);
 
 export const PhenotypersScalarFieldEnumSchema = z.enum(['id','name','email']);
 
 export const QueryModeSchema = z.enum(['default','insensitive']);
 
-export const ScansScalarFieldEnumSchema = z.enum(['id','phenotyperid','plantqrcode','path','capturedate','numframes','exposuretime','gain','brightness','contrast','gamma','secondsperrotation']);
+export const ScansScalarFieldEnumSchema = z.enum(['id','phenotyper_id','scanner_id','plant_qr_code','path','capture_date','num_frames','exposure_time','gain','brightness','contrast','gamma','seconds_per_rot']);
 
 export const SortOrderSchema = z.enum(['asc','desc']);
 
@@ -33,8 +33,8 @@ export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted','ReadCo
 
 export const ImagesSchema = z.object({
   id: z.string().uuid(),
-  scanid: z.string().uuid().nullable(),
-  framenumber: z.number().int().gte(-2147483648).lte(2147483647).nullable(),
+  scan_id: z.string().uuid().nullable(),
+  frame_number: z.number().int().gte(-2147483648).lte(2147483647).nullable(),
   path: z.string().nullable(),
   url: z.string().nullable(),
   status: z.string().nullable(),
@@ -60,17 +60,18 @@ export type Phenotypers = z.infer<typeof PhenotypersSchema>
 
 export const ScansSchema = z.object({
   id: z.string().uuid(),
-  phenotyperid: z.string().uuid().nullable(),
-  plantqrcode: z.string().nullable(),
+  phenotyper_id: z.string().uuid().nullable(),
+  scanner_id: z.string().nullable(),
+  plant_qr_code: z.string().nullable(),
   path: z.string().nullable(),
-  capturedate: z.coerce.date().nullable(),
-  numframes: z.number().int().gte(-2147483648).lte(2147483647).nullable(),
-  exposuretime: z.number().int().gte(-2147483648).lte(2147483647).nullable(),
+  capture_date: z.coerce.date().nullable(),
+  num_frames: z.number().int().gte(-2147483648).lte(2147483647).nullable(),
+  exposure_time: z.number().int().gte(-2147483648).lte(2147483647).nullable(),
   gain: z.number().or(z.nan()).nullable(),
   brightness: z.number().or(z.nan()).nullable(),
   contrast: z.number().or(z.nan()).nullable(),
   gamma: z.number().or(z.nan()).nullable(),
-  secondsperrotation: z.number().or(z.nan()).nullable(),
+  seconds_per_rot: z.number().or(z.nan()).nullable(),
 })
 
 export type Scans = z.infer<typeof ScansSchema>
@@ -93,8 +94,8 @@ export const ImagesArgsSchema: z.ZodType<Prisma.ImagesArgs> = z.object({
 
 export const ImagesSelectSchema: z.ZodType<Prisma.ImagesSelect> = z.object({
   id: z.boolean().optional(),
-  scanid: z.boolean().optional(),
-  framenumber: z.boolean().optional(),
+  scan_id: z.boolean().optional(),
+  frame_number: z.boolean().optional(),
   path: z.boolean().optional(),
   url: z.boolean().optional(),
   status: z.boolean().optional(),
@@ -154,17 +155,18 @@ export const ScansCountOutputTypeSelectSchema: z.ZodType<Prisma.ScansCountOutput
 
 export const ScansSelectSchema: z.ZodType<Prisma.ScansSelect> = z.object({
   id: z.boolean().optional(),
-  phenotyperid: z.boolean().optional(),
-  plantqrcode: z.boolean().optional(),
+  phenotyper_id: z.boolean().optional(),
+  scanner_id: z.boolean().optional(),
+  plant_qr_code: z.boolean().optional(),
   path: z.boolean().optional(),
-  capturedate: z.boolean().optional(),
-  numframes: z.boolean().optional(),
-  exposuretime: z.boolean().optional(),
+  capture_date: z.boolean().optional(),
+  num_frames: z.boolean().optional(),
+  exposure_time: z.boolean().optional(),
   gain: z.boolean().optional(),
   brightness: z.boolean().optional(),
   contrast: z.boolean().optional(),
   gamma: z.boolean().optional(),
-  secondsperrotation: z.boolean().optional(),
+  seconds_per_rot: z.boolean().optional(),
   images: z.union([z.boolean(),z.lazy(() => ImagesFindManyArgsSchema)]).optional(),
   phenotypers: z.union([z.boolean(),z.lazy(() => PhenotypersArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => ScansCountOutputTypeArgsSchema)]).optional(),
@@ -180,8 +182,8 @@ export const ImagesWhereInputSchema: z.ZodType<Prisma.ImagesWhereInput> = z.obje
   OR: z.lazy(() => ImagesWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => ImagesWhereInputSchema),z.lazy(() => ImagesWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => UuidFilterSchema),z.string() ]).optional(),
-  scanid: z.union([ z.lazy(() => UuidNullableFilterSchema),z.string() ]).optional().nullable(),
-  framenumber: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  scan_id: z.union([ z.lazy(() => UuidNullableFilterSchema),z.string() ]).optional().nullable(),
+  frame_number: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
   path: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   url: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   status: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
@@ -190,8 +192,8 @@ export const ImagesWhereInputSchema: z.ZodType<Prisma.ImagesWhereInput> = z.obje
 
 export const ImagesOrderByWithRelationInputSchema: z.ZodType<Prisma.ImagesOrderByWithRelationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
-  scanid: z.lazy(() => SortOrderSchema).optional(),
-  framenumber: z.lazy(() => SortOrderSchema).optional(),
+  scan_id: z.lazy(() => SortOrderSchema).optional(),
+  frame_number: z.lazy(() => SortOrderSchema).optional(),
   path: z.lazy(() => SortOrderSchema).optional(),
   url: z.lazy(() => SortOrderSchema).optional(),
   status: z.lazy(() => SortOrderSchema).optional(),
@@ -204,8 +206,8 @@ export const ImagesWhereUniqueInputSchema: z.ZodType<Prisma.ImagesWhereUniqueInp
 
 export const ImagesOrderByWithAggregationInputSchema: z.ZodType<Prisma.ImagesOrderByWithAggregationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
-  scanid: z.lazy(() => SortOrderSchema).optional(),
-  framenumber: z.lazy(() => SortOrderSchema).optional(),
+  scan_id: z.lazy(() => SortOrderSchema).optional(),
+  frame_number: z.lazy(() => SortOrderSchema).optional(),
   path: z.lazy(() => SortOrderSchema).optional(),
   url: z.lazy(() => SortOrderSchema).optional(),
   status: z.lazy(() => SortOrderSchema).optional(),
@@ -221,8 +223,8 @@ export const ImagesScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Images
   OR: z.lazy(() => ImagesScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => ImagesScalarWhereWithAggregatesInputSchema),z.lazy(() => ImagesScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => UuidWithAggregatesFilterSchema),z.string() ]).optional(),
-  scanid: z.union([ z.lazy(() => UuidNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
-  framenumber: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  scan_id: z.union([ z.lazy(() => UuidNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  frame_number: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   path: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   url: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   status: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
@@ -272,34 +274,36 @@ export const ScansWhereInputSchema: z.ZodType<Prisma.ScansWhereInput> = z.object
   OR: z.lazy(() => ScansWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => ScansWhereInputSchema),z.lazy(() => ScansWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => UuidFilterSchema),z.string() ]).optional(),
-  phenotyperid: z.union([ z.lazy(() => UuidNullableFilterSchema),z.string() ]).optional().nullable(),
-  plantqrcode: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  phenotyper_id: z.union([ z.lazy(() => UuidNullableFilterSchema),z.string() ]).optional().nullable(),
+  scanner_id: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  plant_qr_code: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   path: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  capturedate: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
-  numframes: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
-  exposuretime: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  capture_date: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
+  num_frames: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  exposure_time: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
   gain: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   brightness: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   contrast: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   gamma: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
-  secondsperrotation: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  seconds_per_rot: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   images: z.lazy(() => ImagesListRelationFilterSchema).optional(),
   phenotypers: z.union([ z.lazy(() => PhenotypersRelationFilterSchema),z.lazy(() => PhenotypersWhereInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const ScansOrderByWithRelationInputSchema: z.ZodType<Prisma.ScansOrderByWithRelationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
-  phenotyperid: z.lazy(() => SortOrderSchema).optional(),
-  plantqrcode: z.lazy(() => SortOrderSchema).optional(),
+  phenotyper_id: z.lazy(() => SortOrderSchema).optional(),
+  scanner_id: z.lazy(() => SortOrderSchema).optional(),
+  plant_qr_code: z.lazy(() => SortOrderSchema).optional(),
   path: z.lazy(() => SortOrderSchema).optional(),
-  capturedate: z.lazy(() => SortOrderSchema).optional(),
-  numframes: z.lazy(() => SortOrderSchema).optional(),
-  exposuretime: z.lazy(() => SortOrderSchema).optional(),
+  capture_date: z.lazy(() => SortOrderSchema).optional(),
+  num_frames: z.lazy(() => SortOrderSchema).optional(),
+  exposure_time: z.lazy(() => SortOrderSchema).optional(),
   gain: z.lazy(() => SortOrderSchema).optional(),
   brightness: z.lazy(() => SortOrderSchema).optional(),
   contrast: z.lazy(() => SortOrderSchema).optional(),
   gamma: z.lazy(() => SortOrderSchema).optional(),
-  secondsperrotation: z.lazy(() => SortOrderSchema).optional(),
+  seconds_per_rot: z.lazy(() => SortOrderSchema).optional(),
   images: z.lazy(() => ImagesOrderByRelationAggregateInputSchema).optional(),
   phenotypers: z.lazy(() => PhenotypersOrderByWithRelationInputSchema).optional()
 }).strict();
@@ -310,17 +314,18 @@ export const ScansWhereUniqueInputSchema: z.ZodType<Prisma.ScansWhereUniqueInput
 
 export const ScansOrderByWithAggregationInputSchema: z.ZodType<Prisma.ScansOrderByWithAggregationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
-  phenotyperid: z.lazy(() => SortOrderSchema).optional(),
-  plantqrcode: z.lazy(() => SortOrderSchema).optional(),
+  phenotyper_id: z.lazy(() => SortOrderSchema).optional(),
+  scanner_id: z.lazy(() => SortOrderSchema).optional(),
+  plant_qr_code: z.lazy(() => SortOrderSchema).optional(),
   path: z.lazy(() => SortOrderSchema).optional(),
-  capturedate: z.lazy(() => SortOrderSchema).optional(),
-  numframes: z.lazy(() => SortOrderSchema).optional(),
-  exposuretime: z.lazy(() => SortOrderSchema).optional(),
+  capture_date: z.lazy(() => SortOrderSchema).optional(),
+  num_frames: z.lazy(() => SortOrderSchema).optional(),
+  exposure_time: z.lazy(() => SortOrderSchema).optional(),
   gain: z.lazy(() => SortOrderSchema).optional(),
   brightness: z.lazy(() => SortOrderSchema).optional(),
   contrast: z.lazy(() => SortOrderSchema).optional(),
   gamma: z.lazy(() => SortOrderSchema).optional(),
-  secondsperrotation: z.lazy(() => SortOrderSchema).optional(),
+  seconds_per_rot: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => ScansCountOrderByAggregateInputSchema).optional(),
   _avg: z.lazy(() => ScansAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => ScansMaxOrderByAggregateInputSchema).optional(),
@@ -333,22 +338,23 @@ export const ScansScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.ScansSc
   OR: z.lazy(() => ScansScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => ScansScalarWhereWithAggregatesInputSchema),z.lazy(() => ScansScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => UuidWithAggregatesFilterSchema),z.string() ]).optional(),
-  phenotyperid: z.union([ z.lazy(() => UuidNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
-  plantqrcode: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  phenotyper_id: z.union([ z.lazy(() => UuidNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  scanner_id: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  plant_qr_code: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   path: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
-  capturedate: z.union([ z.lazy(() => DateTimeNullableWithAggregatesFilterSchema),z.coerce.date() ]).optional().nullable(),
-  numframes: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
-  exposuretime: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  capture_date: z.union([ z.lazy(() => DateTimeNullableWithAggregatesFilterSchema),z.coerce.date() ]).optional().nullable(),
+  num_frames: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  exposure_time: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   gain: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   brightness: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   contrast: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   gamma: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
-  secondsperrotation: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  seconds_per_rot: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
 }).strict();
 
 export const ImagesCreateInputSchema: z.ZodType<Prisma.ImagesCreateInput> = z.object({
   id: z.string().uuid(),
-  framenumber: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
+  frame_number: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
   path: z.string().optional().nullable(),
   url: z.string().optional().nullable(),
   status: z.string().optional().nullable(),
@@ -357,8 +363,8 @@ export const ImagesCreateInputSchema: z.ZodType<Prisma.ImagesCreateInput> = z.ob
 
 export const ImagesUncheckedCreateInputSchema: z.ZodType<Prisma.ImagesUncheckedCreateInput> = z.object({
   id: z.string().uuid(),
-  scanid: z.string().uuid().optional().nullable(),
-  framenumber: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
+  scan_id: z.string().uuid().optional().nullable(),
+  frame_number: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
   path: z.string().optional().nullable(),
   url: z.string().optional().nullable(),
   status: z.string().optional().nullable()
@@ -366,7 +372,7 @@ export const ImagesUncheckedCreateInputSchema: z.ZodType<Prisma.ImagesUncheckedC
 
 export const ImagesUpdateInputSchema: z.ZodType<Prisma.ImagesUpdateInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  framenumber: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  frame_number: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -375,8 +381,8 @@ export const ImagesUpdateInputSchema: z.ZodType<Prisma.ImagesUpdateInput> = z.ob
 
 export const ImagesUncheckedUpdateInputSchema: z.ZodType<Prisma.ImagesUncheckedUpdateInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  scanid: z.union([ z.string().uuid(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  framenumber: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  scan_id: z.union([ z.string().uuid(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  frame_number: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -384,8 +390,8 @@ export const ImagesUncheckedUpdateInputSchema: z.ZodType<Prisma.ImagesUncheckedU
 
 export const ImagesCreateManyInputSchema: z.ZodType<Prisma.ImagesCreateManyInput> = z.object({
   id: z.string().uuid(),
-  scanid: z.string().uuid().optional().nullable(),
-  framenumber: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
+  scan_id: z.string().uuid().optional().nullable(),
+  frame_number: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
   path: z.string().optional().nullable(),
   url: z.string().optional().nullable(),
   status: z.string().optional().nullable()
@@ -393,7 +399,7 @@ export const ImagesCreateManyInputSchema: z.ZodType<Prisma.ImagesCreateManyInput
 
 export const ImagesUpdateManyMutationInputSchema: z.ZodType<Prisma.ImagesUpdateManyMutationInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  framenumber: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  frame_number: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -401,8 +407,8 @@ export const ImagesUpdateManyMutationInputSchema: z.ZodType<Prisma.ImagesUpdateM
 
 export const ImagesUncheckedUpdateManyInputSchema: z.ZodType<Prisma.ImagesUncheckedUpdateManyInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  scanid: z.union([ z.string().uuid(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  framenumber: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  scan_id: z.union([ z.string().uuid(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  frame_number: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -456,110 +462,117 @@ export const PhenotypersUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Phenoty
 
 export const ScansCreateInputSchema: z.ZodType<Prisma.ScansCreateInput> = z.object({
   id: z.string().uuid(),
-  plantqrcode: z.string().optional().nullable(),
+  scanner_id: z.string().optional().nullable(),
+  plant_qr_code: z.string().optional().nullable(),
   path: z.string().optional().nullable(),
-  capturedate: z.coerce.date().optional().nullable(),
-  numframes: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
-  exposuretime: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
+  capture_date: z.coerce.date().optional().nullable(),
+  num_frames: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
+  exposure_time: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
   gain: z.number().or(z.nan()).optional().nullable(),
   brightness: z.number().or(z.nan()).optional().nullable(),
   contrast: z.number().or(z.nan()).optional().nullable(),
   gamma: z.number().or(z.nan()).optional().nullable(),
-  secondsperrotation: z.number().or(z.nan()).optional().nullable(),
+  seconds_per_rot: z.number().or(z.nan()).optional().nullable(),
   images: z.lazy(() => ImagesCreateNestedManyWithoutScansInputSchema).optional(),
   phenotypers: z.lazy(() => PhenotypersCreateNestedOneWithoutScansInputSchema).optional()
 }).strict();
 
 export const ScansUncheckedCreateInputSchema: z.ZodType<Prisma.ScansUncheckedCreateInput> = z.object({
   id: z.string().uuid(),
-  phenotyperid: z.string().uuid().optional().nullable(),
-  plantqrcode: z.string().optional().nullable(),
+  phenotyper_id: z.string().uuid().optional().nullable(),
+  scanner_id: z.string().optional().nullable(),
+  plant_qr_code: z.string().optional().nullable(),
   path: z.string().optional().nullable(),
-  capturedate: z.coerce.date().optional().nullable(),
-  numframes: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
-  exposuretime: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
+  capture_date: z.coerce.date().optional().nullable(),
+  num_frames: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
+  exposure_time: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
   gain: z.number().or(z.nan()).optional().nullable(),
   brightness: z.number().or(z.nan()).optional().nullable(),
   contrast: z.number().or(z.nan()).optional().nullable(),
   gamma: z.number().or(z.nan()).optional().nullable(),
-  secondsperrotation: z.number().or(z.nan()).optional().nullable(),
+  seconds_per_rot: z.number().or(z.nan()).optional().nullable(),
   images: z.lazy(() => ImagesUncheckedCreateNestedManyWithoutScansInputSchema).optional()
 }).strict();
 
 export const ScansUpdateInputSchema: z.ZodType<Prisma.ScansUpdateInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  plantqrcode: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  scanner_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  plant_qr_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  capturedate: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  numframes: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  exposuretime: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  capture_date: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  num_frames: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  exposure_time: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gain: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   brightness: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   contrast: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gamma: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  secondsperrotation: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  seconds_per_rot: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   images: z.lazy(() => ImagesUpdateManyWithoutScansNestedInputSchema).optional(),
   phenotypers: z.lazy(() => PhenotypersUpdateOneWithoutScansNestedInputSchema).optional()
 }).strict();
 
 export const ScansUncheckedUpdateInputSchema: z.ZodType<Prisma.ScansUncheckedUpdateInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  phenotyperid: z.union([ z.string().uuid(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  plantqrcode: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  phenotyper_id: z.union([ z.string().uuid(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  scanner_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  plant_qr_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  capturedate: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  numframes: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  exposuretime: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  capture_date: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  num_frames: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  exposure_time: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gain: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   brightness: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   contrast: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gamma: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  secondsperrotation: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  seconds_per_rot: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   images: z.lazy(() => ImagesUncheckedUpdateManyWithoutScansNestedInputSchema).optional()
 }).strict();
 
 export const ScansCreateManyInputSchema: z.ZodType<Prisma.ScansCreateManyInput> = z.object({
   id: z.string().uuid(),
-  phenotyperid: z.string().uuid().optional().nullable(),
-  plantqrcode: z.string().optional().nullable(),
+  phenotyper_id: z.string().uuid().optional().nullable(),
+  scanner_id: z.string().optional().nullable(),
+  plant_qr_code: z.string().optional().nullable(),
   path: z.string().optional().nullable(),
-  capturedate: z.coerce.date().optional().nullable(),
-  numframes: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
-  exposuretime: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
+  capture_date: z.coerce.date().optional().nullable(),
+  num_frames: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
+  exposure_time: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
   gain: z.number().or(z.nan()).optional().nullable(),
   brightness: z.number().or(z.nan()).optional().nullable(),
   contrast: z.number().or(z.nan()).optional().nullable(),
   gamma: z.number().or(z.nan()).optional().nullable(),
-  secondsperrotation: z.number().or(z.nan()).optional().nullable()
+  seconds_per_rot: z.number().or(z.nan()).optional().nullable()
 }).strict();
 
 export const ScansUpdateManyMutationInputSchema: z.ZodType<Prisma.ScansUpdateManyMutationInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  plantqrcode: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  scanner_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  plant_qr_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  capturedate: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  numframes: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  exposuretime: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  capture_date: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  num_frames: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  exposure_time: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gain: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   brightness: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   contrast: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gamma: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  secondsperrotation: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  seconds_per_rot: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const ScansUncheckedUpdateManyInputSchema: z.ZodType<Prisma.ScansUncheckedUpdateManyInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  phenotyperid: z.union([ z.string().uuid(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  plantqrcode: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  phenotyper_id: z.union([ z.string().uuid(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  scanner_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  plant_qr_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  capturedate: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  numframes: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  exposuretime: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  capture_date: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  num_frames: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  exposure_time: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gain: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   brightness: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   contrast: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gamma: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  secondsperrotation: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  seconds_per_rot: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const UuidFilterSchema: z.ZodType<Prisma.UuidFilter> = z.object({
@@ -619,21 +632,21 @@ export const ScansRelationFilterSchema: z.ZodType<Prisma.ScansRelationFilter> = 
 
 export const ImagesCountOrderByAggregateInputSchema: z.ZodType<Prisma.ImagesCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
-  scanid: z.lazy(() => SortOrderSchema).optional(),
-  framenumber: z.lazy(() => SortOrderSchema).optional(),
+  scan_id: z.lazy(() => SortOrderSchema).optional(),
+  frame_number: z.lazy(() => SortOrderSchema).optional(),
   path: z.lazy(() => SortOrderSchema).optional(),
   url: z.lazy(() => SortOrderSchema).optional(),
   status: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const ImagesAvgOrderByAggregateInputSchema: z.ZodType<Prisma.ImagesAvgOrderByAggregateInput> = z.object({
-  framenumber: z.lazy(() => SortOrderSchema).optional()
+  frame_number: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const ImagesMaxOrderByAggregateInputSchema: z.ZodType<Prisma.ImagesMaxOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
-  scanid: z.lazy(() => SortOrderSchema).optional(),
-  framenumber: z.lazy(() => SortOrderSchema).optional(),
+  scan_id: z.lazy(() => SortOrderSchema).optional(),
+  frame_number: z.lazy(() => SortOrderSchema).optional(),
   path: z.lazy(() => SortOrderSchema).optional(),
   url: z.lazy(() => SortOrderSchema).optional(),
   status: z.lazy(() => SortOrderSchema).optional()
@@ -641,15 +654,15 @@ export const ImagesMaxOrderByAggregateInputSchema: z.ZodType<Prisma.ImagesMaxOrd
 
 export const ImagesMinOrderByAggregateInputSchema: z.ZodType<Prisma.ImagesMinOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
-  scanid: z.lazy(() => SortOrderSchema).optional(),
-  framenumber: z.lazy(() => SortOrderSchema).optional(),
+  scan_id: z.lazy(() => SortOrderSchema).optional(),
+  frame_number: z.lazy(() => SortOrderSchema).optional(),
   path: z.lazy(() => SortOrderSchema).optional(),
   url: z.lazy(() => SortOrderSchema).optional(),
   status: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const ImagesSumOrderByAggregateInputSchema: z.ZodType<Prisma.ImagesSumOrderByAggregateInput> = z.object({
-  framenumber: z.lazy(() => SortOrderSchema).optional()
+  frame_number: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const UuidWithAggregatesFilterSchema: z.ZodType<Prisma.UuidWithAggregatesFilter> = z.object({
@@ -783,67 +796,70 @@ export const ImagesOrderByRelationAggregateInputSchema: z.ZodType<Prisma.ImagesO
 
 export const ScansCountOrderByAggregateInputSchema: z.ZodType<Prisma.ScansCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
-  phenotyperid: z.lazy(() => SortOrderSchema).optional(),
-  plantqrcode: z.lazy(() => SortOrderSchema).optional(),
+  phenotyper_id: z.lazy(() => SortOrderSchema).optional(),
+  scanner_id: z.lazy(() => SortOrderSchema).optional(),
+  plant_qr_code: z.lazy(() => SortOrderSchema).optional(),
   path: z.lazy(() => SortOrderSchema).optional(),
-  capturedate: z.lazy(() => SortOrderSchema).optional(),
-  numframes: z.lazy(() => SortOrderSchema).optional(),
-  exposuretime: z.lazy(() => SortOrderSchema).optional(),
+  capture_date: z.lazy(() => SortOrderSchema).optional(),
+  num_frames: z.lazy(() => SortOrderSchema).optional(),
+  exposure_time: z.lazy(() => SortOrderSchema).optional(),
   gain: z.lazy(() => SortOrderSchema).optional(),
   brightness: z.lazy(() => SortOrderSchema).optional(),
   contrast: z.lazy(() => SortOrderSchema).optional(),
   gamma: z.lazy(() => SortOrderSchema).optional(),
-  secondsperrotation: z.lazy(() => SortOrderSchema).optional()
+  seconds_per_rot: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const ScansAvgOrderByAggregateInputSchema: z.ZodType<Prisma.ScansAvgOrderByAggregateInput> = z.object({
-  numframes: z.lazy(() => SortOrderSchema).optional(),
-  exposuretime: z.lazy(() => SortOrderSchema).optional(),
+  num_frames: z.lazy(() => SortOrderSchema).optional(),
+  exposure_time: z.lazy(() => SortOrderSchema).optional(),
   gain: z.lazy(() => SortOrderSchema).optional(),
   brightness: z.lazy(() => SortOrderSchema).optional(),
   contrast: z.lazy(() => SortOrderSchema).optional(),
   gamma: z.lazy(() => SortOrderSchema).optional(),
-  secondsperrotation: z.lazy(() => SortOrderSchema).optional()
+  seconds_per_rot: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const ScansMaxOrderByAggregateInputSchema: z.ZodType<Prisma.ScansMaxOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
-  phenotyperid: z.lazy(() => SortOrderSchema).optional(),
-  plantqrcode: z.lazy(() => SortOrderSchema).optional(),
+  phenotyper_id: z.lazy(() => SortOrderSchema).optional(),
+  scanner_id: z.lazy(() => SortOrderSchema).optional(),
+  plant_qr_code: z.lazy(() => SortOrderSchema).optional(),
   path: z.lazy(() => SortOrderSchema).optional(),
-  capturedate: z.lazy(() => SortOrderSchema).optional(),
-  numframes: z.lazy(() => SortOrderSchema).optional(),
-  exposuretime: z.lazy(() => SortOrderSchema).optional(),
+  capture_date: z.lazy(() => SortOrderSchema).optional(),
+  num_frames: z.lazy(() => SortOrderSchema).optional(),
+  exposure_time: z.lazy(() => SortOrderSchema).optional(),
   gain: z.lazy(() => SortOrderSchema).optional(),
   brightness: z.lazy(() => SortOrderSchema).optional(),
   contrast: z.lazy(() => SortOrderSchema).optional(),
   gamma: z.lazy(() => SortOrderSchema).optional(),
-  secondsperrotation: z.lazy(() => SortOrderSchema).optional()
+  seconds_per_rot: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const ScansMinOrderByAggregateInputSchema: z.ZodType<Prisma.ScansMinOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
-  phenotyperid: z.lazy(() => SortOrderSchema).optional(),
-  plantqrcode: z.lazy(() => SortOrderSchema).optional(),
+  phenotyper_id: z.lazy(() => SortOrderSchema).optional(),
+  scanner_id: z.lazy(() => SortOrderSchema).optional(),
+  plant_qr_code: z.lazy(() => SortOrderSchema).optional(),
   path: z.lazy(() => SortOrderSchema).optional(),
-  capturedate: z.lazy(() => SortOrderSchema).optional(),
-  numframes: z.lazy(() => SortOrderSchema).optional(),
-  exposuretime: z.lazy(() => SortOrderSchema).optional(),
+  capture_date: z.lazy(() => SortOrderSchema).optional(),
+  num_frames: z.lazy(() => SortOrderSchema).optional(),
+  exposure_time: z.lazy(() => SortOrderSchema).optional(),
   gain: z.lazy(() => SortOrderSchema).optional(),
   brightness: z.lazy(() => SortOrderSchema).optional(),
   contrast: z.lazy(() => SortOrderSchema).optional(),
   gamma: z.lazy(() => SortOrderSchema).optional(),
-  secondsperrotation: z.lazy(() => SortOrderSchema).optional()
+  seconds_per_rot: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const ScansSumOrderByAggregateInputSchema: z.ZodType<Prisma.ScansSumOrderByAggregateInput> = z.object({
-  numframes: z.lazy(() => SortOrderSchema).optional(),
-  exposuretime: z.lazy(() => SortOrderSchema).optional(),
+  num_frames: z.lazy(() => SortOrderSchema).optional(),
+  exposure_time: z.lazy(() => SortOrderSchema).optional(),
   gain: z.lazy(() => SortOrderSchema).optional(),
   brightness: z.lazy(() => SortOrderSchema).optional(),
   contrast: z.lazy(() => SortOrderSchema).optional(),
   gamma: z.lazy(() => SortOrderSchema).optional(),
-  secondsperrotation: z.lazy(() => SortOrderSchema).optional()
+  seconds_per_rot: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const DateTimeNullableWithAggregatesFilterSchema: z.ZodType<Prisma.DateTimeNullableWithAggregatesFilter> = z.object({
@@ -1207,32 +1223,34 @@ export const NestedFloatNullableWithAggregatesFilterSchema: z.ZodType<Prisma.Nes
 
 export const ScansCreateWithoutImagesInputSchema: z.ZodType<Prisma.ScansCreateWithoutImagesInput> = z.object({
   id: z.string(),
-  plantqrcode: z.string().optional().nullable(),
+  scanner_id: z.string().optional().nullable(),
+  plant_qr_code: z.string().optional().nullable(),
   path: z.string().optional().nullable(),
-  capturedate: z.coerce.date().optional().nullable(),
-  numframes: z.number().optional().nullable(),
-  exposuretime: z.number().optional().nullable(),
+  capture_date: z.coerce.date().optional().nullable(),
+  num_frames: z.number().optional().nullable(),
+  exposure_time: z.number().optional().nullable(),
   gain: z.number().optional().nullable(),
   brightness: z.number().optional().nullable(),
   contrast: z.number().optional().nullable(),
   gamma: z.number().optional().nullable(),
-  secondsperrotation: z.number().optional().nullable(),
+  seconds_per_rot: z.number().optional().nullable(),
   phenotypers: z.lazy(() => PhenotypersCreateNestedOneWithoutScansInputSchema).optional()
 }).strict();
 
 export const ScansUncheckedCreateWithoutImagesInputSchema: z.ZodType<Prisma.ScansUncheckedCreateWithoutImagesInput> = z.object({
   id: z.string(),
-  phenotyperid: z.string().optional().nullable(),
-  plantqrcode: z.string().optional().nullable(),
+  phenotyper_id: z.string().optional().nullable(),
+  scanner_id: z.string().optional().nullable(),
+  plant_qr_code: z.string().optional().nullable(),
   path: z.string().optional().nullable(),
-  capturedate: z.coerce.date().optional().nullable(),
-  numframes: z.number().optional().nullable(),
-  exposuretime: z.number().optional().nullable(),
+  capture_date: z.coerce.date().optional().nullable(),
+  num_frames: z.number().optional().nullable(),
+  exposure_time: z.number().optional().nullable(),
   gain: z.number().optional().nullable(),
   brightness: z.number().optional().nullable(),
   contrast: z.number().optional().nullable(),
   gamma: z.number().optional().nullable(),
-  secondsperrotation: z.number().optional().nullable()
+  seconds_per_rot: z.number().optional().nullable()
 }).strict();
 
 export const ScansCreateOrConnectWithoutImagesInputSchema: z.ZodType<Prisma.ScansCreateOrConnectWithoutImagesInput> = z.object({
@@ -1247,61 +1265,65 @@ export const ScansUpsertWithoutImagesInputSchema: z.ZodType<Prisma.ScansUpsertWi
 
 export const ScansUpdateWithoutImagesInputSchema: z.ZodType<Prisma.ScansUpdateWithoutImagesInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  plantqrcode: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  scanner_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  plant_qr_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  capturedate: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  numframes: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  exposuretime: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  capture_date: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  num_frames: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  exposure_time: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gain: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   brightness: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   contrast: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gamma: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  secondsperrotation: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  seconds_per_rot: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   phenotypers: z.lazy(() => PhenotypersUpdateOneWithoutScansNestedInputSchema).optional()
 }).strict();
 
 export const ScansUncheckedUpdateWithoutImagesInputSchema: z.ZodType<Prisma.ScansUncheckedUpdateWithoutImagesInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  phenotyperid: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  plantqrcode: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  phenotyper_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  scanner_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  plant_qr_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  capturedate: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  numframes: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  exposuretime: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  capture_date: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  num_frames: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  exposure_time: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gain: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   brightness: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   contrast: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gamma: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  secondsperrotation: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  seconds_per_rot: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const ScansCreateWithoutPhenotypersInputSchema: z.ZodType<Prisma.ScansCreateWithoutPhenotypersInput> = z.object({
   id: z.string(),
-  plantqrcode: z.string().optional().nullable(),
+  scanner_id: z.string().optional().nullable(),
+  plant_qr_code: z.string().optional().nullable(),
   path: z.string().optional().nullable(),
-  capturedate: z.coerce.date().optional().nullable(),
-  numframes: z.number().optional().nullable(),
-  exposuretime: z.number().optional().nullable(),
+  capture_date: z.coerce.date().optional().nullable(),
+  num_frames: z.number().optional().nullable(),
+  exposure_time: z.number().optional().nullable(),
   gain: z.number().optional().nullable(),
   brightness: z.number().optional().nullable(),
   contrast: z.number().optional().nullable(),
   gamma: z.number().optional().nullable(),
-  secondsperrotation: z.number().optional().nullable(),
+  seconds_per_rot: z.number().optional().nullable(),
   images: z.lazy(() => ImagesCreateNestedManyWithoutScansInputSchema).optional()
 }).strict();
 
 export const ScansUncheckedCreateWithoutPhenotypersInputSchema: z.ZodType<Prisma.ScansUncheckedCreateWithoutPhenotypersInput> = z.object({
   id: z.string(),
-  plantqrcode: z.string().optional().nullable(),
+  scanner_id: z.string().optional().nullable(),
+  plant_qr_code: z.string().optional().nullable(),
   path: z.string().optional().nullable(),
-  capturedate: z.coerce.date().optional().nullable(),
-  numframes: z.number().optional().nullable(),
-  exposuretime: z.number().optional().nullable(),
+  capture_date: z.coerce.date().optional().nullable(),
+  num_frames: z.number().optional().nullable(),
+  exposure_time: z.number().optional().nullable(),
   gain: z.number().optional().nullable(),
   brightness: z.number().optional().nullable(),
   contrast: z.number().optional().nullable(),
   gamma: z.number().optional().nullable(),
-  secondsperrotation: z.number().optional().nullable(),
+  seconds_per_rot: z.number().optional().nullable(),
   images: z.lazy(() => ImagesUncheckedCreateNestedManyWithoutScansInputSchema).optional()
 }).strict();
 
@@ -1336,22 +1358,23 @@ export const ScansScalarWhereInputSchema: z.ZodType<Prisma.ScansScalarWhereInput
   OR: z.lazy(() => ScansScalarWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => ScansScalarWhereInputSchema),z.lazy(() => ScansScalarWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => UuidFilterSchema),z.string() ]).optional(),
-  phenotyperid: z.union([ z.lazy(() => UuidNullableFilterSchema),z.string() ]).optional().nullable(),
-  plantqrcode: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  phenotyper_id: z.union([ z.lazy(() => UuidNullableFilterSchema),z.string() ]).optional().nullable(),
+  scanner_id: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  plant_qr_code: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   path: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  capturedate: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
-  numframes: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
-  exposuretime: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  capture_date: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
+  num_frames: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  exposure_time: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
   gain: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   brightness: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   contrast: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   gamma: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
-  secondsperrotation: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  seconds_per_rot: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
 }).strict();
 
 export const ImagesCreateWithoutScansInputSchema: z.ZodType<Prisma.ImagesCreateWithoutScansInput> = z.object({
   id: z.string(),
-  framenumber: z.number().optional().nullable(),
+  frame_number: z.number().optional().nullable(),
   path: z.string().optional().nullable(),
   url: z.string().optional().nullable(),
   status: z.string().optional().nullable()
@@ -1359,7 +1382,7 @@ export const ImagesCreateWithoutScansInputSchema: z.ZodType<Prisma.ImagesCreateW
 
 export const ImagesUncheckedCreateWithoutScansInputSchema: z.ZodType<Prisma.ImagesUncheckedCreateWithoutScansInput> = z.object({
   id: z.string(),
-  framenumber: z.number().optional().nullable(),
+  frame_number: z.number().optional().nullable(),
   path: z.string().optional().nullable(),
   url: z.string().optional().nullable(),
   status: z.string().optional().nullable()
@@ -1413,8 +1436,8 @@ export const ImagesScalarWhereInputSchema: z.ZodType<Prisma.ImagesScalarWhereInp
   OR: z.lazy(() => ImagesScalarWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => ImagesScalarWhereInputSchema),z.lazy(() => ImagesScalarWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => UuidFilterSchema),z.string() ]).optional(),
-  scanid: z.union([ z.lazy(() => UuidNullableFilterSchema),z.string() ]).optional().nullable(),
-  framenumber: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  scan_id: z.union([ z.lazy(() => UuidNullableFilterSchema),z.string() ]).optional().nullable(),
+  frame_number: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
   path: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   url: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   status: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
@@ -1439,65 +1462,69 @@ export const PhenotypersUncheckedUpdateWithoutScansInputSchema: z.ZodType<Prisma
 
 export const ScansCreateManyPhenotypersInputSchema: z.ZodType<Prisma.ScansCreateManyPhenotypersInput> = z.object({
   id: z.string().uuid(),
-  plantqrcode: z.string().optional().nullable(),
+  scanner_id: z.string().optional().nullable(),
+  plant_qr_code: z.string().optional().nullable(),
   path: z.string().optional().nullable(),
-  capturedate: z.coerce.date().optional().nullable(),
-  numframes: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
-  exposuretime: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
+  capture_date: z.coerce.date().optional().nullable(),
+  num_frames: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
+  exposure_time: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
   gain: z.number().or(z.nan()).optional().nullable(),
   brightness: z.number().or(z.nan()).optional().nullable(),
   contrast: z.number().or(z.nan()).optional().nullable(),
   gamma: z.number().or(z.nan()).optional().nullable(),
-  secondsperrotation: z.number().or(z.nan()).optional().nullable()
+  seconds_per_rot: z.number().or(z.nan()).optional().nullable()
 }).strict();
 
 export const ScansUpdateWithoutPhenotypersInputSchema: z.ZodType<Prisma.ScansUpdateWithoutPhenotypersInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  plantqrcode: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  scanner_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  plant_qr_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  capturedate: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  numframes: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  exposuretime: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  capture_date: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  num_frames: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  exposure_time: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gain: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   brightness: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   contrast: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gamma: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  secondsperrotation: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  seconds_per_rot: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   images: z.lazy(() => ImagesUpdateManyWithoutScansNestedInputSchema).optional()
 }).strict();
 
 export const ScansUncheckedUpdateWithoutPhenotypersInputSchema: z.ZodType<Prisma.ScansUncheckedUpdateWithoutPhenotypersInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  plantqrcode: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  scanner_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  plant_qr_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  capturedate: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  numframes: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  exposuretime: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  capture_date: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  num_frames: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  exposure_time: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gain: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   brightness: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   contrast: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gamma: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  secondsperrotation: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  seconds_per_rot: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   images: z.lazy(() => ImagesUncheckedUpdateManyWithoutScansNestedInputSchema).optional()
 }).strict();
 
 export const ScansUncheckedUpdateManyWithoutScansInputSchema: z.ZodType<Prisma.ScansUncheckedUpdateManyWithoutScansInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  plantqrcode: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  scanner_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  plant_qr_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  capturedate: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  numframes: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  exposuretime: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  capture_date: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  num_frames: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  exposure_time: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gain: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   brightness: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   contrast: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gamma: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  secondsperrotation: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  seconds_per_rot: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const ImagesCreateManyScansInputSchema: z.ZodType<Prisma.ImagesCreateManyScansInput> = z.object({
   id: z.string().uuid(),
-  framenumber: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
+  frame_number: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
   path: z.string().optional().nullable(),
   url: z.string().optional().nullable(),
   status: z.string().optional().nullable()
@@ -1505,7 +1532,7 @@ export const ImagesCreateManyScansInputSchema: z.ZodType<Prisma.ImagesCreateMany
 
 export const ImagesUpdateWithoutScansInputSchema: z.ZodType<Prisma.ImagesUpdateWithoutScansInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  framenumber: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  frame_number: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -1513,7 +1540,7 @@ export const ImagesUpdateWithoutScansInputSchema: z.ZodType<Prisma.ImagesUpdateW
 
 export const ImagesUncheckedUpdateWithoutScansInputSchema: z.ZodType<Prisma.ImagesUncheckedUpdateWithoutScansInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  framenumber: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  frame_number: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -1521,7 +1548,7 @@ export const ImagesUncheckedUpdateWithoutScansInputSchema: z.ZodType<Prisma.Imag
 
 export const ImagesUncheckedUpdateManyWithoutImagesInputSchema: z.ZodType<Prisma.ImagesUncheckedUpdateManyWithoutImagesInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  framenumber: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  frame_number: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -1863,11 +1890,11 @@ export const tableSchemas = {
         "UUID"
       ],
       [
-        "scanid",
+        "scan_id",
         "UUID"
       ],
       [
-        "framenumber",
+        "frame_number",
         "INT4"
       ],
       [
@@ -1884,7 +1911,7 @@ export const tableSchemas = {
       ]
     ]),
     relations: [
-      new Relation("scans", "scanid", "id", "scans", "ImagesToScans", "one"),
+      new Relation("scans", "scan_id", "id", "scans", "ImagesToScans", "one"),
     ],
     modelSchema: (ImagesCreateInputSchema as any)
       .partial()
@@ -1959,11 +1986,15 @@ export const tableSchemas = {
         "UUID"
       ],
       [
-        "phenotyperid",
+        "phenotyper_id",
         "UUID"
       ],
       [
-        "plantqrcode",
+        "scanner_id",
+        "TEXT"
+      ],
+      [
+        "plant_qr_code",
         "TEXT"
       ],
       [
@@ -1971,15 +2002,15 @@ export const tableSchemas = {
         "TEXT"
       ],
       [
-        "capturedate",
+        "capture_date",
         "TIMESTAMPTZ"
       ],
       [
-        "numframes",
+        "num_frames",
         "INT4"
       ],
       [
-        "exposuretime",
+        "exposure_time",
         "INT4"
       ],
       [
@@ -1999,13 +2030,13 @@ export const tableSchemas = {
         "FLOAT4"
       ],
       [
-        "secondsperrotation",
+        "seconds_per_rot",
         "FLOAT4"
       ]
     ]),
     relations: [
       new Relation("images", "", "", "images", "ImagesToScans", "many"),
-      new Relation("phenotypers", "phenotyperid", "id", "phenotypers", "PhenotypersToScans", "one"),
+      new Relation("phenotypers", "phenotyper_id", "id", "phenotypers", "PhenotypersToScans", "one"),
     ],
     modelSchema: (ScansCreateInputSchema as any)
       .partial()

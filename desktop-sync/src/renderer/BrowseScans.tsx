@@ -1,14 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, Link, Outlet } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route, Link, Outlet } from "react-router-dom";
+import { Scans, Phenotypers } from "../generated/client";
 
-// const getScans = window.electron.scanStore.getScans;
-const getScansWithEmail = window.electron.scanStore.getScansWithEmail;
+const getScans = window.electron.scanStore.getScans;
+// const getScansWithEmail = window.electron.scanStore.getScansWithEmail;
+
+type ScansWithPhenotypers = Scans & {
+  phenotypers: Phenotypers;
+};
 
 export function BrowseScans() {
-  const [scans, setScans] = useState<ScanWithEmail[]>([]);
+  const [scans, setScans] = useState<ScansWithPhenotypers[]>([]);
   const [selectedScan, setSelectedScan] = useState<number | null>(null);
   useEffect(() => {
-    getScansWithEmail().then((response: ScanWithEmail[]) => setScans(response));
+    getScans().then((response: ScansWithPhenotypers[]) => setScans(response));
   }, []);
   return (
     <div>
@@ -31,47 +36,45 @@ export function BrowseScans() {
           </tr>
         </thead>
         <tbody>
-          {scans.map((scan) => (
-            <tr key={scan.metadata.scanId} className="odd:bg-stone-200">
-              <td className="px-2 py-2">
-                {
-                  <Link
-                    to={`/browse-scans/${scan.metadata.scanId}`}
-                    className="text-lime-700 hover:underline"
-                  >
-                    {scan.metadata.plantQrCode || 'No plant QR code'}
-                  </Link>
-                }
-              </td>
-              <td className="px-2 py-2">
-                {formatDateString(scan.metadata.date)}
-              </td>
-              <td className="px-2 py-2">{scan.metadata.personEmail}</td>
-              <td className="px-2 py-2">{scan.metadata.numFrames}</td>
-              <td className="px-2 py-2">{scan.metadata.exposureTime}</td>
-            </tr>
-          ))}
+          {scans
+            .sort((a, b) => a.capture_date.getTime() - b.capture_date.getTime())
+            .reverse()
+            .map((scan) => (
+              <tr key={scan.id} className="odd:bg-stone-200">
+                <td className="px-2 py-2">
+                  {
+                    <Link
+                      to={`/browse-scans/${scan.id}`}
+                      className="text-lime-700 hover:underline"
+                    >
+                      {scan.plant_qr_code || "No plant QR code"}
+                    </Link>
+                  }
+                </td>
+                <td className="px-2 py-2">{formatDate(scan.capture_date)}</td>
+                <td className="px-2 py-2">{scan.phenotypers.email}</td>
+                <td className="px-2 py-2">{scan.num_frames}</td>
+                <td className="px-2 py-2">{scan.exposure_time}</td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>
   );
 }
 
-function formatDateString(dateString: string) {
-  // Parse the date string into a Date object
-  const date = new Date(dateString);
-
+function formatDate(date: Date) {
   // Options to configure the output format
   const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'short',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
     hour12: true,
   };
 
   // Use Intl.DateTimeFormat to format the date according to the options
-  return new Intl.DateTimeFormat('en-US', options).format(date);
+  return new Intl.DateTimeFormat("en-US", options).format(date);
 }

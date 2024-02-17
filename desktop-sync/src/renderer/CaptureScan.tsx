@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import { useCallback, useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
-import { PersonChooser } from './PersonChooser';
-import { PlantQrCodeTextBox } from './PlantQrCodeTextBox';
+import { PersonChooser } from "./PersonChooser";
+import { PlantQrCodeTextBox } from "./PlantQrCodeTextBox";
 
 const ipcRenderer = window.electron.ipcRenderer;
 const getScanData = window.electron.scanner.getScanData;
@@ -17,7 +17,7 @@ export function CaptureScan() {
   const [numSaved, setNumSaved] = useState<number>(0);
   const [selectedImage, setSelectedImage] = useState<number>(0);
 
-  const [personId, setPersonId] = useState<number | null>(null);
+  const [phenotyperId, setPhenotyperId] = useState<string | null>(null);
   const [plantQrCode, setPlantQrCode] = useState<string | null>(null);
 
   const pullScanData = useCallback(async () => {
@@ -26,10 +26,10 @@ export function CaptureScan() {
       progress: ScanProgress;
       scanImages: ScanImages;
     };
-    console.log('scanData: ' + JSON.stringify(scanData));
+    console.log("scanData: " + JSON.stringify(scanData));
     setImages(scanData.scanImages);
-    setIsScanning(scanData.progress.status === 'capturing');
-    setIsSaving(scanData.progress.status === 'saving');
+    setIsScanning(scanData.progress.status === "capturing");
+    setIsSaving(scanData.progress.status === "saving");
     setNumCaptured(scanData.progress.nImagesCaptured);
     setNumSaved(scanData.progress.nImagesSaved);
   }, []);
@@ -39,18 +39,18 @@ export function CaptureScan() {
   }, []);
 
   useEffect(() => {
-    return ipcRenderer.on('scanner:scan-update', pullScanData);
+    return ipcRenderer.on("scanner:scan-update", pullScanData);
   }, []);
 
   const startScan = useCallback(() => {
     if (!isScanning) {
-      const name = 'scan_' + uuidv4();
+      const name = uuidv4();
       setImages([]);
       setNumCaptured(0);
       setIsSaving(false);
       setIsScanning(true);
       setSelectedImage(0);
-      ipcRenderer.sendMessage('scanner:start-scan', [name]);
+      ipcRenderer.sendMessage("scanner:start-scan", [name]);
     }
   }, [isScanning]);
 
@@ -82,11 +82,13 @@ export function CaptureScan() {
             Phenotyper
           </div>
           <div className="mt-1">
-            <PersonChooser personIdChanged={(id) => setPersonId(id)} />
+            <PersonChooser
+              phenotyperIdChanged={(id: string) => setPhenotyperId(id)}
+            />
           </div>
         </div>
       }
-      {personId === null ? null : (
+      {phenotyperId === null ? null : (
         <div className="mb-2 text-left">
           <div className="block text-xs font-bold text-gray-700 text-left">
             Plant QR Code
@@ -98,13 +100,13 @@ export function CaptureScan() {
           </div>
         </div>
       )}
-      {personId === null ||
+      {phenotyperId === null ||
       plantQrCode === null ||
-      plantQrCode === '' ? null : (
+      plantQrCode === "" ? null : (
         <div className="mt-4 mr-4 border-t p-4">
           {
             <div className="">
-              <div className="text-center" style={{ width: '500px' }}>
+              <div className="text-center" style={{ width: "500px" }}>
                 <button
                   className="rounded-md border border-gray-300 px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
                   onClick={(e) => startScan()}
@@ -124,7 +126,7 @@ export function CaptureScan() {
           ) : null}
           {isSaving ? (
             <div className="">
-              <div className="" style={{ width: '500px' }}>
+              <div className="" style={{ width: "500px" }}>
                 💾 Saving... {numSaved} / {nImages}
               </div>
             </div>
@@ -133,17 +135,17 @@ export function CaptureScan() {
             <div className="">
               {images.length > 0 ? (
                 <img
-                  src={'file://' + images[selectedImage].replaceAll('\\', '/')}
-                  style={{ width: '500px' }}
+                  src={"file://" + images[selectedImage].replaceAll("\\", "/")}
+                  style={{ width: "500px" }}
                   className="rounded-md"
                 />
               ) : (
-                <div style={{ width: '500px', height: '250px' }}></div>
+                <div style={{ width: "500px", height: "250px" }}></div>
               )}
             </div>
           </div>
           <div className="">
-            <div className="text-center" style={{ width: '500px' }}>
+            <div className="text-center" style={{ width: "500px" }}>
               <button
                 className="rounded-md border border-gray-300 px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
                 onClick={(e) => {
@@ -182,14 +184,14 @@ export function Scan({ images }: { images: string[] }) {
       <div>Scan</div>
       <div
         className="h-96 overflow-scroll"
-        style={{ overflow: 'scroll', height: '500px' }}
+        style={{ overflow: "scroll", height: "500px" }}
       >
         {images.map((image) => (
           <div key={image}>
             {image}
             <img
-              src={'file://' + image.replaceAll('\\', '/')}
-              style={{ width: '200px' }}
+              src={"file://" + image.replaceAll("\\", "/")}
+              style={{ width: "200px" }}
             />
           </div>
         ))}
