@@ -25,11 +25,9 @@ export function BrowseScans() {
             </th>
             <th className="text-xs text-left px-2 pb-4 align-bottom">Date</th>
             <th className="text-xs text-left px-2 pb-4 align-bottom">
-              Person Email
+              Phenotyper
             </th>
-            <th className="text-xs text-left px-2 pb-4 align-bottom">
-              Number <br /> of Frames
-            </th>
+            <th className="text-xs text-left px-2 pb-4 align-bottom">Device</th>
             <th className="text-xs text-left px-2 pb-4 align-bottom">
               Exposure
             </th>
@@ -52,8 +50,10 @@ export function BrowseScans() {
                   }
                 </td>
                 <td className="px-2 py-2">{formatDate(scan.capture_date)}</td>
-                <td className="px-2 py-2">{scan.phenotypers.email}</td>
-                <td className="px-2 py-2">{scan.num_frames}</td>
+                <td className="px-2 py-2">
+                  <Phenotyper phenotyper={scan?.phenotypers} />
+                </td>
+                <td className="px-2 py-2">{scan.scanner_id}</td>
                 <td className="px-2 py-2">{scan.exposure_time}</td>
               </tr>
             ))}
@@ -63,16 +63,36 @@ export function BrowseScans() {
   );
 }
 
+function Phenotyper({ phenotyper }: { phenotyper: Phenotypers }) {
+  return (
+    <div>
+      <span className="inline-block">{formatName(phenotyper.name)}</span>
+      <span className="text-xs font-bold text-stone-400 ml-2 inline-block">
+        {phenotyper.email}
+      </span>
+    </div>
+  );
+}
+
+function formatName(name: string) {
+  // Give the name as first name and the first initial of each subsequent name
+  const names = name.split(" ");
+  return names
+    .map((name, index) => (index === 0 ? name : name[0]))
+    .join(" ")
+    .trim();
+}
+
 function formatDate(date: Date) {
   // Options to configure the output format
   const options: Intl.DateTimeFormatOptions = {
     year: "numeric",
     month: "short",
     day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: true,
+    // hour: "2-digit",
+    // minute: "2-digit",
+    // second: "2-digit",
+    // hour12: true,
   };
 
   // Use Intl.DateTimeFormat to format the date according to the options

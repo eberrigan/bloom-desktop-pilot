@@ -2,8 +2,16 @@ import Database from "better-sqlite3";
 import { electrify } from "electric-sql/node";
 import { schema } from "../generated/client";
 import { ElectricClient, ClientTables } from "electric-sql/client/model";
+import { Images, Scans } from "../generated/client";
 import { ElectricConfig, ElectrifyOptions } from "electric-sql";
-import { sleepAsync } from "electric-sql/util";
+import { v4 as uuidv4 } from "uuid";
+import { sleepAsync, uuid } from "electric-sql/util";
+
+// type ScansWithId = Omit<Scans, "id?"> & { id: string };
+// type ImagesWithId = Omit<Images, "id?"> & { id: string };
+// type ImagesWithScansWithoutScanId = Omit<ImagesWithId, "scan_id"> & {
+//   scans: { create: ScansWithId };
+// };
 
 export class ElectricStore {
   private acquireJWT: () => Promise<string | null>;
@@ -97,7 +105,7 @@ export class ElectricStore {
 
     // sync the tables
     const scans = await this.electric.db.scans.sync({
-      include: { phenotypers: true },
+      include: { phenotypers: true, images: true },
     });
     await scans.synced;
 
@@ -111,34 +119,72 @@ export class ElectricStore {
   };
 
   getPhenotypers = async () => {
-    if (this.electric === null || !this.finishedSyncing) {
+    // if (this.electric === null || !this.finishedSyncing) {
+    if (this.electric === null) {
       return [];
     }
     return this.electric.db.phenotypers.findMany();
   };
 
   getScans = async () => {
-    if (this.electric === null || !this.finishedSyncing) {
+    // if (this.electric === null || !this.finishedSyncing) {
+    if (this.electric === null) {
       return [];
     }
     return this.electric.db.scans.findMany({ include: { phenotypers: true } });
   };
 
   getScan = async (scanId: string) => {
-    if (this.electric === null || !this.finishedSyncing) {
+    // if (this.electric === null || !this.finishedSyncing) {
+    if (this.electric === null) {
       return null;
     }
     return this.electric.db.scans.findUnique({
       where: { id: scanId },
-      include: { phenotypers: true },
+      include: { phenotypers: true, images: true },
     });
   };
 
-  addScan = async (scan: ScanMetadata) => {
-    if (this.electric === null || !this.finishedSyncing) {
+  addScan = async (scan: Scan) => {
+    // if (this.electric === null || !this.finishedSyncing) {
+    if (this.electric === null) {
       return;
     }
-    await this.electric.db.scans.create({ data: scan });
+
+    // break out the images into Images objects
+    const scans = parseCaptureDate(scan.metadata) as {
+      id: string;
+      phenotyper_id: string;
+      scanner_id: string;
+      plant_qr_code: string;
+      path: string;
+      capture_date: Date;
+      num_frames: number;
+      exposure_time: number;
+      gain: number;
+      brightness: number;
+      contrast: number;
+      gamma: number;
+      seconds_per_rot: number;
+    };
+
+    const images = scan.images.map((path, index) => {
+      return {
+        id: uuidv4(),
+        path,
+        frame_number: index + 1,
+        url: null,
+        status: "CAPTURED",
+      };
+    });
+
+    // add the scan to the electric database
+    await this.electric.db.scans.create({
+      data: {
+        ...scans,
+        images: { create: images },
+      },
+    });
   };
 
   getStatus = () => {
@@ -201,6 +247,12 @@ function getJsonPayload(token: string) {
   const base64Url = token.split(".")[1];
   const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
   return Buffer.from(base64, "base64").toString();
+}
+
+function parseCaptureDate(scan_metadata: ScanMetadata) {
+  // parses the capture_date string into a Date object and keeps all other fields
+  const { capture_date, ...rest } = scan_metadata;
+  return { ...rest, capture_date: new Date(capture_date) } as Scans;
 }
 
 // electrify(conn, schema, electric_config)

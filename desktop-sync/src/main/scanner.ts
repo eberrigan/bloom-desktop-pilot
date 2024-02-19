@@ -2,6 +2,8 @@ import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import { spawn } from "node:child_process";
 
+import { Scans } from "../generated/client";
+
 const numFrames = 72;
 
 class Scanner {

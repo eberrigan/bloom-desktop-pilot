@@ -44,6 +44,17 @@ export function PersonChooser({
   }, []);
 
   useEffect(() => {
+    getPeople()
+      .then((response) => {
+        const people = response as Phenotyper[];
+        setPhenotyperOptions(people);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+
+  useEffect(() => {
     // Get the list of people from the database every 10 seconds
     const interval = setInterval(() => {
       getPeople()

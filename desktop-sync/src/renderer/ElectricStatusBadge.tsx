@@ -31,7 +31,7 @@ export function ElectricStatusBadge() {
   }, []);
 
   return (
-    <div>
+    <div className="text-stone-400">
       {/* {status.acquiringJWT ? "Acquiring JWT" : ""} */}
       {/* {status.connectingToElectric ? "Connecting to Electric" : ""} */}
       {/* {status.jwt ? `JWT: ${status.jwt.slice(0, 10)}` : ""} */}

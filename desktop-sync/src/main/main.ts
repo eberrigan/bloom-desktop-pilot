@@ -176,7 +176,7 @@ createElectricStore(
     ipcMain.handle("electric:get-phenotypers", electricStore.getPhenotypers);
     ipcMain.handle("electric:get-scans", electricStore.getScans);
     scanner.onScanComplete = (scan: Scan) => {
-      electricStore.addScan(scan.metadata);
+      electricStore.addScan(scan);
     };
     ipcMain.handle("electric:get-status", electricStore.getStatus);
     ipcMain.handle("scan-store:get-scans", electricStore.getScans);
