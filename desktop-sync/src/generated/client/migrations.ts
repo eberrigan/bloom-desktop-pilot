@@ -12,7 +12,7 @@ export default [
       "DROP TRIGGER IF EXISTS delete_main_phenotypers_into_oplog;",
       "CREATE TRIGGER delete_main_phenotypers_into_oplog\n   AFTER DELETE ON \"main\".\"phenotypers\"\n   WHEN 1 == (SELECT flag from _electric_trigger_settings WHERE tablename == 'main.phenotypers')\nBEGIN\n  INSERT INTO _electric_oplog (namespace, tablename, optype, primaryKey, newRow, oldRow, timestamp)\n  VALUES ('main', 'phenotypers', 'DELETE', json_object('id', old.\"id\"), NULL, json_object('email', old.\"email\", 'id', old.\"id\", 'name', old.\"name\"), NULL);\nEND;"
     ],
-    "version": "20240217023000_286"
+    "version": "20240219233037_147"
   },
   {
     "statements": [
@@ -31,7 +31,7 @@ export default [
       "DROP TRIGGER IF EXISTS compensation_update_main_scans_phenotyper_id_into_oplog;",
       "CREATE TRIGGER compensation_update_main_scans_phenotyper_id_into_oplog\n   AFTER UPDATE ON \"main\".\"scans\"\n   WHEN 1 == (SELECT flag from _electric_trigger_settings WHERE tablename == 'main.phenotypers') AND\n        1 == (SELECT value from _electric_meta WHERE key == 'compensations')\nBEGIN\n  INSERT INTO _electric_oplog (namespace, tablename, optype, primaryKey, newRow, oldRow, timestamp)\n  SELECT 'main', 'phenotypers', 'COMPENSATION', json_object('id', \"id\"), json_object('id', \"id\"), NULL, NULL\n  FROM \"main\".\"phenotypers\" WHERE \"id\" = new.\"phenotyper_id\";\nEND;"
     ],
-    "version": "20240217023002_543"
+    "version": "20240219233044_633"
   },
   {
     "statements": [
@@ -50,6 +50,6 @@ export default [
       "DROP TRIGGER IF EXISTS compensation_update_main_images_scan_id_into_oplog;",
       "CREATE TRIGGER compensation_update_main_images_scan_id_into_oplog\n   AFTER UPDATE ON \"main\".\"images\"\n   WHEN 1 == (SELECT flag from _electric_trigger_settings WHERE tablename == 'main.scans') AND\n        1 == (SELECT value from _electric_meta WHERE key == 'compensations')\nBEGIN\n  INSERT INTO _electric_oplog (namespace, tablename, optype, primaryKey, newRow, oldRow, timestamp)\n  SELECT 'main', 'scans', 'COMPENSATION', json_object('id', \"id\"), json_object('id', \"id\"), NULL, NULL\n  FROM \"main\".\"scans\" WHERE \"id\" = new.\"scan_id\";\nEND;"
     ],
-    "version": "20240217023004_504"
+    "version": "20240219233051_046"
   }
 ]

@@ -230,8 +230,8 @@ export async function createElectricStore(
     statusChanged
   );
   console.log("ElectricStore created, initializing...");
-  await store.init();
-  // store.init();
+  // await store.init();
+  store.init();
   console.log("ElectricStore initialized");
   return store;
 }
