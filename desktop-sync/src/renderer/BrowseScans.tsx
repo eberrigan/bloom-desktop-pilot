@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Link, Outlet } from "react-router-dom";
 import { Scans, Phenotypers } from "../generated/client";
 
+const ipcRenderer = window.electron.ipcRenderer;
 const getScans = window.electron.scanStore.getScans;
 // const getScansWithEmail = window.electron.scanStore.getScansWithEmail;
 
@@ -12,9 +13,19 @@ type ScansWithPhenotypers = Scans & {
 export function BrowseScans() {
   const [scans, setScans] = useState<ScansWithPhenotypers[]>([]);
   const [selectedScan, setSelectedScan] = useState<number | null>(null);
-  useEffect(() => {
+
+  const fetchScans = useCallback(() => {
     getScans().then((response: ScansWithPhenotypers[]) => setScans(response));
   }, []);
+
+  useEffect(() => {
+    fetchScans();
+  }, []);
+
+  useEffect(() => {
+    return ipcRenderer.on("electric:scans-updated", fetchScans);
+  }, []);
+
   return (
     <div>
       <table className="rounded-md">

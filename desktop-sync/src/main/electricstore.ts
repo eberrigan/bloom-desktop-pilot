@@ -14,6 +14,8 @@ import { sleepAsync, uuid } from "electric-sql/util";
 // };
 
 export class ElectricStore {
+  public scansUpdated: () => void;
+
   private acquireJWT: () => Promise<string | null>;
   private localDB: string;
   private electric_service_url: string;
@@ -84,6 +86,12 @@ export class ElectricStore {
           this.connectingToElectric = this.electric.isConnected;
           this.statusChanged();
         });
+
+        // Subscribe to data changes.
+        this.electric.notifier.subscribeToDataChanges((changeNotification) => {
+          this.scansUpdated();
+        });
+
         console.log("Syncing data...");
         await this.sync();
         console.log("Finished syncing.");

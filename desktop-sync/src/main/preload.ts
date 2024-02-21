@@ -9,7 +9,8 @@ export type Channels =
   | "scanner:scan-update"
   | "main:idle"
   | "image-captured"
-  | "image-saved";
+  | "image-saved"
+  | "electric:scans-updated";
 
 const electronHandler = {
   ipcRenderer: {

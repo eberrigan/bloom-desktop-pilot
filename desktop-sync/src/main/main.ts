@@ -178,6 +178,9 @@ createElectricStore(
     scanner.onScanComplete = (scan: Scan) => {
       electricStore.addScan(scan);
     };
+    electricStore.scansUpdated = () => {
+      mainWindow?.webContents.send("electric:scans-updated");
+    };
     ipcMain.handle("electric:get-status", electricStore.getStatus);
     ipcMain.handle("scan-store:get-scans", electricStore.getScans);
     ipcMain.handle("scan-store:get-scan", async (event, args) => {
