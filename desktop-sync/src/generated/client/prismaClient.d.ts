@@ -32,6 +32,7 @@ export type Images = {
   path: string | null
   url: string | null
   status: string | null
+  supabase_object_path: string | null
 }
 
 /**
@@ -283,7 +284,7 @@ export namespace Prisma {
 
   /**
    * Prisma Client JS version: 4.8.1
-   * Query Engine version: d6e67a83f971b175a593ccc12e15c4a757f93ffe
+   * Query Engine version: 23fdc5965b1e05fc54e5f26ed3de66776b93de64
    */
   export type PrismaVersion = {
     client: string
@@ -902,7 +903,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   }
 
   export type PhenotypersCountOutputTypeSelect = {
-    scans?: boolean
+    scans?: boolean | PhenotypersCountOutputTypeCountScansArgs
   }
 
   export type PhenotypersCountOutputTypeGetPayload<S extends boolean | null | undefined | PhenotypersCountOutputTypeArgs> =
@@ -935,6 +936,14 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   }
 
 
+  /**
+   * PhenotypersCountOutputType without action
+   */
+  export type PhenotypersCountOutputTypeCountScansArgs = {
+    where?: ScansWhereInput
+  }
+
+
 
   /**
    * Count Type ScansCountOutputType
@@ -946,7 +955,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   }
 
   export type ScansCountOutputTypeSelect = {
-    images?: boolean
+    images?: boolean | ScansCountOutputTypeCountImagesArgs
   }
 
   export type ScansCountOutputTypeGetPayload<S extends boolean | null | undefined | ScansCountOutputTypeArgs> =
@@ -976,6 +985,14 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
      * 
     **/
     select?: ScansCountOutputTypeSelect | null
+  }
+
+
+  /**
+   * ScansCountOutputType without action
+   */
+  export type ScansCountOutputTypeCountImagesArgs = {
+    where?: ImagesWhereInput
   }
 
 
@@ -1012,6 +1029,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path: string | null
     url: string | null
     status: string | null
+    supabase_object_path: string | null
   }
 
   export type ImagesMaxAggregateOutputType = {
@@ -1021,6 +1039,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path: string | null
     url: string | null
     status: string | null
+    supabase_object_path: string | null
   }
 
   export type ImagesCountAggregateOutputType = {
@@ -1030,6 +1049,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path: number
     url: number
     status: number
+    supabase_object_path: number
     _all: number
   }
 
@@ -1049,6 +1069,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path?: true
     url?: true
     status?: true
+    supabase_object_path?: true
   }
 
   export type ImagesMaxAggregateInputType = {
@@ -1058,6 +1079,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path?: true
     url?: true
     status?: true
+    supabase_object_path?: true
   }
 
   export type ImagesCountAggregateInputType = {
@@ -1067,6 +1089,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path?: true
     url?: true
     status?: true
+    supabase_object_path?: true
     _all?: true
   }
 
@@ -1169,6 +1192,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path: string | null
     url: string | null
     status: string | null
+    supabase_object_path: string | null
     _count: ImagesCountAggregateOutputType | null
     _avg: ImagesAvgAggregateOutputType | null
     _sum: ImagesSumAggregateOutputType | null
@@ -1197,12 +1221,13 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path?: boolean
     url?: boolean
     status?: boolean
-    scans?: boolean | ScansArgs
+    supabase_object_path?: boolean
+    scans?: boolean | Images$scansArgs
   }
 
 
   export type ImagesInclude = {
-    scans?: boolean | ScansArgs
+    scans?: boolean | Images$scansArgs
   } 
 
   export type ImagesGetPayload<S extends boolean | null | undefined | ImagesArgs> =
@@ -1591,7 +1616,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
     readonly [Symbol.toStringTag]: 'PrismaClientPromise';
 
-    scans<T extends ScansArgs= {}>(args?: Subset<T, ScansArgs>): Prisma__ScansClient<ScansGetPayload<T> | Null>;
+    scans<T extends Images$scansArgs= {}>(args?: Subset<T, Images$scansArgs>): Prisma__ScansClient<ScansGetPayload<T> | Null>;
 
     private get _document();
     /**
@@ -1993,6 +2018,24 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
      * 
     **/
     where?: ImagesWhereInput
+  }
+
+
+  /**
+   * Images.scans
+   */
+  export type Images$scansArgs = {
+    /**
+     * Select specific fields to fetch from the Scans
+     * 
+    **/
+    select?: ScansSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: ScansInclude | null
+    where?: ScansWhereInput
   }
 
 
@@ -3307,14 +3350,14 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     gamma?: boolean
     seconds_per_rot?: boolean
     images?: boolean | Scans$imagesArgs
-    phenotypers?: boolean | PhenotypersArgs
+    phenotypers?: boolean | Scans$phenotypersArgs
     _count?: boolean | ScansCountOutputTypeArgs
   }
 
 
   export type ScansInclude = {
     images?: boolean | Scans$imagesArgs
-    phenotypers?: boolean | PhenotypersArgs
+    phenotypers?: boolean | Scans$phenotypersArgs
     _count?: boolean | ScansCountOutputTypeArgs
   } 
 
@@ -3710,7 +3753,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
     images<T extends Scans$imagesArgs= {}>(args?: Subset<T, Scans$imagesArgs>): PrismaPromise<Array<ImagesGetPayload<T>>| Null>;
 
-    phenotypers<T extends PhenotypersArgs= {}>(args?: Subset<T, PhenotypersArgs>): Prisma__PhenotypersClient<PhenotypersGetPayload<T> | Null>;
+    phenotypers<T extends Scans$phenotypersArgs= {}>(args?: Subset<T, Scans$phenotypersArgs>): Prisma__PhenotypersClient<PhenotypersGetPayload<T> | Null>;
 
     private get _document();
     /**
@@ -4139,6 +4182,24 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
 
   /**
+   * Scans.phenotypers
+   */
+  export type Scans$phenotypersArgs = {
+    /**
+     * Select specific fields to fetch from the Phenotypers
+     * 
+    **/
+    select?: PhenotypersSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: PhenotypersInclude | null
+    where?: PhenotypersWhereInput
+  }
+
+
+  /**
    * Scans without action
    */
   export type ScansArgs = {
@@ -4163,13 +4224,24 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   // Based on
   // https://github.com/microsoft/TypeScript/issues/3192#issuecomment-261720275
 
+  export const TransactionIsolationLevel: {
+    ReadUncommitted: 'ReadUncommitted',
+    ReadCommitted: 'ReadCommitted',
+    RepeatableRead: 'RepeatableRead',
+    Serializable: 'Serializable'
+  };
+
+  export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
   export const ImagesScalarFieldEnum: {
     id: 'id',
     scan_id: 'scan_id',
     frame_number: 'frame_number',
     path: 'path',
     url: 'url',
-    status: 'status'
+    status: 'status',
+    supabase_object_path: 'supabase_object_path'
   };
 
   export type ImagesScalarFieldEnum = (typeof ImagesScalarFieldEnum)[keyof typeof ImagesScalarFieldEnum]
@@ -4182,14 +4254,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   };
 
   export type PhenotypersScalarFieldEnum = (typeof PhenotypersScalarFieldEnum)[keyof typeof PhenotypersScalarFieldEnum]
-
-
-  export const QueryMode: {
-    default: 'default',
-    insensitive: 'insensitive'
-  };
-
-  export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
   export const ScansScalarFieldEnum: {
@@ -4219,16 +4283,81 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
-  export const TransactionIsolationLevel: {
-    ReadUncommitted: 'ReadUncommitted',
-    ReadCommitted: 'ReadCommitted',
-    RepeatableRead: 'RepeatableRead',
-    Serializable: 'Serializable'
+  export const QueryMode: {
+    default: 'default',
+    insensitive: 'insensitive'
   };
 
-  export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+  export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
+  export const NullsOrder: {
+    first: 'first',
+    last: 'last'
+  };
+
+  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  /**
+   * Field references 
+   */
+
+
+  /**
+   * Reference to a field of type 'String'
+   */
+  export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
+    
+
+
+  /**
+   * Reference to a field of type 'String[]'
+   */
+  export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'DateTime'
+   */
+  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+  /**
+   * Reference to a field of type 'DateTime[]'
+   */
+  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
   /**
    * Deep Input Types
    */
@@ -4238,36 +4367,49 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     AND?: Enumerable<ImagesWhereInput>
     OR?: Enumerable<ImagesWhereInput>
     NOT?: Enumerable<ImagesWhereInput>
-    id?: UuidFilter | string
-    scan_id?: UuidNullableFilter | string | null
-    frame_number?: IntNullableFilter | number | null
-    path?: StringNullableFilter | string | null
-    url?: StringNullableFilter | string | null
-    status?: StringNullableFilter | string | null
-    scans?: XOR<ScansRelationFilter, ScansWhereInput> | null
+    id?: UuidFilter<"Images"> | string
+    scan_id?: UuidNullableFilter<"Images"> | string | null
+    frame_number?: IntNullableFilter<"Images"> | number | null
+    path?: StringNullableFilter<"Images"> | string | null
+    url?: StringNullableFilter<"Images"> | string | null
+    status?: StringNullableFilter<"Images"> | string | null
+    supabase_object_path?: StringNullableFilter<"Images"> | string | null
+    scans?: XOR<ScansNullableRelationFilter, ScansWhereInput> | null
   }
 
   export type ImagesOrderByWithRelationInput = {
     id?: SortOrder
-    scan_id?: SortOrder
-    frame_number?: SortOrder
-    path?: SortOrder
-    url?: SortOrder
-    status?: SortOrder
+    scan_id?: SortOrderInput | SortOrder
+    frame_number?: SortOrderInput | SortOrder
+    path?: SortOrderInput | SortOrder
+    url?: SortOrderInput | SortOrder
+    status?: SortOrderInput | SortOrder
+    supabase_object_path?: SortOrderInput | SortOrder
     scans?: ScansOrderByWithRelationInput
   }
 
-  export type ImagesWhereUniqueInput = {
+  export type ImagesWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-  }
+    AND?: Enumerable<ImagesWhereInput>
+    OR?: Enumerable<ImagesWhereInput>
+    NOT?: Enumerable<ImagesWhereInput>
+    scan_id?: UuidNullableFilter<"Images"> | string | null
+    frame_number?: IntNullableFilter<"Images"> | number | null
+    path?: StringNullableFilter<"Images"> | string | null
+    url?: StringNullableFilter<"Images"> | string | null
+    status?: StringNullableFilter<"Images"> | string | null
+    supabase_object_path?: StringNullableFilter<"Images"> | string | null
+    scans?: XOR<ScansNullableRelationFilter, ScansWhereInput> | null
+  }, "id">
 
   export type ImagesOrderByWithAggregationInput = {
     id?: SortOrder
-    scan_id?: SortOrder
-    frame_number?: SortOrder
-    path?: SortOrder
-    url?: SortOrder
-    status?: SortOrder
+    scan_id?: SortOrderInput | SortOrder
+    frame_number?: SortOrderInput | SortOrder
+    path?: SortOrderInput | SortOrder
+    url?: SortOrderInput | SortOrder
+    status?: SortOrderInput | SortOrder
+    supabase_object_path?: SortOrderInput | SortOrder
     _count?: ImagesCountOrderByAggregateInput
     _avg?: ImagesAvgOrderByAggregateInput
     _max?: ImagesMaxOrderByAggregateInput
@@ -4279,39 +4421,46 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     AND?: Enumerable<ImagesScalarWhereWithAggregatesInput>
     OR?: Enumerable<ImagesScalarWhereWithAggregatesInput>
     NOT?: Enumerable<ImagesScalarWhereWithAggregatesInput>
-    id?: UuidWithAggregatesFilter | string
-    scan_id?: UuidNullableWithAggregatesFilter | string | null
-    frame_number?: IntNullableWithAggregatesFilter | number | null
-    path?: StringNullableWithAggregatesFilter | string | null
-    url?: StringNullableWithAggregatesFilter | string | null
-    status?: StringNullableWithAggregatesFilter | string | null
+    id?: UuidWithAggregatesFilter<"Images"> | string
+    scan_id?: UuidNullableWithAggregatesFilter<"Images"> | string | null
+    frame_number?: IntNullableWithAggregatesFilter<"Images"> | number | null
+    path?: StringNullableWithAggregatesFilter<"Images"> | string | null
+    url?: StringNullableWithAggregatesFilter<"Images"> | string | null
+    status?: StringNullableWithAggregatesFilter<"Images"> | string | null
+    supabase_object_path?: StringNullableWithAggregatesFilter<"Images"> | string | null
   }
 
   export type PhenotypersWhereInput = {
     AND?: Enumerable<PhenotypersWhereInput>
     OR?: Enumerable<PhenotypersWhereInput>
     NOT?: Enumerable<PhenotypersWhereInput>
-    id?: UuidFilter | string
-    name?: StringNullableFilter | string | null
-    email?: StringNullableFilter | string | null
+    id?: UuidFilter<"Phenotypers"> | string
+    name?: StringNullableFilter<"Phenotypers"> | string | null
+    email?: StringNullableFilter<"Phenotypers"> | string | null
     scans?: ScansListRelationFilter
   }
 
   export type PhenotypersOrderByWithRelationInput = {
     id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
+    name?: SortOrderInput | SortOrder
+    email?: SortOrderInput | SortOrder
     scans?: ScansOrderByRelationAggregateInput
   }
 
-  export type PhenotypersWhereUniqueInput = {
+  export type PhenotypersWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-  }
+    AND?: Enumerable<PhenotypersWhereInput>
+    OR?: Enumerable<PhenotypersWhereInput>
+    NOT?: Enumerable<PhenotypersWhereInput>
+    name?: StringNullableFilter<"Phenotypers"> | string | null
+    email?: StringNullableFilter<"Phenotypers"> | string | null
+    scans?: ScansListRelationFilter
+  }, "id">
 
   export type PhenotypersOrderByWithAggregationInput = {
     id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
+    name?: SortOrderInput | SortOrder
+    email?: SortOrderInput | SortOrder
     _count?: PhenotypersCountOrderByAggregateInput
     _max?: PhenotypersMaxOrderByAggregateInput
     _min?: PhenotypersMinOrderByAggregateInput
@@ -4321,68 +4470,85 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     AND?: Enumerable<PhenotypersScalarWhereWithAggregatesInput>
     OR?: Enumerable<PhenotypersScalarWhereWithAggregatesInput>
     NOT?: Enumerable<PhenotypersScalarWhereWithAggregatesInput>
-    id?: UuidWithAggregatesFilter | string
-    name?: StringNullableWithAggregatesFilter | string | null
-    email?: StringNullableWithAggregatesFilter | string | null
+    id?: UuidWithAggregatesFilter<"Phenotypers"> | string
+    name?: StringNullableWithAggregatesFilter<"Phenotypers"> | string | null
+    email?: StringNullableWithAggregatesFilter<"Phenotypers"> | string | null
   }
 
   export type ScansWhereInput = {
     AND?: Enumerable<ScansWhereInput>
     OR?: Enumerable<ScansWhereInput>
     NOT?: Enumerable<ScansWhereInput>
-    id?: UuidFilter | string
-    phenotyper_id?: UuidNullableFilter | string | null
-    scanner_id?: StringNullableFilter | string | null
-    plant_qr_code?: StringNullableFilter | string | null
-    path?: StringNullableFilter | string | null
-    capture_date?: DateTimeNullableFilter | Date | string | null
-    num_frames?: IntNullableFilter | number | null
-    exposure_time?: IntNullableFilter | number | null
-    gain?: FloatNullableFilter | number | null
-    brightness?: FloatNullableFilter | number | null
-    contrast?: FloatNullableFilter | number | null
-    gamma?: FloatNullableFilter | number | null
-    seconds_per_rot?: FloatNullableFilter | number | null
+    id?: UuidFilter<"Scans"> | string
+    phenotyper_id?: UuidNullableFilter<"Scans"> | string | null
+    scanner_id?: StringNullableFilter<"Scans"> | string | null
+    plant_qr_code?: StringNullableFilter<"Scans"> | string | null
+    path?: StringNullableFilter<"Scans"> | string | null
+    capture_date?: DateTimeNullableFilter<"Scans"> | Date | string | null
+    num_frames?: IntNullableFilter<"Scans"> | number | null
+    exposure_time?: IntNullableFilter<"Scans"> | number | null
+    gain?: FloatNullableFilter<"Scans"> | number | null
+    brightness?: FloatNullableFilter<"Scans"> | number | null
+    contrast?: FloatNullableFilter<"Scans"> | number | null
+    gamma?: FloatNullableFilter<"Scans"> | number | null
+    seconds_per_rot?: FloatNullableFilter<"Scans"> | number | null
     images?: ImagesListRelationFilter
-    phenotypers?: XOR<PhenotypersRelationFilter, PhenotypersWhereInput> | null
+    phenotypers?: XOR<PhenotypersNullableRelationFilter, PhenotypersWhereInput> | null
   }
 
   export type ScansOrderByWithRelationInput = {
     id?: SortOrder
-    phenotyper_id?: SortOrder
-    scanner_id?: SortOrder
-    plant_qr_code?: SortOrder
-    path?: SortOrder
-    capture_date?: SortOrder
-    num_frames?: SortOrder
-    exposure_time?: SortOrder
-    gain?: SortOrder
-    brightness?: SortOrder
-    contrast?: SortOrder
-    gamma?: SortOrder
-    seconds_per_rot?: SortOrder
+    phenotyper_id?: SortOrderInput | SortOrder
+    scanner_id?: SortOrderInput | SortOrder
+    plant_qr_code?: SortOrderInput | SortOrder
+    path?: SortOrderInput | SortOrder
+    capture_date?: SortOrderInput | SortOrder
+    num_frames?: SortOrderInput | SortOrder
+    exposure_time?: SortOrderInput | SortOrder
+    gain?: SortOrderInput | SortOrder
+    brightness?: SortOrderInput | SortOrder
+    contrast?: SortOrderInput | SortOrder
+    gamma?: SortOrderInput | SortOrder
+    seconds_per_rot?: SortOrderInput | SortOrder
     images?: ImagesOrderByRelationAggregateInput
     phenotypers?: PhenotypersOrderByWithRelationInput
   }
 
-  export type ScansWhereUniqueInput = {
+  export type ScansWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-  }
+    AND?: Enumerable<ScansWhereInput>
+    OR?: Enumerable<ScansWhereInput>
+    NOT?: Enumerable<ScansWhereInput>
+    phenotyper_id?: UuidNullableFilter<"Scans"> | string | null
+    scanner_id?: StringNullableFilter<"Scans"> | string | null
+    plant_qr_code?: StringNullableFilter<"Scans"> | string | null
+    path?: StringNullableFilter<"Scans"> | string | null
+    capture_date?: DateTimeNullableFilter<"Scans"> | Date | string | null
+    num_frames?: IntNullableFilter<"Scans"> | number | null
+    exposure_time?: IntNullableFilter<"Scans"> | number | null
+    gain?: FloatNullableFilter<"Scans"> | number | null
+    brightness?: FloatNullableFilter<"Scans"> | number | null
+    contrast?: FloatNullableFilter<"Scans"> | number | null
+    gamma?: FloatNullableFilter<"Scans"> | number | null
+    seconds_per_rot?: FloatNullableFilter<"Scans"> | number | null
+    images?: ImagesListRelationFilter
+    phenotypers?: XOR<PhenotypersNullableRelationFilter, PhenotypersWhereInput> | null
+  }, "id">
 
   export type ScansOrderByWithAggregationInput = {
     id?: SortOrder
-    phenotyper_id?: SortOrder
-    scanner_id?: SortOrder
-    plant_qr_code?: SortOrder
-    path?: SortOrder
-    capture_date?: SortOrder
-    num_frames?: SortOrder
-    exposure_time?: SortOrder
-    gain?: SortOrder
-    brightness?: SortOrder
-    contrast?: SortOrder
-    gamma?: SortOrder
-    seconds_per_rot?: SortOrder
+    phenotyper_id?: SortOrderInput | SortOrder
+    scanner_id?: SortOrderInput | SortOrder
+    plant_qr_code?: SortOrderInput | SortOrder
+    path?: SortOrderInput | SortOrder
+    capture_date?: SortOrderInput | SortOrder
+    num_frames?: SortOrderInput | SortOrder
+    exposure_time?: SortOrderInput | SortOrder
+    gain?: SortOrderInput | SortOrder
+    brightness?: SortOrderInput | SortOrder
+    contrast?: SortOrderInput | SortOrder
+    gamma?: SortOrderInput | SortOrder
+    seconds_per_rot?: SortOrderInput | SortOrder
     _count?: ScansCountOrderByAggregateInput
     _avg?: ScansAvgOrderByAggregateInput
     _max?: ScansMaxOrderByAggregateInput
@@ -4394,19 +4560,19 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     AND?: Enumerable<ScansScalarWhereWithAggregatesInput>
     OR?: Enumerable<ScansScalarWhereWithAggregatesInput>
     NOT?: Enumerable<ScansScalarWhereWithAggregatesInput>
-    id?: UuidWithAggregatesFilter | string
-    phenotyper_id?: UuidNullableWithAggregatesFilter | string | null
-    scanner_id?: StringNullableWithAggregatesFilter | string | null
-    plant_qr_code?: StringNullableWithAggregatesFilter | string | null
-    path?: StringNullableWithAggregatesFilter | string | null
-    capture_date?: DateTimeNullableWithAggregatesFilter | Date | string | null
-    num_frames?: IntNullableWithAggregatesFilter | number | null
-    exposure_time?: IntNullableWithAggregatesFilter | number | null
-    gain?: FloatNullableWithAggregatesFilter | number | null
-    brightness?: FloatNullableWithAggregatesFilter | number | null
-    contrast?: FloatNullableWithAggregatesFilter | number | null
-    gamma?: FloatNullableWithAggregatesFilter | number | null
-    seconds_per_rot?: FloatNullableWithAggregatesFilter | number | null
+    id?: UuidWithAggregatesFilter<"Scans"> | string
+    phenotyper_id?: UuidNullableWithAggregatesFilter<"Scans"> | string | null
+    scanner_id?: StringNullableWithAggregatesFilter<"Scans"> | string | null
+    plant_qr_code?: StringNullableWithAggregatesFilter<"Scans"> | string | null
+    path?: StringNullableWithAggregatesFilter<"Scans"> | string | null
+    capture_date?: DateTimeNullableWithAggregatesFilter<"Scans"> | Date | string | null
+    num_frames?: IntNullableWithAggregatesFilter<"Scans"> | number | null
+    exposure_time?: IntNullableWithAggregatesFilter<"Scans"> | number | null
+    gain?: FloatNullableWithAggregatesFilter<"Scans"> | number | null
+    brightness?: FloatNullableWithAggregatesFilter<"Scans"> | number | null
+    contrast?: FloatNullableWithAggregatesFilter<"Scans"> | number | null
+    gamma?: FloatNullableWithAggregatesFilter<"Scans"> | number | null
+    seconds_per_rot?: FloatNullableWithAggregatesFilter<"Scans"> | number | null
   }
 
   export type ImagesCreateInput = {
@@ -4415,6 +4581,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path?: string | null
     url?: string | null
     status?: string | null
+    supabase_object_path?: string | null
     scans?: ScansCreateNestedOneWithoutImagesInput
   }
 
@@ -4425,6 +4592,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path?: string | null
     url?: string | null
     status?: string | null
+    supabase_object_path?: string | null
   }
 
   export type ImagesUpdateInput = {
@@ -4433,6 +4601,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path?: NullableStringFieldUpdateOperationsInput | string | null
     url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableStringFieldUpdateOperationsInput | string | null
+    supabase_object_path?: NullableStringFieldUpdateOperationsInput | string | null
     scans?: ScansUpdateOneWithoutImagesNestedInput
   }
 
@@ -4443,6 +4612,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path?: NullableStringFieldUpdateOperationsInput | string | null
     url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableStringFieldUpdateOperationsInput | string | null
+    supabase_object_path?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ImagesCreateManyInput = {
@@ -4452,6 +4622,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path?: string | null
     url?: string | null
     status?: string | null
+    supabase_object_path?: string | null
   }
 
   export type ImagesUpdateManyMutationInput = {
@@ -4460,6 +4631,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path?: NullableStringFieldUpdateOperationsInput | string | null
     url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableStringFieldUpdateOperationsInput | string | null
+    supabase_object_path?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ImagesUncheckedUpdateManyInput = {
@@ -4469,6 +4641,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path?: NullableStringFieldUpdateOperationsInput | string | null
     url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableStringFieldUpdateOperationsInput | string | null
+    supabase_object_path?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PhenotypersCreateInput = {
@@ -4632,59 +4805,64 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
-  export type UuidFilter = {
-    equals?: string
-    in?: Enumerable<string>
-    notIn?: Enumerable<string>
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
+  export type UuidFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
+    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
-    not?: NestedUuidFilter | string
+    not?: NestedUuidFilter<$PrismaModel> | string
   }
 
-  export type UuidNullableFilter = {
-    equals?: string | null
-    in?: Enumerable<string> | null
-    notIn?: Enumerable<string> | null
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
+  export type UuidNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
-    not?: NestedUuidNullableFilter | string | null
+    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
   }
 
-  export type IntNullableFilter = {
-    equals?: number | null
-    in?: Enumerable<number> | null
-    notIn?: Enumerable<number> | null
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntNullableFilter | number | null
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: Enumerable<number> | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: Enumerable<number> | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type StringNullableFilter = {
-    equals?: string | null
-    in?: Enumerable<string> | null
-    notIn?: Enumerable<string> | null
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
-    not?: NestedStringNullableFilter | string | null
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type ScansRelationFilter = {
+  export type ScansNullableRelationFilter = {
     is?: ScansWhereInput | null
     isNot?: ScansWhereInput | null
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
   }
 
   export type ImagesCountOrderByAggregateInput = {
@@ -4694,6 +4872,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path?: SortOrder
     url?: SortOrder
     status?: SortOrder
+    supabase_object_path?: SortOrder
   }
 
   export type ImagesAvgOrderByAggregateInput = {
@@ -4707,6 +4886,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path?: SortOrder
     url?: SortOrder
     status?: SortOrder
+    supabase_object_path?: SortOrder
   }
 
   export type ImagesMinOrderByAggregateInput = {
@@ -4716,74 +4896,75 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path?: SortOrder
     url?: SortOrder
     status?: SortOrder
+    supabase_object_path?: SortOrder
   }
 
   export type ImagesSumOrderByAggregateInput = {
     frame_number?: SortOrder
   }
 
-  export type UuidWithAggregatesFilter = {
-    equals?: string
-    in?: Enumerable<string>
-    notIn?: Enumerable<string>
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
+  export type UuidWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
+    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
-    not?: NestedUuidWithAggregatesFilter | string
-    _count?: NestedIntFilter
-    _min?: NestedStringFilter
-    _max?: NestedStringFilter
+    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
   }
 
-  export type UuidNullableWithAggregatesFilter = {
-    equals?: string | null
-    in?: Enumerable<string> | null
-    notIn?: Enumerable<string> | null
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
+  export type UuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
-    not?: NestedUuidNullableWithAggregatesFilter | string | null
-    _count?: NestedIntNullableFilter
-    _min?: NestedStringNullableFilter
-    _max?: NestedStringNullableFilter
+    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type IntNullableWithAggregatesFilter = {
-    equals?: number | null
-    in?: Enumerable<number> | null
-    notIn?: Enumerable<number> | null
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntNullableWithAggregatesFilter | number | null
-    _count?: NestedIntNullableFilter
-    _avg?: NestedFloatNullableFilter
-    _sum?: NestedIntNullableFilter
-    _min?: NestedIntNullableFilter
-    _max?: NestedIntNullableFilter
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: Enumerable<number> | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: Enumerable<number> | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type StringNullableWithAggregatesFilter = {
-    equals?: string | null
-    in?: Enumerable<string> | null
-    notIn?: Enumerable<string> | null
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter | string | null
-    _count?: NestedIntNullableFilter
-    _min?: NestedStringNullableFilter
-    _max?: NestedStringNullableFilter
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type ScansListRelationFilter = {
@@ -4814,26 +4995,26 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     email?: SortOrder
   }
 
-  export type DateTimeNullableFilter = {
-    equals?: Date | string | null
-    in?: Enumerable<Date> | Enumerable<string> | null
-    notIn?: Enumerable<Date> | Enumerable<string> | null
-    lt?: Date | string
-    lte?: Date | string
-    gt?: Date | string
-    gte?: Date | string
-    not?: NestedDateTimeNullableFilter | Date | string | null
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Enumerable<Date> | Enumerable<string> | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Enumerable<Date> | Enumerable<string> | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type FloatNullableFilter = {
-    equals?: number | null
-    in?: Enumerable<number> | null
-    notIn?: Enumerable<number> | null
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedFloatNullableFilter | number | null
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: Enumerable<number> | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: Enumerable<number> | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type ImagesListRelationFilter = {
@@ -4842,7 +5023,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     none?: ImagesWhereInput
   }
 
-  export type PhenotypersRelationFilter = {
+  export type PhenotypersNullableRelationFilter = {
     is?: PhenotypersWhereInput | null
     isNot?: PhenotypersWhereInput | null
   }
@@ -4919,34 +5100,34 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     seconds_per_rot?: SortOrder
   }
 
-  export type DateTimeNullableWithAggregatesFilter = {
-    equals?: Date | string | null
-    in?: Enumerable<Date> | Enumerable<string> | null
-    notIn?: Enumerable<Date> | Enumerable<string> | null
-    lt?: Date | string
-    lte?: Date | string
-    gt?: Date | string
-    gte?: Date | string
-    not?: NestedDateTimeNullableWithAggregatesFilter | Date | string | null
-    _count?: NestedIntNullableFilter
-    _min?: NestedDateTimeNullableFilter
-    _max?: NestedDateTimeNullableFilter
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Enumerable<Date> | Enumerable<string> | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Enumerable<Date> | Enumerable<string> | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type FloatNullableWithAggregatesFilter = {
-    equals?: number | null
-    in?: Enumerable<number> | null
-    notIn?: Enumerable<number> | null
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedFloatNullableWithAggregatesFilter | number | null
-    _count?: NestedIntNullableFilter
-    _avg?: NestedFloatNullableFilter
-    _sum?: NestedFloatNullableFilter
-    _min?: NestedFloatNullableFilter
-    _max?: NestedFloatNullableFilter
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: Enumerable<number> | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: Enumerable<number> | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type ScansCreateNestedOneWithoutImagesInput = {
@@ -4975,10 +5156,10 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     create?: XOR<ScansCreateWithoutImagesInput, ScansUncheckedCreateWithoutImagesInput>
     connectOrCreate?: ScansCreateOrConnectWithoutImagesInput
     upsert?: ScansUpsertWithoutImagesInput
-    disconnect?: boolean
-    delete?: boolean
+    disconnect?: ScansWhereInput | boolean
+    delete?: ScansWhereInput | boolean
     connect?: ScansWhereUniqueInput
-    update?: XOR<ScansUpdateWithoutImagesInput, ScansUncheckedUpdateWithoutImagesInput>
+    update?: XOR<XOR<ScansUpdateToOneWithWhereWithoutImagesInput, ScansUpdateWithoutImagesInput>, ScansUncheckedUpdateWithoutImagesInput>
   }
 
   export type ScansCreateNestedManyWithoutPhenotypersInput = {
@@ -5073,10 +5254,10 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     create?: XOR<PhenotypersCreateWithoutScansInput, PhenotypersUncheckedCreateWithoutScansInput>
     connectOrCreate?: PhenotypersCreateOrConnectWithoutScansInput
     upsert?: PhenotypersUpsertWithoutScansInput
-    disconnect?: boolean
-    delete?: boolean
+    disconnect?: PhenotypersWhereInput | boolean
+    delete?: PhenotypersWhereInput | boolean
     connect?: PhenotypersWhereUniqueInput
-    update?: XOR<PhenotypersUpdateWithoutScansInput, PhenotypersUncheckedUpdateWithoutScansInput>
+    update?: XOR<XOR<PhenotypersUpdateToOneWithWhereWithoutScansInput, PhenotypersUpdateWithoutScansInput>, PhenotypersUncheckedUpdateWithoutScansInput>
   }
 
   export type ImagesUncheckedUpdateManyWithoutScansNestedInput = {
@@ -5093,189 +5274,189 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     deleteMany?: Enumerable<ImagesScalarWhereInput>
   }
 
-  export type NestedUuidFilter = {
-    equals?: string
-    in?: Enumerable<string>
-    notIn?: Enumerable<string>
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    not?: NestedUuidFilter | string
+  export type NestedUuidFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
+    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidFilter<$PrismaModel> | string
   }
 
-  export type NestedUuidNullableFilter = {
-    equals?: string | null
-    in?: Enumerable<string> | null
-    notIn?: Enumerable<string> | null
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    not?: NestedUuidNullableFilter | string | null
+  export type NestedUuidNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
   }
 
-  export type NestedIntNullableFilter = {
-    equals?: number | null
-    in?: Enumerable<number> | null
-    notIn?: Enumerable<number> | null
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntNullableFilter | number | null
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: Enumerable<number> | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: Enumerable<number> | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedStringNullableFilter = {
-    equals?: string | null
-    in?: Enumerable<string> | null
-    notIn?: Enumerable<string> | null
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
-    not?: NestedStringNullableFilter | string | null
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type NestedUuidWithAggregatesFilter = {
-    equals?: string
-    in?: Enumerable<string>
-    notIn?: Enumerable<string>
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    not?: NestedUuidWithAggregatesFilter | string
-    _count?: NestedIntFilter
-    _min?: NestedStringFilter
-    _max?: NestedStringFilter
+  export type NestedUuidWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
+    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
   }
 
-  export type NestedIntFilter = {
-    equals?: number
-    in?: Enumerable<number>
-    notIn?: Enumerable<number>
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntFilter | number
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: Enumerable<number> | ListIntFieldRefInput<$PrismaModel>
+    notIn?: Enumerable<number> | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type NestedStringFilter = {
-    equals?: string
-    in?: Enumerable<string>
-    notIn?: Enumerable<string>
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
-    not?: NestedStringFilter | string
+  export type NestedStringFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
+    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type NestedUuidNullableWithAggregatesFilter = {
-    equals?: string | null
-    in?: Enumerable<string> | null
-    notIn?: Enumerable<string> | null
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    not?: NestedUuidNullableWithAggregatesFilter | string | null
-    _count?: NestedIntNullableFilter
-    _min?: NestedStringNullableFilter
-    _max?: NestedStringNullableFilter
+  export type NestedUuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableWithAggregatesFilter = {
-    equals?: number | null
-    in?: Enumerable<number> | null
-    notIn?: Enumerable<number> | null
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntNullableWithAggregatesFilter | number | null
-    _count?: NestedIntNullableFilter
-    _avg?: NestedFloatNullableFilter
-    _sum?: NestedIntNullableFilter
-    _min?: NestedIntNullableFilter
-    _max?: NestedIntNullableFilter
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: Enumerable<number> | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: Enumerable<number> | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type NestedFloatNullableFilter = {
-    equals?: number | null
-    in?: Enumerable<number> | null
-    notIn?: Enumerable<number> | null
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedFloatNullableFilter | number | null
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: Enumerable<number> | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: Enumerable<number> | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedStringNullableWithAggregatesFilter = {
-    equals?: string | null
-    in?: Enumerable<string> | null
-    notIn?: Enumerable<string> | null
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
-    not?: NestedStringNullableWithAggregatesFilter | string | null
-    _count?: NestedIntNullableFilter
-    _min?: NestedStringNullableFilter
-    _max?: NestedStringNullableFilter
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeNullableFilter = {
-    equals?: Date | string | null
-    in?: Enumerable<Date> | Enumerable<string> | null
-    notIn?: Enumerable<Date> | Enumerable<string> | null
-    lt?: Date | string
-    lte?: Date | string
-    gt?: Date | string
-    gte?: Date | string
-    not?: NestedDateTimeNullableFilter | Date | string | null
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Enumerable<Date> | Enumerable<string> | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Enumerable<Date> | Enumerable<string> | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type NestedDateTimeNullableWithAggregatesFilter = {
-    equals?: Date | string | null
-    in?: Enumerable<Date> | Enumerable<string> | null
-    notIn?: Enumerable<Date> | Enumerable<string> | null
-    lt?: Date | string
-    lte?: Date | string
-    gt?: Date | string
-    gte?: Date | string
-    not?: NestedDateTimeNullableWithAggregatesFilter | Date | string | null
-    _count?: NestedIntNullableFilter
-    _min?: NestedDateTimeNullableFilter
-    _max?: NestedDateTimeNullableFilter
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Enumerable<Date> | Enumerable<string> | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Enumerable<Date> | Enumerable<string> | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type NestedFloatNullableWithAggregatesFilter = {
-    equals?: number | null
-    in?: Enumerable<number> | null
-    notIn?: Enumerable<number> | null
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedFloatNullableWithAggregatesFilter | number | null
-    _count?: NestedIntNullableFilter
-    _avg?: NestedFloatNullableFilter
-    _sum?: NestedFloatNullableFilter
-    _min?: NestedFloatNullableFilter
-    _max?: NestedFloatNullableFilter
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: Enumerable<number> | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: Enumerable<number> | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type ScansCreateWithoutImagesInput = {
@@ -5318,6 +5499,12 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type ScansUpsertWithoutImagesInput = {
     update: XOR<ScansUpdateWithoutImagesInput, ScansUncheckedUpdateWithoutImagesInput>
     create: XOR<ScansCreateWithoutImagesInput, ScansUncheckedCreateWithoutImagesInput>
+    where?: ScansWhereInput
+  }
+
+  export type ScansUpdateToOneWithWhereWithoutImagesInput = {
+    where?: ScansWhereInput
+    data: XOR<ScansUpdateWithoutImagesInput, ScansUncheckedUpdateWithoutImagesInput>
   }
 
   export type ScansUpdateWithoutImagesInput = {
@@ -5407,26 +5594,26 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ScansUpdateManyWithWhereWithoutPhenotypersInput = {
     where: ScansScalarWhereInput
-    data: XOR<ScansUpdateManyMutationInput, ScansUncheckedUpdateManyWithoutScansInput>
+    data: XOR<ScansUpdateManyMutationInput, ScansUncheckedUpdateManyWithoutPhenotypersInput>
   }
 
   export type ScansScalarWhereInput = {
     AND?: Enumerable<ScansScalarWhereInput>
     OR?: Enumerable<ScansScalarWhereInput>
     NOT?: Enumerable<ScansScalarWhereInput>
-    id?: UuidFilter | string
-    phenotyper_id?: UuidNullableFilter | string | null
-    scanner_id?: StringNullableFilter | string | null
-    plant_qr_code?: StringNullableFilter | string | null
-    path?: StringNullableFilter | string | null
-    capture_date?: DateTimeNullableFilter | Date | string | null
-    num_frames?: IntNullableFilter | number | null
-    exposure_time?: IntNullableFilter | number | null
-    gain?: FloatNullableFilter | number | null
-    brightness?: FloatNullableFilter | number | null
-    contrast?: FloatNullableFilter | number | null
-    gamma?: FloatNullableFilter | number | null
-    seconds_per_rot?: FloatNullableFilter | number | null
+    id?: UuidFilter<"Scans"> | string
+    phenotyper_id?: UuidNullableFilter<"Scans"> | string | null
+    scanner_id?: StringNullableFilter<"Scans"> | string | null
+    plant_qr_code?: StringNullableFilter<"Scans"> | string | null
+    path?: StringNullableFilter<"Scans"> | string | null
+    capture_date?: DateTimeNullableFilter<"Scans"> | Date | string | null
+    num_frames?: IntNullableFilter<"Scans"> | number | null
+    exposure_time?: IntNullableFilter<"Scans"> | number | null
+    gain?: FloatNullableFilter<"Scans"> | number | null
+    brightness?: FloatNullableFilter<"Scans"> | number | null
+    contrast?: FloatNullableFilter<"Scans"> | number | null
+    gamma?: FloatNullableFilter<"Scans"> | number | null
+    seconds_per_rot?: FloatNullableFilter<"Scans"> | number | null
   }
 
   export type ImagesCreateWithoutScansInput = {
@@ -5435,6 +5622,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path?: string | null
     url?: string | null
     status?: string | null
+    supabase_object_path?: string | null
   }
 
   export type ImagesUncheckedCreateWithoutScansInput = {
@@ -5443,6 +5631,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path?: string | null
     url?: string | null
     status?: string | null
+    supabase_object_path?: string | null
   }
 
   export type ImagesCreateOrConnectWithoutScansInput = {
@@ -5485,24 +5674,31 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type ImagesUpdateManyWithWhereWithoutScansInput = {
     where: ImagesScalarWhereInput
-    data: XOR<ImagesUpdateManyMutationInput, ImagesUncheckedUpdateManyWithoutImagesInput>
+    data: XOR<ImagesUpdateManyMutationInput, ImagesUncheckedUpdateManyWithoutScansInput>
   }
 
   export type ImagesScalarWhereInput = {
     AND?: Enumerable<ImagesScalarWhereInput>
     OR?: Enumerable<ImagesScalarWhereInput>
     NOT?: Enumerable<ImagesScalarWhereInput>
-    id?: UuidFilter | string
-    scan_id?: UuidNullableFilter | string | null
-    frame_number?: IntNullableFilter | number | null
-    path?: StringNullableFilter | string | null
-    url?: StringNullableFilter | string | null
-    status?: StringNullableFilter | string | null
+    id?: UuidFilter<"Images"> | string
+    scan_id?: UuidNullableFilter<"Images"> | string | null
+    frame_number?: IntNullableFilter<"Images"> | number | null
+    path?: StringNullableFilter<"Images"> | string | null
+    url?: StringNullableFilter<"Images"> | string | null
+    status?: StringNullableFilter<"Images"> | string | null
+    supabase_object_path?: StringNullableFilter<"Images"> | string | null
   }
 
   export type PhenotypersUpsertWithoutScansInput = {
     update: XOR<PhenotypersUpdateWithoutScansInput, PhenotypersUncheckedUpdateWithoutScansInput>
     create: XOR<PhenotypersCreateWithoutScansInput, PhenotypersUncheckedCreateWithoutScansInput>
+    where?: PhenotypersWhereInput
+  }
+
+  export type PhenotypersUpdateToOneWithWhereWithoutScansInput = {
+    where?: PhenotypersWhereInput
+    data: XOR<PhenotypersUpdateWithoutScansInput, PhenotypersUncheckedUpdateWithoutScansInput>
   }
 
   export type PhenotypersUpdateWithoutScansInput = {
@@ -5564,7 +5760,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     images?: ImagesUncheckedUpdateManyWithoutScansNestedInput
   }
 
-  export type ScansUncheckedUpdateManyWithoutScansInput = {
+  export type ScansUncheckedUpdateManyWithoutPhenotypersInput = {
     id?: StringFieldUpdateOperationsInput | string
     scanner_id?: NullableStringFieldUpdateOperationsInput | string | null
     plant_qr_code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -5585,6 +5781,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path?: string | null
     url?: string | null
     status?: string | null
+    supabase_object_path?: string | null
   }
 
   export type ImagesUpdateWithoutScansInput = {
@@ -5593,6 +5790,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path?: NullableStringFieldUpdateOperationsInput | string | null
     url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableStringFieldUpdateOperationsInput | string | null
+    supabase_object_path?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ImagesUncheckedUpdateWithoutScansInput = {
@@ -5601,14 +5799,16 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     path?: NullableStringFieldUpdateOperationsInput | string | null
     url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableStringFieldUpdateOperationsInput | string | null
+    supabase_object_path?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type ImagesUncheckedUpdateManyWithoutImagesInput = {
+  export type ImagesUncheckedUpdateManyWithoutScansInput = {
     id?: StringFieldUpdateOperationsInput | string
     frame_number?: NullableIntFieldUpdateOperationsInput | number | null
     path?: NullableStringFieldUpdateOperationsInput | string | null
     url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableStringFieldUpdateOperationsInput | string | null
+    supabase_object_path?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
 

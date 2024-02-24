@@ -61,7 +61,7 @@ class Scanner {
       }
       if (str.slice(0, 10) === "IMAGE_PATH") {
         console.log("data matches IMAGE_PATH");
-        const imagePath = str.slice(11);
+        const imagePath = str.slice(11).trim();
         options.onImageSaved(imagePath);
         this.imageSaved(imagePath);
       }

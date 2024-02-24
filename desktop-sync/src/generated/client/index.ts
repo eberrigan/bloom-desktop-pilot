@@ -12,7 +12,7 @@ import migrations from './migrations';
 // ENUMS
 /////////////////////////////////////////
 
-export const ImagesScalarFieldEnumSchema = z.enum(['id','scan_id','frame_number','path','url','status']);
+export const ImagesScalarFieldEnumSchema = z.enum(['id','scan_id','frame_number','path','url','status','supabase_object_path']);
 
 export const PhenotypersScalarFieldEnumSchema = z.enum(['id','name','email']);
 
@@ -38,6 +38,7 @@ export const ImagesSchema = z.object({
   path: z.string().nullable(),
   url: z.string().nullable(),
   status: z.string().nullable(),
+  supabase_object_path: z.string().nullable(),
 })
 
 export type Images = z.infer<typeof ImagesSchema>
@@ -99,6 +100,7 @@ export const ImagesSelectSchema: z.ZodType<Prisma.ImagesSelect> = z.object({
   path: z.boolean().optional(),
   url: z.boolean().optional(),
   status: z.boolean().optional(),
+  supabase_object_path: z.boolean().optional(),
   scans: z.union([z.boolean(),z.lazy(() => ScansArgsSchema)]).optional(),
 }).strict()
 
@@ -187,6 +189,7 @@ export const ImagesWhereInputSchema: z.ZodType<Prisma.ImagesWhereInput> = z.obje
   path: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   url: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   status: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  supabase_object_path: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   scans: z.union([ z.lazy(() => ScansRelationFilterSchema),z.lazy(() => ScansWhereInputSchema) ]).optional().nullable(),
 }).strict();
 
@@ -197,6 +200,7 @@ export const ImagesOrderByWithRelationInputSchema: z.ZodType<Prisma.ImagesOrderB
   path: z.lazy(() => SortOrderSchema).optional(),
   url: z.lazy(() => SortOrderSchema).optional(),
   status: z.lazy(() => SortOrderSchema).optional(),
+  supabase_object_path: z.lazy(() => SortOrderSchema).optional(),
   scans: z.lazy(() => ScansOrderByWithRelationInputSchema).optional()
 }).strict();
 
@@ -211,6 +215,7 @@ export const ImagesOrderByWithAggregationInputSchema: z.ZodType<Prisma.ImagesOrd
   path: z.lazy(() => SortOrderSchema).optional(),
   url: z.lazy(() => SortOrderSchema).optional(),
   status: z.lazy(() => SortOrderSchema).optional(),
+  supabase_object_path: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => ImagesCountOrderByAggregateInputSchema).optional(),
   _avg: z.lazy(() => ImagesAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => ImagesMaxOrderByAggregateInputSchema).optional(),
@@ -228,6 +233,7 @@ export const ImagesScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Images
   path: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   url: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   status: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  supabase_object_path: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
 }).strict();
 
 export const PhenotypersWhereInputSchema: z.ZodType<Prisma.PhenotypersWhereInput> = z.object({
@@ -358,6 +364,7 @@ export const ImagesCreateInputSchema: z.ZodType<Prisma.ImagesCreateInput> = z.ob
   path: z.string().optional().nullable(),
   url: z.string().optional().nullable(),
   status: z.string().optional().nullable(),
+  supabase_object_path: z.string().optional().nullable(),
   scans: z.lazy(() => ScansCreateNestedOneWithoutImagesInputSchema).optional()
 }).strict();
 
@@ -367,7 +374,8 @@ export const ImagesUncheckedCreateInputSchema: z.ZodType<Prisma.ImagesUncheckedC
   frame_number: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
   path: z.string().optional().nullable(),
   url: z.string().optional().nullable(),
-  status: z.string().optional().nullable()
+  status: z.string().optional().nullable(),
+  supabase_object_path: z.string().optional().nullable()
 }).strict();
 
 export const ImagesUpdateInputSchema: z.ZodType<Prisma.ImagesUpdateInput> = z.object({
@@ -376,6 +384,7 @@ export const ImagesUpdateInputSchema: z.ZodType<Prisma.ImagesUpdateInput> = z.ob
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  supabase_object_path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   scans: z.lazy(() => ScansUpdateOneWithoutImagesNestedInputSchema).optional()
 }).strict();
 
@@ -386,6 +395,7 @@ export const ImagesUncheckedUpdateInputSchema: z.ZodType<Prisma.ImagesUncheckedU
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  supabase_object_path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const ImagesCreateManyInputSchema: z.ZodType<Prisma.ImagesCreateManyInput> = z.object({
@@ -394,7 +404,8 @@ export const ImagesCreateManyInputSchema: z.ZodType<Prisma.ImagesCreateManyInput
   frame_number: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
   path: z.string().optional().nullable(),
   url: z.string().optional().nullable(),
-  status: z.string().optional().nullable()
+  status: z.string().optional().nullable(),
+  supabase_object_path: z.string().optional().nullable()
 }).strict();
 
 export const ImagesUpdateManyMutationInputSchema: z.ZodType<Prisma.ImagesUpdateManyMutationInput> = z.object({
@@ -403,6 +414,7 @@ export const ImagesUpdateManyMutationInputSchema: z.ZodType<Prisma.ImagesUpdateM
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  supabase_object_path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const ImagesUncheckedUpdateManyInputSchema: z.ZodType<Prisma.ImagesUncheckedUpdateManyInput> = z.object({
@@ -412,6 +424,7 @@ export const ImagesUncheckedUpdateManyInputSchema: z.ZodType<Prisma.ImagesUnchec
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  supabase_object_path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const PhenotypersCreateInputSchema: z.ZodType<Prisma.PhenotypersCreateInput> = z.object({
@@ -636,7 +649,8 @@ export const ImagesCountOrderByAggregateInputSchema: z.ZodType<Prisma.ImagesCoun
   frame_number: z.lazy(() => SortOrderSchema).optional(),
   path: z.lazy(() => SortOrderSchema).optional(),
   url: z.lazy(() => SortOrderSchema).optional(),
-  status: z.lazy(() => SortOrderSchema).optional()
+  status: z.lazy(() => SortOrderSchema).optional(),
+  supabase_object_path: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const ImagesAvgOrderByAggregateInputSchema: z.ZodType<Prisma.ImagesAvgOrderByAggregateInput> = z.object({
@@ -649,7 +663,8 @@ export const ImagesMaxOrderByAggregateInputSchema: z.ZodType<Prisma.ImagesMaxOrd
   frame_number: z.lazy(() => SortOrderSchema).optional(),
   path: z.lazy(() => SortOrderSchema).optional(),
   url: z.lazy(() => SortOrderSchema).optional(),
-  status: z.lazy(() => SortOrderSchema).optional()
+  status: z.lazy(() => SortOrderSchema).optional(),
+  supabase_object_path: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const ImagesMinOrderByAggregateInputSchema: z.ZodType<Prisma.ImagesMinOrderByAggregateInput> = z.object({
@@ -658,7 +673,8 @@ export const ImagesMinOrderByAggregateInputSchema: z.ZodType<Prisma.ImagesMinOrd
   frame_number: z.lazy(() => SortOrderSchema).optional(),
   path: z.lazy(() => SortOrderSchema).optional(),
   url: z.lazy(() => SortOrderSchema).optional(),
-  status: z.lazy(() => SortOrderSchema).optional()
+  status: z.lazy(() => SortOrderSchema).optional(),
+  supabase_object_path: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const ImagesSumOrderByAggregateInputSchema: z.ZodType<Prisma.ImagesSumOrderByAggregateInput> = z.object({
@@ -1377,7 +1393,8 @@ export const ImagesCreateWithoutScansInputSchema: z.ZodType<Prisma.ImagesCreateW
   frame_number: z.number().optional().nullable(),
   path: z.string().optional().nullable(),
   url: z.string().optional().nullable(),
-  status: z.string().optional().nullable()
+  status: z.string().optional().nullable(),
+  supabase_object_path: z.string().optional().nullable()
 }).strict();
 
 export const ImagesUncheckedCreateWithoutScansInputSchema: z.ZodType<Prisma.ImagesUncheckedCreateWithoutScansInput> = z.object({
@@ -1385,7 +1402,8 @@ export const ImagesUncheckedCreateWithoutScansInputSchema: z.ZodType<Prisma.Imag
   frame_number: z.number().optional().nullable(),
   path: z.string().optional().nullable(),
   url: z.string().optional().nullable(),
-  status: z.string().optional().nullable()
+  status: z.string().optional().nullable(),
+  supabase_object_path: z.string().optional().nullable()
 }).strict();
 
 export const ImagesCreateOrConnectWithoutScansInputSchema: z.ZodType<Prisma.ImagesCreateOrConnectWithoutScansInput> = z.object({
@@ -1441,6 +1459,7 @@ export const ImagesScalarWhereInputSchema: z.ZodType<Prisma.ImagesScalarWhereInp
   path: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   url: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   status: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  supabase_object_path: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
 }).strict();
 
 export const PhenotypersUpsertWithoutScansInputSchema: z.ZodType<Prisma.PhenotypersUpsertWithoutScansInput> = z.object({
@@ -1527,7 +1546,8 @@ export const ImagesCreateManyScansInputSchema: z.ZodType<Prisma.ImagesCreateMany
   frame_number: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
   path: z.string().optional().nullable(),
   url: z.string().optional().nullable(),
-  status: z.string().optional().nullable()
+  status: z.string().optional().nullable(),
+  supabase_object_path: z.string().optional().nullable()
 }).strict();
 
 export const ImagesUpdateWithoutScansInputSchema: z.ZodType<Prisma.ImagesUpdateWithoutScansInput> = z.object({
@@ -1536,6 +1556,7 @@ export const ImagesUpdateWithoutScansInputSchema: z.ZodType<Prisma.ImagesUpdateW
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  supabase_object_path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const ImagesUncheckedUpdateWithoutScansInputSchema: z.ZodType<Prisma.ImagesUncheckedUpdateWithoutScansInput> = z.object({
@@ -1544,6 +1565,7 @@ export const ImagesUncheckedUpdateWithoutScansInputSchema: z.ZodType<Prisma.Imag
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  supabase_object_path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const ImagesUncheckedUpdateManyWithoutImagesInputSchema: z.ZodType<Prisma.ImagesUncheckedUpdateManyWithoutImagesInput> = z.object({
@@ -1552,6 +1574,7 @@ export const ImagesUncheckedUpdateManyWithoutImagesInputSchema: z.ZodType<Prisma
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  supabase_object_path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 /////////////////////////////////////////
@@ -1907,6 +1930,10 @@ export const tableSchemas = {
       ],
       [
         "status",
+        "TEXT"
+      ],
+      [
+        "supabase_object_path",
         "TEXT"
       ]
     ]),

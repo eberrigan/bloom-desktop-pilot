@@ -12,7 +12,7 @@ export default [
       "DROP TRIGGER IF EXISTS delete_main_phenotypers_into_oplog;",
       "CREATE TRIGGER delete_main_phenotypers_into_oplog\n   AFTER DELETE ON \"main\".\"phenotypers\"\n   WHEN 1 == (SELECT flag from _electric_trigger_settings WHERE tablename == 'main.phenotypers')\nBEGIN\n  INSERT INTO _electric_oplog (namespace, tablename, optype, primaryKey, newRow, oldRow, timestamp)\n  VALUES ('main', 'phenotypers', 'DELETE', json_object('id', old.\"id\"), NULL, json_object('email', old.\"email\", 'id', old.\"id\", 'name', old.\"name\"), NULL);\nEND;"
     ],
-    "version": "20240221013307_800"
+    "version": "20240222180935_366"
   },
   {
     "statements": [
@@ -31,7 +31,7 @@ export default [
       "DROP TRIGGER IF EXISTS compensation_update_main_scans_phenotyper_id_into_oplog;",
       "CREATE TRIGGER compensation_update_main_scans_phenotyper_id_into_oplog\n   AFTER UPDATE ON \"main\".\"scans\"\n   WHEN 1 == (SELECT flag from _electric_trigger_settings WHERE tablename == 'main.phenotypers') AND\n        1 == (SELECT value from _electric_meta WHERE key == 'compensations')\nBEGIN\n  INSERT INTO _electric_oplog (namespace, tablename, optype, primaryKey, newRow, oldRow, timestamp)\n  SELECT 'main', 'phenotypers', 'COMPENSATION', json_object('id', \"id\"), json_object('id', \"id\"), NULL, NULL\n  FROM \"main\".\"phenotypers\" WHERE \"id\" = new.\"phenotyper_id\";\nEND;"
     ],
-    "version": "20240221013313_967"
+    "version": "20240222180937_230"
   },
   {
     "statements": [
@@ -50,6 +50,25 @@ export default [
       "DROP TRIGGER IF EXISTS compensation_update_main_images_scan_id_into_oplog;",
       "CREATE TRIGGER compensation_update_main_images_scan_id_into_oplog\n   AFTER UPDATE ON \"main\".\"images\"\n   WHEN 1 == (SELECT flag from _electric_trigger_settings WHERE tablename == 'main.scans') AND\n        1 == (SELECT value from _electric_meta WHERE key == 'compensations')\nBEGIN\n  INSERT INTO _electric_oplog (namespace, tablename, optype, primaryKey, newRow, oldRow, timestamp)\n  SELECT 'main', 'scans', 'COMPENSATION', json_object('id', \"id\"), json_object('id', \"id\"), NULL, NULL\n  FROM \"main\".\"scans\" WHERE \"id\" = new.\"scan_id\";\nEND;"
     ],
-    "version": "20240221013319_468"
+    "version": "20240222180938_770"
+  },
+  {
+    "statements": [
+      "ALTER TABLE \"images\" ADD COLUMN \"supabase_object_path\" TEXT;\n",
+      "-- Toggles for turning the triggers on and off\nINSERT OR IGNORE INTO _electric_trigger_settings(tablename,flag) VALUES ('main.images', 1);",
+      "  /* Triggers for table images */\n\n  -- ensures primary key is immutable\n  DROP TRIGGER IF EXISTS update_ensure_main_images_primarykey;",
+      "CREATE TRIGGER update_ensure_main_images_primarykey\n  BEFORE UPDATE ON \"main\".\"images\"\nBEGIN\n  SELECT\n    CASE\n      WHEN old.\"id\" != new.\"id\" THEN\n      \t\tRAISE (ABORT, 'cannot change the value of column id as it belongs to the primary key')\n    END;\nEND;",
+      "-- Triggers that add INSERT, UPDATE, DELETE operation to the _opslog table\nDROP TRIGGER IF EXISTS insert_main_images_into_oplog;",
+      "CREATE TRIGGER insert_main_images_into_oplog\n   AFTER INSERT ON \"main\".\"images\"\n   WHEN 1 == (SELECT flag from _electric_trigger_settings WHERE tablename == 'main.images')\nBEGIN\n  INSERT INTO _electric_oplog (namespace, tablename, optype, primaryKey, newRow, oldRow, timestamp)\n  VALUES ('main', 'images', 'INSERT', json_object('id', new.\"id\"), json_object('frame_number', new.\"frame_number\", 'id', new.\"id\", 'path', new.\"path\", 'scan_id', new.\"scan_id\", 'status', new.\"status\", 'supabase_object_path', new.\"supabase_object_path\", 'url', new.\"url\"), NULL, NULL);\nEND;",
+      "DROP TRIGGER IF EXISTS update_main_images_into_oplog;",
+      "CREATE TRIGGER update_main_images_into_oplog\n   AFTER UPDATE ON \"main\".\"images\"\n   WHEN 1 == (SELECT flag from _electric_trigger_settings WHERE tablename == 'main.images')\nBEGIN\n  INSERT INTO _electric_oplog (namespace, tablename, optype, primaryKey, newRow, oldRow, timestamp)\n  VALUES ('main', 'images', 'UPDATE', json_object('id', new.\"id\"), json_object('frame_number', new.\"frame_number\", 'id', new.\"id\", 'path', new.\"path\", 'scan_id', new.\"scan_id\", 'status', new.\"status\", 'supabase_object_path', new.\"supabase_object_path\", 'url', new.\"url\"), json_object('frame_number', old.\"frame_number\", 'id', old.\"id\", 'path', old.\"path\", 'scan_id', old.\"scan_id\", 'status', old.\"status\", 'supabase_object_path', old.\"supabase_object_path\", 'url', old.\"url\"), NULL);\nEND;",
+      "DROP TRIGGER IF EXISTS delete_main_images_into_oplog;",
+      "CREATE TRIGGER delete_main_images_into_oplog\n   AFTER DELETE ON \"main\".\"images\"\n   WHEN 1 == (SELECT flag from _electric_trigger_settings WHERE tablename == 'main.images')\nBEGIN\n  INSERT INTO _electric_oplog (namespace, tablename, optype, primaryKey, newRow, oldRow, timestamp)\n  VALUES ('main', 'images', 'DELETE', json_object('id', old.\"id\"), NULL, json_object('frame_number', old.\"frame_number\", 'id', old.\"id\", 'path', old.\"path\", 'scan_id', old.\"scan_id\", 'status', old.\"status\", 'supabase_object_path', old.\"supabase_object_path\", 'url', old.\"url\"), NULL);\nEND;",
+      "-- Triggers for foreign key compensations\nDROP TRIGGER IF EXISTS compensation_insert_main_images_scan_id_into_oplog;",
+      "CREATE TRIGGER compensation_insert_main_images_scan_id_into_oplog\n  AFTER INSERT ON \"main\".\"images\"\n  WHEN 1 == (SELECT flag from _electric_trigger_settings WHERE tablename == 'main.scans') AND\n       1 == (SELECT value from _electric_meta WHERE key == 'compensations')\nBEGIN\n  INSERT INTO _electric_oplog (namespace, tablename, optype, primaryKey, newRow, oldRow, timestamp)\n  SELECT 'main', 'scans', 'COMPENSATION', json_object('id', \"id\"), json_object('id', \"id\"), NULL, NULL\n  FROM \"main\".\"scans\" WHERE \"id\" = new.\"scan_id\";\nEND;",
+      "DROP TRIGGER IF EXISTS compensation_update_main_images_scan_id_into_oplog;",
+      "CREATE TRIGGER compensation_update_main_images_scan_id_into_oplog\n   AFTER UPDATE ON \"main\".\"images\"\n   WHEN 1 == (SELECT flag from _electric_trigger_settings WHERE tablename == 'main.scans') AND\n        1 == (SELECT value from _electric_meta WHERE key == 'compensations')\nBEGIN\n  INSERT INTO _electric_oplog (namespace, tablename, optype, primaryKey, newRow, oldRow, timestamp)\n  SELECT 'main', 'scans', 'COMPENSATION', json_object('id', \"id\"), json_object('id', \"id\"), NULL, NULL\n  FROM \"main\".\"scans\" WHERE \"id\" = new.\"scan_id\";\nEND;"
+    ],
+    "version": "20240222221241_192"
   }
 ]

@@ -7,12 +7,6 @@ import { ElectricConfig, ElectrifyOptions } from "electric-sql";
 import { v4 as uuidv4 } from "uuid";
 import { sleepAsync, uuid } from "electric-sql/util";
 
-// type ScansWithId = Omit<Scans, "id?"> & { id: string };
-// type ImagesWithId = Omit<Images, "id?"> & { id: string };
-// type ImagesWithScansWithoutScanId = Omit<ImagesWithId, "scan_id"> & {
-//   scans: { create: ScansWithId };
-// };
-
 export class ElectricStore {
   public scansUpdated: () => void;
 
@@ -72,15 +66,13 @@ export class ElectricStore {
       console.log("Electric client not connected, reconnecting...");
       const electric_config: ElectricConfig = {
         url: this.electric_service_url,
-        auth: {
-          token: this.jwt || "dummy-jwt",
-        },
         timeout: 20000,
       };
       this.connectingToElectric = true;
       this.statusChanged();
       try {
         this.electric = await electrify(this.conn, schema, electric_config);
+        this.electric.connect(this.jwt || "dummy-jwt");
         console.log("Connected to the electric service");
         this.electric.notifier.subscribeToConnectivityStateChanges(() => {
           this.connectingToElectric = this.electric.isConnected;
@@ -134,12 +126,31 @@ export class ElectricStore {
     return this.electric.db.phenotypers.findMany();
   };
 
+  getImagesToUpload = async () => {
+    if (this.electric === null) {
+      return [];
+    }
+    return this.electric.db.images.findMany({
+      where: { status: { not: "UPLOADED" } },
+      include: { scans: true },
+    });
+  };
+
   getScans = async () => {
     // if (this.electric === null || !this.finishedSyncing) {
     if (this.electric === null) {
       return [];
     }
-    return this.electric.db.scans.findMany({ include: { phenotypers: true } });
+    const scans = await this.electric.db.scans.findMany({
+      include: { phenotypers: true, images: true },
+    });
+    // remove duplicate scans
+    const seen = new Set();
+    return scans.filter((scan) => {
+      const duplicate = seen.has(scan.id);
+      seen.add(scan.id);
+      return !duplicate;
+    });
   };
 
   getScan = async (scanId: string) => {
@@ -151,6 +162,21 @@ export class ElectricStore {
       where: { id: scanId },
       include: { phenotypers: true, images: true },
     });
+  };
+
+  updateImageMetadata = async (imageId: string, metadata: Partial<Images>) => {
+    if (this.electric === null) {
+      return { error: "Electric client is null" };
+    }
+    try {
+      await this.electric.db.images.update({
+        data: metadata,
+        where: { id: imageId },
+      });
+      return { error: null };
+    } catch (err) {
+      return { error: err };
+    }
   };
 
   addScan = async (scan: Scan) => {

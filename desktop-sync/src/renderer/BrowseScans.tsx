@@ -1,13 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Link, Outlet } from "react-router-dom";
-import { Scans, Phenotypers } from "../generated/client";
+import { Scans, Phenotypers, Images } from "../generated/client";
 
 const ipcRenderer = window.electron.ipcRenderer;
 const getScans = window.electron.scanStore.getScans;
+const uploadImages = window.electron.electric.uploadImages;
 // const getScansWithEmail = window.electron.scanStore.getScansWithEmail;
 
 type ScansWithPhenotypers = Scans & {
   phenotypers: Phenotypers;
+  images: Images[];
 };
 
 export function BrowseScans() {
@@ -28,6 +30,7 @@ export function BrowseScans() {
 
   return (
     <div>
+      <UploadControls />
       <table className="rounded-md">
         <thead>
           <tr>
@@ -42,6 +45,7 @@ export function BrowseScans() {
             <th className="text-xs text-left px-2 pb-4 align-bottom">
               Exposure
             </th>
+            <th className="text-xs text-left px-2 pb-4 align-bottom">Upload</th>
           </tr>
         </thead>
         <tbody>
@@ -66,10 +70,54 @@ export function BrowseScans() {
                 </td>
                 <td className="px-2 py-2">{scan.scanner_id}</td>
                 <td className="px-2 py-2">{scan.exposure_time}</td>
+                <td className="px-2 py-2">
+                  <ProgressBar
+                    value={
+                      scan.images.filter((image) => image.status == "UPLOADED")
+                        .length
+                    }
+                    max={scan.images.length}
+                  />
+                </td>
               </tr>
             ))}
         </tbody>
       </table>
+    </div>
+  );
+}
+
+function UploadControls() {
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
+
+  const upload = useCallback(() => {
+    setUploading(true);
+    uploadImages()
+      .then((response) => {
+        setUploadProgress(response);
+      })
+      .finally(() => {
+        setUploading(false);
+      });
+  }, []);
+
+  return (
+    <div className="mb-4">
+      <div>
+        <button
+          onClick={upload}
+          className="bg-stone-400 text-white px-4 py-2 rounded-md"
+          disabled={uploading}
+        >
+          {uploading ? "Uploading..." : "Upload"}
+        </button>
+        {uploadProgress && (
+          <span className="text-stone-400 ml-2">
+            {uploadProgress} images uploaded
+          </span>
+        )}
+      </div>
     </div>
   );
 }
@@ -92,6 +140,41 @@ function formatName(name: string) {
     .map((name, index) => (index === 0 ? name : name[0]))
     .join(" ")
     .trim();
+}
+
+function ProgressBar({ value, max }: { value: number; max: number }) {
+  return (
+    <div>
+      {value == 0 ? (
+        <span></span>
+      ) : value < max ? (
+        <div className="h-2 relative max-w-xs rounded-full overflow-hidden">
+          <div className="w-full h-full border border-stone-800 absolute z-10 rounded-full"></div>
+          <div
+            className="h-full bg-lime-400 absolute z-1 rounded-full"
+            style={{ width: `${(value / max) * 100}%` }}
+          ></div>
+        </div>
+      ) : (
+        <div className="text-lime-700">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="inline w-4 h-4 mr-1"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="m4.5 12.75 6 6 9-13.5"
+            />
+          </svg>
+        </div>
+      )}
+    </div>
+  );
 }
 
 function formatDate(date: Date) {

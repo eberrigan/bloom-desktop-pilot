@@ -49,6 +49,7 @@ const electronHandler = {
       ipcRenderer.invoke("scan-store:get-scans") as Promise<
         (Scans & {
           phenotypers: Phenotypers;
+          images: Images[];
         })[]
       >,
     getScan: (scanId: string) =>
@@ -59,6 +60,7 @@ const electronHandler = {
   electric: {
     getPhenotypers: () => ipcRenderer.invoke("electric:get-phenotypers"),
     getStatus: () => ipcRenderer.invoke("electric:get-status"),
+    uploadImages: () => ipcRenderer.invoke("electric:upload-images"),
   },
 };
 
