@@ -7,6 +7,7 @@ import { Scans } from "../generated/client";
 const numFrames = 72;
 
 class Scanner {
+  private scanId: string | null = null;
   private phenotyperId: string | null = null;
   private scanPath: string | null = null;
   private plantQrCode: string | null = null;
@@ -35,8 +36,8 @@ class Scanner {
   }) => {
     this.images = [];
 
-    const scan_name = uuidv4();
-    this.scanPath = path.join(this.scans_dir, scan_name);
+    this.scanId = uuidv4();
+    this.scanPath = path.join(this.scans_dir, this.scanId);
 
     this.captureMetadata();
     this.resetProgress();
@@ -112,7 +113,7 @@ class Scanner {
       throw new Error("plantQrCode is null");
     }
     const metadata = {
-      id: uuidv4(),
+      id: this.scanId,
       phenotyper_id: this.phenotyperId,
       scanner_id: this.scanner_id,
       plant_qr_code: this.plantQrCode,
