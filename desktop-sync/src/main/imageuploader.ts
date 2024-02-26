@@ -52,7 +52,7 @@ export class ImageUploader {
 
     const dst = `bloom-desktop-cyl-scans/${
       image.scans.scanner_id
-    }/${image.scans.capture_date.toISOString()}/scan_${image.scans.id}/plant_${
+    }/${image.scans.capture_date.toISOString()}/scan_${image.scans.id}/${
       image.scans.plant_qr_code
     }/${image.frame_number}.png`;
 
