@@ -1,7 +1,11 @@
 // Disable no-unused-vars, broken for spread args
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
-import { Scans, Phenotypers, Images } from "../generated/client";
+import {
+  Electric_cyl_scans,
+  Electric_phenotypers,
+  Electric_cyl_images,
+} from "../generated/client";
 
 export type Channels =
   | "ipc-example"
@@ -47,14 +51,17 @@ const electronHandler = {
   scanStore: {
     getScans: () =>
       ipcRenderer.invoke("scan-store:get-scans") as Promise<
-        (Scans & {
-          phenotypers: Phenotypers;
-          images: Images[];
+        (Electric_cyl_scans & {
+          electric_phenotypers: Electric_phenotypers;
+          electric_cyl_images: Electric_cyl_images[];
         })[]
       >,
     getScan: (scanId: string) =>
       ipcRenderer.invoke("scan-store:get-scan", [scanId]) as Promise<
-        Scans & { images: Images[]; phenotypers: Phenotypers }
+        Electric_cyl_scans & {
+          electric_phenotypers: Electric_phenotypers;
+          electric_cyl_images: Electric_cyl_images[];
+        }
       >,
   },
   electric: {

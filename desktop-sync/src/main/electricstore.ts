@@ -2,7 +2,7 @@ import Database from "better-sqlite3";
 import { electrify } from "electric-sql/node";
 import { schema } from "../generated/client";
 import { ElectricClient, ClientTables } from "electric-sql/client/model";
-import { Images, Scans } from "../generated/client";
+import { Electric_cyl_images, Electric_cyl_scans } from "../generated/client";
 import { ElectricConfig, ElectrifyOptions } from "electric-sql";
 import { v4 as uuidv4 } from "uuid";
 import { sleepAsync, uuid } from "electric-sql/util";
@@ -67,12 +67,15 @@ export class ElectricStore {
       const electric_config: ElectricConfig = {
         url: this.electric_service_url,
         timeout: 20000,
+        auth: {
+          token: this.jwt || "dummy-jwt",
+        },
       };
       this.connectingToElectric = true;
       this.statusChanged();
       try {
         this.electric = await electrify(this.conn, schema, electric_config);
-        this.electric.connect(this.jwt || "dummy-jwt");
+        // this.electric.connect(this.jwt || "dummy-jwt");
         console.log("Connected to the electric service");
         this.electric.notifier.subscribeToConnectivityStateChanges(() => {
           this.connectingToElectric = this.electric.isConnected;
@@ -104,16 +107,18 @@ export class ElectricStore {
     }
 
     // sync the tables
-    const scans = await this.electric.db.scans.sync({
-      include: { phenotypers: true, images: true },
+    const scans = await this.electric.db.electric_cyl_scans.sync({
+      include: { electric_phenotypers: true, electric_cyl_images: true },
     });
     await scans.synced;
 
-    const phenotypers = await this.electric.db.phenotypers.sync();
+    const phenotypers = await this.electric.db.electric_phenotypers.sync();
     await phenotypers.synced;
 
-    const images = await this.electric.db.images.sync({
-      include: { scans: { include: { phenotypers: true } } },
+    const images = await this.electric.db.electric_cyl_images.sync({
+      include: {
+        electric_cyl_scans: { include: { electric_phenotypers: true } },
+      },
     });
     await images.synced;
   };
@@ -123,16 +128,16 @@ export class ElectricStore {
     if (this.electric === null) {
       return [];
     }
-    return this.electric.db.phenotypers.findMany();
+    return this.electric.db.electric_phenotypers.findMany();
   };
 
   getImagesToUpload = async () => {
     if (this.electric === null) {
       return [];
     }
-    return this.electric.db.images.findMany({
+    return this.electric.db.electric_cyl_images.findMany({
       where: { status: { not: "UPLOADED" } },
-      include: { scans: true },
+      include: { electric_cyl_scans: true },
     });
   };
 
@@ -141,8 +146,8 @@ export class ElectricStore {
     if (this.electric === null) {
       return [];
     }
-    const scans = await this.electric.db.scans.findMany({
-      include: { phenotypers: true, images: true },
+    const scans = await this.electric.db.electric_cyl_scans.findMany({
+      include: { electric_phenotypers: true, electric_cyl_images: true },
     });
     // remove duplicate scans
     const seen = new Set();
@@ -158,18 +163,21 @@ export class ElectricStore {
     if (this.electric === null) {
       return null;
     }
-    return this.electric.db.scans.findUnique({
+    return this.electric.db.electric_cyl_scans.findUnique({
       where: { id: scanId },
-      include: { phenotypers: true, images: true },
+      include: { electric_phenotypers: true, electric_cyl_images: true },
     });
   };
 
-  updateImageMetadata = async (imageId: string, metadata: Partial<Images>) => {
+  updateImageMetadata = async (
+    imageId: string,
+    metadata: Partial<Electric_cyl_images>
+  ) => {
     if (this.electric === null) {
       return { error: "Electric client is null" };
     }
     try {
-      await this.electric.db.images.update({
+      await this.electric.db.electric_cyl_images.update({
         data: metadata,
         where: { id: imageId },
       });
@@ -213,10 +221,10 @@ export class ElectricStore {
     });
 
     // add the scan to the electric database
-    await this.electric.db.scans.create({
+    await this.electric.db.electric_cyl_scans.create({
       data: {
         ...scans,
-        images: { create: images },
+        electric_cyl_images: { create: images },
       },
     });
   };
@@ -286,7 +294,10 @@ function getJsonPayload(token: string) {
 function parseCaptureDate(scan_metadata: ScanMetadata) {
   // parses the capture_date string into a Date object and keeps all other fields
   const { capture_date, ...rest } = scan_metadata;
-  return { ...rest, capture_date: new Date(capture_date) } as Scans;
+  return {
+    ...rest,
+    capture_date: new Date(capture_date),
+  } as Electric_cyl_scans;
 }
 
 // electrify(conn, schema, electric_config)

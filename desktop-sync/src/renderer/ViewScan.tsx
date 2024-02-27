@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Scans } from "../generated/client/prismaClient";
-import { Images, Phenotypers } from "../generated/client";
+// import { Electric_cyl_scans } from "../generated/client/prismaClient";
+import {
+  Electric_cyl_scans,
+  Electric_cyl_images,
+  Electric_phenotypers,
+} from "../generated/client";
 
 const getScan = window.electron.scanStore.getScan;
 // const getScanWithEmail = window.electron.scanStore.getScanWithEmail;
 
-type ScansWithPhenotypers = Scans & {
-  phenotypers: Phenotypers;
-  images: Images[];
+type ScansWithPhenotypers = Electric_cyl_scans & {
+  electric_phenotypers: Electric_phenotypers;
+  electric_cyl_images: Electric_cyl_images[];
 };
 
 export function ViewScan() {
@@ -34,7 +38,7 @@ export function ViewScan() {
           <div className="text-xs mt-2 font-bold">Date</div>
           <div>{scan && formatDate(scan?.capture_date)}</div>
           <div className="text-xs mt-2 font-bold">Phenotyper</div>
-          <Phenotyper phenotyper={scan?.phenotypers} />
+          <Phenotyper phenotyper={scan?.electric_phenotypers} />
           <div className="text-xs mt-2 font-bold">Scanner</div>
           <div>{scan?.scanner_id}</div>
           <div className="text-xs mt-2 font-bold">
@@ -47,7 +51,7 @@ export function ViewScan() {
           <div className="text-xs mt-2 font-bold">Scan ID</div>
           <div>{scanId}</div>
           <img
-            src={"file://" + scan?.images[0].path}
+            src={"file://" + scan?.electric_cyl_images[0].path}
             style={{ width: "500px" }}
             className="rounded-md mt-2"
           />
@@ -59,7 +63,7 @@ export function ViewScan() {
   );
 }
 
-function Phenotyper({ phenotyper }: { phenotyper: Phenotypers }) {
+function Phenotyper({ phenotyper }: { phenotyper: Electric_phenotypers }) {
   return (
     <div>
       {phenotyper.name} ({phenotyper.email})

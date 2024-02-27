@@ -1,15 +1,19 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Link, Outlet } from "react-router-dom";
-import { Scans, Phenotypers, Images } from "../generated/client";
+import {
+  Electric_cyl_scans,
+  Electric_phenotypers,
+  Electric_cyl_images,
+} from "../generated/client";
 
 const ipcRenderer = window.electron.ipcRenderer;
 const getScans = window.electron.scanStore.getScans;
 const uploadImages = window.electron.electric.uploadImages;
 // const getScansWithEmail = window.electron.scanStore.getScansWithEmail;
 
-type ScansWithPhenotypers = Scans & {
-  phenotypers: Phenotypers;
-  images: Images[];
+type ScansWithPhenotypers = Electric_cyl_scans & {
+  electric_phenotypers: Electric_phenotypers;
+  electric_cyl_images: Electric_cyl_images[];
 };
 
 export function BrowseScans() {
@@ -66,17 +70,18 @@ export function BrowseScans() {
                 </td>
                 <td className="px-2 py-2">{formatDate(scan.capture_date)}</td>
                 <td className="px-2 py-2">
-                  <Phenotyper phenotyper={scan?.phenotypers} />
+                  <Phenotyper phenotyper={scan?.electric_phenotypers} />
                 </td>
                 <td className="px-2 py-2">{scan.scanner_id}</td>
                 <td className="px-2 py-2">{scan.exposure_time}</td>
                 <td className="px-2 py-2">
                   <ProgressBar
                     value={
-                      scan.images.filter((image) => image.status == "UPLOADED")
-                        .length
+                      scan.electric_cyl_images.filter(
+                        (image) => image.status == "UPLOADED"
+                      ).length
                     }
-                    max={scan.images.length}
+                    max={scan.electric_cyl_images.length}
                   />
                 </td>
               </tr>
@@ -122,7 +127,7 @@ function UploadControls() {
   );
 }
 
-function Phenotyper({ phenotyper }: { phenotyper: Phenotypers }) {
+function Phenotyper({ phenotyper }: { phenotyper: Electric_phenotypers }) {
   return (
     <div>
       <span className="inline-block">{formatName(phenotyper.name)}</span>

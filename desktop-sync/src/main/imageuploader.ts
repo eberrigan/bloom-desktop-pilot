@@ -8,10 +8,12 @@ import sharp from "sharp";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 import { Database } from "../types/database.types";
-import { Images, Scans } from "../generated/client";
+import { Electric_cyl_images, Electric_cyl_scans } from "../generated/client";
 import { ElectricStore } from "./electricstore";
 
-type ImagesWithScans = Images & { scans: Scans };
+type ImagesWithScans = Electric_cyl_images & {
+  electric_cyl_scans: Electric_cyl_scans;
+};
 
 export class ImageUploader {
   private supabase: SupabaseClient<Database> | null = null;
@@ -51,10 +53,10 @@ export class ImageUploader {
     const src = image.path;
 
     const dst = `bloom-desktop-cyl-scans/${
-      image.scans.scanner_id
-    }/${image.scans.capture_date.toISOString()}/scan_${image.scans.id}/${
-      image.scans.plant_qr_code
-    }/${image.frame_number}.png`;
+      image.electric_cyl_scans.scanner_id
+    }/${image.electric_cyl_scans.capture_date.toISOString()}/scan_${
+      image.electric_cyl_scans.id
+    }/${image.electric_cyl_scans.plant_qr_code}/${image.frame_number}.png`;
 
     // upload image to supabase
     const bucket = "images";

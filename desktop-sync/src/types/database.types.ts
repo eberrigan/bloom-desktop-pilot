@@ -34,7 +34,7 @@ export interface Database {
   }
   public: {
     Tables: {
-      images: {
+      electric_cyl_images: {
         Row: {
           frame_number: number | null
           id: string
@@ -64,33 +64,15 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "images_scan_id_fkey"
+            foreignKeyName: "electric_cyl_images_scan_id_fkey"
             columns: ["scan_id"]
             isOneToOne: false
-            referencedRelation: "scans"
+            referencedRelation: "electric_cyl_scans"
             referencedColumns: ["id"]
           }
         ]
       }
-      phenotypers: {
-        Row: {
-          email: string | null
-          id: string
-          name: string | null
-        }
-        Insert: {
-          email?: string | null
-          id: string
-          name?: string | null
-        }
-        Update: {
-          email?: string | null
-          id?: string
-          name?: string | null
-        }
-        Relationships: []
-      }
-      scans: {
+      electric_cyl_scans: {
         Row: {
           brightness: number | null
           capture_date: string | null
@@ -138,13 +120,31 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "scans_phenotyper_id_fkey"
+            foreignKeyName: "electric_cyl_scans_phenotyper_id_fkey"
             columns: ["phenotyper_id"]
             isOneToOne: false
-            referencedRelation: "phenotypers"
+            referencedRelation: "electric_phenotypers"
             referencedColumns: ["id"]
           }
         ]
+      }
+      electric_phenotypers: {
+        Row: {
+          email: string | null
+          id: string
+          name: string | null
+        }
+        Insert: {
+          email?: string | null
+          id: string
+          name?: string | null
+        }
+        Update: {
+          email?: string | null
+          id?: string
+          name?: string | null
+        }
+        Relationships: []
       }
     }
     Views: {

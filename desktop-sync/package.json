@@ -1,5 +1,5 @@
 {
-  "name": "bloom-desktop-pilot-2",
+  "name": "bloom-desktop-pilot",
   "productName": "Bloom Desktop",
   "version": "1.0.0",
   "description": "My Electron application description",
@@ -63,6 +63,7 @@
     "@supabase/supabase-js": "^2.39.6",
     "@types/better-sqlite3": "^7.6.9",
     "@types/js-yaml": "^4.0.9",
+    "@types/node": "^20.11.20",
     "@types/uuid": "^9.0.8",
     "better-sqlite3": "^9.4.1",
     "electric-sql": "^0.9.2",

@@ -12,13 +12,13 @@ import migrations from './migrations';
 // ENUMS
 /////////////////////////////////////////
 
-export const ImagesScalarFieldEnumSchema = z.enum(['id','scan_id','frame_number','path','url','status','supabase_object_path']);
+export const Electric_cyl_imagesScalarFieldEnumSchema = z.enum(['id','scan_id','frame_number','path','url','status','supabase_object_path']);
 
-export const PhenotypersScalarFieldEnumSchema = z.enum(['id','name','email']);
+export const Electric_cyl_scansScalarFieldEnumSchema = z.enum(['id','phenotyper_id','scanner_id','plant_qr_code','path','capture_date','num_frames','exposure_time','gain','brightness','contrast','gamma','seconds_per_rot']);
+
+export const Electric_phenotypersScalarFieldEnumSchema = z.enum(['id','name','email']);
 
 export const QueryModeSchema = z.enum(['default','insensitive']);
-
-export const ScansScalarFieldEnumSchema = z.enum(['id','phenotyper_id','scanner_id','plant_qr_code','path','capture_date','num_frames','exposure_time','gain','brightness','contrast','gamma','seconds_per_rot']);
 
 export const SortOrderSchema = z.enum(['asc','desc']);
 
@@ -28,10 +28,10 @@ export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted','ReadCo
 /////////////////////////////////////////
 
 /////////////////////////////////////////
-// IMAGES SCHEMA
+// ELECTRIC CYL IMAGES SCHEMA
 /////////////////////////////////////////
 
-export const ImagesSchema = z.object({
+export const Electric_cyl_imagesSchema = z.object({
   id: z.string().uuid(),
   scan_id: z.string().uuid().nullable(),
   frame_number: z.number().int().gte(-2147483648).lte(2147483647).nullable(),
@@ -41,25 +41,13 @@ export const ImagesSchema = z.object({
   supabase_object_path: z.string().nullable(),
 })
 
-export type Images = z.infer<typeof ImagesSchema>
+export type Electric_cyl_images = z.infer<typeof Electric_cyl_imagesSchema>
 
 /////////////////////////////////////////
-// PHENOTYPERS SCHEMA
+// ELECTRIC CYL SCANS SCHEMA
 /////////////////////////////////////////
 
-export const PhenotypersSchema = z.object({
-  id: z.string().uuid(),
-  name: z.string().nullable(),
-  email: z.string().nullable(),
-})
-
-export type Phenotypers = z.infer<typeof PhenotypersSchema>
-
-/////////////////////////////////////////
-// SCANS SCHEMA
-/////////////////////////////////////////
-
-export const ScansSchema = z.object({
+export const Electric_cyl_scansSchema = z.object({
   id: z.string().uuid(),
   phenotyper_id: z.string().uuid().nullable(),
   scanner_id: z.string().nullable(),
@@ -75,25 +63,37 @@ export const ScansSchema = z.object({
   seconds_per_rot: z.number().or(z.nan()).nullable(),
 })
 
-export type Scans = z.infer<typeof ScansSchema>
+export type Electric_cyl_scans = z.infer<typeof Electric_cyl_scansSchema>
+
+/////////////////////////////////////////
+// ELECTRIC PHENOTYPERS SCHEMA
+/////////////////////////////////////////
+
+export const Electric_phenotypersSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().nullable(),
+  email: z.string().nullable(),
+})
+
+export type Electric_phenotypers = z.infer<typeof Electric_phenotypersSchema>
 
 /////////////////////////////////////////
 // SELECT & INCLUDE
 /////////////////////////////////////////
 
-// IMAGES
+// ELECTRIC CYL IMAGES
 //------------------------------------------------------
 
-export const ImagesIncludeSchema: z.ZodType<Prisma.ImagesInclude> = z.object({
-  scans: z.union([z.boolean(),z.lazy(() => ScansArgsSchema)]).optional(),
+export const Electric_cyl_imagesIncludeSchema: z.ZodType<Prisma.Electric_cyl_imagesInclude> = z.object({
+  electric_cyl_scans: z.union([z.boolean(),z.lazy(() => Electric_cyl_scansArgsSchema)]).optional(),
 }).strict()
 
-export const ImagesArgsSchema: z.ZodType<Prisma.ImagesArgs> = z.object({
-  select: z.lazy(() => ImagesSelectSchema).optional(),
-  include: z.lazy(() => ImagesIncludeSchema).optional(),
+export const Electric_cyl_imagesArgsSchema: z.ZodType<Prisma.Electric_cyl_imagesArgs> = z.object({
+  select: z.lazy(() => Electric_cyl_imagesSelectSchema).optional(),
+  include: z.lazy(() => Electric_cyl_imagesIncludeSchema).optional(),
 }).strict();
 
-export const ImagesSelectSchema: z.ZodType<Prisma.ImagesSelect> = z.object({
+export const Electric_cyl_imagesSelectSchema: z.ZodType<Prisma.Electric_cyl_imagesSelect> = z.object({
   id: z.boolean().optional(),
   scan_id: z.boolean().optional(),
   frame_number: z.boolean().optional(),
@@ -101,61 +101,32 @@ export const ImagesSelectSchema: z.ZodType<Prisma.ImagesSelect> = z.object({
   url: z.boolean().optional(),
   status: z.boolean().optional(),
   supabase_object_path: z.boolean().optional(),
-  scans: z.union([z.boolean(),z.lazy(() => ScansArgsSchema)]).optional(),
+  electric_cyl_scans: z.union([z.boolean(),z.lazy(() => Electric_cyl_scansArgsSchema)]).optional(),
 }).strict()
 
-// PHENOTYPERS
+// ELECTRIC CYL SCANS
 //------------------------------------------------------
 
-export const PhenotypersIncludeSchema: z.ZodType<Prisma.PhenotypersInclude> = z.object({
-  scans: z.union([z.boolean(),z.lazy(() => ScansFindManyArgsSchema)]).optional(),
-  _count: z.union([z.boolean(),z.lazy(() => PhenotypersCountOutputTypeArgsSchema)]).optional(),
+export const Electric_cyl_scansIncludeSchema: z.ZodType<Prisma.Electric_cyl_scansInclude> = z.object({
+  electric_cyl_images: z.union([z.boolean(),z.lazy(() => Electric_cyl_imagesFindManyArgsSchema)]).optional(),
+  electric_phenotypers: z.union([z.boolean(),z.lazy(() => Electric_phenotypersArgsSchema)]).optional(),
+  _count: z.union([z.boolean(),z.lazy(() => Electric_cyl_scansCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
-export const PhenotypersArgsSchema: z.ZodType<Prisma.PhenotypersArgs> = z.object({
-  select: z.lazy(() => PhenotypersSelectSchema).optional(),
-  include: z.lazy(() => PhenotypersIncludeSchema).optional(),
+export const Electric_cyl_scansArgsSchema: z.ZodType<Prisma.Electric_cyl_scansArgs> = z.object({
+  select: z.lazy(() => Electric_cyl_scansSelectSchema).optional(),
+  include: z.lazy(() => Electric_cyl_scansIncludeSchema).optional(),
 }).strict();
 
-export const PhenotypersCountOutputTypeArgsSchema: z.ZodType<Prisma.PhenotypersCountOutputTypeArgs> = z.object({
-  select: z.lazy(() => PhenotypersCountOutputTypeSelectSchema).nullish(),
+export const Electric_cyl_scansCountOutputTypeArgsSchema: z.ZodType<Prisma.Electric_cyl_scansCountOutputTypeArgs> = z.object({
+  select: z.lazy(() => Electric_cyl_scansCountOutputTypeSelectSchema).nullish(),
 }).strict();
 
-export const PhenotypersCountOutputTypeSelectSchema: z.ZodType<Prisma.PhenotypersCountOutputTypeSelect> = z.object({
-  scans: z.boolean().optional(),
+export const Electric_cyl_scansCountOutputTypeSelectSchema: z.ZodType<Prisma.Electric_cyl_scansCountOutputTypeSelect> = z.object({
+  electric_cyl_images: z.boolean().optional(),
 }).strict();
 
-export const PhenotypersSelectSchema: z.ZodType<Prisma.PhenotypersSelect> = z.object({
-  id: z.boolean().optional(),
-  name: z.boolean().optional(),
-  email: z.boolean().optional(),
-  scans: z.union([z.boolean(),z.lazy(() => ScansFindManyArgsSchema)]).optional(),
-  _count: z.union([z.boolean(),z.lazy(() => PhenotypersCountOutputTypeArgsSchema)]).optional(),
-}).strict()
-
-// SCANS
-//------------------------------------------------------
-
-export const ScansIncludeSchema: z.ZodType<Prisma.ScansInclude> = z.object({
-  images: z.union([z.boolean(),z.lazy(() => ImagesFindManyArgsSchema)]).optional(),
-  phenotypers: z.union([z.boolean(),z.lazy(() => PhenotypersArgsSchema)]).optional(),
-  _count: z.union([z.boolean(),z.lazy(() => ScansCountOutputTypeArgsSchema)]).optional(),
-}).strict()
-
-export const ScansArgsSchema: z.ZodType<Prisma.ScansArgs> = z.object({
-  select: z.lazy(() => ScansSelectSchema).optional(),
-  include: z.lazy(() => ScansIncludeSchema).optional(),
-}).strict();
-
-export const ScansCountOutputTypeArgsSchema: z.ZodType<Prisma.ScansCountOutputTypeArgs> = z.object({
-  select: z.lazy(() => ScansCountOutputTypeSelectSchema).nullish(),
-}).strict();
-
-export const ScansCountOutputTypeSelectSchema: z.ZodType<Prisma.ScansCountOutputTypeSelect> = z.object({
-  images: z.boolean().optional(),
-}).strict();
-
-export const ScansSelectSchema: z.ZodType<Prisma.ScansSelect> = z.object({
+export const Electric_cyl_scansSelectSchema: z.ZodType<Prisma.Electric_cyl_scansSelect> = z.object({
   id: z.boolean().optional(),
   phenotyper_id: z.boolean().optional(),
   scanner_id: z.boolean().optional(),
@@ -169,9 +140,38 @@ export const ScansSelectSchema: z.ZodType<Prisma.ScansSelect> = z.object({
   contrast: z.boolean().optional(),
   gamma: z.boolean().optional(),
   seconds_per_rot: z.boolean().optional(),
-  images: z.union([z.boolean(),z.lazy(() => ImagesFindManyArgsSchema)]).optional(),
-  phenotypers: z.union([z.boolean(),z.lazy(() => PhenotypersArgsSchema)]).optional(),
-  _count: z.union([z.boolean(),z.lazy(() => ScansCountOutputTypeArgsSchema)]).optional(),
+  electric_cyl_images: z.union([z.boolean(),z.lazy(() => Electric_cyl_imagesFindManyArgsSchema)]).optional(),
+  electric_phenotypers: z.union([z.boolean(),z.lazy(() => Electric_phenotypersArgsSchema)]).optional(),
+  _count: z.union([z.boolean(),z.lazy(() => Electric_cyl_scansCountOutputTypeArgsSchema)]).optional(),
+}).strict()
+
+// ELECTRIC PHENOTYPERS
+//------------------------------------------------------
+
+export const Electric_phenotypersIncludeSchema: z.ZodType<Prisma.Electric_phenotypersInclude> = z.object({
+  electric_cyl_scans: z.union([z.boolean(),z.lazy(() => Electric_cyl_scansFindManyArgsSchema)]).optional(),
+  _count: z.union([z.boolean(),z.lazy(() => Electric_phenotypersCountOutputTypeArgsSchema)]).optional(),
+}).strict()
+
+export const Electric_phenotypersArgsSchema: z.ZodType<Prisma.Electric_phenotypersArgs> = z.object({
+  select: z.lazy(() => Electric_phenotypersSelectSchema).optional(),
+  include: z.lazy(() => Electric_phenotypersIncludeSchema).optional(),
+}).strict();
+
+export const Electric_phenotypersCountOutputTypeArgsSchema: z.ZodType<Prisma.Electric_phenotypersCountOutputTypeArgs> = z.object({
+  select: z.lazy(() => Electric_phenotypersCountOutputTypeSelectSchema).nullish(),
+}).strict();
+
+export const Electric_phenotypersCountOutputTypeSelectSchema: z.ZodType<Prisma.Electric_phenotypersCountOutputTypeSelect> = z.object({
+  electric_cyl_scans: z.boolean().optional(),
+}).strict();
+
+export const Electric_phenotypersSelectSchema: z.ZodType<Prisma.Electric_phenotypersSelect> = z.object({
+  id: z.boolean().optional(),
+  name: z.boolean().optional(),
+  email: z.boolean().optional(),
+  electric_cyl_scans: z.union([z.boolean(),z.lazy(() => Electric_cyl_scansFindManyArgsSchema)]).optional(),
+  _count: z.union([z.boolean(),z.lazy(() => Electric_phenotypersCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
 
@@ -179,10 +179,10 @@ export const ScansSelectSchema: z.ZodType<Prisma.ScansSelect> = z.object({
 // INPUT TYPES
 /////////////////////////////////////////
 
-export const ImagesWhereInputSchema: z.ZodType<Prisma.ImagesWhereInput> = z.object({
-  AND: z.union([ z.lazy(() => ImagesWhereInputSchema),z.lazy(() => ImagesWhereInputSchema).array() ]).optional(),
-  OR: z.lazy(() => ImagesWhereInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => ImagesWhereInputSchema),z.lazy(() => ImagesWhereInputSchema).array() ]).optional(),
+export const Electric_cyl_imagesWhereInputSchema: z.ZodType<Prisma.Electric_cyl_imagesWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => Electric_cyl_imagesWhereInputSchema),z.lazy(() => Electric_cyl_imagesWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => Electric_cyl_imagesWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => Electric_cyl_imagesWhereInputSchema),z.lazy(() => Electric_cyl_imagesWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => UuidFilterSchema),z.string() ]).optional(),
   scan_id: z.union([ z.lazy(() => UuidNullableFilterSchema),z.string() ]).optional().nullable(),
   frame_number: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
@@ -190,10 +190,10 @@ export const ImagesWhereInputSchema: z.ZodType<Prisma.ImagesWhereInput> = z.obje
   url: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   status: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   supabase_object_path: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  scans: z.union([ z.lazy(() => ScansRelationFilterSchema),z.lazy(() => ScansWhereInputSchema) ]).optional().nullable(),
+  electric_cyl_scans: z.union([ z.lazy(() => Electric_cyl_scansRelationFilterSchema),z.lazy(() => Electric_cyl_scansWhereInputSchema) ]).optional().nullable(),
 }).strict();
 
-export const ImagesOrderByWithRelationInputSchema: z.ZodType<Prisma.ImagesOrderByWithRelationInput> = z.object({
+export const Electric_cyl_imagesOrderByWithRelationInputSchema: z.ZodType<Prisma.Electric_cyl_imagesOrderByWithRelationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   scan_id: z.lazy(() => SortOrderSchema).optional(),
   frame_number: z.lazy(() => SortOrderSchema).optional(),
@@ -201,14 +201,14 @@ export const ImagesOrderByWithRelationInputSchema: z.ZodType<Prisma.ImagesOrderB
   url: z.lazy(() => SortOrderSchema).optional(),
   status: z.lazy(() => SortOrderSchema).optional(),
   supabase_object_path: z.lazy(() => SortOrderSchema).optional(),
-  scans: z.lazy(() => ScansOrderByWithRelationInputSchema).optional()
+  electric_cyl_scans: z.lazy(() => Electric_cyl_scansOrderByWithRelationInputSchema).optional()
 }).strict();
 
-export const ImagesWhereUniqueInputSchema: z.ZodType<Prisma.ImagesWhereUniqueInput> = z.object({
+export const Electric_cyl_imagesWhereUniqueInputSchema: z.ZodType<Prisma.Electric_cyl_imagesWhereUniqueInput> = z.object({
   id: z.string().uuid().optional()
 }).strict();
 
-export const ImagesOrderByWithAggregationInputSchema: z.ZodType<Prisma.ImagesOrderByWithAggregationInput> = z.object({
+export const Electric_cyl_imagesOrderByWithAggregationInputSchema: z.ZodType<Prisma.Electric_cyl_imagesOrderByWithAggregationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   scan_id: z.lazy(() => SortOrderSchema).optional(),
   frame_number: z.lazy(() => SortOrderSchema).optional(),
@@ -216,17 +216,17 @@ export const ImagesOrderByWithAggregationInputSchema: z.ZodType<Prisma.ImagesOrd
   url: z.lazy(() => SortOrderSchema).optional(),
   status: z.lazy(() => SortOrderSchema).optional(),
   supabase_object_path: z.lazy(() => SortOrderSchema).optional(),
-  _count: z.lazy(() => ImagesCountOrderByAggregateInputSchema).optional(),
-  _avg: z.lazy(() => ImagesAvgOrderByAggregateInputSchema).optional(),
-  _max: z.lazy(() => ImagesMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => ImagesMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => ImagesSumOrderByAggregateInputSchema).optional()
+  _count: z.lazy(() => Electric_cyl_imagesCountOrderByAggregateInputSchema).optional(),
+  _avg: z.lazy(() => Electric_cyl_imagesAvgOrderByAggregateInputSchema).optional(),
+  _max: z.lazy(() => Electric_cyl_imagesMaxOrderByAggregateInputSchema).optional(),
+  _min: z.lazy(() => Electric_cyl_imagesMinOrderByAggregateInputSchema).optional(),
+  _sum: z.lazy(() => Electric_cyl_imagesSumOrderByAggregateInputSchema).optional()
 }).strict();
 
-export const ImagesScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.ImagesScalarWhereWithAggregatesInput> = z.object({
-  AND: z.union([ z.lazy(() => ImagesScalarWhereWithAggregatesInputSchema),z.lazy(() => ImagesScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  OR: z.lazy(() => ImagesScalarWhereWithAggregatesInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => ImagesScalarWhereWithAggregatesInputSchema),z.lazy(() => ImagesScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+export const Electric_cyl_imagesScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Electric_cyl_imagesScalarWhereWithAggregatesInput> = z.object({
+  AND: z.union([ z.lazy(() => Electric_cyl_imagesScalarWhereWithAggregatesInputSchema),z.lazy(() => Electric_cyl_imagesScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+  OR: z.lazy(() => Electric_cyl_imagesScalarWhereWithAggregatesInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => Electric_cyl_imagesScalarWhereWithAggregatesInputSchema),z.lazy(() => Electric_cyl_imagesScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => UuidWithAggregatesFilterSchema),z.string() ]).optional(),
   scan_id: z.union([ z.lazy(() => UuidNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   frame_number: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
@@ -236,49 +236,10 @@ export const ImagesScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Images
   supabase_object_path: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
 }).strict();
 
-export const PhenotypersWhereInputSchema: z.ZodType<Prisma.PhenotypersWhereInput> = z.object({
-  AND: z.union([ z.lazy(() => PhenotypersWhereInputSchema),z.lazy(() => PhenotypersWhereInputSchema).array() ]).optional(),
-  OR: z.lazy(() => PhenotypersWhereInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => PhenotypersWhereInputSchema),z.lazy(() => PhenotypersWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => UuidFilterSchema),z.string() ]).optional(),
-  name: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  email: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  scans: z.lazy(() => ScansListRelationFilterSchema).optional()
-}).strict();
-
-export const PhenotypersOrderByWithRelationInputSchema: z.ZodType<Prisma.PhenotypersOrderByWithRelationInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  name: z.lazy(() => SortOrderSchema).optional(),
-  email: z.lazy(() => SortOrderSchema).optional(),
-  scans: z.lazy(() => ScansOrderByRelationAggregateInputSchema).optional()
-}).strict();
-
-export const PhenotypersWhereUniqueInputSchema: z.ZodType<Prisma.PhenotypersWhereUniqueInput> = z.object({
-  id: z.string().uuid().optional()
-}).strict();
-
-export const PhenotypersOrderByWithAggregationInputSchema: z.ZodType<Prisma.PhenotypersOrderByWithAggregationInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  name: z.lazy(() => SortOrderSchema).optional(),
-  email: z.lazy(() => SortOrderSchema).optional(),
-  _count: z.lazy(() => PhenotypersCountOrderByAggregateInputSchema).optional(),
-  _max: z.lazy(() => PhenotypersMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => PhenotypersMinOrderByAggregateInputSchema).optional()
-}).strict();
-
-export const PhenotypersScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.PhenotypersScalarWhereWithAggregatesInput> = z.object({
-  AND: z.union([ z.lazy(() => PhenotypersScalarWhereWithAggregatesInputSchema),z.lazy(() => PhenotypersScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  OR: z.lazy(() => PhenotypersScalarWhereWithAggregatesInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => PhenotypersScalarWhereWithAggregatesInputSchema),z.lazy(() => PhenotypersScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => UuidWithAggregatesFilterSchema),z.string() ]).optional(),
-  name: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
-  email: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
-}).strict();
-
-export const ScansWhereInputSchema: z.ZodType<Prisma.ScansWhereInput> = z.object({
-  AND: z.union([ z.lazy(() => ScansWhereInputSchema),z.lazy(() => ScansWhereInputSchema).array() ]).optional(),
-  OR: z.lazy(() => ScansWhereInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => ScansWhereInputSchema),z.lazy(() => ScansWhereInputSchema).array() ]).optional(),
+export const Electric_cyl_scansWhereInputSchema: z.ZodType<Prisma.Electric_cyl_scansWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => Electric_cyl_scansWhereInputSchema),z.lazy(() => Electric_cyl_scansWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => Electric_cyl_scansWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => Electric_cyl_scansWhereInputSchema),z.lazy(() => Electric_cyl_scansWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => UuidFilterSchema),z.string() ]).optional(),
   phenotyper_id: z.union([ z.lazy(() => UuidNullableFilterSchema),z.string() ]).optional().nullable(),
   scanner_id: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
@@ -292,11 +253,11 @@ export const ScansWhereInputSchema: z.ZodType<Prisma.ScansWhereInput> = z.object
   contrast: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   gamma: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   seconds_per_rot: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
-  images: z.lazy(() => ImagesListRelationFilterSchema).optional(),
-  phenotypers: z.union([ z.lazy(() => PhenotypersRelationFilterSchema),z.lazy(() => PhenotypersWhereInputSchema) ]).optional().nullable(),
+  electric_cyl_images: z.lazy(() => Electric_cyl_imagesListRelationFilterSchema).optional(),
+  electric_phenotypers: z.union([ z.lazy(() => Electric_phenotypersRelationFilterSchema),z.lazy(() => Electric_phenotypersWhereInputSchema) ]).optional().nullable(),
 }).strict();
 
-export const ScansOrderByWithRelationInputSchema: z.ZodType<Prisma.ScansOrderByWithRelationInput> = z.object({
+export const Electric_cyl_scansOrderByWithRelationInputSchema: z.ZodType<Prisma.Electric_cyl_scansOrderByWithRelationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   phenotyper_id: z.lazy(() => SortOrderSchema).optional(),
   scanner_id: z.lazy(() => SortOrderSchema).optional(),
@@ -310,15 +271,15 @@ export const ScansOrderByWithRelationInputSchema: z.ZodType<Prisma.ScansOrderByW
   contrast: z.lazy(() => SortOrderSchema).optional(),
   gamma: z.lazy(() => SortOrderSchema).optional(),
   seconds_per_rot: z.lazy(() => SortOrderSchema).optional(),
-  images: z.lazy(() => ImagesOrderByRelationAggregateInputSchema).optional(),
-  phenotypers: z.lazy(() => PhenotypersOrderByWithRelationInputSchema).optional()
+  electric_cyl_images: z.lazy(() => Electric_cyl_imagesOrderByRelationAggregateInputSchema).optional(),
+  electric_phenotypers: z.lazy(() => Electric_phenotypersOrderByWithRelationInputSchema).optional()
 }).strict();
 
-export const ScansWhereUniqueInputSchema: z.ZodType<Prisma.ScansWhereUniqueInput> = z.object({
+export const Electric_cyl_scansWhereUniqueInputSchema: z.ZodType<Prisma.Electric_cyl_scansWhereUniqueInput> = z.object({
   id: z.string().uuid().optional()
 }).strict();
 
-export const ScansOrderByWithAggregationInputSchema: z.ZodType<Prisma.ScansOrderByWithAggregationInput> = z.object({
+export const Electric_cyl_scansOrderByWithAggregationInputSchema: z.ZodType<Prisma.Electric_cyl_scansOrderByWithAggregationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   phenotyper_id: z.lazy(() => SortOrderSchema).optional(),
   scanner_id: z.lazy(() => SortOrderSchema).optional(),
@@ -332,17 +293,17 @@ export const ScansOrderByWithAggregationInputSchema: z.ZodType<Prisma.ScansOrder
   contrast: z.lazy(() => SortOrderSchema).optional(),
   gamma: z.lazy(() => SortOrderSchema).optional(),
   seconds_per_rot: z.lazy(() => SortOrderSchema).optional(),
-  _count: z.lazy(() => ScansCountOrderByAggregateInputSchema).optional(),
-  _avg: z.lazy(() => ScansAvgOrderByAggregateInputSchema).optional(),
-  _max: z.lazy(() => ScansMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => ScansMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => ScansSumOrderByAggregateInputSchema).optional()
+  _count: z.lazy(() => Electric_cyl_scansCountOrderByAggregateInputSchema).optional(),
+  _avg: z.lazy(() => Electric_cyl_scansAvgOrderByAggregateInputSchema).optional(),
+  _max: z.lazy(() => Electric_cyl_scansMaxOrderByAggregateInputSchema).optional(),
+  _min: z.lazy(() => Electric_cyl_scansMinOrderByAggregateInputSchema).optional(),
+  _sum: z.lazy(() => Electric_cyl_scansSumOrderByAggregateInputSchema).optional()
 }).strict();
 
-export const ScansScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.ScansScalarWhereWithAggregatesInput> = z.object({
-  AND: z.union([ z.lazy(() => ScansScalarWhereWithAggregatesInputSchema),z.lazy(() => ScansScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  OR: z.lazy(() => ScansScalarWhereWithAggregatesInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => ScansScalarWhereWithAggregatesInputSchema),z.lazy(() => ScansScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+export const Electric_cyl_scansScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Electric_cyl_scansScalarWhereWithAggregatesInput> = z.object({
+  AND: z.union([ z.lazy(() => Electric_cyl_scansScalarWhereWithAggregatesInputSchema),z.lazy(() => Electric_cyl_scansScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+  OR: z.lazy(() => Electric_cyl_scansScalarWhereWithAggregatesInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => Electric_cyl_scansScalarWhereWithAggregatesInputSchema),z.lazy(() => Electric_cyl_scansScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => UuidWithAggregatesFilterSchema),z.string() ]).optional(),
   phenotyper_id: z.union([ z.lazy(() => UuidNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   scanner_id: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
@@ -358,17 +319,56 @@ export const ScansScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.ScansSc
   seconds_per_rot: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
 }).strict();
 
-export const ImagesCreateInputSchema: z.ZodType<Prisma.ImagesCreateInput> = z.object({
+export const Electric_phenotypersWhereInputSchema: z.ZodType<Prisma.Electric_phenotypersWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => Electric_phenotypersWhereInputSchema),z.lazy(() => Electric_phenotypersWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => Electric_phenotypersWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => Electric_phenotypersWhereInputSchema),z.lazy(() => Electric_phenotypersWhereInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => UuidFilterSchema),z.string() ]).optional(),
+  name: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  email: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  electric_cyl_scans: z.lazy(() => Electric_cyl_scansListRelationFilterSchema).optional()
+}).strict();
+
+export const Electric_phenotypersOrderByWithRelationInputSchema: z.ZodType<Prisma.Electric_phenotypersOrderByWithRelationInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  name: z.lazy(() => SortOrderSchema).optional(),
+  email: z.lazy(() => SortOrderSchema).optional(),
+  electric_cyl_scans: z.lazy(() => Electric_cyl_scansOrderByRelationAggregateInputSchema).optional()
+}).strict();
+
+export const Electric_phenotypersWhereUniqueInputSchema: z.ZodType<Prisma.Electric_phenotypersWhereUniqueInput> = z.object({
+  id: z.string().uuid().optional()
+}).strict();
+
+export const Electric_phenotypersOrderByWithAggregationInputSchema: z.ZodType<Prisma.Electric_phenotypersOrderByWithAggregationInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  name: z.lazy(() => SortOrderSchema).optional(),
+  email: z.lazy(() => SortOrderSchema).optional(),
+  _count: z.lazy(() => Electric_phenotypersCountOrderByAggregateInputSchema).optional(),
+  _max: z.lazy(() => Electric_phenotypersMaxOrderByAggregateInputSchema).optional(),
+  _min: z.lazy(() => Electric_phenotypersMinOrderByAggregateInputSchema).optional()
+}).strict();
+
+export const Electric_phenotypersScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Electric_phenotypersScalarWhereWithAggregatesInput> = z.object({
+  AND: z.union([ z.lazy(() => Electric_phenotypersScalarWhereWithAggregatesInputSchema),z.lazy(() => Electric_phenotypersScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+  OR: z.lazy(() => Electric_phenotypersScalarWhereWithAggregatesInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => Electric_phenotypersScalarWhereWithAggregatesInputSchema),z.lazy(() => Electric_phenotypersScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => UuidWithAggregatesFilterSchema),z.string() ]).optional(),
+  name: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  email: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+}).strict();
+
+export const Electric_cyl_imagesCreateInputSchema: z.ZodType<Prisma.Electric_cyl_imagesCreateInput> = z.object({
   id: z.string().uuid(),
   frame_number: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
   path: z.string().optional().nullable(),
   url: z.string().optional().nullable(),
   status: z.string().optional().nullable(),
   supabase_object_path: z.string().optional().nullable(),
-  scans: z.lazy(() => ScansCreateNestedOneWithoutImagesInputSchema).optional()
+  electric_cyl_scans: z.lazy(() => Electric_cyl_scansCreateNestedOneWithoutElectric_cyl_imagesInputSchema).optional()
 }).strict();
 
-export const ImagesUncheckedCreateInputSchema: z.ZodType<Prisma.ImagesUncheckedCreateInput> = z.object({
+export const Electric_cyl_imagesUncheckedCreateInputSchema: z.ZodType<Prisma.Electric_cyl_imagesUncheckedCreateInput> = z.object({
   id: z.string().uuid(),
   scan_id: z.string().uuid().optional().nullable(),
   frame_number: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
@@ -378,17 +378,17 @@ export const ImagesUncheckedCreateInputSchema: z.ZodType<Prisma.ImagesUncheckedC
   supabase_object_path: z.string().optional().nullable()
 }).strict();
 
-export const ImagesUpdateInputSchema: z.ZodType<Prisma.ImagesUpdateInput> = z.object({
+export const Electric_cyl_imagesUpdateInputSchema: z.ZodType<Prisma.Electric_cyl_imagesUpdateInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   frame_number: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   supabase_object_path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  scans: z.lazy(() => ScansUpdateOneWithoutImagesNestedInputSchema).optional()
+  electric_cyl_scans: z.lazy(() => Electric_cyl_scansUpdateOneWithoutElectric_cyl_imagesNestedInputSchema).optional()
 }).strict();
 
-export const ImagesUncheckedUpdateInputSchema: z.ZodType<Prisma.ImagesUncheckedUpdateInput> = z.object({
+export const Electric_cyl_imagesUncheckedUpdateInputSchema: z.ZodType<Prisma.Electric_cyl_imagesUncheckedUpdateInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   scan_id: z.union([ z.string().uuid(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   frame_number: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -398,7 +398,7 @@ export const ImagesUncheckedUpdateInputSchema: z.ZodType<Prisma.ImagesUncheckedU
   supabase_object_path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
-export const ImagesCreateManyInputSchema: z.ZodType<Prisma.ImagesCreateManyInput> = z.object({
+export const Electric_cyl_imagesCreateManyInputSchema: z.ZodType<Prisma.Electric_cyl_imagesCreateManyInput> = z.object({
   id: z.string().uuid(),
   scan_id: z.string().uuid().optional().nullable(),
   frame_number: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
@@ -408,7 +408,7 @@ export const ImagesCreateManyInputSchema: z.ZodType<Prisma.ImagesCreateManyInput
   supabase_object_path: z.string().optional().nullable()
 }).strict();
 
-export const ImagesUpdateManyMutationInputSchema: z.ZodType<Prisma.ImagesUpdateManyMutationInput> = z.object({
+export const Electric_cyl_imagesUpdateManyMutationInputSchema: z.ZodType<Prisma.Electric_cyl_imagesUpdateManyMutationInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   frame_number: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -417,7 +417,7 @@ export const ImagesUpdateManyMutationInputSchema: z.ZodType<Prisma.ImagesUpdateM
   supabase_object_path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
-export const ImagesUncheckedUpdateManyInputSchema: z.ZodType<Prisma.ImagesUncheckedUpdateManyInput> = z.object({
+export const Electric_cyl_imagesUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Electric_cyl_imagesUncheckedUpdateManyInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   scan_id: z.union([ z.string().uuid(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   frame_number: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -427,53 +427,7 @@ export const ImagesUncheckedUpdateManyInputSchema: z.ZodType<Prisma.ImagesUnchec
   supabase_object_path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
-export const PhenotypersCreateInputSchema: z.ZodType<Prisma.PhenotypersCreateInput> = z.object({
-  id: z.string().uuid(),
-  name: z.string().optional().nullable(),
-  email: z.string().optional().nullable(),
-  scans: z.lazy(() => ScansCreateNestedManyWithoutPhenotypersInputSchema).optional()
-}).strict();
-
-export const PhenotypersUncheckedCreateInputSchema: z.ZodType<Prisma.PhenotypersUncheckedCreateInput> = z.object({
-  id: z.string().uuid(),
-  name: z.string().optional().nullable(),
-  email: z.string().optional().nullable(),
-  scans: z.lazy(() => ScansUncheckedCreateNestedManyWithoutPhenotypersInputSchema).optional()
-}).strict();
-
-export const PhenotypersUpdateInputSchema: z.ZodType<Prisma.PhenotypersUpdateInput> = z.object({
-  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  email: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  scans: z.lazy(() => ScansUpdateManyWithoutPhenotypersNestedInputSchema).optional()
-}).strict();
-
-export const PhenotypersUncheckedUpdateInputSchema: z.ZodType<Prisma.PhenotypersUncheckedUpdateInput> = z.object({
-  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  email: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  scans: z.lazy(() => ScansUncheckedUpdateManyWithoutPhenotypersNestedInputSchema).optional()
-}).strict();
-
-export const PhenotypersCreateManyInputSchema: z.ZodType<Prisma.PhenotypersCreateManyInput> = z.object({
-  id: z.string().uuid(),
-  name: z.string().optional().nullable(),
-  email: z.string().optional().nullable()
-}).strict();
-
-export const PhenotypersUpdateManyMutationInputSchema: z.ZodType<Prisma.PhenotypersUpdateManyMutationInput> = z.object({
-  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  email: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-}).strict();
-
-export const PhenotypersUncheckedUpdateManyInputSchema: z.ZodType<Prisma.PhenotypersUncheckedUpdateManyInput> = z.object({
-  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  email: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-}).strict();
-
-export const ScansCreateInputSchema: z.ZodType<Prisma.ScansCreateInput> = z.object({
+export const Electric_cyl_scansCreateInputSchema: z.ZodType<Prisma.Electric_cyl_scansCreateInput> = z.object({
   id: z.string().uuid(),
   scanner_id: z.string().optional().nullable(),
   plant_qr_code: z.string().optional().nullable(),
@@ -486,11 +440,11 @@ export const ScansCreateInputSchema: z.ZodType<Prisma.ScansCreateInput> = z.obje
   contrast: z.number().or(z.nan()).optional().nullable(),
   gamma: z.number().or(z.nan()).optional().nullable(),
   seconds_per_rot: z.number().or(z.nan()).optional().nullable(),
-  images: z.lazy(() => ImagesCreateNestedManyWithoutScansInputSchema).optional(),
-  phenotypers: z.lazy(() => PhenotypersCreateNestedOneWithoutScansInputSchema).optional()
+  electric_cyl_images: z.lazy(() => Electric_cyl_imagesCreateNestedManyWithoutElectric_cyl_scansInputSchema).optional(),
+  electric_phenotypers: z.lazy(() => Electric_phenotypersCreateNestedOneWithoutElectric_cyl_scansInputSchema).optional()
 }).strict();
 
-export const ScansUncheckedCreateInputSchema: z.ZodType<Prisma.ScansUncheckedCreateInput> = z.object({
+export const Electric_cyl_scansUncheckedCreateInputSchema: z.ZodType<Prisma.Electric_cyl_scansUncheckedCreateInput> = z.object({
   id: z.string().uuid(),
   phenotyper_id: z.string().uuid().optional().nullable(),
   scanner_id: z.string().optional().nullable(),
@@ -504,10 +458,10 @@ export const ScansUncheckedCreateInputSchema: z.ZodType<Prisma.ScansUncheckedCre
   contrast: z.number().or(z.nan()).optional().nullable(),
   gamma: z.number().or(z.nan()).optional().nullable(),
   seconds_per_rot: z.number().or(z.nan()).optional().nullable(),
-  images: z.lazy(() => ImagesUncheckedCreateNestedManyWithoutScansInputSchema).optional()
+  electric_cyl_images: z.lazy(() => Electric_cyl_imagesUncheckedCreateNestedManyWithoutElectric_cyl_scansInputSchema).optional()
 }).strict();
 
-export const ScansUpdateInputSchema: z.ZodType<Prisma.ScansUpdateInput> = z.object({
+export const Electric_cyl_scansUpdateInputSchema: z.ZodType<Prisma.Electric_cyl_scansUpdateInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   scanner_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   plant_qr_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -520,11 +474,11 @@ export const ScansUpdateInputSchema: z.ZodType<Prisma.ScansUpdateInput> = z.obje
   contrast: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gamma: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   seconds_per_rot: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  images: z.lazy(() => ImagesUpdateManyWithoutScansNestedInputSchema).optional(),
-  phenotypers: z.lazy(() => PhenotypersUpdateOneWithoutScansNestedInputSchema).optional()
+  electric_cyl_images: z.lazy(() => Electric_cyl_imagesUpdateManyWithoutElectric_cyl_scansNestedInputSchema).optional(),
+  electric_phenotypers: z.lazy(() => Electric_phenotypersUpdateOneWithoutElectric_cyl_scansNestedInputSchema).optional()
 }).strict();
 
-export const ScansUncheckedUpdateInputSchema: z.ZodType<Prisma.ScansUncheckedUpdateInput> = z.object({
+export const Electric_cyl_scansUncheckedUpdateInputSchema: z.ZodType<Prisma.Electric_cyl_scansUncheckedUpdateInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   phenotyper_id: z.union([ z.string().uuid(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   scanner_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -538,10 +492,10 @@ export const ScansUncheckedUpdateInputSchema: z.ZodType<Prisma.ScansUncheckedUpd
   contrast: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gamma: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   seconds_per_rot: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  images: z.lazy(() => ImagesUncheckedUpdateManyWithoutScansNestedInputSchema).optional()
+  electric_cyl_images: z.lazy(() => Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_scansNestedInputSchema).optional()
 }).strict();
 
-export const ScansCreateManyInputSchema: z.ZodType<Prisma.ScansCreateManyInput> = z.object({
+export const Electric_cyl_scansCreateManyInputSchema: z.ZodType<Prisma.Electric_cyl_scansCreateManyInput> = z.object({
   id: z.string().uuid(),
   phenotyper_id: z.string().uuid().optional().nullable(),
   scanner_id: z.string().optional().nullable(),
@@ -557,7 +511,7 @@ export const ScansCreateManyInputSchema: z.ZodType<Prisma.ScansCreateManyInput> 
   seconds_per_rot: z.number().or(z.nan()).optional().nullable()
 }).strict();
 
-export const ScansUpdateManyMutationInputSchema: z.ZodType<Prisma.ScansUpdateManyMutationInput> = z.object({
+export const Electric_cyl_scansUpdateManyMutationInputSchema: z.ZodType<Prisma.Electric_cyl_scansUpdateManyMutationInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   scanner_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   plant_qr_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -572,7 +526,7 @@ export const ScansUpdateManyMutationInputSchema: z.ZodType<Prisma.ScansUpdateMan
   seconds_per_rot: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
-export const ScansUncheckedUpdateManyInputSchema: z.ZodType<Prisma.ScansUncheckedUpdateManyInput> = z.object({
+export const Electric_cyl_scansUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Electric_cyl_scansUncheckedUpdateManyInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   phenotyper_id: z.union([ z.string().uuid(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   scanner_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -586,6 +540,52 @@ export const ScansUncheckedUpdateManyInputSchema: z.ZodType<Prisma.ScansUnchecke
   contrast: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gamma: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   seconds_per_rot: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+}).strict();
+
+export const Electric_phenotypersCreateInputSchema: z.ZodType<Prisma.Electric_phenotypersCreateInput> = z.object({
+  id: z.string().uuid(),
+  name: z.string().optional().nullable(),
+  email: z.string().optional().nullable(),
+  electric_cyl_scans: z.lazy(() => Electric_cyl_scansCreateNestedManyWithoutElectric_phenotypersInputSchema).optional()
+}).strict();
+
+export const Electric_phenotypersUncheckedCreateInputSchema: z.ZodType<Prisma.Electric_phenotypersUncheckedCreateInput> = z.object({
+  id: z.string().uuid(),
+  name: z.string().optional().nullable(),
+  email: z.string().optional().nullable(),
+  electric_cyl_scans: z.lazy(() => Electric_cyl_scansUncheckedCreateNestedManyWithoutElectric_phenotypersInputSchema).optional()
+}).strict();
+
+export const Electric_phenotypersUpdateInputSchema: z.ZodType<Prisma.Electric_phenotypersUpdateInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  email: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  electric_cyl_scans: z.lazy(() => Electric_cyl_scansUpdateManyWithoutElectric_phenotypersNestedInputSchema).optional()
+}).strict();
+
+export const Electric_phenotypersUncheckedUpdateInputSchema: z.ZodType<Prisma.Electric_phenotypersUncheckedUpdateInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  email: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  electric_cyl_scans: z.lazy(() => Electric_cyl_scansUncheckedUpdateManyWithoutElectric_phenotypersNestedInputSchema).optional()
+}).strict();
+
+export const Electric_phenotypersCreateManyInputSchema: z.ZodType<Prisma.Electric_phenotypersCreateManyInput> = z.object({
+  id: z.string().uuid(),
+  name: z.string().optional().nullable(),
+  email: z.string().optional().nullable()
+}).strict();
+
+export const Electric_phenotypersUpdateManyMutationInputSchema: z.ZodType<Prisma.Electric_phenotypersUpdateManyMutationInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  email: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+}).strict();
+
+export const Electric_phenotypersUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Electric_phenotypersUncheckedUpdateManyInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  email: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const UuidFilterSchema: z.ZodType<Prisma.UuidFilter> = z.object({
@@ -638,12 +638,12 @@ export const StringNullableFilterSchema: z.ZodType<Prisma.StringNullableFilter> 
   not: z.union([ z.string(),z.lazy(() => NestedStringNullableFilterSchema) ]).optional().nullable(),
 }).strict();
 
-export const ScansRelationFilterSchema: z.ZodType<Prisma.ScansRelationFilter> = z.object({
-  is: z.lazy(() => ScansWhereInputSchema).optional().nullable(),
-  isNot: z.lazy(() => ScansWhereInputSchema).optional().nullable()
+export const Electric_cyl_scansRelationFilterSchema: z.ZodType<Prisma.Electric_cyl_scansRelationFilter> = z.object({
+  is: z.lazy(() => Electric_cyl_scansWhereInputSchema).optional().nullable(),
+  isNot: z.lazy(() => Electric_cyl_scansWhereInputSchema).optional().nullable()
 }).strict();
 
-export const ImagesCountOrderByAggregateInputSchema: z.ZodType<Prisma.ImagesCountOrderByAggregateInput> = z.object({
+export const Electric_cyl_imagesCountOrderByAggregateInputSchema: z.ZodType<Prisma.Electric_cyl_imagesCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   scan_id: z.lazy(() => SortOrderSchema).optional(),
   frame_number: z.lazy(() => SortOrderSchema).optional(),
@@ -653,11 +653,11 @@ export const ImagesCountOrderByAggregateInputSchema: z.ZodType<Prisma.ImagesCoun
   supabase_object_path: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const ImagesAvgOrderByAggregateInputSchema: z.ZodType<Prisma.ImagesAvgOrderByAggregateInput> = z.object({
+export const Electric_cyl_imagesAvgOrderByAggregateInputSchema: z.ZodType<Prisma.Electric_cyl_imagesAvgOrderByAggregateInput> = z.object({
   frame_number: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const ImagesMaxOrderByAggregateInputSchema: z.ZodType<Prisma.ImagesMaxOrderByAggregateInput> = z.object({
+export const Electric_cyl_imagesMaxOrderByAggregateInputSchema: z.ZodType<Prisma.Electric_cyl_imagesMaxOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   scan_id: z.lazy(() => SortOrderSchema).optional(),
   frame_number: z.lazy(() => SortOrderSchema).optional(),
@@ -667,7 +667,7 @@ export const ImagesMaxOrderByAggregateInputSchema: z.ZodType<Prisma.ImagesMaxOrd
   supabase_object_path: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const ImagesMinOrderByAggregateInputSchema: z.ZodType<Prisma.ImagesMinOrderByAggregateInput> = z.object({
+export const Electric_cyl_imagesMinOrderByAggregateInputSchema: z.ZodType<Prisma.Electric_cyl_imagesMinOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   scan_id: z.lazy(() => SortOrderSchema).optional(),
   frame_number: z.lazy(() => SortOrderSchema).optional(),
@@ -677,7 +677,7 @@ export const ImagesMinOrderByAggregateInputSchema: z.ZodType<Prisma.ImagesMinOrd
   supabase_object_path: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const ImagesSumOrderByAggregateInputSchema: z.ZodType<Prisma.ImagesSumOrderByAggregateInput> = z.object({
+export const Electric_cyl_imagesSumOrderByAggregateInputSchema: z.ZodType<Prisma.Electric_cyl_imagesSumOrderByAggregateInput> = z.object({
   frame_number: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
@@ -745,34 +745,6 @@ export const StringNullableWithAggregatesFilterSchema: z.ZodType<Prisma.StringNu
   _max: z.lazy(() => NestedStringNullableFilterSchema).optional()
 }).strict();
 
-export const ScansListRelationFilterSchema: z.ZodType<Prisma.ScansListRelationFilter> = z.object({
-  every: z.lazy(() => ScansWhereInputSchema).optional(),
-  some: z.lazy(() => ScansWhereInputSchema).optional(),
-  none: z.lazy(() => ScansWhereInputSchema).optional()
-}).strict();
-
-export const ScansOrderByRelationAggregateInputSchema: z.ZodType<Prisma.ScansOrderByRelationAggregateInput> = z.object({
-  _count: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const PhenotypersCountOrderByAggregateInputSchema: z.ZodType<Prisma.PhenotypersCountOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  name: z.lazy(() => SortOrderSchema).optional(),
-  email: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const PhenotypersMaxOrderByAggregateInputSchema: z.ZodType<Prisma.PhenotypersMaxOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  name: z.lazy(() => SortOrderSchema).optional(),
-  email: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const PhenotypersMinOrderByAggregateInputSchema: z.ZodType<Prisma.PhenotypersMinOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  name: z.lazy(() => SortOrderSchema).optional(),
-  email: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
 export const DateTimeNullableFilterSchema: z.ZodType<Prisma.DateTimeNullableFilter> = z.object({
   equals: z.coerce.date().optional().nullable(),
   in: z.coerce.date().array().optional().nullable(),
@@ -795,22 +767,22 @@ export const FloatNullableFilterSchema: z.ZodType<Prisma.FloatNullableFilter> = 
   not: z.union([ z.number(),z.lazy(() => NestedFloatNullableFilterSchema) ]).optional().nullable(),
 }).strict();
 
-export const ImagesListRelationFilterSchema: z.ZodType<Prisma.ImagesListRelationFilter> = z.object({
-  every: z.lazy(() => ImagesWhereInputSchema).optional(),
-  some: z.lazy(() => ImagesWhereInputSchema).optional(),
-  none: z.lazy(() => ImagesWhereInputSchema).optional()
+export const Electric_cyl_imagesListRelationFilterSchema: z.ZodType<Prisma.Electric_cyl_imagesListRelationFilter> = z.object({
+  every: z.lazy(() => Electric_cyl_imagesWhereInputSchema).optional(),
+  some: z.lazy(() => Electric_cyl_imagesWhereInputSchema).optional(),
+  none: z.lazy(() => Electric_cyl_imagesWhereInputSchema).optional()
 }).strict();
 
-export const PhenotypersRelationFilterSchema: z.ZodType<Prisma.PhenotypersRelationFilter> = z.object({
-  is: z.lazy(() => PhenotypersWhereInputSchema).optional().nullable(),
-  isNot: z.lazy(() => PhenotypersWhereInputSchema).optional().nullable()
+export const Electric_phenotypersRelationFilterSchema: z.ZodType<Prisma.Electric_phenotypersRelationFilter> = z.object({
+  is: z.lazy(() => Electric_phenotypersWhereInputSchema).optional().nullable(),
+  isNot: z.lazy(() => Electric_phenotypersWhereInputSchema).optional().nullable()
 }).strict();
 
-export const ImagesOrderByRelationAggregateInputSchema: z.ZodType<Prisma.ImagesOrderByRelationAggregateInput> = z.object({
+export const Electric_cyl_imagesOrderByRelationAggregateInputSchema: z.ZodType<Prisma.Electric_cyl_imagesOrderByRelationAggregateInput> = z.object({
   _count: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const ScansCountOrderByAggregateInputSchema: z.ZodType<Prisma.ScansCountOrderByAggregateInput> = z.object({
+export const Electric_cyl_scansCountOrderByAggregateInputSchema: z.ZodType<Prisma.Electric_cyl_scansCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   phenotyper_id: z.lazy(() => SortOrderSchema).optional(),
   scanner_id: z.lazy(() => SortOrderSchema).optional(),
@@ -826,7 +798,7 @@ export const ScansCountOrderByAggregateInputSchema: z.ZodType<Prisma.ScansCountO
   seconds_per_rot: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const ScansAvgOrderByAggregateInputSchema: z.ZodType<Prisma.ScansAvgOrderByAggregateInput> = z.object({
+export const Electric_cyl_scansAvgOrderByAggregateInputSchema: z.ZodType<Prisma.Electric_cyl_scansAvgOrderByAggregateInput> = z.object({
   num_frames: z.lazy(() => SortOrderSchema).optional(),
   exposure_time: z.lazy(() => SortOrderSchema).optional(),
   gain: z.lazy(() => SortOrderSchema).optional(),
@@ -836,7 +808,7 @@ export const ScansAvgOrderByAggregateInputSchema: z.ZodType<Prisma.ScansAvgOrder
   seconds_per_rot: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const ScansMaxOrderByAggregateInputSchema: z.ZodType<Prisma.ScansMaxOrderByAggregateInput> = z.object({
+export const Electric_cyl_scansMaxOrderByAggregateInputSchema: z.ZodType<Prisma.Electric_cyl_scansMaxOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   phenotyper_id: z.lazy(() => SortOrderSchema).optional(),
   scanner_id: z.lazy(() => SortOrderSchema).optional(),
@@ -852,7 +824,7 @@ export const ScansMaxOrderByAggregateInputSchema: z.ZodType<Prisma.ScansMaxOrder
   seconds_per_rot: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const ScansMinOrderByAggregateInputSchema: z.ZodType<Prisma.ScansMinOrderByAggregateInput> = z.object({
+export const Electric_cyl_scansMinOrderByAggregateInputSchema: z.ZodType<Prisma.Electric_cyl_scansMinOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   phenotyper_id: z.lazy(() => SortOrderSchema).optional(),
   scanner_id: z.lazy(() => SortOrderSchema).optional(),
@@ -868,7 +840,7 @@ export const ScansMinOrderByAggregateInputSchema: z.ZodType<Prisma.ScansMinOrder
   seconds_per_rot: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const ScansSumOrderByAggregateInputSchema: z.ZodType<Prisma.ScansSumOrderByAggregateInput> = z.object({
+export const Electric_cyl_scansSumOrderByAggregateInputSchema: z.ZodType<Prisma.Electric_cyl_scansSumOrderByAggregateInput> = z.object({
   num_frames: z.lazy(() => SortOrderSchema).optional(),
   exposure_time: z.lazy(() => SortOrderSchema).optional(),
   gain: z.lazy(() => SortOrderSchema).optional(),
@@ -908,10 +880,38 @@ export const FloatNullableWithAggregatesFilterSchema: z.ZodType<Prisma.FloatNull
   _max: z.lazy(() => NestedFloatNullableFilterSchema).optional()
 }).strict();
 
-export const ScansCreateNestedOneWithoutImagesInputSchema: z.ZodType<Prisma.ScansCreateNestedOneWithoutImagesInput> = z.object({
-  create: z.union([ z.lazy(() => ScansCreateWithoutImagesInputSchema),z.lazy(() => ScansUncheckedCreateWithoutImagesInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => ScansCreateOrConnectWithoutImagesInputSchema).optional(),
-  connect: z.lazy(() => ScansWhereUniqueInputSchema).optional()
+export const Electric_cyl_scansListRelationFilterSchema: z.ZodType<Prisma.Electric_cyl_scansListRelationFilter> = z.object({
+  every: z.lazy(() => Electric_cyl_scansWhereInputSchema).optional(),
+  some: z.lazy(() => Electric_cyl_scansWhereInputSchema).optional(),
+  none: z.lazy(() => Electric_cyl_scansWhereInputSchema).optional()
+}).strict();
+
+export const Electric_cyl_scansOrderByRelationAggregateInputSchema: z.ZodType<Prisma.Electric_cyl_scansOrderByRelationAggregateInput> = z.object({
+  _count: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const Electric_phenotypersCountOrderByAggregateInputSchema: z.ZodType<Prisma.Electric_phenotypersCountOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  name: z.lazy(() => SortOrderSchema).optional(),
+  email: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const Electric_phenotypersMaxOrderByAggregateInputSchema: z.ZodType<Prisma.Electric_phenotypersMaxOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  name: z.lazy(() => SortOrderSchema).optional(),
+  email: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const Electric_phenotypersMinOrderByAggregateInputSchema: z.ZodType<Prisma.Electric_phenotypersMinOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  name: z.lazy(() => SortOrderSchema).optional(),
+  email: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const Electric_cyl_scansCreateNestedOneWithoutElectric_cyl_imagesInputSchema: z.ZodType<Prisma.Electric_cyl_scansCreateNestedOneWithoutElectric_cyl_imagesInput> = z.object({
+  create: z.union([ z.lazy(() => Electric_cyl_scansCreateWithoutElectric_cyl_imagesInputSchema),z.lazy(() => Electric_cyl_scansUncheckedCreateWithoutElectric_cyl_imagesInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => Electric_cyl_scansCreateOrConnectWithoutElectric_cyl_imagesInputSchema).optional(),
+  connect: z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema).optional()
 }).strict();
 
 export const StringFieldUpdateOperationsInputSchema: z.ZodType<Prisma.StringFieldUpdateOperationsInput> = z.object({
@@ -930,76 +930,34 @@ export const NullableStringFieldUpdateOperationsInputSchema: z.ZodType<Prisma.Nu
   set: z.string().optional().nullable()
 }).strict();
 
-export const ScansUpdateOneWithoutImagesNestedInputSchema: z.ZodType<Prisma.ScansUpdateOneWithoutImagesNestedInput> = z.object({
-  create: z.union([ z.lazy(() => ScansCreateWithoutImagesInputSchema),z.lazy(() => ScansUncheckedCreateWithoutImagesInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => ScansCreateOrConnectWithoutImagesInputSchema).optional(),
-  upsert: z.lazy(() => ScansUpsertWithoutImagesInputSchema).optional(),
+export const Electric_cyl_scansUpdateOneWithoutElectric_cyl_imagesNestedInputSchema: z.ZodType<Prisma.Electric_cyl_scansUpdateOneWithoutElectric_cyl_imagesNestedInput> = z.object({
+  create: z.union([ z.lazy(() => Electric_cyl_scansCreateWithoutElectric_cyl_imagesInputSchema),z.lazy(() => Electric_cyl_scansUncheckedCreateWithoutElectric_cyl_imagesInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => Electric_cyl_scansCreateOrConnectWithoutElectric_cyl_imagesInputSchema).optional(),
+  upsert: z.lazy(() => Electric_cyl_scansUpsertWithoutElectric_cyl_imagesInputSchema).optional(),
   disconnect: z.boolean().optional(),
   delete: z.boolean().optional(),
-  connect: z.lazy(() => ScansWhereUniqueInputSchema).optional(),
-  update: z.union([ z.lazy(() => ScansUpdateWithoutImagesInputSchema),z.lazy(() => ScansUncheckedUpdateWithoutImagesInputSchema) ]).optional(),
+  connect: z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema).optional(),
+  update: z.union([ z.lazy(() => Electric_cyl_scansUpdateWithoutElectric_cyl_imagesInputSchema),z.lazy(() => Electric_cyl_scansUncheckedUpdateWithoutElectric_cyl_imagesInputSchema) ]).optional(),
 }).strict();
 
-export const ScansCreateNestedManyWithoutPhenotypersInputSchema: z.ZodType<Prisma.ScansCreateNestedManyWithoutPhenotypersInput> = z.object({
-  create: z.union([ z.lazy(() => ScansCreateWithoutPhenotypersInputSchema),z.lazy(() => ScansCreateWithoutPhenotypersInputSchema).array(),z.lazy(() => ScansUncheckedCreateWithoutPhenotypersInputSchema),z.lazy(() => ScansUncheckedCreateWithoutPhenotypersInputSchema).array() ]).optional(),
-  connectOrCreate: z.union([ z.lazy(() => ScansCreateOrConnectWithoutPhenotypersInputSchema),z.lazy(() => ScansCreateOrConnectWithoutPhenotypersInputSchema).array() ]).optional(),
-  createMany: z.lazy(() => ScansCreateManyPhenotypersInputEnvelopeSchema).optional(),
-  connect: z.union([ z.lazy(() => ScansWhereUniqueInputSchema),z.lazy(() => ScansWhereUniqueInputSchema).array() ]).optional(),
+export const Electric_cyl_imagesCreateNestedManyWithoutElectric_cyl_scansInputSchema: z.ZodType<Prisma.Electric_cyl_imagesCreateNestedManyWithoutElectric_cyl_scansInput> = z.object({
+  create: z.union([ z.lazy(() => Electric_cyl_imagesCreateWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_cyl_imagesCreateWithoutElectric_cyl_scansInputSchema).array(),z.lazy(() => Electric_cyl_imagesUncheckedCreateWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_cyl_imagesUncheckedCreateWithoutElectric_cyl_scansInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => Electric_cyl_imagesCreateOrConnectWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_cyl_imagesCreateOrConnectWithoutElectric_cyl_scansInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => Electric_cyl_imagesCreateManyElectric_cyl_scansInputEnvelopeSchema).optional(),
+  connect: z.union([ z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema),z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema).array() ]).optional(),
 }).strict();
 
-export const ScansUncheckedCreateNestedManyWithoutPhenotypersInputSchema: z.ZodType<Prisma.ScansUncheckedCreateNestedManyWithoutPhenotypersInput> = z.object({
-  create: z.union([ z.lazy(() => ScansCreateWithoutPhenotypersInputSchema),z.lazy(() => ScansCreateWithoutPhenotypersInputSchema).array(),z.lazy(() => ScansUncheckedCreateWithoutPhenotypersInputSchema),z.lazy(() => ScansUncheckedCreateWithoutPhenotypersInputSchema).array() ]).optional(),
-  connectOrCreate: z.union([ z.lazy(() => ScansCreateOrConnectWithoutPhenotypersInputSchema),z.lazy(() => ScansCreateOrConnectWithoutPhenotypersInputSchema).array() ]).optional(),
-  createMany: z.lazy(() => ScansCreateManyPhenotypersInputEnvelopeSchema).optional(),
-  connect: z.union([ z.lazy(() => ScansWhereUniqueInputSchema),z.lazy(() => ScansWhereUniqueInputSchema).array() ]).optional(),
+export const Electric_phenotypersCreateNestedOneWithoutElectric_cyl_scansInputSchema: z.ZodType<Prisma.Electric_phenotypersCreateNestedOneWithoutElectric_cyl_scansInput> = z.object({
+  create: z.union([ z.lazy(() => Electric_phenotypersCreateWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_phenotypersUncheckedCreateWithoutElectric_cyl_scansInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => Electric_phenotypersCreateOrConnectWithoutElectric_cyl_scansInputSchema).optional(),
+  connect: z.lazy(() => Electric_phenotypersWhereUniqueInputSchema).optional()
 }).strict();
 
-export const ScansUpdateManyWithoutPhenotypersNestedInputSchema: z.ZodType<Prisma.ScansUpdateManyWithoutPhenotypersNestedInput> = z.object({
-  create: z.union([ z.lazy(() => ScansCreateWithoutPhenotypersInputSchema),z.lazy(() => ScansCreateWithoutPhenotypersInputSchema).array(),z.lazy(() => ScansUncheckedCreateWithoutPhenotypersInputSchema),z.lazy(() => ScansUncheckedCreateWithoutPhenotypersInputSchema).array() ]).optional(),
-  connectOrCreate: z.union([ z.lazy(() => ScansCreateOrConnectWithoutPhenotypersInputSchema),z.lazy(() => ScansCreateOrConnectWithoutPhenotypersInputSchema).array() ]).optional(),
-  upsert: z.union([ z.lazy(() => ScansUpsertWithWhereUniqueWithoutPhenotypersInputSchema),z.lazy(() => ScansUpsertWithWhereUniqueWithoutPhenotypersInputSchema).array() ]).optional(),
-  createMany: z.lazy(() => ScansCreateManyPhenotypersInputEnvelopeSchema).optional(),
-  set: z.union([ z.lazy(() => ScansWhereUniqueInputSchema),z.lazy(() => ScansWhereUniqueInputSchema).array() ]).optional(),
-  disconnect: z.union([ z.lazy(() => ScansWhereUniqueInputSchema),z.lazy(() => ScansWhereUniqueInputSchema).array() ]).optional(),
-  delete: z.union([ z.lazy(() => ScansWhereUniqueInputSchema),z.lazy(() => ScansWhereUniqueInputSchema).array() ]).optional(),
-  connect: z.union([ z.lazy(() => ScansWhereUniqueInputSchema),z.lazy(() => ScansWhereUniqueInputSchema).array() ]).optional(),
-  update: z.union([ z.lazy(() => ScansUpdateWithWhereUniqueWithoutPhenotypersInputSchema),z.lazy(() => ScansUpdateWithWhereUniqueWithoutPhenotypersInputSchema).array() ]).optional(),
-  updateMany: z.union([ z.lazy(() => ScansUpdateManyWithWhereWithoutPhenotypersInputSchema),z.lazy(() => ScansUpdateManyWithWhereWithoutPhenotypersInputSchema).array() ]).optional(),
-  deleteMany: z.union([ z.lazy(() => ScansScalarWhereInputSchema),z.lazy(() => ScansScalarWhereInputSchema).array() ]).optional(),
-}).strict();
-
-export const ScansUncheckedUpdateManyWithoutPhenotypersNestedInputSchema: z.ZodType<Prisma.ScansUncheckedUpdateManyWithoutPhenotypersNestedInput> = z.object({
-  create: z.union([ z.lazy(() => ScansCreateWithoutPhenotypersInputSchema),z.lazy(() => ScansCreateWithoutPhenotypersInputSchema).array(),z.lazy(() => ScansUncheckedCreateWithoutPhenotypersInputSchema),z.lazy(() => ScansUncheckedCreateWithoutPhenotypersInputSchema).array() ]).optional(),
-  connectOrCreate: z.union([ z.lazy(() => ScansCreateOrConnectWithoutPhenotypersInputSchema),z.lazy(() => ScansCreateOrConnectWithoutPhenotypersInputSchema).array() ]).optional(),
-  upsert: z.union([ z.lazy(() => ScansUpsertWithWhereUniqueWithoutPhenotypersInputSchema),z.lazy(() => ScansUpsertWithWhereUniqueWithoutPhenotypersInputSchema).array() ]).optional(),
-  createMany: z.lazy(() => ScansCreateManyPhenotypersInputEnvelopeSchema).optional(),
-  set: z.union([ z.lazy(() => ScansWhereUniqueInputSchema),z.lazy(() => ScansWhereUniqueInputSchema).array() ]).optional(),
-  disconnect: z.union([ z.lazy(() => ScansWhereUniqueInputSchema),z.lazy(() => ScansWhereUniqueInputSchema).array() ]).optional(),
-  delete: z.union([ z.lazy(() => ScansWhereUniqueInputSchema),z.lazy(() => ScansWhereUniqueInputSchema).array() ]).optional(),
-  connect: z.union([ z.lazy(() => ScansWhereUniqueInputSchema),z.lazy(() => ScansWhereUniqueInputSchema).array() ]).optional(),
-  update: z.union([ z.lazy(() => ScansUpdateWithWhereUniqueWithoutPhenotypersInputSchema),z.lazy(() => ScansUpdateWithWhereUniqueWithoutPhenotypersInputSchema).array() ]).optional(),
-  updateMany: z.union([ z.lazy(() => ScansUpdateManyWithWhereWithoutPhenotypersInputSchema),z.lazy(() => ScansUpdateManyWithWhereWithoutPhenotypersInputSchema).array() ]).optional(),
-  deleteMany: z.union([ z.lazy(() => ScansScalarWhereInputSchema),z.lazy(() => ScansScalarWhereInputSchema).array() ]).optional(),
-}).strict();
-
-export const ImagesCreateNestedManyWithoutScansInputSchema: z.ZodType<Prisma.ImagesCreateNestedManyWithoutScansInput> = z.object({
-  create: z.union([ z.lazy(() => ImagesCreateWithoutScansInputSchema),z.lazy(() => ImagesCreateWithoutScansInputSchema).array(),z.lazy(() => ImagesUncheckedCreateWithoutScansInputSchema),z.lazy(() => ImagesUncheckedCreateWithoutScansInputSchema).array() ]).optional(),
-  connectOrCreate: z.union([ z.lazy(() => ImagesCreateOrConnectWithoutScansInputSchema),z.lazy(() => ImagesCreateOrConnectWithoutScansInputSchema).array() ]).optional(),
-  createMany: z.lazy(() => ImagesCreateManyScansInputEnvelopeSchema).optional(),
-  connect: z.union([ z.lazy(() => ImagesWhereUniqueInputSchema),z.lazy(() => ImagesWhereUniqueInputSchema).array() ]).optional(),
-}).strict();
-
-export const PhenotypersCreateNestedOneWithoutScansInputSchema: z.ZodType<Prisma.PhenotypersCreateNestedOneWithoutScansInput> = z.object({
-  create: z.union([ z.lazy(() => PhenotypersCreateWithoutScansInputSchema),z.lazy(() => PhenotypersUncheckedCreateWithoutScansInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => PhenotypersCreateOrConnectWithoutScansInputSchema).optional(),
-  connect: z.lazy(() => PhenotypersWhereUniqueInputSchema).optional()
-}).strict();
-
-export const ImagesUncheckedCreateNestedManyWithoutScansInputSchema: z.ZodType<Prisma.ImagesUncheckedCreateNestedManyWithoutScansInput> = z.object({
-  create: z.union([ z.lazy(() => ImagesCreateWithoutScansInputSchema),z.lazy(() => ImagesCreateWithoutScansInputSchema).array(),z.lazy(() => ImagesUncheckedCreateWithoutScansInputSchema),z.lazy(() => ImagesUncheckedCreateWithoutScansInputSchema).array() ]).optional(),
-  connectOrCreate: z.union([ z.lazy(() => ImagesCreateOrConnectWithoutScansInputSchema),z.lazy(() => ImagesCreateOrConnectWithoutScansInputSchema).array() ]).optional(),
-  createMany: z.lazy(() => ImagesCreateManyScansInputEnvelopeSchema).optional(),
-  connect: z.union([ z.lazy(() => ImagesWhereUniqueInputSchema),z.lazy(() => ImagesWhereUniqueInputSchema).array() ]).optional(),
+export const Electric_cyl_imagesUncheckedCreateNestedManyWithoutElectric_cyl_scansInputSchema: z.ZodType<Prisma.Electric_cyl_imagesUncheckedCreateNestedManyWithoutElectric_cyl_scansInput> = z.object({
+  create: z.union([ z.lazy(() => Electric_cyl_imagesCreateWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_cyl_imagesCreateWithoutElectric_cyl_scansInputSchema).array(),z.lazy(() => Electric_cyl_imagesUncheckedCreateWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_cyl_imagesUncheckedCreateWithoutElectric_cyl_scansInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => Electric_cyl_imagesCreateOrConnectWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_cyl_imagesCreateOrConnectWithoutElectric_cyl_scansInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => Electric_cyl_imagesCreateManyElectric_cyl_scansInputEnvelopeSchema).optional(),
+  connect: z.union([ z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema),z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema).array() ]).optional(),
 }).strict();
 
 export const NullableDateTimeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableDateTimeFieldUpdateOperationsInput> = z.object({
@@ -1014,42 +972,84 @@ export const NullableFloatFieldUpdateOperationsInputSchema: z.ZodType<Prisma.Nul
   divide: z.number().optional()
 }).strict();
 
-export const ImagesUpdateManyWithoutScansNestedInputSchema: z.ZodType<Prisma.ImagesUpdateManyWithoutScansNestedInput> = z.object({
-  create: z.union([ z.lazy(() => ImagesCreateWithoutScansInputSchema),z.lazy(() => ImagesCreateWithoutScansInputSchema).array(),z.lazy(() => ImagesUncheckedCreateWithoutScansInputSchema),z.lazy(() => ImagesUncheckedCreateWithoutScansInputSchema).array() ]).optional(),
-  connectOrCreate: z.union([ z.lazy(() => ImagesCreateOrConnectWithoutScansInputSchema),z.lazy(() => ImagesCreateOrConnectWithoutScansInputSchema).array() ]).optional(),
-  upsert: z.union([ z.lazy(() => ImagesUpsertWithWhereUniqueWithoutScansInputSchema),z.lazy(() => ImagesUpsertWithWhereUniqueWithoutScansInputSchema).array() ]).optional(),
-  createMany: z.lazy(() => ImagesCreateManyScansInputEnvelopeSchema).optional(),
-  set: z.union([ z.lazy(() => ImagesWhereUniqueInputSchema),z.lazy(() => ImagesWhereUniqueInputSchema).array() ]).optional(),
-  disconnect: z.union([ z.lazy(() => ImagesWhereUniqueInputSchema),z.lazy(() => ImagesWhereUniqueInputSchema).array() ]).optional(),
-  delete: z.union([ z.lazy(() => ImagesWhereUniqueInputSchema),z.lazy(() => ImagesWhereUniqueInputSchema).array() ]).optional(),
-  connect: z.union([ z.lazy(() => ImagesWhereUniqueInputSchema),z.lazy(() => ImagesWhereUniqueInputSchema).array() ]).optional(),
-  update: z.union([ z.lazy(() => ImagesUpdateWithWhereUniqueWithoutScansInputSchema),z.lazy(() => ImagesUpdateWithWhereUniqueWithoutScansInputSchema).array() ]).optional(),
-  updateMany: z.union([ z.lazy(() => ImagesUpdateManyWithWhereWithoutScansInputSchema),z.lazy(() => ImagesUpdateManyWithWhereWithoutScansInputSchema).array() ]).optional(),
-  deleteMany: z.union([ z.lazy(() => ImagesScalarWhereInputSchema),z.lazy(() => ImagesScalarWhereInputSchema).array() ]).optional(),
+export const Electric_cyl_imagesUpdateManyWithoutElectric_cyl_scansNestedInputSchema: z.ZodType<Prisma.Electric_cyl_imagesUpdateManyWithoutElectric_cyl_scansNestedInput> = z.object({
+  create: z.union([ z.lazy(() => Electric_cyl_imagesCreateWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_cyl_imagesCreateWithoutElectric_cyl_scansInputSchema).array(),z.lazy(() => Electric_cyl_imagesUncheckedCreateWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_cyl_imagesUncheckedCreateWithoutElectric_cyl_scansInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => Electric_cyl_imagesCreateOrConnectWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_cyl_imagesCreateOrConnectWithoutElectric_cyl_scansInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => Electric_cyl_imagesUpsertWithWhereUniqueWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_cyl_imagesUpsertWithWhereUniqueWithoutElectric_cyl_scansInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => Electric_cyl_imagesCreateManyElectric_cyl_scansInputEnvelopeSchema).optional(),
+  set: z.union([ z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema),z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema),z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema),z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema),z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => Electric_cyl_imagesUpdateWithWhereUniqueWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_cyl_imagesUpdateWithWhereUniqueWithoutElectric_cyl_scansInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => Electric_cyl_imagesUpdateManyWithWhereWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_cyl_imagesUpdateManyWithWhereWithoutElectric_cyl_scansInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => Electric_cyl_imagesScalarWhereInputSchema),z.lazy(() => Electric_cyl_imagesScalarWhereInputSchema).array() ]).optional(),
 }).strict();
 
-export const PhenotypersUpdateOneWithoutScansNestedInputSchema: z.ZodType<Prisma.PhenotypersUpdateOneWithoutScansNestedInput> = z.object({
-  create: z.union([ z.lazy(() => PhenotypersCreateWithoutScansInputSchema),z.lazy(() => PhenotypersUncheckedCreateWithoutScansInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => PhenotypersCreateOrConnectWithoutScansInputSchema).optional(),
-  upsert: z.lazy(() => PhenotypersUpsertWithoutScansInputSchema).optional(),
+export const Electric_phenotypersUpdateOneWithoutElectric_cyl_scansNestedInputSchema: z.ZodType<Prisma.Electric_phenotypersUpdateOneWithoutElectric_cyl_scansNestedInput> = z.object({
+  create: z.union([ z.lazy(() => Electric_phenotypersCreateWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_phenotypersUncheckedCreateWithoutElectric_cyl_scansInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => Electric_phenotypersCreateOrConnectWithoutElectric_cyl_scansInputSchema).optional(),
+  upsert: z.lazy(() => Electric_phenotypersUpsertWithoutElectric_cyl_scansInputSchema).optional(),
   disconnect: z.boolean().optional(),
   delete: z.boolean().optional(),
-  connect: z.lazy(() => PhenotypersWhereUniqueInputSchema).optional(),
-  update: z.union([ z.lazy(() => PhenotypersUpdateWithoutScansInputSchema),z.lazy(() => PhenotypersUncheckedUpdateWithoutScansInputSchema) ]).optional(),
+  connect: z.lazy(() => Electric_phenotypersWhereUniqueInputSchema).optional(),
+  update: z.union([ z.lazy(() => Electric_phenotypersUpdateWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_phenotypersUncheckedUpdateWithoutElectric_cyl_scansInputSchema) ]).optional(),
 }).strict();
 
-export const ImagesUncheckedUpdateManyWithoutScansNestedInputSchema: z.ZodType<Prisma.ImagesUncheckedUpdateManyWithoutScansNestedInput> = z.object({
-  create: z.union([ z.lazy(() => ImagesCreateWithoutScansInputSchema),z.lazy(() => ImagesCreateWithoutScansInputSchema).array(),z.lazy(() => ImagesUncheckedCreateWithoutScansInputSchema),z.lazy(() => ImagesUncheckedCreateWithoutScansInputSchema).array() ]).optional(),
-  connectOrCreate: z.union([ z.lazy(() => ImagesCreateOrConnectWithoutScansInputSchema),z.lazy(() => ImagesCreateOrConnectWithoutScansInputSchema).array() ]).optional(),
-  upsert: z.union([ z.lazy(() => ImagesUpsertWithWhereUniqueWithoutScansInputSchema),z.lazy(() => ImagesUpsertWithWhereUniqueWithoutScansInputSchema).array() ]).optional(),
-  createMany: z.lazy(() => ImagesCreateManyScansInputEnvelopeSchema).optional(),
-  set: z.union([ z.lazy(() => ImagesWhereUniqueInputSchema),z.lazy(() => ImagesWhereUniqueInputSchema).array() ]).optional(),
-  disconnect: z.union([ z.lazy(() => ImagesWhereUniqueInputSchema),z.lazy(() => ImagesWhereUniqueInputSchema).array() ]).optional(),
-  delete: z.union([ z.lazy(() => ImagesWhereUniqueInputSchema),z.lazy(() => ImagesWhereUniqueInputSchema).array() ]).optional(),
-  connect: z.union([ z.lazy(() => ImagesWhereUniqueInputSchema),z.lazy(() => ImagesWhereUniqueInputSchema).array() ]).optional(),
-  update: z.union([ z.lazy(() => ImagesUpdateWithWhereUniqueWithoutScansInputSchema),z.lazy(() => ImagesUpdateWithWhereUniqueWithoutScansInputSchema).array() ]).optional(),
-  updateMany: z.union([ z.lazy(() => ImagesUpdateManyWithWhereWithoutScansInputSchema),z.lazy(() => ImagesUpdateManyWithWhereWithoutScansInputSchema).array() ]).optional(),
-  deleteMany: z.union([ z.lazy(() => ImagesScalarWhereInputSchema),z.lazy(() => ImagesScalarWhereInputSchema).array() ]).optional(),
+export const Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_scansNestedInputSchema: z.ZodType<Prisma.Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_scansNestedInput> = z.object({
+  create: z.union([ z.lazy(() => Electric_cyl_imagesCreateWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_cyl_imagesCreateWithoutElectric_cyl_scansInputSchema).array(),z.lazy(() => Electric_cyl_imagesUncheckedCreateWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_cyl_imagesUncheckedCreateWithoutElectric_cyl_scansInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => Electric_cyl_imagesCreateOrConnectWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_cyl_imagesCreateOrConnectWithoutElectric_cyl_scansInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => Electric_cyl_imagesUpsertWithWhereUniqueWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_cyl_imagesUpsertWithWhereUniqueWithoutElectric_cyl_scansInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => Electric_cyl_imagesCreateManyElectric_cyl_scansInputEnvelopeSchema).optional(),
+  set: z.union([ z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema),z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema),z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema),z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema),z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => Electric_cyl_imagesUpdateWithWhereUniqueWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_cyl_imagesUpdateWithWhereUniqueWithoutElectric_cyl_scansInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => Electric_cyl_imagesUpdateManyWithWhereWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_cyl_imagesUpdateManyWithWhereWithoutElectric_cyl_scansInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => Electric_cyl_imagesScalarWhereInputSchema),z.lazy(() => Electric_cyl_imagesScalarWhereInputSchema).array() ]).optional(),
+}).strict();
+
+export const Electric_cyl_scansCreateNestedManyWithoutElectric_phenotypersInputSchema: z.ZodType<Prisma.Electric_cyl_scansCreateNestedManyWithoutElectric_phenotypersInput> = z.object({
+  create: z.union([ z.lazy(() => Electric_cyl_scansCreateWithoutElectric_phenotypersInputSchema),z.lazy(() => Electric_cyl_scansCreateWithoutElectric_phenotypersInputSchema).array(),z.lazy(() => Electric_cyl_scansUncheckedCreateWithoutElectric_phenotypersInputSchema),z.lazy(() => Electric_cyl_scansUncheckedCreateWithoutElectric_phenotypersInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => Electric_cyl_scansCreateOrConnectWithoutElectric_phenotypersInputSchema),z.lazy(() => Electric_cyl_scansCreateOrConnectWithoutElectric_phenotypersInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => Electric_cyl_scansCreateManyElectric_phenotypersInputEnvelopeSchema).optional(),
+  connect: z.union([ z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema),z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema).array() ]).optional(),
+}).strict();
+
+export const Electric_cyl_scansUncheckedCreateNestedManyWithoutElectric_phenotypersInputSchema: z.ZodType<Prisma.Electric_cyl_scansUncheckedCreateNestedManyWithoutElectric_phenotypersInput> = z.object({
+  create: z.union([ z.lazy(() => Electric_cyl_scansCreateWithoutElectric_phenotypersInputSchema),z.lazy(() => Electric_cyl_scansCreateWithoutElectric_phenotypersInputSchema).array(),z.lazy(() => Electric_cyl_scansUncheckedCreateWithoutElectric_phenotypersInputSchema),z.lazy(() => Electric_cyl_scansUncheckedCreateWithoutElectric_phenotypersInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => Electric_cyl_scansCreateOrConnectWithoutElectric_phenotypersInputSchema),z.lazy(() => Electric_cyl_scansCreateOrConnectWithoutElectric_phenotypersInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => Electric_cyl_scansCreateManyElectric_phenotypersInputEnvelopeSchema).optional(),
+  connect: z.union([ z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema),z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema).array() ]).optional(),
+}).strict();
+
+export const Electric_cyl_scansUpdateManyWithoutElectric_phenotypersNestedInputSchema: z.ZodType<Prisma.Electric_cyl_scansUpdateManyWithoutElectric_phenotypersNestedInput> = z.object({
+  create: z.union([ z.lazy(() => Electric_cyl_scansCreateWithoutElectric_phenotypersInputSchema),z.lazy(() => Electric_cyl_scansCreateWithoutElectric_phenotypersInputSchema).array(),z.lazy(() => Electric_cyl_scansUncheckedCreateWithoutElectric_phenotypersInputSchema),z.lazy(() => Electric_cyl_scansUncheckedCreateWithoutElectric_phenotypersInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => Electric_cyl_scansCreateOrConnectWithoutElectric_phenotypersInputSchema),z.lazy(() => Electric_cyl_scansCreateOrConnectWithoutElectric_phenotypersInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => Electric_cyl_scansUpsertWithWhereUniqueWithoutElectric_phenotypersInputSchema),z.lazy(() => Electric_cyl_scansUpsertWithWhereUniqueWithoutElectric_phenotypersInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => Electric_cyl_scansCreateManyElectric_phenotypersInputEnvelopeSchema).optional(),
+  set: z.union([ z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema),z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema),z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema),z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema),z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => Electric_cyl_scansUpdateWithWhereUniqueWithoutElectric_phenotypersInputSchema),z.lazy(() => Electric_cyl_scansUpdateWithWhereUniqueWithoutElectric_phenotypersInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => Electric_cyl_scansUpdateManyWithWhereWithoutElectric_phenotypersInputSchema),z.lazy(() => Electric_cyl_scansUpdateManyWithWhereWithoutElectric_phenotypersInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => Electric_cyl_scansScalarWhereInputSchema),z.lazy(() => Electric_cyl_scansScalarWhereInputSchema).array() ]).optional(),
+}).strict();
+
+export const Electric_cyl_scansUncheckedUpdateManyWithoutElectric_phenotypersNestedInputSchema: z.ZodType<Prisma.Electric_cyl_scansUncheckedUpdateManyWithoutElectric_phenotypersNestedInput> = z.object({
+  create: z.union([ z.lazy(() => Electric_cyl_scansCreateWithoutElectric_phenotypersInputSchema),z.lazy(() => Electric_cyl_scansCreateWithoutElectric_phenotypersInputSchema).array(),z.lazy(() => Electric_cyl_scansUncheckedCreateWithoutElectric_phenotypersInputSchema),z.lazy(() => Electric_cyl_scansUncheckedCreateWithoutElectric_phenotypersInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => Electric_cyl_scansCreateOrConnectWithoutElectric_phenotypersInputSchema),z.lazy(() => Electric_cyl_scansCreateOrConnectWithoutElectric_phenotypersInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => Electric_cyl_scansUpsertWithWhereUniqueWithoutElectric_phenotypersInputSchema),z.lazy(() => Electric_cyl_scansUpsertWithWhereUniqueWithoutElectric_phenotypersInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => Electric_cyl_scansCreateManyElectric_phenotypersInputEnvelopeSchema).optional(),
+  set: z.union([ z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema),z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema),z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema),z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema),z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => Electric_cyl_scansUpdateWithWhereUniqueWithoutElectric_phenotypersInputSchema),z.lazy(() => Electric_cyl_scansUpdateWithWhereUniqueWithoutElectric_phenotypersInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => Electric_cyl_scansUpdateManyWithWhereWithoutElectric_phenotypersInputSchema),z.lazy(() => Electric_cyl_scansUpdateManyWithWhereWithoutElectric_phenotypersInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => Electric_cyl_scansScalarWhereInputSchema),z.lazy(() => Electric_cyl_scansScalarWhereInputSchema).array() ]).optional(),
 }).strict();
 
 export const NestedUuidFilterSchema: z.ZodType<Prisma.NestedUuidFilter> = z.object({
@@ -1237,7 +1237,7 @@ export const NestedFloatNullableWithAggregatesFilterSchema: z.ZodType<Prisma.Nes
   _max: z.lazy(() => NestedFloatNullableFilterSchema).optional()
 }).strict();
 
-export const ScansCreateWithoutImagesInputSchema: z.ZodType<Prisma.ScansCreateWithoutImagesInput> = z.object({
+export const Electric_cyl_scansCreateWithoutElectric_cyl_imagesInputSchema: z.ZodType<Prisma.Electric_cyl_scansCreateWithoutElectric_cyl_imagesInput> = z.object({
   id: z.string(),
   scanner_id: z.string().optional().nullable(),
   plant_qr_code: z.string().optional().nullable(),
@@ -1250,10 +1250,10 @@ export const ScansCreateWithoutImagesInputSchema: z.ZodType<Prisma.ScansCreateWi
   contrast: z.number().optional().nullable(),
   gamma: z.number().optional().nullable(),
   seconds_per_rot: z.number().optional().nullable(),
-  phenotypers: z.lazy(() => PhenotypersCreateNestedOneWithoutScansInputSchema).optional()
+  electric_phenotypers: z.lazy(() => Electric_phenotypersCreateNestedOneWithoutElectric_cyl_scansInputSchema).optional()
 }).strict();
 
-export const ScansUncheckedCreateWithoutImagesInputSchema: z.ZodType<Prisma.ScansUncheckedCreateWithoutImagesInput> = z.object({
+export const Electric_cyl_scansUncheckedCreateWithoutElectric_cyl_imagesInputSchema: z.ZodType<Prisma.Electric_cyl_scansUncheckedCreateWithoutElectric_cyl_imagesInput> = z.object({
   id: z.string(),
   phenotyper_id: z.string().optional().nullable(),
   scanner_id: z.string().optional().nullable(),
@@ -1269,17 +1269,17 @@ export const ScansUncheckedCreateWithoutImagesInputSchema: z.ZodType<Prisma.Scan
   seconds_per_rot: z.number().optional().nullable()
 }).strict();
 
-export const ScansCreateOrConnectWithoutImagesInputSchema: z.ZodType<Prisma.ScansCreateOrConnectWithoutImagesInput> = z.object({
-  where: z.lazy(() => ScansWhereUniqueInputSchema),
-  create: z.union([ z.lazy(() => ScansCreateWithoutImagesInputSchema),z.lazy(() => ScansUncheckedCreateWithoutImagesInputSchema) ]),
+export const Electric_cyl_scansCreateOrConnectWithoutElectric_cyl_imagesInputSchema: z.ZodType<Prisma.Electric_cyl_scansCreateOrConnectWithoutElectric_cyl_imagesInput> = z.object({
+  where: z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema),
+  create: z.union([ z.lazy(() => Electric_cyl_scansCreateWithoutElectric_cyl_imagesInputSchema),z.lazy(() => Electric_cyl_scansUncheckedCreateWithoutElectric_cyl_imagesInputSchema) ]),
 }).strict();
 
-export const ScansUpsertWithoutImagesInputSchema: z.ZodType<Prisma.ScansUpsertWithoutImagesInput> = z.object({
-  update: z.union([ z.lazy(() => ScansUpdateWithoutImagesInputSchema),z.lazy(() => ScansUncheckedUpdateWithoutImagesInputSchema) ]),
-  create: z.union([ z.lazy(() => ScansCreateWithoutImagesInputSchema),z.lazy(() => ScansUncheckedCreateWithoutImagesInputSchema) ]),
+export const Electric_cyl_scansUpsertWithoutElectric_cyl_imagesInputSchema: z.ZodType<Prisma.Electric_cyl_scansUpsertWithoutElectric_cyl_imagesInput> = z.object({
+  update: z.union([ z.lazy(() => Electric_cyl_scansUpdateWithoutElectric_cyl_imagesInputSchema),z.lazy(() => Electric_cyl_scansUncheckedUpdateWithoutElectric_cyl_imagesInputSchema) ]),
+  create: z.union([ z.lazy(() => Electric_cyl_scansCreateWithoutElectric_cyl_imagesInputSchema),z.lazy(() => Electric_cyl_scansUncheckedCreateWithoutElectric_cyl_imagesInputSchema) ]),
 }).strict();
 
-export const ScansUpdateWithoutImagesInputSchema: z.ZodType<Prisma.ScansUpdateWithoutImagesInput> = z.object({
+export const Electric_cyl_scansUpdateWithoutElectric_cyl_imagesInputSchema: z.ZodType<Prisma.Electric_cyl_scansUpdateWithoutElectric_cyl_imagesInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   scanner_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   plant_qr_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -1292,10 +1292,10 @@ export const ScansUpdateWithoutImagesInputSchema: z.ZodType<Prisma.ScansUpdateWi
   contrast: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gamma: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   seconds_per_rot: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  phenotypers: z.lazy(() => PhenotypersUpdateOneWithoutScansNestedInputSchema).optional()
+  electric_phenotypers: z.lazy(() => Electric_phenotypersUpdateOneWithoutElectric_cyl_scansNestedInputSchema).optional()
 }).strict();
 
-export const ScansUncheckedUpdateWithoutImagesInputSchema: z.ZodType<Prisma.ScansUncheckedUpdateWithoutImagesInput> = z.object({
+export const Electric_cyl_scansUncheckedUpdateWithoutElectric_cyl_imagesInputSchema: z.ZodType<Prisma.Electric_cyl_scansUncheckedUpdateWithoutElectric_cyl_imagesInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   phenotyper_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   scanner_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -1311,68 +1311,159 @@ export const ScansUncheckedUpdateWithoutImagesInputSchema: z.ZodType<Prisma.Scan
   seconds_per_rot: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
-export const ScansCreateWithoutPhenotypersInputSchema: z.ZodType<Prisma.ScansCreateWithoutPhenotypersInput> = z.object({
+export const Electric_cyl_imagesCreateWithoutElectric_cyl_scansInputSchema: z.ZodType<Prisma.Electric_cyl_imagesCreateWithoutElectric_cyl_scansInput> = z.object({
   id: z.string(),
-  scanner_id: z.string().optional().nullable(),
-  plant_qr_code: z.string().optional().nullable(),
+  frame_number: z.number().optional().nullable(),
   path: z.string().optional().nullable(),
-  capture_date: z.coerce.date().optional().nullable(),
-  num_frames: z.number().optional().nullable(),
-  exposure_time: z.number().optional().nullable(),
-  gain: z.number().optional().nullable(),
-  brightness: z.number().optional().nullable(),
-  contrast: z.number().optional().nullable(),
-  gamma: z.number().optional().nullable(),
-  seconds_per_rot: z.number().optional().nullable(),
-  images: z.lazy(() => ImagesCreateNestedManyWithoutScansInputSchema).optional()
+  url: z.string().optional().nullable(),
+  status: z.string().optional().nullable(),
+  supabase_object_path: z.string().optional().nullable()
 }).strict();
 
-export const ScansUncheckedCreateWithoutPhenotypersInputSchema: z.ZodType<Prisma.ScansUncheckedCreateWithoutPhenotypersInput> = z.object({
+export const Electric_cyl_imagesUncheckedCreateWithoutElectric_cyl_scansInputSchema: z.ZodType<Prisma.Electric_cyl_imagesUncheckedCreateWithoutElectric_cyl_scansInput> = z.object({
   id: z.string(),
-  scanner_id: z.string().optional().nullable(),
-  plant_qr_code: z.string().optional().nullable(),
+  frame_number: z.number().optional().nullable(),
   path: z.string().optional().nullable(),
-  capture_date: z.coerce.date().optional().nullable(),
-  num_frames: z.number().optional().nullable(),
-  exposure_time: z.number().optional().nullable(),
-  gain: z.number().optional().nullable(),
-  brightness: z.number().optional().nullable(),
-  contrast: z.number().optional().nullable(),
-  gamma: z.number().optional().nullable(),
-  seconds_per_rot: z.number().optional().nullable(),
-  images: z.lazy(() => ImagesUncheckedCreateNestedManyWithoutScansInputSchema).optional()
+  url: z.string().optional().nullable(),
+  status: z.string().optional().nullable(),
+  supabase_object_path: z.string().optional().nullable()
 }).strict();
 
-export const ScansCreateOrConnectWithoutPhenotypersInputSchema: z.ZodType<Prisma.ScansCreateOrConnectWithoutPhenotypersInput> = z.object({
-  where: z.lazy(() => ScansWhereUniqueInputSchema),
-  create: z.union([ z.lazy(() => ScansCreateWithoutPhenotypersInputSchema),z.lazy(() => ScansUncheckedCreateWithoutPhenotypersInputSchema) ]),
+export const Electric_cyl_imagesCreateOrConnectWithoutElectric_cyl_scansInputSchema: z.ZodType<Prisma.Electric_cyl_imagesCreateOrConnectWithoutElectric_cyl_scansInput> = z.object({
+  where: z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema),
+  create: z.union([ z.lazy(() => Electric_cyl_imagesCreateWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_cyl_imagesUncheckedCreateWithoutElectric_cyl_scansInputSchema) ]),
 }).strict();
 
-export const ScansCreateManyPhenotypersInputEnvelopeSchema: z.ZodType<Prisma.ScansCreateManyPhenotypersInputEnvelope> = z.object({
-  data: z.lazy(() => ScansCreateManyPhenotypersInputSchema).array(),
+export const Electric_cyl_imagesCreateManyElectric_cyl_scansInputEnvelopeSchema: z.ZodType<Prisma.Electric_cyl_imagesCreateManyElectric_cyl_scansInputEnvelope> = z.object({
+  data: z.lazy(() => Electric_cyl_imagesCreateManyElectric_cyl_scansInputSchema).array(),
   skipDuplicates: z.boolean().optional()
 }).strict();
 
-export const ScansUpsertWithWhereUniqueWithoutPhenotypersInputSchema: z.ZodType<Prisma.ScansUpsertWithWhereUniqueWithoutPhenotypersInput> = z.object({
-  where: z.lazy(() => ScansWhereUniqueInputSchema),
-  update: z.union([ z.lazy(() => ScansUpdateWithoutPhenotypersInputSchema),z.lazy(() => ScansUncheckedUpdateWithoutPhenotypersInputSchema) ]),
-  create: z.union([ z.lazy(() => ScansCreateWithoutPhenotypersInputSchema),z.lazy(() => ScansUncheckedCreateWithoutPhenotypersInputSchema) ]),
+export const Electric_phenotypersCreateWithoutElectric_cyl_scansInputSchema: z.ZodType<Prisma.Electric_phenotypersCreateWithoutElectric_cyl_scansInput> = z.object({
+  id: z.string(),
+  name: z.string().optional().nullable(),
+  email: z.string().optional().nullable()
 }).strict();
 
-export const ScansUpdateWithWhereUniqueWithoutPhenotypersInputSchema: z.ZodType<Prisma.ScansUpdateWithWhereUniqueWithoutPhenotypersInput> = z.object({
-  where: z.lazy(() => ScansWhereUniqueInputSchema),
-  data: z.union([ z.lazy(() => ScansUpdateWithoutPhenotypersInputSchema),z.lazy(() => ScansUncheckedUpdateWithoutPhenotypersInputSchema) ]),
+export const Electric_phenotypersUncheckedCreateWithoutElectric_cyl_scansInputSchema: z.ZodType<Prisma.Electric_phenotypersUncheckedCreateWithoutElectric_cyl_scansInput> = z.object({
+  id: z.string(),
+  name: z.string().optional().nullable(),
+  email: z.string().optional().nullable()
 }).strict();
 
-export const ScansUpdateManyWithWhereWithoutPhenotypersInputSchema: z.ZodType<Prisma.ScansUpdateManyWithWhereWithoutPhenotypersInput> = z.object({
-  where: z.lazy(() => ScansScalarWhereInputSchema),
-  data: z.union([ z.lazy(() => ScansUpdateManyMutationInputSchema),z.lazy(() => ScansUncheckedUpdateManyWithoutScansInputSchema) ]),
+export const Electric_phenotypersCreateOrConnectWithoutElectric_cyl_scansInputSchema: z.ZodType<Prisma.Electric_phenotypersCreateOrConnectWithoutElectric_cyl_scansInput> = z.object({
+  where: z.lazy(() => Electric_phenotypersWhereUniqueInputSchema),
+  create: z.union([ z.lazy(() => Electric_phenotypersCreateWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_phenotypersUncheckedCreateWithoutElectric_cyl_scansInputSchema) ]),
 }).strict();
 
-export const ScansScalarWhereInputSchema: z.ZodType<Prisma.ScansScalarWhereInput> = z.object({
-  AND: z.union([ z.lazy(() => ScansScalarWhereInputSchema),z.lazy(() => ScansScalarWhereInputSchema).array() ]).optional(),
-  OR: z.lazy(() => ScansScalarWhereInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => ScansScalarWhereInputSchema),z.lazy(() => ScansScalarWhereInputSchema).array() ]).optional(),
+export const Electric_cyl_imagesUpsertWithWhereUniqueWithoutElectric_cyl_scansInputSchema: z.ZodType<Prisma.Electric_cyl_imagesUpsertWithWhereUniqueWithoutElectric_cyl_scansInput> = z.object({
+  where: z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema),
+  update: z.union([ z.lazy(() => Electric_cyl_imagesUpdateWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_cyl_imagesUncheckedUpdateWithoutElectric_cyl_scansInputSchema) ]),
+  create: z.union([ z.lazy(() => Electric_cyl_imagesCreateWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_cyl_imagesUncheckedCreateWithoutElectric_cyl_scansInputSchema) ]),
+}).strict();
+
+export const Electric_cyl_imagesUpdateWithWhereUniqueWithoutElectric_cyl_scansInputSchema: z.ZodType<Prisma.Electric_cyl_imagesUpdateWithWhereUniqueWithoutElectric_cyl_scansInput> = z.object({
+  where: z.lazy(() => Electric_cyl_imagesWhereUniqueInputSchema),
+  data: z.union([ z.lazy(() => Electric_cyl_imagesUpdateWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_cyl_imagesUncheckedUpdateWithoutElectric_cyl_scansInputSchema) ]),
+}).strict();
+
+export const Electric_cyl_imagesUpdateManyWithWhereWithoutElectric_cyl_scansInputSchema: z.ZodType<Prisma.Electric_cyl_imagesUpdateManyWithWhereWithoutElectric_cyl_scansInput> = z.object({
+  where: z.lazy(() => Electric_cyl_imagesScalarWhereInputSchema),
+  data: z.union([ z.lazy(() => Electric_cyl_imagesUpdateManyMutationInputSchema),z.lazy(() => Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_imagesInputSchema) ]),
+}).strict();
+
+export const Electric_cyl_imagesScalarWhereInputSchema: z.ZodType<Prisma.Electric_cyl_imagesScalarWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => Electric_cyl_imagesScalarWhereInputSchema),z.lazy(() => Electric_cyl_imagesScalarWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => Electric_cyl_imagesScalarWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => Electric_cyl_imagesScalarWhereInputSchema),z.lazy(() => Electric_cyl_imagesScalarWhereInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => UuidFilterSchema),z.string() ]).optional(),
+  scan_id: z.union([ z.lazy(() => UuidNullableFilterSchema),z.string() ]).optional().nullable(),
+  frame_number: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  path: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  url: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  status: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  supabase_object_path: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+}).strict();
+
+export const Electric_phenotypersUpsertWithoutElectric_cyl_scansInputSchema: z.ZodType<Prisma.Electric_phenotypersUpsertWithoutElectric_cyl_scansInput> = z.object({
+  update: z.union([ z.lazy(() => Electric_phenotypersUpdateWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_phenotypersUncheckedUpdateWithoutElectric_cyl_scansInputSchema) ]),
+  create: z.union([ z.lazy(() => Electric_phenotypersCreateWithoutElectric_cyl_scansInputSchema),z.lazy(() => Electric_phenotypersUncheckedCreateWithoutElectric_cyl_scansInputSchema) ]),
+}).strict();
+
+export const Electric_phenotypersUpdateWithoutElectric_cyl_scansInputSchema: z.ZodType<Prisma.Electric_phenotypersUpdateWithoutElectric_cyl_scansInput> = z.object({
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  email: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+}).strict();
+
+export const Electric_phenotypersUncheckedUpdateWithoutElectric_cyl_scansInputSchema: z.ZodType<Prisma.Electric_phenotypersUncheckedUpdateWithoutElectric_cyl_scansInput> = z.object({
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  email: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+}).strict();
+
+export const Electric_cyl_scansCreateWithoutElectric_phenotypersInputSchema: z.ZodType<Prisma.Electric_cyl_scansCreateWithoutElectric_phenotypersInput> = z.object({
+  id: z.string(),
+  scanner_id: z.string().optional().nullable(),
+  plant_qr_code: z.string().optional().nullable(),
+  path: z.string().optional().nullable(),
+  capture_date: z.coerce.date().optional().nullable(),
+  num_frames: z.number().optional().nullable(),
+  exposure_time: z.number().optional().nullable(),
+  gain: z.number().optional().nullable(),
+  brightness: z.number().optional().nullable(),
+  contrast: z.number().optional().nullable(),
+  gamma: z.number().optional().nullable(),
+  seconds_per_rot: z.number().optional().nullable(),
+  electric_cyl_images: z.lazy(() => Electric_cyl_imagesCreateNestedManyWithoutElectric_cyl_scansInputSchema).optional()
+}).strict();
+
+export const Electric_cyl_scansUncheckedCreateWithoutElectric_phenotypersInputSchema: z.ZodType<Prisma.Electric_cyl_scansUncheckedCreateWithoutElectric_phenotypersInput> = z.object({
+  id: z.string(),
+  scanner_id: z.string().optional().nullable(),
+  plant_qr_code: z.string().optional().nullable(),
+  path: z.string().optional().nullable(),
+  capture_date: z.coerce.date().optional().nullable(),
+  num_frames: z.number().optional().nullable(),
+  exposure_time: z.number().optional().nullable(),
+  gain: z.number().optional().nullable(),
+  brightness: z.number().optional().nullable(),
+  contrast: z.number().optional().nullable(),
+  gamma: z.number().optional().nullable(),
+  seconds_per_rot: z.number().optional().nullable(),
+  electric_cyl_images: z.lazy(() => Electric_cyl_imagesUncheckedCreateNestedManyWithoutElectric_cyl_scansInputSchema).optional()
+}).strict();
+
+export const Electric_cyl_scansCreateOrConnectWithoutElectric_phenotypersInputSchema: z.ZodType<Prisma.Electric_cyl_scansCreateOrConnectWithoutElectric_phenotypersInput> = z.object({
+  where: z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema),
+  create: z.union([ z.lazy(() => Electric_cyl_scansCreateWithoutElectric_phenotypersInputSchema),z.lazy(() => Electric_cyl_scansUncheckedCreateWithoutElectric_phenotypersInputSchema) ]),
+}).strict();
+
+export const Electric_cyl_scansCreateManyElectric_phenotypersInputEnvelopeSchema: z.ZodType<Prisma.Electric_cyl_scansCreateManyElectric_phenotypersInputEnvelope> = z.object({
+  data: z.lazy(() => Electric_cyl_scansCreateManyElectric_phenotypersInputSchema).array(),
+  skipDuplicates: z.boolean().optional()
+}).strict();
+
+export const Electric_cyl_scansUpsertWithWhereUniqueWithoutElectric_phenotypersInputSchema: z.ZodType<Prisma.Electric_cyl_scansUpsertWithWhereUniqueWithoutElectric_phenotypersInput> = z.object({
+  where: z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema),
+  update: z.union([ z.lazy(() => Electric_cyl_scansUpdateWithoutElectric_phenotypersInputSchema),z.lazy(() => Electric_cyl_scansUncheckedUpdateWithoutElectric_phenotypersInputSchema) ]),
+  create: z.union([ z.lazy(() => Electric_cyl_scansCreateWithoutElectric_phenotypersInputSchema),z.lazy(() => Electric_cyl_scansUncheckedCreateWithoutElectric_phenotypersInputSchema) ]),
+}).strict();
+
+export const Electric_cyl_scansUpdateWithWhereUniqueWithoutElectric_phenotypersInputSchema: z.ZodType<Prisma.Electric_cyl_scansUpdateWithWhereUniqueWithoutElectric_phenotypersInput> = z.object({
+  where: z.lazy(() => Electric_cyl_scansWhereUniqueInputSchema),
+  data: z.union([ z.lazy(() => Electric_cyl_scansUpdateWithoutElectric_phenotypersInputSchema),z.lazy(() => Electric_cyl_scansUncheckedUpdateWithoutElectric_phenotypersInputSchema) ]),
+}).strict();
+
+export const Electric_cyl_scansUpdateManyWithWhereWithoutElectric_phenotypersInputSchema: z.ZodType<Prisma.Electric_cyl_scansUpdateManyWithWhereWithoutElectric_phenotypersInput> = z.object({
+  where: z.lazy(() => Electric_cyl_scansScalarWhereInputSchema),
+  data: z.union([ z.lazy(() => Electric_cyl_scansUpdateManyMutationInputSchema),z.lazy(() => Electric_cyl_scansUncheckedUpdateManyWithoutElectric_cyl_scansInputSchema) ]),
+}).strict();
+
+export const Electric_cyl_scansScalarWhereInputSchema: z.ZodType<Prisma.Electric_cyl_scansScalarWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => Electric_cyl_scansScalarWhereInputSchema),z.lazy(() => Electric_cyl_scansScalarWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => Electric_cyl_scansScalarWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => Electric_cyl_scansScalarWhereInputSchema),z.lazy(() => Electric_cyl_scansScalarWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => UuidFilterSchema),z.string() ]).optional(),
   phenotyper_id: z.union([ z.lazy(() => UuidNullableFilterSchema),z.string() ]).optional().nullable(),
   scanner_id: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
@@ -1388,98 +1479,43 @@ export const ScansScalarWhereInputSchema: z.ZodType<Prisma.ScansScalarWhereInput
   seconds_per_rot: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
 }).strict();
 
-export const ImagesCreateWithoutScansInputSchema: z.ZodType<Prisma.ImagesCreateWithoutScansInput> = z.object({
-  id: z.string(),
-  frame_number: z.number().optional().nullable(),
+export const Electric_cyl_imagesCreateManyElectric_cyl_scansInputSchema: z.ZodType<Prisma.Electric_cyl_imagesCreateManyElectric_cyl_scansInput> = z.object({
+  id: z.string().uuid(),
+  frame_number: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
   path: z.string().optional().nullable(),
   url: z.string().optional().nullable(),
   status: z.string().optional().nullable(),
   supabase_object_path: z.string().optional().nullable()
 }).strict();
 
-export const ImagesUncheckedCreateWithoutScansInputSchema: z.ZodType<Prisma.ImagesUncheckedCreateWithoutScansInput> = z.object({
-  id: z.string(),
-  frame_number: z.number().optional().nullable(),
-  path: z.string().optional().nullable(),
-  url: z.string().optional().nullable(),
-  status: z.string().optional().nullable(),
-  supabase_object_path: z.string().optional().nullable()
-}).strict();
-
-export const ImagesCreateOrConnectWithoutScansInputSchema: z.ZodType<Prisma.ImagesCreateOrConnectWithoutScansInput> = z.object({
-  where: z.lazy(() => ImagesWhereUniqueInputSchema),
-  create: z.union([ z.lazy(() => ImagesCreateWithoutScansInputSchema),z.lazy(() => ImagesUncheckedCreateWithoutScansInputSchema) ]),
-}).strict();
-
-export const ImagesCreateManyScansInputEnvelopeSchema: z.ZodType<Prisma.ImagesCreateManyScansInputEnvelope> = z.object({
-  data: z.lazy(() => ImagesCreateManyScansInputSchema).array(),
-  skipDuplicates: z.boolean().optional()
-}).strict();
-
-export const PhenotypersCreateWithoutScansInputSchema: z.ZodType<Prisma.PhenotypersCreateWithoutScansInput> = z.object({
-  id: z.string(),
-  name: z.string().optional().nullable(),
-  email: z.string().optional().nullable()
-}).strict();
-
-export const PhenotypersUncheckedCreateWithoutScansInputSchema: z.ZodType<Prisma.PhenotypersUncheckedCreateWithoutScansInput> = z.object({
-  id: z.string(),
-  name: z.string().optional().nullable(),
-  email: z.string().optional().nullable()
-}).strict();
-
-export const PhenotypersCreateOrConnectWithoutScansInputSchema: z.ZodType<Prisma.PhenotypersCreateOrConnectWithoutScansInput> = z.object({
-  where: z.lazy(() => PhenotypersWhereUniqueInputSchema),
-  create: z.union([ z.lazy(() => PhenotypersCreateWithoutScansInputSchema),z.lazy(() => PhenotypersUncheckedCreateWithoutScansInputSchema) ]),
-}).strict();
-
-export const ImagesUpsertWithWhereUniqueWithoutScansInputSchema: z.ZodType<Prisma.ImagesUpsertWithWhereUniqueWithoutScansInput> = z.object({
-  where: z.lazy(() => ImagesWhereUniqueInputSchema),
-  update: z.union([ z.lazy(() => ImagesUpdateWithoutScansInputSchema),z.lazy(() => ImagesUncheckedUpdateWithoutScansInputSchema) ]),
-  create: z.union([ z.lazy(() => ImagesCreateWithoutScansInputSchema),z.lazy(() => ImagesUncheckedCreateWithoutScansInputSchema) ]),
-}).strict();
-
-export const ImagesUpdateWithWhereUniqueWithoutScansInputSchema: z.ZodType<Prisma.ImagesUpdateWithWhereUniqueWithoutScansInput> = z.object({
-  where: z.lazy(() => ImagesWhereUniqueInputSchema),
-  data: z.union([ z.lazy(() => ImagesUpdateWithoutScansInputSchema),z.lazy(() => ImagesUncheckedUpdateWithoutScansInputSchema) ]),
-}).strict();
-
-export const ImagesUpdateManyWithWhereWithoutScansInputSchema: z.ZodType<Prisma.ImagesUpdateManyWithWhereWithoutScansInput> = z.object({
-  where: z.lazy(() => ImagesScalarWhereInputSchema),
-  data: z.union([ z.lazy(() => ImagesUpdateManyMutationInputSchema),z.lazy(() => ImagesUncheckedUpdateManyWithoutImagesInputSchema) ]),
-}).strict();
-
-export const ImagesScalarWhereInputSchema: z.ZodType<Prisma.ImagesScalarWhereInput> = z.object({
-  AND: z.union([ z.lazy(() => ImagesScalarWhereInputSchema),z.lazy(() => ImagesScalarWhereInputSchema).array() ]).optional(),
-  OR: z.lazy(() => ImagesScalarWhereInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => ImagesScalarWhereInputSchema),z.lazy(() => ImagesScalarWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => UuidFilterSchema),z.string() ]).optional(),
-  scan_id: z.union([ z.lazy(() => UuidNullableFilterSchema),z.string() ]).optional().nullable(),
-  frame_number: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
-  path: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  url: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  status: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  supabase_object_path: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-}).strict();
-
-export const PhenotypersUpsertWithoutScansInputSchema: z.ZodType<Prisma.PhenotypersUpsertWithoutScansInput> = z.object({
-  update: z.union([ z.lazy(() => PhenotypersUpdateWithoutScansInputSchema),z.lazy(() => PhenotypersUncheckedUpdateWithoutScansInputSchema) ]),
-  create: z.union([ z.lazy(() => PhenotypersCreateWithoutScansInputSchema),z.lazy(() => PhenotypersUncheckedCreateWithoutScansInputSchema) ]),
-}).strict();
-
-export const PhenotypersUpdateWithoutScansInputSchema: z.ZodType<Prisma.PhenotypersUpdateWithoutScansInput> = z.object({
+export const Electric_cyl_imagesUpdateWithoutElectric_cyl_scansInputSchema: z.ZodType<Prisma.Electric_cyl_imagesUpdateWithoutElectric_cyl_scansInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  email: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  frame_number: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  supabase_object_path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
-export const PhenotypersUncheckedUpdateWithoutScansInputSchema: z.ZodType<Prisma.PhenotypersUncheckedUpdateWithoutScansInput> = z.object({
+export const Electric_cyl_imagesUncheckedUpdateWithoutElectric_cyl_scansInputSchema: z.ZodType<Prisma.Electric_cyl_imagesUncheckedUpdateWithoutElectric_cyl_scansInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  email: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  frame_number: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  supabase_object_path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
-export const ScansCreateManyPhenotypersInputSchema: z.ZodType<Prisma.ScansCreateManyPhenotypersInput> = z.object({
+export const Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_imagesInputSchema: z.ZodType<Prisma.Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_imagesInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  frame_number: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  supabase_object_path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+}).strict();
+
+export const Electric_cyl_scansCreateManyElectric_phenotypersInputSchema: z.ZodType<Prisma.Electric_cyl_scansCreateManyElectric_phenotypersInput> = z.object({
   id: z.string().uuid(),
   scanner_id: z.string().optional().nullable(),
   plant_qr_code: z.string().optional().nullable(),
@@ -1494,7 +1530,7 @@ export const ScansCreateManyPhenotypersInputSchema: z.ZodType<Prisma.ScansCreate
   seconds_per_rot: z.number().or(z.nan()).optional().nullable()
 }).strict();
 
-export const ScansUpdateWithoutPhenotypersInputSchema: z.ZodType<Prisma.ScansUpdateWithoutPhenotypersInput> = z.object({
+export const Electric_cyl_scansUpdateWithoutElectric_phenotypersInputSchema: z.ZodType<Prisma.Electric_cyl_scansUpdateWithoutElectric_phenotypersInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   scanner_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   plant_qr_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -1507,10 +1543,10 @@ export const ScansUpdateWithoutPhenotypersInputSchema: z.ZodType<Prisma.ScansUpd
   contrast: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gamma: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   seconds_per_rot: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  images: z.lazy(() => ImagesUpdateManyWithoutScansNestedInputSchema).optional()
+  electric_cyl_images: z.lazy(() => Electric_cyl_imagesUpdateManyWithoutElectric_cyl_scansNestedInputSchema).optional()
 }).strict();
 
-export const ScansUncheckedUpdateWithoutPhenotypersInputSchema: z.ZodType<Prisma.ScansUncheckedUpdateWithoutPhenotypersInput> = z.object({
+export const Electric_cyl_scansUncheckedUpdateWithoutElectric_phenotypersInputSchema: z.ZodType<Prisma.Electric_cyl_scansUncheckedUpdateWithoutElectric_phenotypersInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   scanner_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   plant_qr_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -1523,10 +1559,10 @@ export const ScansUncheckedUpdateWithoutPhenotypersInputSchema: z.ZodType<Prisma
   contrast: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   gamma: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   seconds_per_rot: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  images: z.lazy(() => ImagesUncheckedUpdateManyWithoutScansNestedInputSchema).optional()
+  electric_cyl_images: z.lazy(() => Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_scansNestedInputSchema).optional()
 }).strict();
 
-export const ScansUncheckedUpdateManyWithoutScansInputSchema: z.ZodType<Prisma.ScansUncheckedUpdateManyWithoutScansInput> = z.object({
+export const Electric_cyl_scansUncheckedUpdateManyWithoutElectric_cyl_scansInputSchema: z.ZodType<Prisma.Electric_cyl_scansUncheckedUpdateManyWithoutElectric_cyl_scansInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   scanner_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   plant_qr_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -1541,372 +1577,336 @@ export const ScansUncheckedUpdateManyWithoutScansInputSchema: z.ZodType<Prisma.S
   seconds_per_rot: z.union([ z.number().or(z.nan()),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
-export const ImagesCreateManyScansInputSchema: z.ZodType<Prisma.ImagesCreateManyScansInput> = z.object({
-  id: z.string().uuid(),
-  frame_number: z.number().int().gte(-2147483648).lte(2147483647).optional().nullable(),
-  path: z.string().optional().nullable(),
-  url: z.string().optional().nullable(),
-  status: z.string().optional().nullable(),
-  supabase_object_path: z.string().optional().nullable()
-}).strict();
-
-export const ImagesUpdateWithoutScansInputSchema: z.ZodType<Prisma.ImagesUpdateWithoutScansInput> = z.object({
-  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  frame_number: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  supabase_object_path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-}).strict();
-
-export const ImagesUncheckedUpdateWithoutScansInputSchema: z.ZodType<Prisma.ImagesUncheckedUpdateWithoutScansInput> = z.object({
-  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  frame_number: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  supabase_object_path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-}).strict();
-
-export const ImagesUncheckedUpdateManyWithoutImagesInputSchema: z.ZodType<Prisma.ImagesUncheckedUpdateManyWithoutImagesInput> = z.object({
-  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  frame_number: z.union([ z.number().int().gte(-2147483648).lte(2147483647),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  url: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  supabase_object_path: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-}).strict();
-
 /////////////////////////////////////////
 // ARGS
 /////////////////////////////////////////
 
-export const ImagesFindFirstArgsSchema: z.ZodType<Prisma.ImagesFindFirstArgs> = z.object({
-  select: ImagesSelectSchema.optional(),
-  include: ImagesIncludeSchema.optional(),
-  where: ImagesWhereInputSchema.optional(),
-  orderBy: z.union([ ImagesOrderByWithRelationInputSchema.array(),ImagesOrderByWithRelationInputSchema ]).optional(),
-  cursor: ImagesWhereUniqueInputSchema.optional(),
+export const Electric_cyl_imagesFindFirstArgsSchema: z.ZodType<Prisma.Electric_cyl_imagesFindFirstArgs> = z.object({
+  select: Electric_cyl_imagesSelectSchema.optional(),
+  include: Electric_cyl_imagesIncludeSchema.optional(),
+  where: Electric_cyl_imagesWhereInputSchema.optional(),
+  orderBy: z.union([ Electric_cyl_imagesOrderByWithRelationInputSchema.array(),Electric_cyl_imagesOrderByWithRelationInputSchema ]).optional(),
+  cursor: Electric_cyl_imagesWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-  distinct: ImagesScalarFieldEnumSchema.array().optional(),
-}).strict() as z.ZodType<Prisma.ImagesFindFirstArgs>
+  distinct: Electric_cyl_imagesScalarFieldEnumSchema.array().optional(),
+}).strict() as z.ZodType<Prisma.Electric_cyl_imagesFindFirstArgs>
 
-export const ImagesFindFirstOrThrowArgsSchema: z.ZodType<Prisma.ImagesFindFirstOrThrowArgs> = z.object({
-  select: ImagesSelectSchema.optional(),
-  include: ImagesIncludeSchema.optional(),
-  where: ImagesWhereInputSchema.optional(),
-  orderBy: z.union([ ImagesOrderByWithRelationInputSchema.array(),ImagesOrderByWithRelationInputSchema ]).optional(),
-  cursor: ImagesWhereUniqueInputSchema.optional(),
+export const Electric_cyl_imagesFindFirstOrThrowArgsSchema: z.ZodType<Prisma.Electric_cyl_imagesFindFirstOrThrowArgs> = z.object({
+  select: Electric_cyl_imagesSelectSchema.optional(),
+  include: Electric_cyl_imagesIncludeSchema.optional(),
+  where: Electric_cyl_imagesWhereInputSchema.optional(),
+  orderBy: z.union([ Electric_cyl_imagesOrderByWithRelationInputSchema.array(),Electric_cyl_imagesOrderByWithRelationInputSchema ]).optional(),
+  cursor: Electric_cyl_imagesWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-  distinct: ImagesScalarFieldEnumSchema.array().optional(),
-}).strict() as z.ZodType<Prisma.ImagesFindFirstOrThrowArgs>
+  distinct: Electric_cyl_imagesScalarFieldEnumSchema.array().optional(),
+}).strict() as z.ZodType<Prisma.Electric_cyl_imagesFindFirstOrThrowArgs>
 
-export const ImagesFindManyArgsSchema: z.ZodType<Prisma.ImagesFindManyArgs> = z.object({
-  select: ImagesSelectSchema.optional(),
-  include: ImagesIncludeSchema.optional(),
-  where: ImagesWhereInputSchema.optional(),
-  orderBy: z.union([ ImagesOrderByWithRelationInputSchema.array(),ImagesOrderByWithRelationInputSchema ]).optional(),
-  cursor: ImagesWhereUniqueInputSchema.optional(),
+export const Electric_cyl_imagesFindManyArgsSchema: z.ZodType<Prisma.Electric_cyl_imagesFindManyArgs> = z.object({
+  select: Electric_cyl_imagesSelectSchema.optional(),
+  include: Electric_cyl_imagesIncludeSchema.optional(),
+  where: Electric_cyl_imagesWhereInputSchema.optional(),
+  orderBy: z.union([ Electric_cyl_imagesOrderByWithRelationInputSchema.array(),Electric_cyl_imagesOrderByWithRelationInputSchema ]).optional(),
+  cursor: Electric_cyl_imagesWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-  distinct: ImagesScalarFieldEnumSchema.array().optional(),
-}).strict() as z.ZodType<Prisma.ImagesFindManyArgs>
+  distinct: Electric_cyl_imagesScalarFieldEnumSchema.array().optional(),
+}).strict() as z.ZodType<Prisma.Electric_cyl_imagesFindManyArgs>
 
-export const ImagesAggregateArgsSchema: z.ZodType<Prisma.ImagesAggregateArgs> = z.object({
-  where: ImagesWhereInputSchema.optional(),
-  orderBy: z.union([ ImagesOrderByWithRelationInputSchema.array(),ImagesOrderByWithRelationInputSchema ]).optional(),
-  cursor: ImagesWhereUniqueInputSchema.optional(),
+export const Electric_cyl_imagesAggregateArgsSchema: z.ZodType<Prisma.Electric_cyl_imagesAggregateArgs> = z.object({
+  where: Electric_cyl_imagesWhereInputSchema.optional(),
+  orderBy: z.union([ Electric_cyl_imagesOrderByWithRelationInputSchema.array(),Electric_cyl_imagesOrderByWithRelationInputSchema ]).optional(),
+  cursor: Electric_cyl_imagesWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-}).strict() as z.ZodType<Prisma.ImagesAggregateArgs>
+}).strict() as z.ZodType<Prisma.Electric_cyl_imagesAggregateArgs>
 
-export const ImagesGroupByArgsSchema: z.ZodType<Prisma.ImagesGroupByArgs> = z.object({
-  where: ImagesWhereInputSchema.optional(),
-  orderBy: z.union([ ImagesOrderByWithAggregationInputSchema.array(),ImagesOrderByWithAggregationInputSchema ]).optional(),
-  by: ImagesScalarFieldEnumSchema.array(),
-  having: ImagesScalarWhereWithAggregatesInputSchema.optional(),
+export const Electric_cyl_imagesGroupByArgsSchema: z.ZodType<Prisma.Electric_cyl_imagesGroupByArgs> = z.object({
+  where: Electric_cyl_imagesWhereInputSchema.optional(),
+  orderBy: z.union([ Electric_cyl_imagesOrderByWithAggregationInputSchema.array(),Electric_cyl_imagesOrderByWithAggregationInputSchema ]).optional(),
+  by: Electric_cyl_imagesScalarFieldEnumSchema.array(),
+  having: Electric_cyl_imagesScalarWhereWithAggregatesInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-}).strict() as z.ZodType<Prisma.ImagesGroupByArgs>
+}).strict() as z.ZodType<Prisma.Electric_cyl_imagesGroupByArgs>
 
-export const ImagesFindUniqueArgsSchema: z.ZodType<Prisma.ImagesFindUniqueArgs> = z.object({
-  select: ImagesSelectSchema.optional(),
-  include: ImagesIncludeSchema.optional(),
-  where: ImagesWhereUniqueInputSchema,
-}).strict() as z.ZodType<Prisma.ImagesFindUniqueArgs>
+export const Electric_cyl_imagesFindUniqueArgsSchema: z.ZodType<Prisma.Electric_cyl_imagesFindUniqueArgs> = z.object({
+  select: Electric_cyl_imagesSelectSchema.optional(),
+  include: Electric_cyl_imagesIncludeSchema.optional(),
+  where: Electric_cyl_imagesWhereUniqueInputSchema,
+}).strict() as z.ZodType<Prisma.Electric_cyl_imagesFindUniqueArgs>
 
-export const ImagesFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.ImagesFindUniqueOrThrowArgs> = z.object({
-  select: ImagesSelectSchema.optional(),
-  include: ImagesIncludeSchema.optional(),
-  where: ImagesWhereUniqueInputSchema,
-}).strict() as z.ZodType<Prisma.ImagesFindUniqueOrThrowArgs>
+export const Electric_cyl_imagesFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.Electric_cyl_imagesFindUniqueOrThrowArgs> = z.object({
+  select: Electric_cyl_imagesSelectSchema.optional(),
+  include: Electric_cyl_imagesIncludeSchema.optional(),
+  where: Electric_cyl_imagesWhereUniqueInputSchema,
+}).strict() as z.ZodType<Prisma.Electric_cyl_imagesFindUniqueOrThrowArgs>
 
-export const PhenotypersFindFirstArgsSchema: z.ZodType<Prisma.PhenotypersFindFirstArgs> = z.object({
-  select: PhenotypersSelectSchema.optional(),
-  include: PhenotypersIncludeSchema.optional(),
-  where: PhenotypersWhereInputSchema.optional(),
-  orderBy: z.union([ PhenotypersOrderByWithRelationInputSchema.array(),PhenotypersOrderByWithRelationInputSchema ]).optional(),
-  cursor: PhenotypersWhereUniqueInputSchema.optional(),
+export const Electric_cyl_scansFindFirstArgsSchema: z.ZodType<Prisma.Electric_cyl_scansFindFirstArgs> = z.object({
+  select: Electric_cyl_scansSelectSchema.optional(),
+  include: Electric_cyl_scansIncludeSchema.optional(),
+  where: Electric_cyl_scansWhereInputSchema.optional(),
+  orderBy: z.union([ Electric_cyl_scansOrderByWithRelationInputSchema.array(),Electric_cyl_scansOrderByWithRelationInputSchema ]).optional(),
+  cursor: Electric_cyl_scansWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-  distinct: PhenotypersScalarFieldEnumSchema.array().optional(),
-}).strict() as z.ZodType<Prisma.PhenotypersFindFirstArgs>
+  distinct: Electric_cyl_scansScalarFieldEnumSchema.array().optional(),
+}).strict() as z.ZodType<Prisma.Electric_cyl_scansFindFirstArgs>
 
-export const PhenotypersFindFirstOrThrowArgsSchema: z.ZodType<Prisma.PhenotypersFindFirstOrThrowArgs> = z.object({
-  select: PhenotypersSelectSchema.optional(),
-  include: PhenotypersIncludeSchema.optional(),
-  where: PhenotypersWhereInputSchema.optional(),
-  orderBy: z.union([ PhenotypersOrderByWithRelationInputSchema.array(),PhenotypersOrderByWithRelationInputSchema ]).optional(),
-  cursor: PhenotypersWhereUniqueInputSchema.optional(),
+export const Electric_cyl_scansFindFirstOrThrowArgsSchema: z.ZodType<Prisma.Electric_cyl_scansFindFirstOrThrowArgs> = z.object({
+  select: Electric_cyl_scansSelectSchema.optional(),
+  include: Electric_cyl_scansIncludeSchema.optional(),
+  where: Electric_cyl_scansWhereInputSchema.optional(),
+  orderBy: z.union([ Electric_cyl_scansOrderByWithRelationInputSchema.array(),Electric_cyl_scansOrderByWithRelationInputSchema ]).optional(),
+  cursor: Electric_cyl_scansWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-  distinct: PhenotypersScalarFieldEnumSchema.array().optional(),
-}).strict() as z.ZodType<Prisma.PhenotypersFindFirstOrThrowArgs>
+  distinct: Electric_cyl_scansScalarFieldEnumSchema.array().optional(),
+}).strict() as z.ZodType<Prisma.Electric_cyl_scansFindFirstOrThrowArgs>
 
-export const PhenotypersFindManyArgsSchema: z.ZodType<Prisma.PhenotypersFindManyArgs> = z.object({
-  select: PhenotypersSelectSchema.optional(),
-  include: PhenotypersIncludeSchema.optional(),
-  where: PhenotypersWhereInputSchema.optional(),
-  orderBy: z.union([ PhenotypersOrderByWithRelationInputSchema.array(),PhenotypersOrderByWithRelationInputSchema ]).optional(),
-  cursor: PhenotypersWhereUniqueInputSchema.optional(),
+export const Electric_cyl_scansFindManyArgsSchema: z.ZodType<Prisma.Electric_cyl_scansFindManyArgs> = z.object({
+  select: Electric_cyl_scansSelectSchema.optional(),
+  include: Electric_cyl_scansIncludeSchema.optional(),
+  where: Electric_cyl_scansWhereInputSchema.optional(),
+  orderBy: z.union([ Electric_cyl_scansOrderByWithRelationInputSchema.array(),Electric_cyl_scansOrderByWithRelationInputSchema ]).optional(),
+  cursor: Electric_cyl_scansWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-  distinct: PhenotypersScalarFieldEnumSchema.array().optional(),
-}).strict() as z.ZodType<Prisma.PhenotypersFindManyArgs>
+  distinct: Electric_cyl_scansScalarFieldEnumSchema.array().optional(),
+}).strict() as z.ZodType<Prisma.Electric_cyl_scansFindManyArgs>
 
-export const PhenotypersAggregateArgsSchema: z.ZodType<Prisma.PhenotypersAggregateArgs> = z.object({
-  where: PhenotypersWhereInputSchema.optional(),
-  orderBy: z.union([ PhenotypersOrderByWithRelationInputSchema.array(),PhenotypersOrderByWithRelationInputSchema ]).optional(),
-  cursor: PhenotypersWhereUniqueInputSchema.optional(),
+export const Electric_cyl_scansAggregateArgsSchema: z.ZodType<Prisma.Electric_cyl_scansAggregateArgs> = z.object({
+  where: Electric_cyl_scansWhereInputSchema.optional(),
+  orderBy: z.union([ Electric_cyl_scansOrderByWithRelationInputSchema.array(),Electric_cyl_scansOrderByWithRelationInputSchema ]).optional(),
+  cursor: Electric_cyl_scansWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-}).strict() as z.ZodType<Prisma.PhenotypersAggregateArgs>
+}).strict() as z.ZodType<Prisma.Electric_cyl_scansAggregateArgs>
 
-export const PhenotypersGroupByArgsSchema: z.ZodType<Prisma.PhenotypersGroupByArgs> = z.object({
-  where: PhenotypersWhereInputSchema.optional(),
-  orderBy: z.union([ PhenotypersOrderByWithAggregationInputSchema.array(),PhenotypersOrderByWithAggregationInputSchema ]).optional(),
-  by: PhenotypersScalarFieldEnumSchema.array(),
-  having: PhenotypersScalarWhereWithAggregatesInputSchema.optional(),
+export const Electric_cyl_scansGroupByArgsSchema: z.ZodType<Prisma.Electric_cyl_scansGroupByArgs> = z.object({
+  where: Electric_cyl_scansWhereInputSchema.optional(),
+  orderBy: z.union([ Electric_cyl_scansOrderByWithAggregationInputSchema.array(),Electric_cyl_scansOrderByWithAggregationInputSchema ]).optional(),
+  by: Electric_cyl_scansScalarFieldEnumSchema.array(),
+  having: Electric_cyl_scansScalarWhereWithAggregatesInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-}).strict() as z.ZodType<Prisma.PhenotypersGroupByArgs>
+}).strict() as z.ZodType<Prisma.Electric_cyl_scansGroupByArgs>
 
-export const PhenotypersFindUniqueArgsSchema: z.ZodType<Prisma.PhenotypersFindUniqueArgs> = z.object({
-  select: PhenotypersSelectSchema.optional(),
-  include: PhenotypersIncludeSchema.optional(),
-  where: PhenotypersWhereUniqueInputSchema,
-}).strict() as z.ZodType<Prisma.PhenotypersFindUniqueArgs>
+export const Electric_cyl_scansFindUniqueArgsSchema: z.ZodType<Prisma.Electric_cyl_scansFindUniqueArgs> = z.object({
+  select: Electric_cyl_scansSelectSchema.optional(),
+  include: Electric_cyl_scansIncludeSchema.optional(),
+  where: Electric_cyl_scansWhereUniqueInputSchema,
+}).strict() as z.ZodType<Prisma.Electric_cyl_scansFindUniqueArgs>
 
-export const PhenotypersFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.PhenotypersFindUniqueOrThrowArgs> = z.object({
-  select: PhenotypersSelectSchema.optional(),
-  include: PhenotypersIncludeSchema.optional(),
-  where: PhenotypersWhereUniqueInputSchema,
-}).strict() as z.ZodType<Prisma.PhenotypersFindUniqueOrThrowArgs>
+export const Electric_cyl_scansFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.Electric_cyl_scansFindUniqueOrThrowArgs> = z.object({
+  select: Electric_cyl_scansSelectSchema.optional(),
+  include: Electric_cyl_scansIncludeSchema.optional(),
+  where: Electric_cyl_scansWhereUniqueInputSchema,
+}).strict() as z.ZodType<Prisma.Electric_cyl_scansFindUniqueOrThrowArgs>
 
-export const ScansFindFirstArgsSchema: z.ZodType<Prisma.ScansFindFirstArgs> = z.object({
-  select: ScansSelectSchema.optional(),
-  include: ScansIncludeSchema.optional(),
-  where: ScansWhereInputSchema.optional(),
-  orderBy: z.union([ ScansOrderByWithRelationInputSchema.array(),ScansOrderByWithRelationInputSchema ]).optional(),
-  cursor: ScansWhereUniqueInputSchema.optional(),
+export const Electric_phenotypersFindFirstArgsSchema: z.ZodType<Prisma.Electric_phenotypersFindFirstArgs> = z.object({
+  select: Electric_phenotypersSelectSchema.optional(),
+  include: Electric_phenotypersIncludeSchema.optional(),
+  where: Electric_phenotypersWhereInputSchema.optional(),
+  orderBy: z.union([ Electric_phenotypersOrderByWithRelationInputSchema.array(),Electric_phenotypersOrderByWithRelationInputSchema ]).optional(),
+  cursor: Electric_phenotypersWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-  distinct: ScansScalarFieldEnumSchema.array().optional(),
-}).strict() as z.ZodType<Prisma.ScansFindFirstArgs>
+  distinct: Electric_phenotypersScalarFieldEnumSchema.array().optional(),
+}).strict() as z.ZodType<Prisma.Electric_phenotypersFindFirstArgs>
 
-export const ScansFindFirstOrThrowArgsSchema: z.ZodType<Prisma.ScansFindFirstOrThrowArgs> = z.object({
-  select: ScansSelectSchema.optional(),
-  include: ScansIncludeSchema.optional(),
-  where: ScansWhereInputSchema.optional(),
-  orderBy: z.union([ ScansOrderByWithRelationInputSchema.array(),ScansOrderByWithRelationInputSchema ]).optional(),
-  cursor: ScansWhereUniqueInputSchema.optional(),
+export const Electric_phenotypersFindFirstOrThrowArgsSchema: z.ZodType<Prisma.Electric_phenotypersFindFirstOrThrowArgs> = z.object({
+  select: Electric_phenotypersSelectSchema.optional(),
+  include: Electric_phenotypersIncludeSchema.optional(),
+  where: Electric_phenotypersWhereInputSchema.optional(),
+  orderBy: z.union([ Electric_phenotypersOrderByWithRelationInputSchema.array(),Electric_phenotypersOrderByWithRelationInputSchema ]).optional(),
+  cursor: Electric_phenotypersWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-  distinct: ScansScalarFieldEnumSchema.array().optional(),
-}).strict() as z.ZodType<Prisma.ScansFindFirstOrThrowArgs>
+  distinct: Electric_phenotypersScalarFieldEnumSchema.array().optional(),
+}).strict() as z.ZodType<Prisma.Electric_phenotypersFindFirstOrThrowArgs>
 
-export const ScansFindManyArgsSchema: z.ZodType<Prisma.ScansFindManyArgs> = z.object({
-  select: ScansSelectSchema.optional(),
-  include: ScansIncludeSchema.optional(),
-  where: ScansWhereInputSchema.optional(),
-  orderBy: z.union([ ScansOrderByWithRelationInputSchema.array(),ScansOrderByWithRelationInputSchema ]).optional(),
-  cursor: ScansWhereUniqueInputSchema.optional(),
+export const Electric_phenotypersFindManyArgsSchema: z.ZodType<Prisma.Electric_phenotypersFindManyArgs> = z.object({
+  select: Electric_phenotypersSelectSchema.optional(),
+  include: Electric_phenotypersIncludeSchema.optional(),
+  where: Electric_phenotypersWhereInputSchema.optional(),
+  orderBy: z.union([ Electric_phenotypersOrderByWithRelationInputSchema.array(),Electric_phenotypersOrderByWithRelationInputSchema ]).optional(),
+  cursor: Electric_phenotypersWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-  distinct: ScansScalarFieldEnumSchema.array().optional(),
-}).strict() as z.ZodType<Prisma.ScansFindManyArgs>
+  distinct: Electric_phenotypersScalarFieldEnumSchema.array().optional(),
+}).strict() as z.ZodType<Prisma.Electric_phenotypersFindManyArgs>
 
-export const ScansAggregateArgsSchema: z.ZodType<Prisma.ScansAggregateArgs> = z.object({
-  where: ScansWhereInputSchema.optional(),
-  orderBy: z.union([ ScansOrderByWithRelationInputSchema.array(),ScansOrderByWithRelationInputSchema ]).optional(),
-  cursor: ScansWhereUniqueInputSchema.optional(),
+export const Electric_phenotypersAggregateArgsSchema: z.ZodType<Prisma.Electric_phenotypersAggregateArgs> = z.object({
+  where: Electric_phenotypersWhereInputSchema.optional(),
+  orderBy: z.union([ Electric_phenotypersOrderByWithRelationInputSchema.array(),Electric_phenotypersOrderByWithRelationInputSchema ]).optional(),
+  cursor: Electric_phenotypersWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-}).strict() as z.ZodType<Prisma.ScansAggregateArgs>
+}).strict() as z.ZodType<Prisma.Electric_phenotypersAggregateArgs>
 
-export const ScansGroupByArgsSchema: z.ZodType<Prisma.ScansGroupByArgs> = z.object({
-  where: ScansWhereInputSchema.optional(),
-  orderBy: z.union([ ScansOrderByWithAggregationInputSchema.array(),ScansOrderByWithAggregationInputSchema ]).optional(),
-  by: ScansScalarFieldEnumSchema.array(),
-  having: ScansScalarWhereWithAggregatesInputSchema.optional(),
+export const Electric_phenotypersGroupByArgsSchema: z.ZodType<Prisma.Electric_phenotypersGroupByArgs> = z.object({
+  where: Electric_phenotypersWhereInputSchema.optional(),
+  orderBy: z.union([ Electric_phenotypersOrderByWithAggregationInputSchema.array(),Electric_phenotypersOrderByWithAggregationInputSchema ]).optional(),
+  by: Electric_phenotypersScalarFieldEnumSchema.array(),
+  having: Electric_phenotypersScalarWhereWithAggregatesInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-}).strict() as z.ZodType<Prisma.ScansGroupByArgs>
+}).strict() as z.ZodType<Prisma.Electric_phenotypersGroupByArgs>
 
-export const ScansFindUniqueArgsSchema: z.ZodType<Prisma.ScansFindUniqueArgs> = z.object({
-  select: ScansSelectSchema.optional(),
-  include: ScansIncludeSchema.optional(),
-  where: ScansWhereUniqueInputSchema,
-}).strict() as z.ZodType<Prisma.ScansFindUniqueArgs>
+export const Electric_phenotypersFindUniqueArgsSchema: z.ZodType<Prisma.Electric_phenotypersFindUniqueArgs> = z.object({
+  select: Electric_phenotypersSelectSchema.optional(),
+  include: Electric_phenotypersIncludeSchema.optional(),
+  where: Electric_phenotypersWhereUniqueInputSchema,
+}).strict() as z.ZodType<Prisma.Electric_phenotypersFindUniqueArgs>
 
-export const ScansFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.ScansFindUniqueOrThrowArgs> = z.object({
-  select: ScansSelectSchema.optional(),
-  include: ScansIncludeSchema.optional(),
-  where: ScansWhereUniqueInputSchema,
-}).strict() as z.ZodType<Prisma.ScansFindUniqueOrThrowArgs>
+export const Electric_phenotypersFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.Electric_phenotypersFindUniqueOrThrowArgs> = z.object({
+  select: Electric_phenotypersSelectSchema.optional(),
+  include: Electric_phenotypersIncludeSchema.optional(),
+  where: Electric_phenotypersWhereUniqueInputSchema,
+}).strict() as z.ZodType<Prisma.Electric_phenotypersFindUniqueOrThrowArgs>
 
-export const ImagesCreateArgsSchema: z.ZodType<Prisma.ImagesCreateArgs> = z.object({
-  select: ImagesSelectSchema.optional(),
-  include: ImagesIncludeSchema.optional(),
-  data: z.union([ ImagesCreateInputSchema,ImagesUncheckedCreateInputSchema ]),
-}).strict() as z.ZodType<Prisma.ImagesCreateArgs>
+export const Electric_cyl_imagesCreateArgsSchema: z.ZodType<Prisma.Electric_cyl_imagesCreateArgs> = z.object({
+  select: Electric_cyl_imagesSelectSchema.optional(),
+  include: Electric_cyl_imagesIncludeSchema.optional(),
+  data: z.union([ Electric_cyl_imagesCreateInputSchema,Electric_cyl_imagesUncheckedCreateInputSchema ]),
+}).strict() as z.ZodType<Prisma.Electric_cyl_imagesCreateArgs>
 
-export const ImagesUpsertArgsSchema: z.ZodType<Prisma.ImagesUpsertArgs> = z.object({
-  select: ImagesSelectSchema.optional(),
-  include: ImagesIncludeSchema.optional(),
-  where: ImagesWhereUniqueInputSchema,
-  create: z.union([ ImagesCreateInputSchema,ImagesUncheckedCreateInputSchema ]),
-  update: z.union([ ImagesUpdateInputSchema,ImagesUncheckedUpdateInputSchema ]),
-}).strict() as z.ZodType<Prisma.ImagesUpsertArgs>
+export const Electric_cyl_imagesUpsertArgsSchema: z.ZodType<Prisma.Electric_cyl_imagesUpsertArgs> = z.object({
+  select: Electric_cyl_imagesSelectSchema.optional(),
+  include: Electric_cyl_imagesIncludeSchema.optional(),
+  where: Electric_cyl_imagesWhereUniqueInputSchema,
+  create: z.union([ Electric_cyl_imagesCreateInputSchema,Electric_cyl_imagesUncheckedCreateInputSchema ]),
+  update: z.union([ Electric_cyl_imagesUpdateInputSchema,Electric_cyl_imagesUncheckedUpdateInputSchema ]),
+}).strict() as z.ZodType<Prisma.Electric_cyl_imagesUpsertArgs>
 
-export const ImagesCreateManyArgsSchema: z.ZodType<Prisma.ImagesCreateManyArgs> = z.object({
-  data: ImagesCreateManyInputSchema.array(),
+export const Electric_cyl_imagesCreateManyArgsSchema: z.ZodType<Prisma.Electric_cyl_imagesCreateManyArgs> = z.object({
+  data: Electric_cyl_imagesCreateManyInputSchema.array(),
   skipDuplicates: z.boolean().optional(),
-}).strict() as z.ZodType<Prisma.ImagesCreateManyArgs>
+}).strict() as z.ZodType<Prisma.Electric_cyl_imagesCreateManyArgs>
 
-export const ImagesDeleteArgsSchema: z.ZodType<Prisma.ImagesDeleteArgs> = z.object({
-  select: ImagesSelectSchema.optional(),
-  include: ImagesIncludeSchema.optional(),
-  where: ImagesWhereUniqueInputSchema,
-}).strict() as z.ZodType<Prisma.ImagesDeleteArgs>
+export const Electric_cyl_imagesDeleteArgsSchema: z.ZodType<Prisma.Electric_cyl_imagesDeleteArgs> = z.object({
+  select: Electric_cyl_imagesSelectSchema.optional(),
+  include: Electric_cyl_imagesIncludeSchema.optional(),
+  where: Electric_cyl_imagesWhereUniqueInputSchema,
+}).strict() as z.ZodType<Prisma.Electric_cyl_imagesDeleteArgs>
 
-export const ImagesUpdateArgsSchema: z.ZodType<Prisma.ImagesUpdateArgs> = z.object({
-  select: ImagesSelectSchema.optional(),
-  include: ImagesIncludeSchema.optional(),
-  data: z.union([ ImagesUpdateInputSchema,ImagesUncheckedUpdateInputSchema ]),
-  where: ImagesWhereUniqueInputSchema,
-}).strict() as z.ZodType<Prisma.ImagesUpdateArgs>
+export const Electric_cyl_imagesUpdateArgsSchema: z.ZodType<Prisma.Electric_cyl_imagesUpdateArgs> = z.object({
+  select: Electric_cyl_imagesSelectSchema.optional(),
+  include: Electric_cyl_imagesIncludeSchema.optional(),
+  data: z.union([ Electric_cyl_imagesUpdateInputSchema,Electric_cyl_imagesUncheckedUpdateInputSchema ]),
+  where: Electric_cyl_imagesWhereUniqueInputSchema,
+}).strict() as z.ZodType<Prisma.Electric_cyl_imagesUpdateArgs>
 
-export const ImagesUpdateManyArgsSchema: z.ZodType<Prisma.ImagesUpdateManyArgs> = z.object({
-  data: z.union([ ImagesUpdateManyMutationInputSchema,ImagesUncheckedUpdateManyInputSchema ]),
-  where: ImagesWhereInputSchema.optional(),
-}).strict() as z.ZodType<Prisma.ImagesUpdateManyArgs>
+export const Electric_cyl_imagesUpdateManyArgsSchema: z.ZodType<Prisma.Electric_cyl_imagesUpdateManyArgs> = z.object({
+  data: z.union([ Electric_cyl_imagesUpdateManyMutationInputSchema,Electric_cyl_imagesUncheckedUpdateManyInputSchema ]),
+  where: Electric_cyl_imagesWhereInputSchema.optional(),
+}).strict() as z.ZodType<Prisma.Electric_cyl_imagesUpdateManyArgs>
 
-export const ImagesDeleteManyArgsSchema: z.ZodType<Prisma.ImagesDeleteManyArgs> = z.object({
-  where: ImagesWhereInputSchema.optional(),
-}).strict() as z.ZodType<Prisma.ImagesDeleteManyArgs>
+export const Electric_cyl_imagesDeleteManyArgsSchema: z.ZodType<Prisma.Electric_cyl_imagesDeleteManyArgs> = z.object({
+  where: Electric_cyl_imagesWhereInputSchema.optional(),
+}).strict() as z.ZodType<Prisma.Electric_cyl_imagesDeleteManyArgs>
 
-export const PhenotypersCreateArgsSchema: z.ZodType<Prisma.PhenotypersCreateArgs> = z.object({
-  select: PhenotypersSelectSchema.optional(),
-  include: PhenotypersIncludeSchema.optional(),
-  data: z.union([ PhenotypersCreateInputSchema,PhenotypersUncheckedCreateInputSchema ]),
-}).strict() as z.ZodType<Prisma.PhenotypersCreateArgs>
+export const Electric_cyl_scansCreateArgsSchema: z.ZodType<Prisma.Electric_cyl_scansCreateArgs> = z.object({
+  select: Electric_cyl_scansSelectSchema.optional(),
+  include: Electric_cyl_scansIncludeSchema.optional(),
+  data: z.union([ Electric_cyl_scansCreateInputSchema,Electric_cyl_scansUncheckedCreateInputSchema ]),
+}).strict() as z.ZodType<Prisma.Electric_cyl_scansCreateArgs>
 
-export const PhenotypersUpsertArgsSchema: z.ZodType<Prisma.PhenotypersUpsertArgs> = z.object({
-  select: PhenotypersSelectSchema.optional(),
-  include: PhenotypersIncludeSchema.optional(),
-  where: PhenotypersWhereUniqueInputSchema,
-  create: z.union([ PhenotypersCreateInputSchema,PhenotypersUncheckedCreateInputSchema ]),
-  update: z.union([ PhenotypersUpdateInputSchema,PhenotypersUncheckedUpdateInputSchema ]),
-}).strict() as z.ZodType<Prisma.PhenotypersUpsertArgs>
+export const Electric_cyl_scansUpsertArgsSchema: z.ZodType<Prisma.Electric_cyl_scansUpsertArgs> = z.object({
+  select: Electric_cyl_scansSelectSchema.optional(),
+  include: Electric_cyl_scansIncludeSchema.optional(),
+  where: Electric_cyl_scansWhereUniqueInputSchema,
+  create: z.union([ Electric_cyl_scansCreateInputSchema,Electric_cyl_scansUncheckedCreateInputSchema ]),
+  update: z.union([ Electric_cyl_scansUpdateInputSchema,Electric_cyl_scansUncheckedUpdateInputSchema ]),
+}).strict() as z.ZodType<Prisma.Electric_cyl_scansUpsertArgs>
 
-export const PhenotypersCreateManyArgsSchema: z.ZodType<Prisma.PhenotypersCreateManyArgs> = z.object({
-  data: PhenotypersCreateManyInputSchema.array(),
+export const Electric_cyl_scansCreateManyArgsSchema: z.ZodType<Prisma.Electric_cyl_scansCreateManyArgs> = z.object({
+  data: Electric_cyl_scansCreateManyInputSchema.array(),
   skipDuplicates: z.boolean().optional(),
-}).strict() as z.ZodType<Prisma.PhenotypersCreateManyArgs>
+}).strict() as z.ZodType<Prisma.Electric_cyl_scansCreateManyArgs>
 
-export const PhenotypersDeleteArgsSchema: z.ZodType<Prisma.PhenotypersDeleteArgs> = z.object({
-  select: PhenotypersSelectSchema.optional(),
-  include: PhenotypersIncludeSchema.optional(),
-  where: PhenotypersWhereUniqueInputSchema,
-}).strict() as z.ZodType<Prisma.PhenotypersDeleteArgs>
+export const Electric_cyl_scansDeleteArgsSchema: z.ZodType<Prisma.Electric_cyl_scansDeleteArgs> = z.object({
+  select: Electric_cyl_scansSelectSchema.optional(),
+  include: Electric_cyl_scansIncludeSchema.optional(),
+  where: Electric_cyl_scansWhereUniqueInputSchema,
+}).strict() as z.ZodType<Prisma.Electric_cyl_scansDeleteArgs>
 
-export const PhenotypersUpdateArgsSchema: z.ZodType<Prisma.PhenotypersUpdateArgs> = z.object({
-  select: PhenotypersSelectSchema.optional(),
-  include: PhenotypersIncludeSchema.optional(),
-  data: z.union([ PhenotypersUpdateInputSchema,PhenotypersUncheckedUpdateInputSchema ]),
-  where: PhenotypersWhereUniqueInputSchema,
-}).strict() as z.ZodType<Prisma.PhenotypersUpdateArgs>
+export const Electric_cyl_scansUpdateArgsSchema: z.ZodType<Prisma.Electric_cyl_scansUpdateArgs> = z.object({
+  select: Electric_cyl_scansSelectSchema.optional(),
+  include: Electric_cyl_scansIncludeSchema.optional(),
+  data: z.union([ Electric_cyl_scansUpdateInputSchema,Electric_cyl_scansUncheckedUpdateInputSchema ]),
+  where: Electric_cyl_scansWhereUniqueInputSchema,
+}).strict() as z.ZodType<Prisma.Electric_cyl_scansUpdateArgs>
 
-export const PhenotypersUpdateManyArgsSchema: z.ZodType<Prisma.PhenotypersUpdateManyArgs> = z.object({
-  data: z.union([ PhenotypersUpdateManyMutationInputSchema,PhenotypersUncheckedUpdateManyInputSchema ]),
-  where: PhenotypersWhereInputSchema.optional(),
-}).strict() as z.ZodType<Prisma.PhenotypersUpdateManyArgs>
+export const Electric_cyl_scansUpdateManyArgsSchema: z.ZodType<Prisma.Electric_cyl_scansUpdateManyArgs> = z.object({
+  data: z.union([ Electric_cyl_scansUpdateManyMutationInputSchema,Electric_cyl_scansUncheckedUpdateManyInputSchema ]),
+  where: Electric_cyl_scansWhereInputSchema.optional(),
+}).strict() as z.ZodType<Prisma.Electric_cyl_scansUpdateManyArgs>
 
-export const PhenotypersDeleteManyArgsSchema: z.ZodType<Prisma.PhenotypersDeleteManyArgs> = z.object({
-  where: PhenotypersWhereInputSchema.optional(),
-}).strict() as z.ZodType<Prisma.PhenotypersDeleteManyArgs>
+export const Electric_cyl_scansDeleteManyArgsSchema: z.ZodType<Prisma.Electric_cyl_scansDeleteManyArgs> = z.object({
+  where: Electric_cyl_scansWhereInputSchema.optional(),
+}).strict() as z.ZodType<Prisma.Electric_cyl_scansDeleteManyArgs>
 
-export const ScansCreateArgsSchema: z.ZodType<Prisma.ScansCreateArgs> = z.object({
-  select: ScansSelectSchema.optional(),
-  include: ScansIncludeSchema.optional(),
-  data: z.union([ ScansCreateInputSchema,ScansUncheckedCreateInputSchema ]),
-}).strict() as z.ZodType<Prisma.ScansCreateArgs>
+export const Electric_phenotypersCreateArgsSchema: z.ZodType<Prisma.Electric_phenotypersCreateArgs> = z.object({
+  select: Electric_phenotypersSelectSchema.optional(),
+  include: Electric_phenotypersIncludeSchema.optional(),
+  data: z.union([ Electric_phenotypersCreateInputSchema,Electric_phenotypersUncheckedCreateInputSchema ]),
+}).strict() as z.ZodType<Prisma.Electric_phenotypersCreateArgs>
 
-export const ScansUpsertArgsSchema: z.ZodType<Prisma.ScansUpsertArgs> = z.object({
-  select: ScansSelectSchema.optional(),
-  include: ScansIncludeSchema.optional(),
-  where: ScansWhereUniqueInputSchema,
-  create: z.union([ ScansCreateInputSchema,ScansUncheckedCreateInputSchema ]),
-  update: z.union([ ScansUpdateInputSchema,ScansUncheckedUpdateInputSchema ]),
-}).strict() as z.ZodType<Prisma.ScansUpsertArgs>
+export const Electric_phenotypersUpsertArgsSchema: z.ZodType<Prisma.Electric_phenotypersUpsertArgs> = z.object({
+  select: Electric_phenotypersSelectSchema.optional(),
+  include: Electric_phenotypersIncludeSchema.optional(),
+  where: Electric_phenotypersWhereUniqueInputSchema,
+  create: z.union([ Electric_phenotypersCreateInputSchema,Electric_phenotypersUncheckedCreateInputSchema ]),
+  update: z.union([ Electric_phenotypersUpdateInputSchema,Electric_phenotypersUncheckedUpdateInputSchema ]),
+}).strict() as z.ZodType<Prisma.Electric_phenotypersUpsertArgs>
 
-export const ScansCreateManyArgsSchema: z.ZodType<Prisma.ScansCreateManyArgs> = z.object({
-  data: ScansCreateManyInputSchema.array(),
+export const Electric_phenotypersCreateManyArgsSchema: z.ZodType<Prisma.Electric_phenotypersCreateManyArgs> = z.object({
+  data: Electric_phenotypersCreateManyInputSchema.array(),
   skipDuplicates: z.boolean().optional(),
-}).strict() as z.ZodType<Prisma.ScansCreateManyArgs>
+}).strict() as z.ZodType<Prisma.Electric_phenotypersCreateManyArgs>
 
-export const ScansDeleteArgsSchema: z.ZodType<Prisma.ScansDeleteArgs> = z.object({
-  select: ScansSelectSchema.optional(),
-  include: ScansIncludeSchema.optional(),
-  where: ScansWhereUniqueInputSchema,
-}).strict() as z.ZodType<Prisma.ScansDeleteArgs>
+export const Electric_phenotypersDeleteArgsSchema: z.ZodType<Prisma.Electric_phenotypersDeleteArgs> = z.object({
+  select: Electric_phenotypersSelectSchema.optional(),
+  include: Electric_phenotypersIncludeSchema.optional(),
+  where: Electric_phenotypersWhereUniqueInputSchema,
+}).strict() as z.ZodType<Prisma.Electric_phenotypersDeleteArgs>
 
-export const ScansUpdateArgsSchema: z.ZodType<Prisma.ScansUpdateArgs> = z.object({
-  select: ScansSelectSchema.optional(),
-  include: ScansIncludeSchema.optional(),
-  data: z.union([ ScansUpdateInputSchema,ScansUncheckedUpdateInputSchema ]),
-  where: ScansWhereUniqueInputSchema,
-}).strict() as z.ZodType<Prisma.ScansUpdateArgs>
+export const Electric_phenotypersUpdateArgsSchema: z.ZodType<Prisma.Electric_phenotypersUpdateArgs> = z.object({
+  select: Electric_phenotypersSelectSchema.optional(),
+  include: Electric_phenotypersIncludeSchema.optional(),
+  data: z.union([ Electric_phenotypersUpdateInputSchema,Electric_phenotypersUncheckedUpdateInputSchema ]),
+  where: Electric_phenotypersWhereUniqueInputSchema,
+}).strict() as z.ZodType<Prisma.Electric_phenotypersUpdateArgs>
 
-export const ScansUpdateManyArgsSchema: z.ZodType<Prisma.ScansUpdateManyArgs> = z.object({
-  data: z.union([ ScansUpdateManyMutationInputSchema,ScansUncheckedUpdateManyInputSchema ]),
-  where: ScansWhereInputSchema.optional(),
-}).strict() as z.ZodType<Prisma.ScansUpdateManyArgs>
+export const Electric_phenotypersUpdateManyArgsSchema: z.ZodType<Prisma.Electric_phenotypersUpdateManyArgs> = z.object({
+  data: z.union([ Electric_phenotypersUpdateManyMutationInputSchema,Electric_phenotypersUncheckedUpdateManyInputSchema ]),
+  where: Electric_phenotypersWhereInputSchema.optional(),
+}).strict() as z.ZodType<Prisma.Electric_phenotypersUpdateManyArgs>
 
-export const ScansDeleteManyArgsSchema: z.ZodType<Prisma.ScansDeleteManyArgs> = z.object({
-  where: ScansWhereInputSchema.optional(),
-}).strict() as z.ZodType<Prisma.ScansDeleteManyArgs>
+export const Electric_phenotypersDeleteManyArgsSchema: z.ZodType<Prisma.Electric_phenotypersDeleteManyArgs> = z.object({
+  where: Electric_phenotypersWhereInputSchema.optional(),
+}).strict() as z.ZodType<Prisma.Electric_phenotypersDeleteManyArgs>
 
-interface ImagesGetPayload extends HKT {
-  readonly _A?: boolean | null | undefined | Prisma.ImagesArgs
-  readonly type: Prisma.ImagesGetPayload<this['_A']>
+interface Electric_cyl_imagesGetPayload extends HKT {
+  readonly _A?: boolean | null | undefined | Prisma.Electric_cyl_imagesArgs
+  readonly type: Prisma.Electric_cyl_imagesGetPayload<this['_A']>
 }
 
-interface PhenotypersGetPayload extends HKT {
-  readonly _A?: boolean | null | undefined | Prisma.PhenotypersArgs
-  readonly type: Prisma.PhenotypersGetPayload<this['_A']>
+interface Electric_cyl_scansGetPayload extends HKT {
+  readonly _A?: boolean | null | undefined | Prisma.Electric_cyl_scansArgs
+  readonly type: Prisma.Electric_cyl_scansGetPayload<this['_A']>
 }
 
-interface ScansGetPayload extends HKT {
-  readonly _A?: boolean | null | undefined | Prisma.ScansArgs
-  readonly type: Prisma.ScansGetPayload<this['_A']>
+interface Electric_phenotypersGetPayload extends HKT {
+  readonly _A?: boolean | null | undefined | Prisma.Electric_phenotypersArgs
+  readonly type: Prisma.Electric_phenotypersGetPayload<this['_A']>
 }
 
 export const tableSchemas = {
-  images: {
+  electric_cyl_images: {
     fields: new Map([
       [
         "id",
@@ -1938,75 +1938,33 @@ export const tableSchemas = {
       ]
     ]),
     relations: [
-      new Relation("scans", "scan_id", "id", "scans", "ImagesToScans", "one"),
+      new Relation("electric_cyl_scans", "scan_id", "id", "electric_cyl_scans", "Electric_cyl_imagesToElectric_cyl_scans", "one"),
     ],
-    modelSchema: (ImagesCreateInputSchema as any)
+    modelSchema: (Electric_cyl_imagesCreateInputSchema as any)
       .partial()
-      .or((ImagesUncheckedCreateInputSchema as any).partial()),
-    createSchema: ImagesCreateArgsSchema,
-    createManySchema: ImagesCreateManyArgsSchema,
-    findUniqueSchema: ImagesFindUniqueArgsSchema,
-    findSchema: ImagesFindFirstArgsSchema,
-    updateSchema: ImagesUpdateArgsSchema,
-    updateManySchema: ImagesUpdateManyArgsSchema,
-    upsertSchema: ImagesUpsertArgsSchema,
-    deleteSchema: ImagesDeleteArgsSchema,
-    deleteManySchema: ImagesDeleteManyArgsSchema
+      .or((Electric_cyl_imagesUncheckedCreateInputSchema as any).partial()),
+    createSchema: Electric_cyl_imagesCreateArgsSchema,
+    createManySchema: Electric_cyl_imagesCreateManyArgsSchema,
+    findUniqueSchema: Electric_cyl_imagesFindUniqueArgsSchema,
+    findSchema: Electric_cyl_imagesFindFirstArgsSchema,
+    updateSchema: Electric_cyl_imagesUpdateArgsSchema,
+    updateManySchema: Electric_cyl_imagesUpdateManyArgsSchema,
+    upsertSchema: Electric_cyl_imagesUpsertArgsSchema,
+    deleteSchema: Electric_cyl_imagesDeleteArgsSchema,
+    deleteManySchema: Electric_cyl_imagesDeleteManyArgsSchema
   } as TableSchema<
-    z.infer<typeof ImagesCreateInputSchema>,
-    Prisma.ImagesCreateArgs['data'],
-    Prisma.ImagesUpdateArgs['data'],
-    Prisma.ImagesFindFirstArgs['select'],
-    Prisma.ImagesFindFirstArgs['where'],
-    Prisma.ImagesFindUniqueArgs['where'],
-    Omit<Prisma.ImagesInclude, '_count'>,
-    Prisma.ImagesFindFirstArgs['orderBy'],
-    Prisma.ImagesScalarFieldEnum,
-    ImagesGetPayload
+    z.infer<typeof Electric_cyl_imagesCreateInputSchema>,
+    Prisma.Electric_cyl_imagesCreateArgs['data'],
+    Prisma.Electric_cyl_imagesUpdateArgs['data'],
+    Prisma.Electric_cyl_imagesFindFirstArgs['select'],
+    Prisma.Electric_cyl_imagesFindFirstArgs['where'],
+    Prisma.Electric_cyl_imagesFindUniqueArgs['where'],
+    Omit<Prisma.Electric_cyl_imagesInclude, '_count'>,
+    Prisma.Electric_cyl_imagesFindFirstArgs['orderBy'],
+    Prisma.Electric_cyl_imagesScalarFieldEnum,
+    Electric_cyl_imagesGetPayload
   >,
-  phenotypers: {
-    fields: new Map([
-      [
-        "id",
-        "UUID"
-      ],
-      [
-        "name",
-        "TEXT"
-      ],
-      [
-        "email",
-        "TEXT"
-      ]
-    ]),
-    relations: [
-      new Relation("scans", "", "", "scans", "PhenotypersToScans", "many"),
-    ],
-    modelSchema: (PhenotypersCreateInputSchema as any)
-      .partial()
-      .or((PhenotypersUncheckedCreateInputSchema as any).partial()),
-    createSchema: PhenotypersCreateArgsSchema,
-    createManySchema: PhenotypersCreateManyArgsSchema,
-    findUniqueSchema: PhenotypersFindUniqueArgsSchema,
-    findSchema: PhenotypersFindFirstArgsSchema,
-    updateSchema: PhenotypersUpdateArgsSchema,
-    updateManySchema: PhenotypersUpdateManyArgsSchema,
-    upsertSchema: PhenotypersUpsertArgsSchema,
-    deleteSchema: PhenotypersDeleteArgsSchema,
-    deleteManySchema: PhenotypersDeleteManyArgsSchema
-  } as TableSchema<
-    z.infer<typeof PhenotypersCreateInputSchema>,
-    Prisma.PhenotypersCreateArgs['data'],
-    Prisma.PhenotypersUpdateArgs['data'],
-    Prisma.PhenotypersFindFirstArgs['select'],
-    Prisma.PhenotypersFindFirstArgs['where'],
-    Prisma.PhenotypersFindUniqueArgs['where'],
-    Omit<Prisma.PhenotypersInclude, '_count'>,
-    Prisma.PhenotypersFindFirstArgs['orderBy'],
-    Prisma.PhenotypersScalarFieldEnum,
-    PhenotypersGetPayload
-  >,
-  scans: {
+  electric_cyl_scans: {
     fields: new Map([
       [
         "id",
@@ -2062,32 +2020,74 @@ export const tableSchemas = {
       ]
     ]),
     relations: [
-      new Relation("images", "", "", "images", "ImagesToScans", "many"),
-      new Relation("phenotypers", "phenotyper_id", "id", "phenotypers", "PhenotypersToScans", "one"),
+      new Relation("electric_cyl_images", "", "", "electric_cyl_images", "Electric_cyl_imagesToElectric_cyl_scans", "many"),
+      new Relation("electric_phenotypers", "phenotyper_id", "id", "electric_phenotypers", "Electric_cyl_scansToElectric_phenotypers", "one"),
     ],
-    modelSchema: (ScansCreateInputSchema as any)
+    modelSchema: (Electric_cyl_scansCreateInputSchema as any)
       .partial()
-      .or((ScansUncheckedCreateInputSchema as any).partial()),
-    createSchema: ScansCreateArgsSchema,
-    createManySchema: ScansCreateManyArgsSchema,
-    findUniqueSchema: ScansFindUniqueArgsSchema,
-    findSchema: ScansFindFirstArgsSchema,
-    updateSchema: ScansUpdateArgsSchema,
-    updateManySchema: ScansUpdateManyArgsSchema,
-    upsertSchema: ScansUpsertArgsSchema,
-    deleteSchema: ScansDeleteArgsSchema,
-    deleteManySchema: ScansDeleteManyArgsSchema
+      .or((Electric_cyl_scansUncheckedCreateInputSchema as any).partial()),
+    createSchema: Electric_cyl_scansCreateArgsSchema,
+    createManySchema: Electric_cyl_scansCreateManyArgsSchema,
+    findUniqueSchema: Electric_cyl_scansFindUniqueArgsSchema,
+    findSchema: Electric_cyl_scansFindFirstArgsSchema,
+    updateSchema: Electric_cyl_scansUpdateArgsSchema,
+    updateManySchema: Electric_cyl_scansUpdateManyArgsSchema,
+    upsertSchema: Electric_cyl_scansUpsertArgsSchema,
+    deleteSchema: Electric_cyl_scansDeleteArgsSchema,
+    deleteManySchema: Electric_cyl_scansDeleteManyArgsSchema
   } as TableSchema<
-    z.infer<typeof ScansCreateInputSchema>,
-    Prisma.ScansCreateArgs['data'],
-    Prisma.ScansUpdateArgs['data'],
-    Prisma.ScansFindFirstArgs['select'],
-    Prisma.ScansFindFirstArgs['where'],
-    Prisma.ScansFindUniqueArgs['where'],
-    Omit<Prisma.ScansInclude, '_count'>,
-    Prisma.ScansFindFirstArgs['orderBy'],
-    Prisma.ScansScalarFieldEnum,
-    ScansGetPayload
+    z.infer<typeof Electric_cyl_scansCreateInputSchema>,
+    Prisma.Electric_cyl_scansCreateArgs['data'],
+    Prisma.Electric_cyl_scansUpdateArgs['data'],
+    Prisma.Electric_cyl_scansFindFirstArgs['select'],
+    Prisma.Electric_cyl_scansFindFirstArgs['where'],
+    Prisma.Electric_cyl_scansFindUniqueArgs['where'],
+    Omit<Prisma.Electric_cyl_scansInclude, '_count'>,
+    Prisma.Electric_cyl_scansFindFirstArgs['orderBy'],
+    Prisma.Electric_cyl_scansScalarFieldEnum,
+    Electric_cyl_scansGetPayload
+  >,
+  electric_phenotypers: {
+    fields: new Map([
+      [
+        "id",
+        "UUID"
+      ],
+      [
+        "name",
+        "TEXT"
+      ],
+      [
+        "email",
+        "TEXT"
+      ]
+    ]),
+    relations: [
+      new Relation("electric_cyl_scans", "", "", "electric_cyl_scans", "Electric_cyl_scansToElectric_phenotypers", "many"),
+    ],
+    modelSchema: (Electric_phenotypersCreateInputSchema as any)
+      .partial()
+      .or((Electric_phenotypersUncheckedCreateInputSchema as any).partial()),
+    createSchema: Electric_phenotypersCreateArgsSchema,
+    createManySchema: Electric_phenotypersCreateManyArgsSchema,
+    findUniqueSchema: Electric_phenotypersFindUniqueArgsSchema,
+    findSchema: Electric_phenotypersFindFirstArgsSchema,
+    updateSchema: Electric_phenotypersUpdateArgsSchema,
+    updateManySchema: Electric_phenotypersUpdateManyArgsSchema,
+    upsertSchema: Electric_phenotypersUpsertArgsSchema,
+    deleteSchema: Electric_phenotypersDeleteArgsSchema,
+    deleteManySchema: Electric_phenotypersDeleteManyArgsSchema
+  } as TableSchema<
+    z.infer<typeof Electric_phenotypersCreateInputSchema>,
+    Prisma.Electric_phenotypersCreateArgs['data'],
+    Prisma.Electric_phenotypersUpdateArgs['data'],
+    Prisma.Electric_phenotypersFindFirstArgs['select'],
+    Prisma.Electric_phenotypersFindFirstArgs['where'],
+    Prisma.Electric_phenotypersFindUniqueArgs['where'],
+    Omit<Prisma.Electric_phenotypersInclude, '_count'>,
+    Prisma.Electric_phenotypersFindFirstArgs['orderBy'],
+    Prisma.Electric_phenotypersScalarFieldEnum,
+    Electric_phenotypersGetPayload
   >,
 }
 

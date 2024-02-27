@@ -13,10 +13,10 @@ type UnwrapTuple<Tuple extends readonly unknown[]> = {
 
 
 /**
- * Model Images
+ * Model Electric_cyl_images
  * 
  */
-export type Images = {
+export type Electric_cyl_images = {
   /**
    * @zod.string.uuid()
    */
@@ -36,23 +36,10 @@ export type Images = {
 }
 
 /**
- * Model Phenotypers
+ * Model Electric_cyl_scans
  * 
  */
-export type Phenotypers = {
-  /**
-   * @zod.string.uuid()
-   */
-  id: string
-  name: string | null
-  email: string | null
-}
-
-/**
- * Model Scans
- * 
- */
-export type Scans = {
+export type Electric_cyl_scans = {
   /**
    * @zod.string.uuid()
    */
@@ -95,6 +82,19 @@ export type Scans = {
   seconds_per_rot: number | null
 }
 
+/**
+ * Model Electric_phenotypers
+ * 
+ */
+export type Electric_phenotypers = {
+  /**
+   * @zod.string.uuid()
+   */
+  id: string
+  name: string | null
+  email: string | null
+}
+
 
 /**
  * ##  Prisma Client ʲˢ
@@ -103,8 +103,8 @@ export type Scans = {
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Images
- * const images = await prisma.images.findMany()
+ * // Fetch zero or more Electric_cyl_images
+ * const electric_cyl_images = await prisma.electric_cyl_images.findMany()
  * ```
  *
  * 
@@ -124,8 +124,8 @@ export class PrismaClient<
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more Images
-   * const images = await prisma.images.findMany()
+   * // Fetch zero or more Electric_cyl_images
+   * const electric_cyl_images = await prisma.electric_cyl_images.findMany()
    * ```
    *
    * 
@@ -214,34 +214,34 @@ export class PrismaClient<
   $transaction<R>(fn: (prisma: Prisma.TransactionClient) => Promise<R>, options?: {maxWait?: number, timeout?: number, isolationLevel?: Prisma.TransactionIsolationLevel}): Promise<R>;
 
       /**
-   * `prisma.images`: Exposes CRUD operations for the **Images** model.
+   * `prisma.electric_cyl_images`: Exposes CRUD operations for the **Electric_cyl_images** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Images
-    * const images = await prisma.images.findMany()
+    * // Fetch zero or more Electric_cyl_images
+    * const electric_cyl_images = await prisma.electric_cyl_images.findMany()
     * ```
     */
-  get images(): Prisma.ImagesDelegate<GlobalReject>;
+  get electric_cyl_images(): Prisma.Electric_cyl_imagesDelegate<GlobalReject>;
 
   /**
-   * `prisma.phenotypers`: Exposes CRUD operations for the **Phenotypers** model.
+   * `prisma.electric_cyl_scans`: Exposes CRUD operations for the **Electric_cyl_scans** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Phenotypers
-    * const phenotypers = await prisma.phenotypers.findMany()
+    * // Fetch zero or more Electric_cyl_scans
+    * const electric_cyl_scans = await prisma.electric_cyl_scans.findMany()
     * ```
     */
-  get phenotypers(): Prisma.PhenotypersDelegate<GlobalReject>;
+  get electric_cyl_scans(): Prisma.Electric_cyl_scansDelegate<GlobalReject>;
 
   /**
-   * `prisma.scans`: Exposes CRUD operations for the **Scans** model.
+   * `prisma.electric_phenotypers`: Exposes CRUD operations for the **Electric_phenotypers** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Scans
-    * const scans = await prisma.scans.findMany()
+    * // Fetch zero or more Electric_phenotypers
+    * const electric_phenotypers = await prisma.electric_phenotypers.findMany()
     * ```
     */
-  get scans(): Prisma.ScansDelegate<GlobalReject>;
+  get electric_phenotypers(): Prisma.Electric_phenotypersDelegate<GlobalReject>;
 }
 
 export namespace Prisma {
@@ -726,9 +726,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   }
 
   export const ModelName: {
-    Images: 'Images',
-    Phenotypers: 'Phenotypers',
-    Scans: 'Scans'
+    Electric_cyl_images: 'Electric_cyl_images',
+    Electric_cyl_scans: 'Electric_cyl_scans',
+    Electric_phenotypers: 'Electric_phenotypers'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -894,30 +894,30 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
 
   /**
-   * Count Type PhenotypersCountOutputType
+   * Count Type Electric_cyl_scansCountOutputType
    */
 
 
-  export type PhenotypersCountOutputType = {
-    scans: number
+  export type Electric_cyl_scansCountOutputType = {
+    electric_cyl_images: number
   }
 
-  export type PhenotypersCountOutputTypeSelect = {
-    scans?: boolean | PhenotypersCountOutputTypeCountScansArgs
+  export type Electric_cyl_scansCountOutputTypeSelect = {
+    electric_cyl_images?: boolean | Electric_cyl_scansCountOutputTypeCountElectric_cyl_imagesArgs
   }
 
-  export type PhenotypersCountOutputTypeGetPayload<S extends boolean | null | undefined | PhenotypersCountOutputTypeArgs> =
+  export type Electric_cyl_scansCountOutputTypeGetPayload<S extends boolean | null | undefined | Electric_cyl_scansCountOutputTypeArgs> =
     S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
-    S extends true ? PhenotypersCountOutputType :
+    S extends true ? Electric_cyl_scansCountOutputType :
     S extends undefined ? never :
-    S extends { include: any } & (PhenotypersCountOutputTypeArgs)
-    ? PhenotypersCountOutputType 
-    : S extends { select: any } & (PhenotypersCountOutputTypeArgs)
+    S extends { include: any } & (Electric_cyl_scansCountOutputTypeArgs)
+    ? Electric_cyl_scansCountOutputType 
+    : S extends { select: any } & (Electric_cyl_scansCountOutputTypeArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-    P extends keyof PhenotypersCountOutputType ? PhenotypersCountOutputType[P] : never
+    P extends keyof Electric_cyl_scansCountOutputType ? Electric_cyl_scansCountOutputType[P] : never
   } 
-      : PhenotypersCountOutputType
+      : Electric_cyl_scansCountOutputType
 
 
 
@@ -925,51 +925,51 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   // Custom InputTypes
 
   /**
-   * PhenotypersCountOutputType without action
+   * Electric_cyl_scansCountOutputType without action
    */
-  export type PhenotypersCountOutputTypeArgs = {
+  export type Electric_cyl_scansCountOutputTypeArgs = {
     /**
-     * Select specific fields to fetch from the PhenotypersCountOutputType
+     * Select specific fields to fetch from the Electric_cyl_scansCountOutputType
      * 
     **/
-    select?: PhenotypersCountOutputTypeSelect | null
+    select?: Electric_cyl_scansCountOutputTypeSelect | null
   }
 
 
   /**
-   * PhenotypersCountOutputType without action
+   * Electric_cyl_scansCountOutputType without action
    */
-  export type PhenotypersCountOutputTypeCountScansArgs = {
-    where?: ScansWhereInput
+  export type Electric_cyl_scansCountOutputTypeCountElectric_cyl_imagesArgs = {
+    where?: Electric_cyl_imagesWhereInput
   }
 
 
 
   /**
-   * Count Type ScansCountOutputType
+   * Count Type Electric_phenotypersCountOutputType
    */
 
 
-  export type ScansCountOutputType = {
-    images: number
+  export type Electric_phenotypersCountOutputType = {
+    electric_cyl_scans: number
   }
 
-  export type ScansCountOutputTypeSelect = {
-    images?: boolean | ScansCountOutputTypeCountImagesArgs
+  export type Electric_phenotypersCountOutputTypeSelect = {
+    electric_cyl_scans?: boolean | Electric_phenotypersCountOutputTypeCountElectric_cyl_scansArgs
   }
 
-  export type ScansCountOutputTypeGetPayload<S extends boolean | null | undefined | ScansCountOutputTypeArgs> =
+  export type Electric_phenotypersCountOutputTypeGetPayload<S extends boolean | null | undefined | Electric_phenotypersCountOutputTypeArgs> =
     S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
-    S extends true ? ScansCountOutputType :
+    S extends true ? Electric_phenotypersCountOutputType :
     S extends undefined ? never :
-    S extends { include: any } & (ScansCountOutputTypeArgs)
-    ? ScansCountOutputType 
-    : S extends { select: any } & (ScansCountOutputTypeArgs)
+    S extends { include: any } & (Electric_phenotypersCountOutputTypeArgs)
+    ? Electric_phenotypersCountOutputType 
+    : S extends { select: any } & (Electric_phenotypersCountOutputTypeArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-    P extends keyof ScansCountOutputType ? ScansCountOutputType[P] : never
+    P extends keyof Electric_phenotypersCountOutputType ? Electric_phenotypersCountOutputType[P] : never
   } 
-      : ScansCountOutputType
+      : Electric_phenotypersCountOutputType
 
 
 
@@ -977,22 +977,22 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   // Custom InputTypes
 
   /**
-   * ScansCountOutputType without action
+   * Electric_phenotypersCountOutputType without action
    */
-  export type ScansCountOutputTypeArgs = {
+  export type Electric_phenotypersCountOutputTypeArgs = {
     /**
-     * Select specific fields to fetch from the ScansCountOutputType
+     * Select specific fields to fetch from the Electric_phenotypersCountOutputType
      * 
     **/
-    select?: ScansCountOutputTypeSelect | null
+    select?: Electric_phenotypersCountOutputTypeSelect | null
   }
 
 
   /**
-   * ScansCountOutputType without action
+   * Electric_phenotypersCountOutputType without action
    */
-  export type ScansCountOutputTypeCountImagesArgs = {
-    where?: ImagesWhereInput
+  export type Electric_phenotypersCountOutputTypeCountElectric_cyl_scansArgs = {
+    where?: Electric_cyl_scansWhereInput
   }
 
 
@@ -1002,27 +1002,27 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
    */
 
   /**
-   * Model Images
+   * Model Electric_cyl_images
    */
 
 
-  export type AggregateImages = {
-    _count: ImagesCountAggregateOutputType | null
-    _avg: ImagesAvgAggregateOutputType | null
-    _sum: ImagesSumAggregateOutputType | null
-    _min: ImagesMinAggregateOutputType | null
-    _max: ImagesMaxAggregateOutputType | null
+  export type AggregateElectric_cyl_images = {
+    _count: Electric_cyl_imagesCountAggregateOutputType | null
+    _avg: Electric_cyl_imagesAvgAggregateOutputType | null
+    _sum: Electric_cyl_imagesSumAggregateOutputType | null
+    _min: Electric_cyl_imagesMinAggregateOutputType | null
+    _max: Electric_cyl_imagesMaxAggregateOutputType | null
   }
 
-  export type ImagesAvgAggregateOutputType = {
+  export type Electric_cyl_imagesAvgAggregateOutputType = {
     frame_number: number | null
   }
 
-  export type ImagesSumAggregateOutputType = {
+  export type Electric_cyl_imagesSumAggregateOutputType = {
     frame_number: number | null
   }
 
-  export type ImagesMinAggregateOutputType = {
+  export type Electric_cyl_imagesMinAggregateOutputType = {
     id: string | null
     scan_id: string | null
     frame_number: number | null
@@ -1032,7 +1032,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     supabase_object_path: string | null
   }
 
-  export type ImagesMaxAggregateOutputType = {
+  export type Electric_cyl_imagesMaxAggregateOutputType = {
     id: string | null
     scan_id: string | null
     frame_number: number | null
@@ -1042,7 +1042,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     supabase_object_path: string | null
   }
 
-  export type ImagesCountAggregateOutputType = {
+  export type Electric_cyl_imagesCountAggregateOutputType = {
     id: number
     scan_id: number
     frame_number: number
@@ -1054,15 +1054,15 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   }
 
 
-  export type ImagesAvgAggregateInputType = {
+  export type Electric_cyl_imagesAvgAggregateInputType = {
     frame_number?: true
   }
 
-  export type ImagesSumAggregateInputType = {
+  export type Electric_cyl_imagesSumAggregateInputType = {
     frame_number?: true
   }
 
-  export type ImagesMinAggregateInputType = {
+  export type Electric_cyl_imagesMinAggregateInputType = {
     id?: true
     scan_id?: true
     frame_number?: true
@@ -1072,7 +1072,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     supabase_object_path?: true
   }
 
-  export type ImagesMaxAggregateInputType = {
+  export type Electric_cyl_imagesMaxAggregateInputType = {
     id?: true
     scan_id?: true
     frame_number?: true
@@ -1082,7 +1082,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     supabase_object_path?: true
   }
 
-  export type ImagesCountAggregateInputType = {
+  export type Electric_cyl_imagesCountAggregateInputType = {
     id?: true
     scan_id?: true
     frame_number?: true
@@ -1093,99 +1093,99 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     _all?: true
   }
 
-  export type ImagesAggregateArgs = {
+  export type Electric_cyl_imagesAggregateArgs = {
     /**
-     * Filter which Images to aggregate.
+     * Filter which Electric_cyl_images to aggregate.
      * 
     **/
-    where?: ImagesWhereInput
+    where?: Electric_cyl_imagesWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Images to fetch.
+     * Determine the order of Electric_cyl_images to fetch.
      * 
     **/
-    orderBy?: Enumerable<ImagesOrderByWithRelationInput>
+    orderBy?: Enumerable<Electric_cyl_imagesOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      * 
     **/
-    cursor?: ImagesWhereUniqueInput
+    cursor?: Electric_cyl_imagesWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Images from the position of the cursor.
+     * Take `±n` Electric_cyl_images from the position of the cursor.
      * 
     **/
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Images.
+     * Skip the first `n` Electric_cyl_images.
      * 
     **/
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Images
+     * Count returned Electric_cyl_images
     **/
-    _count?: true | ImagesCountAggregateInputType
+    _count?: true | Electric_cyl_imagesCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: ImagesAvgAggregateInputType
+    _avg?: Electric_cyl_imagesAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: ImagesSumAggregateInputType
+    _sum?: Electric_cyl_imagesSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: ImagesMinAggregateInputType
+    _min?: Electric_cyl_imagesMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: ImagesMaxAggregateInputType
+    _max?: Electric_cyl_imagesMaxAggregateInputType
   }
 
-  export type GetImagesAggregateType<T extends ImagesAggregateArgs> = {
-        [P in keyof T & keyof AggregateImages]: P extends '_count' | 'count'
+  export type GetElectric_cyl_imagesAggregateType<T extends Electric_cyl_imagesAggregateArgs> = {
+        [P in keyof T & keyof AggregateElectric_cyl_images]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateImages[P]>
-      : GetScalarType<T[P], AggregateImages[P]>
+        : GetScalarType<T[P], AggregateElectric_cyl_images[P]>
+      : GetScalarType<T[P], AggregateElectric_cyl_images[P]>
   }
 
 
 
 
-  export type ImagesGroupByArgs = {
-    where?: ImagesWhereInput
-    orderBy?: Enumerable<ImagesOrderByWithAggregationInput>
-    by: Array<ImagesScalarFieldEnum>
-    having?: ImagesScalarWhereWithAggregatesInput
+  export type Electric_cyl_imagesGroupByArgs = {
+    where?: Electric_cyl_imagesWhereInput
+    orderBy?: Enumerable<Electric_cyl_imagesOrderByWithAggregationInput>
+    by: Array<Electric_cyl_imagesScalarFieldEnum>
+    having?: Electric_cyl_imagesScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: ImagesCountAggregateInputType | true
-    _avg?: ImagesAvgAggregateInputType
-    _sum?: ImagesSumAggregateInputType
-    _min?: ImagesMinAggregateInputType
-    _max?: ImagesMaxAggregateInputType
+    _count?: Electric_cyl_imagesCountAggregateInputType | true
+    _avg?: Electric_cyl_imagesAvgAggregateInputType
+    _sum?: Electric_cyl_imagesSumAggregateInputType
+    _min?: Electric_cyl_imagesMinAggregateInputType
+    _max?: Electric_cyl_imagesMaxAggregateInputType
   }
 
 
-  export type ImagesGroupByOutputType = {
+  export type Electric_cyl_imagesGroupByOutputType = {
     id: string
     scan_id: string | null
     frame_number: number | null
@@ -1193,28 +1193,28 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     url: string | null
     status: string | null
     supabase_object_path: string | null
-    _count: ImagesCountAggregateOutputType | null
-    _avg: ImagesAvgAggregateOutputType | null
-    _sum: ImagesSumAggregateOutputType | null
-    _min: ImagesMinAggregateOutputType | null
-    _max: ImagesMaxAggregateOutputType | null
+    _count: Electric_cyl_imagesCountAggregateOutputType | null
+    _avg: Electric_cyl_imagesAvgAggregateOutputType | null
+    _sum: Electric_cyl_imagesSumAggregateOutputType | null
+    _min: Electric_cyl_imagesMinAggregateOutputType | null
+    _max: Electric_cyl_imagesMaxAggregateOutputType | null
   }
 
-  type GetImagesGroupByPayload<T extends ImagesGroupByArgs> = PrismaPromise<
+  type GetElectric_cyl_imagesGroupByPayload<T extends Electric_cyl_imagesGroupByArgs> = PrismaPromise<
     Array<
-      PickArray<ImagesGroupByOutputType, T['by']> &
+      PickArray<Electric_cyl_imagesGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof ImagesGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof Electric_cyl_imagesGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], ImagesGroupByOutputType[P]>
-            : GetScalarType<T[P], ImagesGroupByOutputType[P]>
+              : GetScalarType<T[P], Electric_cyl_imagesGroupByOutputType[P]>
+            : GetScalarType<T[P], Electric_cyl_imagesGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type ImagesSelect = {
+  export type Electric_cyl_imagesSelect = {
     id?: boolean
     scan_id?: boolean
     frame_number?: boolean
@@ -1222,178 +1222,178 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     url?: boolean
     status?: boolean
     supabase_object_path?: boolean
-    scans?: boolean | Images$scansArgs
+    electric_cyl_scans?: boolean | Electric_cyl_images$electric_cyl_scansArgs
   }
 
 
-  export type ImagesInclude = {
-    scans?: boolean | Images$scansArgs
+  export type Electric_cyl_imagesInclude = {
+    electric_cyl_scans?: boolean | Electric_cyl_images$electric_cyl_scansArgs
   } 
 
-  export type ImagesGetPayload<S extends boolean | null | undefined | ImagesArgs> =
+  export type Electric_cyl_imagesGetPayload<S extends boolean | null | undefined | Electric_cyl_imagesArgs> =
     S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
-    S extends true ? Images :
+    S extends true ? Electric_cyl_images :
     S extends undefined ? never :
-    S extends { include: any } & (ImagesArgs | ImagesFindManyArgs)
-    ? Images  & {
+    S extends { include: any } & (Electric_cyl_imagesArgs | Electric_cyl_imagesFindManyArgs)
+    ? Electric_cyl_images  & {
     [P in TruthyKeys<S['include']>]:
-        P extends 'scans' ? ScansGetPayload<S['include'][P]> | null :  never
+        P extends 'electric_cyl_scans' ? Electric_cyl_scansGetPayload<S['include'][P]> | null :  never
   } 
-    : S extends { select: any } & (ImagesArgs | ImagesFindManyArgs)
+    : S extends { select: any } & (Electric_cyl_imagesArgs | Electric_cyl_imagesFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-        P extends 'scans' ? ScansGetPayload<S['select'][P]> | null :  P extends keyof Images ? Images[P] : never
+        P extends 'electric_cyl_scans' ? Electric_cyl_scansGetPayload<S['select'][P]> | null :  P extends keyof Electric_cyl_images ? Electric_cyl_images[P] : never
   } 
-      : Images
+      : Electric_cyl_images
 
 
-  type ImagesCountArgs = Merge<
-    Omit<ImagesFindManyArgs, 'select' | 'include'> & {
-      select?: ImagesCountAggregateInputType | true
+  type Electric_cyl_imagesCountArgs = Merge<
+    Omit<Electric_cyl_imagesFindManyArgs, 'select' | 'include'> & {
+      select?: Electric_cyl_imagesCountAggregateInputType | true
     }
   >
 
-  export interface ImagesDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+  export interface Electric_cyl_imagesDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
     /**
-     * Find zero or one Images that matches the filter.
-     * @param {ImagesFindUniqueArgs} args - Arguments to find a Images
+     * Find zero or one Electric_cyl_images that matches the filter.
+     * @param {Electric_cyl_imagesFindUniqueArgs} args - Arguments to find a Electric_cyl_images
      * @example
-     * // Get one Images
-     * const images = await prisma.images.findUnique({
+     * // Get one Electric_cyl_images
+     * const electric_cyl_images = await prisma.electric_cyl_images.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findUnique<T extends ImagesFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args: SelectSubset<T, ImagesFindUniqueArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Images'> extends True ? Prisma__ImagesClient<ImagesGetPayload<T>> : Prisma__ImagesClient<ImagesGetPayload<T> | null, null>
+    findUnique<T extends Electric_cyl_imagesFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, Electric_cyl_imagesFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Electric_cyl_images'> extends True ? Prisma__Electric_cyl_imagesClient<Electric_cyl_imagesGetPayload<T>> : Prisma__Electric_cyl_imagesClient<Electric_cyl_imagesGetPayload<T> | null, null>
 
     /**
-     * Find one Images that matches the filter or throw an error  with `error.code='P2025'` 
+     * Find one Electric_cyl_images that matches the filter or throw an error  with `error.code='P2025'` 
      *     if no matches were found.
-     * @param {ImagesFindUniqueOrThrowArgs} args - Arguments to find a Images
+     * @param {Electric_cyl_imagesFindUniqueOrThrowArgs} args - Arguments to find a Electric_cyl_images
      * @example
-     * // Get one Images
-     * const images = await prisma.images.findUniqueOrThrow({
+     * // Get one Electric_cyl_images
+     * const electric_cyl_images = await prisma.electric_cyl_images.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findUniqueOrThrow<T extends ImagesFindUniqueOrThrowArgs>(
-      args?: SelectSubset<T, ImagesFindUniqueOrThrowArgs>
-    ): Prisma__ImagesClient<ImagesGetPayload<T>>
+    findUniqueOrThrow<T extends Electric_cyl_imagesFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, Electric_cyl_imagesFindUniqueOrThrowArgs>
+    ): Prisma__Electric_cyl_imagesClient<Electric_cyl_imagesGetPayload<T>>
 
     /**
-     * Find the first Images that matches the filter.
+     * Find the first Electric_cyl_images that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ImagesFindFirstArgs} args - Arguments to find a Images
+     * @param {Electric_cyl_imagesFindFirstArgs} args - Arguments to find a Electric_cyl_images
      * @example
-     * // Get one Images
-     * const images = await prisma.images.findFirst({
+     * // Get one Electric_cyl_images
+     * const electric_cyl_images = await prisma.electric_cyl_images.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findFirst<T extends ImagesFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args?: SelectSubset<T, ImagesFindFirstArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Images'> extends True ? Prisma__ImagesClient<ImagesGetPayload<T>> : Prisma__ImagesClient<ImagesGetPayload<T> | null, null>
+    findFirst<T extends Electric_cyl_imagesFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, Electric_cyl_imagesFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Electric_cyl_images'> extends True ? Prisma__Electric_cyl_imagesClient<Electric_cyl_imagesGetPayload<T>> : Prisma__Electric_cyl_imagesClient<Electric_cyl_imagesGetPayload<T> | null, null>
 
     /**
-     * Find the first Images that matches the filter or
+     * Find the first Electric_cyl_images that matches the filter or
      * throw `NotFoundError` if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ImagesFindFirstOrThrowArgs} args - Arguments to find a Images
+     * @param {Electric_cyl_imagesFindFirstOrThrowArgs} args - Arguments to find a Electric_cyl_images
      * @example
-     * // Get one Images
-     * const images = await prisma.images.findFirstOrThrow({
+     * // Get one Electric_cyl_images
+     * const electric_cyl_images = await prisma.electric_cyl_images.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findFirstOrThrow<T extends ImagesFindFirstOrThrowArgs>(
-      args?: SelectSubset<T, ImagesFindFirstOrThrowArgs>
-    ): Prisma__ImagesClient<ImagesGetPayload<T>>
+    findFirstOrThrow<T extends Electric_cyl_imagesFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, Electric_cyl_imagesFindFirstOrThrowArgs>
+    ): Prisma__Electric_cyl_imagesClient<Electric_cyl_imagesGetPayload<T>>
 
     /**
-     * Find zero or more Images that matches the filter.
+     * Find zero or more Electric_cyl_images that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ImagesFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @param {Electric_cyl_imagesFindManyArgs=} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Images
-     * const images = await prisma.images.findMany()
+     * // Get all Electric_cyl_images
+     * const electric_cyl_images = await prisma.electric_cyl_images.findMany()
      * 
-     * // Get first 10 Images
-     * const images = await prisma.images.findMany({ take: 10 })
+     * // Get first 10 Electric_cyl_images
+     * const electric_cyl_images = await prisma.electric_cyl_images.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const imagesWithIdOnly = await prisma.images.findMany({ select: { id: true } })
+     * const electric_cyl_imagesWithIdOnly = await prisma.electric_cyl_images.findMany({ select: { id: true } })
      * 
     **/
-    findMany<T extends ImagesFindManyArgs>(
-      args?: SelectSubset<T, ImagesFindManyArgs>
-    ): PrismaPromise<Array<ImagesGetPayload<T>>>
+    findMany<T extends Electric_cyl_imagesFindManyArgs>(
+      args?: SelectSubset<T, Electric_cyl_imagesFindManyArgs>
+    ): PrismaPromise<Array<Electric_cyl_imagesGetPayload<T>>>
 
     /**
-     * Create a Images.
-     * @param {ImagesCreateArgs} args - Arguments to create a Images.
+     * Create a Electric_cyl_images.
+     * @param {Electric_cyl_imagesCreateArgs} args - Arguments to create a Electric_cyl_images.
      * @example
-     * // Create one Images
-     * const Images = await prisma.images.create({
+     * // Create one Electric_cyl_images
+     * const Electric_cyl_images = await prisma.electric_cyl_images.create({
      *   data: {
-     *     // ... data to create a Images
+     *     // ... data to create a Electric_cyl_images
      *   }
      * })
      * 
     **/
-    create<T extends ImagesCreateArgs>(
-      args: SelectSubset<T, ImagesCreateArgs>
-    ): Prisma__ImagesClient<ImagesGetPayload<T>>
+    create<T extends Electric_cyl_imagesCreateArgs>(
+      args: SelectSubset<T, Electric_cyl_imagesCreateArgs>
+    ): Prisma__Electric_cyl_imagesClient<Electric_cyl_imagesGetPayload<T>>
 
     /**
-     * Create many Images.
-     *     @param {ImagesCreateManyArgs} args - Arguments to create many Images.
+     * Create many Electric_cyl_images.
+     *     @param {Electric_cyl_imagesCreateManyArgs} args - Arguments to create many Electric_cyl_images.
      *     @example
-     *     // Create many Images
-     *     const images = await prisma.images.createMany({
+     *     // Create many Electric_cyl_images
+     *     const electric_cyl_images = await prisma.electric_cyl_images.createMany({
      *       data: {
      *         // ... provide data here
      *       }
      *     })
      *     
     **/
-    createMany<T extends ImagesCreateManyArgs>(
-      args?: SelectSubset<T, ImagesCreateManyArgs>
+    createMany<T extends Electric_cyl_imagesCreateManyArgs>(
+      args?: SelectSubset<T, Electric_cyl_imagesCreateManyArgs>
     ): PrismaPromise<BatchPayload>
 
     /**
-     * Delete a Images.
-     * @param {ImagesDeleteArgs} args - Arguments to delete one Images.
+     * Delete a Electric_cyl_images.
+     * @param {Electric_cyl_imagesDeleteArgs} args - Arguments to delete one Electric_cyl_images.
      * @example
-     * // Delete one Images
-     * const Images = await prisma.images.delete({
+     * // Delete one Electric_cyl_images
+     * const Electric_cyl_images = await prisma.electric_cyl_images.delete({
      *   where: {
-     *     // ... filter to delete one Images
+     *     // ... filter to delete one Electric_cyl_images
      *   }
      * })
      * 
     **/
-    delete<T extends ImagesDeleteArgs>(
-      args: SelectSubset<T, ImagesDeleteArgs>
-    ): Prisma__ImagesClient<ImagesGetPayload<T>>
+    delete<T extends Electric_cyl_imagesDeleteArgs>(
+      args: SelectSubset<T, Electric_cyl_imagesDeleteArgs>
+    ): Prisma__Electric_cyl_imagesClient<Electric_cyl_imagesGetPayload<T>>
 
     /**
-     * Update one Images.
-     * @param {ImagesUpdateArgs} args - Arguments to update one Images.
+     * Update one Electric_cyl_images.
+     * @param {Electric_cyl_imagesUpdateArgs} args - Arguments to update one Electric_cyl_images.
      * @example
-     * // Update one Images
-     * const images = await prisma.images.update({
+     * // Update one Electric_cyl_images
+     * const electric_cyl_images = await prisma.electric_cyl_images.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -1403,34 +1403,34 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
      * })
      * 
     **/
-    update<T extends ImagesUpdateArgs>(
-      args: SelectSubset<T, ImagesUpdateArgs>
-    ): Prisma__ImagesClient<ImagesGetPayload<T>>
+    update<T extends Electric_cyl_imagesUpdateArgs>(
+      args: SelectSubset<T, Electric_cyl_imagesUpdateArgs>
+    ): Prisma__Electric_cyl_imagesClient<Electric_cyl_imagesGetPayload<T>>
 
     /**
-     * Delete zero or more Images.
-     * @param {ImagesDeleteManyArgs} args - Arguments to filter Images to delete.
+     * Delete zero or more Electric_cyl_images.
+     * @param {Electric_cyl_imagesDeleteManyArgs} args - Arguments to filter Electric_cyl_images to delete.
      * @example
-     * // Delete a few Images
-     * const { count } = await prisma.images.deleteMany({
+     * // Delete a few Electric_cyl_images
+     * const { count } = await prisma.electric_cyl_images.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
     **/
-    deleteMany<T extends ImagesDeleteManyArgs>(
-      args?: SelectSubset<T, ImagesDeleteManyArgs>
+    deleteMany<T extends Electric_cyl_imagesDeleteManyArgs>(
+      args?: SelectSubset<T, Electric_cyl_imagesDeleteManyArgs>
     ): PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Images.
+     * Update zero or more Electric_cyl_images.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ImagesUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {Electric_cyl_imagesUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Images
-     * const images = await prisma.images.updateMany({
+     * // Update many Electric_cyl_images
+     * const electric_cyl_images = await prisma.electric_cyl_images.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -1440,59 +1440,59 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
      * })
      * 
     **/
-    updateMany<T extends ImagesUpdateManyArgs>(
-      args: SelectSubset<T, ImagesUpdateManyArgs>
+    updateMany<T extends Electric_cyl_imagesUpdateManyArgs>(
+      args: SelectSubset<T, Electric_cyl_imagesUpdateManyArgs>
     ): PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one Images.
-     * @param {ImagesUpsertArgs} args - Arguments to update or create a Images.
+     * Create or update one Electric_cyl_images.
+     * @param {Electric_cyl_imagesUpsertArgs} args - Arguments to update or create a Electric_cyl_images.
      * @example
-     * // Update or create a Images
-     * const images = await prisma.images.upsert({
+     * // Update or create a Electric_cyl_images
+     * const electric_cyl_images = await prisma.electric_cyl_images.upsert({
      *   create: {
-     *     // ... data to create a Images
+     *     // ... data to create a Electric_cyl_images
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Images we want to update
+     *     // ... the filter for the Electric_cyl_images we want to update
      *   }
      * })
     **/
-    upsert<T extends ImagesUpsertArgs>(
-      args: SelectSubset<T, ImagesUpsertArgs>
-    ): Prisma__ImagesClient<ImagesGetPayload<T>>
+    upsert<T extends Electric_cyl_imagesUpsertArgs>(
+      args: SelectSubset<T, Electric_cyl_imagesUpsertArgs>
+    ): Prisma__Electric_cyl_imagesClient<Electric_cyl_imagesGetPayload<T>>
 
     /**
-     * Count the number of Images.
+     * Count the number of Electric_cyl_images.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ImagesCountArgs} args - Arguments to filter Images to count.
+     * @param {Electric_cyl_imagesCountArgs} args - Arguments to filter Electric_cyl_images to count.
      * @example
-     * // Count the number of Images
-     * const count = await prisma.images.count({
+     * // Count the number of Electric_cyl_images
+     * const count = await prisma.electric_cyl_images.count({
      *   where: {
-     *     // ... the filter for the Images we want to count
+     *     // ... the filter for the Electric_cyl_images we want to count
      *   }
      * })
     **/
-    count<T extends ImagesCountArgs>(
-      args?: Subset<T, ImagesCountArgs>,
+    count<T extends Electric_cyl_imagesCountArgs>(
+      args?: Subset<T, Electric_cyl_imagesCountArgs>,
     ): PrismaPromise<
       T extends _Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], ImagesCountAggregateOutputType>
+          : GetScalarType<T['select'], Electric_cyl_imagesCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Images.
+     * Allows you to perform aggregations operations on a Electric_cyl_images.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ImagesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {Electric_cyl_imagesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -1512,13 +1512,13 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
      *   take: 10,
      * })
     **/
-    aggregate<T extends ImagesAggregateArgs>(args: Subset<T, ImagesAggregateArgs>): PrismaPromise<GetImagesAggregateType<T>>
+    aggregate<T extends Electric_cyl_imagesAggregateArgs>(args: Subset<T, Electric_cyl_imagesAggregateArgs>): PrismaPromise<GetElectric_cyl_imagesAggregateType<T>>
 
     /**
-     * Group by Images.
+     * Group by Electric_cyl_images.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ImagesGroupByArgs} args - Group by arguments.
+     * @param {Electric_cyl_imagesGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -1533,14 +1533,14 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
      * 
     **/
     groupBy<
-      T extends ImagesGroupByArgs,
+      T extends Electric_cyl_imagesGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ImagesGroupByArgs['orderBy'] }
-        : { orderBy?: ImagesGroupByArgs['orderBy'] },
+        ? { orderBy: Electric_cyl_imagesGroupByArgs['orderBy'] }
+        : { orderBy?: Electric_cyl_imagesGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends TupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -1589,17 +1589,17 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, ImagesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetImagesGroupByPayload<T> : PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, Electric_cyl_imagesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetElectric_cyl_imagesGroupByPayload<T> : PrismaPromise<InputErrors>
 
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Images.
+   * The delegate class that acts as a "Promise-like" for Electric_cyl_images.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export class Prisma__ImagesClient<T, Null = never> implements PrismaPromise<T> {
+  export class Prisma__Electric_cyl_imagesClient<T, Null = never> implements PrismaPromise<T> {
     [prisma]: true;
     private readonly _dmmf;
     private readonly _fetcher;
@@ -1616,7 +1616,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
     readonly [Symbol.toStringTag]: 'PrismaClientPromise';
 
-    scans<T extends Images$scansArgs= {}>(args?: Subset<T, Images$scansArgs>): Prisma__ScansClient<ScansGetPayload<T> | Null>;
+    electric_cyl_scans<T extends Electric_cyl_images$electric_cyl_scansArgs= {}>(args?: Subset<T, Electric_cyl_images$electric_cyl_scansArgs>): Prisma__Electric_cyl_scansClient<Electric_cyl_scansGetPayload<T> | Null>;
 
     private get _document();
     /**
@@ -1646,30 +1646,30 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   // Custom InputTypes
 
   /**
-   * Images base type for findUnique actions
+   * Electric_cyl_images base type for findUnique actions
    */
-  export type ImagesFindUniqueArgsBase = {
+  export type Electric_cyl_imagesFindUniqueArgsBase = {
     /**
-     * Select specific fields to fetch from the Images
+     * Select specific fields to fetch from the Electric_cyl_images
      * 
     **/
-    select?: ImagesSelect | null
+    select?: Electric_cyl_imagesSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: ImagesInclude | null
+    include?: Electric_cyl_imagesInclude | null
     /**
-     * Filter, which Images to fetch.
+     * Filter, which Electric_cyl_images to fetch.
      * 
     **/
-    where: ImagesWhereUniqueInput
+    where: Electric_cyl_imagesWhereUniqueInput
   }
 
   /**
-   * Images findUnique
+   * Electric_cyl_images findUnique
    */
-  export interface ImagesFindUniqueArgs extends ImagesFindUniqueArgsBase {
+  export interface Electric_cyl_imagesFindUniqueArgs extends Electric_cyl_imagesFindUniqueArgsBase {
    /**
     * Throw an Error if query returns no results
     * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
@@ -1679,87 +1679,87 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
       
 
   /**
-   * Images findUniqueOrThrow
+   * Electric_cyl_images findUniqueOrThrow
    */
-  export type ImagesFindUniqueOrThrowArgs = {
+  export type Electric_cyl_imagesFindUniqueOrThrowArgs = {
     /**
-     * Select specific fields to fetch from the Images
+     * Select specific fields to fetch from the Electric_cyl_images
      * 
     **/
-    select?: ImagesSelect | null
+    select?: Electric_cyl_imagesSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: ImagesInclude | null
+    include?: Electric_cyl_imagesInclude | null
     /**
-     * Filter, which Images to fetch.
+     * Filter, which Electric_cyl_images to fetch.
      * 
     **/
-    where: ImagesWhereUniqueInput
+    where: Electric_cyl_imagesWhereUniqueInput
   }
 
 
   /**
-   * Images base type for findFirst actions
+   * Electric_cyl_images base type for findFirst actions
    */
-  export type ImagesFindFirstArgsBase = {
+  export type Electric_cyl_imagesFindFirstArgsBase = {
     /**
-     * Select specific fields to fetch from the Images
+     * Select specific fields to fetch from the Electric_cyl_images
      * 
     **/
-    select?: ImagesSelect | null
+    select?: Electric_cyl_imagesSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: ImagesInclude | null
+    include?: Electric_cyl_imagesInclude | null
     /**
-     * Filter, which Images to fetch.
+     * Filter, which Electric_cyl_images to fetch.
      * 
     **/
-    where?: ImagesWhereInput
+    where?: Electric_cyl_imagesWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Images to fetch.
+     * Determine the order of Electric_cyl_images to fetch.
      * 
     **/
-    orderBy?: Enumerable<ImagesOrderByWithRelationInput>
+    orderBy?: Enumerable<Electric_cyl_imagesOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Images.
+     * Sets the position for searching for Electric_cyl_images.
      * 
     **/
-    cursor?: ImagesWhereUniqueInput
+    cursor?: Electric_cyl_imagesWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Images from the position of the cursor.
+     * Take `±n` Electric_cyl_images from the position of the cursor.
      * 
     **/
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Images.
+     * Skip the first `n` Electric_cyl_images.
      * 
     **/
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Images.
+     * Filter by unique combinations of Electric_cyl_images.
      * 
     **/
-    distinct?: Enumerable<ImagesScalarFieldEnum>
+    distinct?: Enumerable<Electric_cyl_imagesScalarFieldEnum>
   }
 
   /**
-   * Images findFirst
+   * Electric_cyl_images findFirst
    */
-  export interface ImagesFindFirstArgs extends ImagesFindFirstArgsBase {
+  export interface Electric_cyl_imagesFindFirstArgs extends Electric_cyl_imagesFindFirstArgsBase {
    /**
     * Throw an Error if query returns no results
     * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
@@ -1769,1307 +1769,308 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
       
 
   /**
-   * Images findFirstOrThrow
+   * Electric_cyl_images findFirstOrThrow
    */
-  export type ImagesFindFirstOrThrowArgs = {
+  export type Electric_cyl_imagesFindFirstOrThrowArgs = {
     /**
-     * Select specific fields to fetch from the Images
+     * Select specific fields to fetch from the Electric_cyl_images
      * 
     **/
-    select?: ImagesSelect | null
+    select?: Electric_cyl_imagesSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: ImagesInclude | null
+    include?: Electric_cyl_imagesInclude | null
     /**
-     * Filter, which Images to fetch.
+     * Filter, which Electric_cyl_images to fetch.
      * 
     **/
-    where?: ImagesWhereInput
+    where?: Electric_cyl_imagesWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Images to fetch.
+     * Determine the order of Electric_cyl_images to fetch.
      * 
     **/
-    orderBy?: Enumerable<ImagesOrderByWithRelationInput>
+    orderBy?: Enumerable<Electric_cyl_imagesOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Images.
+     * Sets the position for searching for Electric_cyl_images.
      * 
     **/
-    cursor?: ImagesWhereUniqueInput
+    cursor?: Electric_cyl_imagesWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Images from the position of the cursor.
+     * Take `±n` Electric_cyl_images from the position of the cursor.
      * 
     **/
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Images.
+     * Skip the first `n` Electric_cyl_images.
      * 
     **/
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Images.
+     * Filter by unique combinations of Electric_cyl_images.
      * 
     **/
-    distinct?: Enumerable<ImagesScalarFieldEnum>
+    distinct?: Enumerable<Electric_cyl_imagesScalarFieldEnum>
   }
 
 
   /**
-   * Images findMany
+   * Electric_cyl_images findMany
    */
-  export type ImagesFindManyArgs = {
+  export type Electric_cyl_imagesFindManyArgs = {
     /**
-     * Select specific fields to fetch from the Images
+     * Select specific fields to fetch from the Electric_cyl_images
      * 
     **/
-    select?: ImagesSelect | null
+    select?: Electric_cyl_imagesSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: ImagesInclude | null
+    include?: Electric_cyl_imagesInclude | null
     /**
-     * Filter, which Images to fetch.
+     * Filter, which Electric_cyl_images to fetch.
      * 
     **/
-    where?: ImagesWhereInput
+    where?: Electric_cyl_imagesWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Images to fetch.
+     * Determine the order of Electric_cyl_images to fetch.
      * 
     **/
-    orderBy?: Enumerable<ImagesOrderByWithRelationInput>
+    orderBy?: Enumerable<Electric_cyl_imagesOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Images.
+     * Sets the position for listing Electric_cyl_images.
      * 
     **/
-    cursor?: ImagesWhereUniqueInput
+    cursor?: Electric_cyl_imagesWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Images from the position of the cursor.
+     * Take `±n` Electric_cyl_images from the position of the cursor.
      * 
     **/
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Images.
+     * Skip the first `n` Electric_cyl_images.
      * 
     **/
     skip?: number
-    distinct?: Enumerable<ImagesScalarFieldEnum>
+    distinct?: Enumerable<Electric_cyl_imagesScalarFieldEnum>
   }
 
 
   /**
-   * Images create
+   * Electric_cyl_images create
    */
-  export type ImagesCreateArgs = {
+  export type Electric_cyl_imagesCreateArgs = {
     /**
-     * Select specific fields to fetch from the Images
+     * Select specific fields to fetch from the Electric_cyl_images
      * 
     **/
-    select?: ImagesSelect | null
+    select?: Electric_cyl_imagesSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: ImagesInclude | null
+    include?: Electric_cyl_imagesInclude | null
     /**
-     * The data needed to create a Images.
+     * The data needed to create a Electric_cyl_images.
      * 
     **/
-    data: XOR<ImagesCreateInput, ImagesUncheckedCreateInput>
+    data: XOR<Electric_cyl_imagesCreateInput, Electric_cyl_imagesUncheckedCreateInput>
   }
 
 
   /**
-   * Images createMany
+   * Electric_cyl_images createMany
    */
-  export type ImagesCreateManyArgs = {
+  export type Electric_cyl_imagesCreateManyArgs = {
     /**
-     * The data used to create many Images.
+     * The data used to create many Electric_cyl_images.
      * 
     **/
-    data: Enumerable<ImagesCreateManyInput>
+    data: Enumerable<Electric_cyl_imagesCreateManyInput>
     skipDuplicates?: boolean
   }
 
 
   /**
-   * Images update
+   * Electric_cyl_images update
    */
-  export type ImagesUpdateArgs = {
+  export type Electric_cyl_imagesUpdateArgs = {
     /**
-     * Select specific fields to fetch from the Images
+     * Select specific fields to fetch from the Electric_cyl_images
      * 
     **/
-    select?: ImagesSelect | null
+    select?: Electric_cyl_imagesSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: ImagesInclude | null
+    include?: Electric_cyl_imagesInclude | null
     /**
-     * The data needed to update a Images.
+     * The data needed to update a Electric_cyl_images.
      * 
     **/
-    data: XOR<ImagesUpdateInput, ImagesUncheckedUpdateInput>
+    data: XOR<Electric_cyl_imagesUpdateInput, Electric_cyl_imagesUncheckedUpdateInput>
     /**
-     * Choose, which Images to update.
+     * Choose, which Electric_cyl_images to update.
      * 
     **/
-    where: ImagesWhereUniqueInput
+    where: Electric_cyl_imagesWhereUniqueInput
   }
 
 
   /**
-   * Images updateMany
+   * Electric_cyl_images updateMany
    */
-  export type ImagesUpdateManyArgs = {
+  export type Electric_cyl_imagesUpdateManyArgs = {
     /**
-     * The data used to update Images.
+     * The data used to update Electric_cyl_images.
      * 
     **/
-    data: XOR<ImagesUpdateManyMutationInput, ImagesUncheckedUpdateManyInput>
+    data: XOR<Electric_cyl_imagesUpdateManyMutationInput, Electric_cyl_imagesUncheckedUpdateManyInput>
     /**
-     * Filter which Images to update
+     * Filter which Electric_cyl_images to update
      * 
     **/
-    where?: ImagesWhereInput
+    where?: Electric_cyl_imagesWhereInput
   }
 
 
   /**
-   * Images upsert
+   * Electric_cyl_images upsert
    */
-  export type ImagesUpsertArgs = {
+  export type Electric_cyl_imagesUpsertArgs = {
     /**
-     * Select specific fields to fetch from the Images
+     * Select specific fields to fetch from the Electric_cyl_images
      * 
     **/
-    select?: ImagesSelect | null
+    select?: Electric_cyl_imagesSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: ImagesInclude | null
+    include?: Electric_cyl_imagesInclude | null
     /**
-     * The filter to search for the Images to update in case it exists.
+     * The filter to search for the Electric_cyl_images to update in case it exists.
      * 
     **/
-    where: ImagesWhereUniqueInput
+    where: Electric_cyl_imagesWhereUniqueInput
     /**
-     * In case the Images found by the `where` argument doesn't exist, create a new Images with this data.
+     * In case the Electric_cyl_images found by the `where` argument doesn't exist, create a new Electric_cyl_images with this data.
      * 
     **/
-    create: XOR<ImagesCreateInput, ImagesUncheckedCreateInput>
+    create: XOR<Electric_cyl_imagesCreateInput, Electric_cyl_imagesUncheckedCreateInput>
     /**
-     * In case the Images was found with the provided `where` argument, update it with this data.
+     * In case the Electric_cyl_images was found with the provided `where` argument, update it with this data.
      * 
     **/
-    update: XOR<ImagesUpdateInput, ImagesUncheckedUpdateInput>
+    update: XOR<Electric_cyl_imagesUpdateInput, Electric_cyl_imagesUncheckedUpdateInput>
   }
 
 
   /**
-   * Images delete
+   * Electric_cyl_images delete
    */
-  export type ImagesDeleteArgs = {
+  export type Electric_cyl_imagesDeleteArgs = {
     /**
-     * Select specific fields to fetch from the Images
+     * Select specific fields to fetch from the Electric_cyl_images
      * 
     **/
-    select?: ImagesSelect | null
+    select?: Electric_cyl_imagesSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: ImagesInclude | null
+    include?: Electric_cyl_imagesInclude | null
     /**
-     * Filter which Images to delete.
+     * Filter which Electric_cyl_images to delete.
      * 
     **/
-    where: ImagesWhereUniqueInput
+    where: Electric_cyl_imagesWhereUniqueInput
   }
 
 
   /**
-   * Images deleteMany
+   * Electric_cyl_images deleteMany
    */
-  export type ImagesDeleteManyArgs = {
+  export type Electric_cyl_imagesDeleteManyArgs = {
     /**
-     * Filter which Images to delete
+     * Filter which Electric_cyl_images to delete
      * 
     **/
-    where?: ImagesWhereInput
+    where?: Electric_cyl_imagesWhereInput
   }
 
 
   /**
-   * Images.scans
+   * Electric_cyl_images.electric_cyl_scans
    */
-  export type Images$scansArgs = {
+  export type Electric_cyl_images$electric_cyl_scansArgs = {
     /**
-     * Select specific fields to fetch from the Scans
+     * Select specific fields to fetch from the Electric_cyl_scans
      * 
     **/
-    select?: ScansSelect | null
+    select?: Electric_cyl_scansSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: ScansInclude | null
-    where?: ScansWhereInput
+    include?: Electric_cyl_scansInclude | null
+    where?: Electric_cyl_scansWhereInput
   }
 
 
   /**
-   * Images without action
+   * Electric_cyl_images without action
    */
-  export type ImagesArgs = {
+  export type Electric_cyl_imagesArgs = {
     /**
-     * Select specific fields to fetch from the Images
+     * Select specific fields to fetch from the Electric_cyl_images
      * 
     **/
-    select?: ImagesSelect | null
+    select?: Electric_cyl_imagesSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: ImagesInclude | null
+    include?: Electric_cyl_imagesInclude | null
   }
 
 
 
   /**
-   * Model Phenotypers
+   * Model Electric_cyl_scans
    */
 
 
-  export type AggregatePhenotypers = {
-    _count: PhenotypersCountAggregateOutputType | null
-    _min: PhenotypersMinAggregateOutputType | null
-    _max: PhenotypersMaxAggregateOutputType | null
+  export type AggregateElectric_cyl_scans = {
+    _count: Electric_cyl_scansCountAggregateOutputType | null
+    _avg: Electric_cyl_scansAvgAggregateOutputType | null
+    _sum: Electric_cyl_scansSumAggregateOutputType | null
+    _min: Electric_cyl_scansMinAggregateOutputType | null
+    _max: Electric_cyl_scansMaxAggregateOutputType | null
   }
 
-  export type PhenotypersMinAggregateOutputType = {
-    id: string | null
-    name: string | null
-    email: string | null
-  }
-
-  export type PhenotypersMaxAggregateOutputType = {
-    id: string | null
-    name: string | null
-    email: string | null
-  }
-
-  export type PhenotypersCountAggregateOutputType = {
-    id: number
-    name: number
-    email: number
-    _all: number
-  }
-
-
-  export type PhenotypersMinAggregateInputType = {
-    id?: true
-    name?: true
-    email?: true
-  }
-
-  export type PhenotypersMaxAggregateInputType = {
-    id?: true
-    name?: true
-    email?: true
-  }
-
-  export type PhenotypersCountAggregateInputType = {
-    id?: true
-    name?: true
-    email?: true
-    _all?: true
-  }
-
-  export type PhenotypersAggregateArgs = {
-    /**
-     * Filter which Phenotypers to aggregate.
-     * 
-    **/
-    where?: PhenotypersWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Phenotypers to fetch.
-     * 
-    **/
-    orderBy?: Enumerable<PhenotypersOrderByWithRelationInput>
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     * 
-    **/
-    cursor?: PhenotypersWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Phenotypers from the position of the cursor.
-     * 
-    **/
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Phenotypers.
-     * 
-    **/
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Phenotypers
-    **/
-    _count?: true | PhenotypersCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: PhenotypersMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: PhenotypersMaxAggregateInputType
-  }
-
-  export type GetPhenotypersAggregateType<T extends PhenotypersAggregateArgs> = {
-        [P in keyof T & keyof AggregatePhenotypers]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregatePhenotypers[P]>
-      : GetScalarType<T[P], AggregatePhenotypers[P]>
-  }
-
-
-
-
-  export type PhenotypersGroupByArgs = {
-    where?: PhenotypersWhereInput
-    orderBy?: Enumerable<PhenotypersOrderByWithAggregationInput>
-    by: Array<PhenotypersScalarFieldEnum>
-    having?: PhenotypersScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: PhenotypersCountAggregateInputType | true
-    _min?: PhenotypersMinAggregateInputType
-    _max?: PhenotypersMaxAggregateInputType
-  }
-
-
-  export type PhenotypersGroupByOutputType = {
-    id: string
-    name: string | null
-    email: string | null
-    _count: PhenotypersCountAggregateOutputType | null
-    _min: PhenotypersMinAggregateOutputType | null
-    _max: PhenotypersMaxAggregateOutputType | null
-  }
-
-  type GetPhenotypersGroupByPayload<T extends PhenotypersGroupByArgs> = PrismaPromise<
-    Array<
-      PickArray<PhenotypersGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof PhenotypersGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], PhenotypersGroupByOutputType[P]>
-            : GetScalarType<T[P], PhenotypersGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type PhenotypersSelect = {
-    id?: boolean
-    name?: boolean
-    email?: boolean
-    scans?: boolean | Phenotypers$scansArgs
-    _count?: boolean | PhenotypersCountOutputTypeArgs
-  }
-
-
-  export type PhenotypersInclude = {
-    scans?: boolean | Phenotypers$scansArgs
-    _count?: boolean | PhenotypersCountOutputTypeArgs
-  } 
-
-  export type PhenotypersGetPayload<S extends boolean | null | undefined | PhenotypersArgs> =
-    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
-    S extends true ? Phenotypers :
-    S extends undefined ? never :
-    S extends { include: any } & (PhenotypersArgs | PhenotypersFindManyArgs)
-    ? Phenotypers  & {
-    [P in TruthyKeys<S['include']>]:
-        P extends 'scans' ? Array < ScansGetPayload<S['include'][P]>>  :
-        P extends '_count' ? PhenotypersCountOutputTypeGetPayload<S['include'][P]> :  never
-  } 
-    : S extends { select: any } & (PhenotypersArgs | PhenotypersFindManyArgs)
-      ? {
-    [P in TruthyKeys<S['select']>]:
-        P extends 'scans' ? Array < ScansGetPayload<S['select'][P]>>  :
-        P extends '_count' ? PhenotypersCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof Phenotypers ? Phenotypers[P] : never
-  } 
-      : Phenotypers
-
-
-  type PhenotypersCountArgs = Merge<
-    Omit<PhenotypersFindManyArgs, 'select' | 'include'> & {
-      select?: PhenotypersCountAggregateInputType | true
-    }
-  >
-
-  export interface PhenotypersDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
-    /**
-     * Find zero or one Phenotypers that matches the filter.
-     * @param {PhenotypersFindUniqueArgs} args - Arguments to find a Phenotypers
-     * @example
-     * // Get one Phenotypers
-     * const phenotypers = await prisma.phenotypers.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUnique<T extends PhenotypersFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args: SelectSubset<T, PhenotypersFindUniqueArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Phenotypers'> extends True ? Prisma__PhenotypersClient<PhenotypersGetPayload<T>> : Prisma__PhenotypersClient<PhenotypersGetPayload<T> | null, null>
-
-    /**
-     * Find one Phenotypers that matches the filter or throw an error  with `error.code='P2025'` 
-     *     if no matches were found.
-     * @param {PhenotypersFindUniqueOrThrowArgs} args - Arguments to find a Phenotypers
-     * @example
-     * // Get one Phenotypers
-     * const phenotypers = await prisma.phenotypers.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUniqueOrThrow<T extends PhenotypersFindUniqueOrThrowArgs>(
-      args?: SelectSubset<T, PhenotypersFindUniqueOrThrowArgs>
-    ): Prisma__PhenotypersClient<PhenotypersGetPayload<T>>
-
-    /**
-     * Find the first Phenotypers that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PhenotypersFindFirstArgs} args - Arguments to find a Phenotypers
-     * @example
-     * // Get one Phenotypers
-     * const phenotypers = await prisma.phenotypers.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirst<T extends PhenotypersFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args?: SelectSubset<T, PhenotypersFindFirstArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Phenotypers'> extends True ? Prisma__PhenotypersClient<PhenotypersGetPayload<T>> : Prisma__PhenotypersClient<PhenotypersGetPayload<T> | null, null>
-
-    /**
-     * Find the first Phenotypers that matches the filter or
-     * throw `NotFoundError` if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PhenotypersFindFirstOrThrowArgs} args - Arguments to find a Phenotypers
-     * @example
-     * // Get one Phenotypers
-     * const phenotypers = await prisma.phenotypers.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirstOrThrow<T extends PhenotypersFindFirstOrThrowArgs>(
-      args?: SelectSubset<T, PhenotypersFindFirstOrThrowArgs>
-    ): Prisma__PhenotypersClient<PhenotypersGetPayload<T>>
-
-    /**
-     * Find zero or more Phenotypers that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PhenotypersFindManyArgs=} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Phenotypers
-     * const phenotypers = await prisma.phenotypers.findMany()
-     * 
-     * // Get first 10 Phenotypers
-     * const phenotypers = await prisma.phenotypers.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const phenotypersWithIdOnly = await prisma.phenotypers.findMany({ select: { id: true } })
-     * 
-    **/
-    findMany<T extends PhenotypersFindManyArgs>(
-      args?: SelectSubset<T, PhenotypersFindManyArgs>
-    ): PrismaPromise<Array<PhenotypersGetPayload<T>>>
-
-    /**
-     * Create a Phenotypers.
-     * @param {PhenotypersCreateArgs} args - Arguments to create a Phenotypers.
-     * @example
-     * // Create one Phenotypers
-     * const Phenotypers = await prisma.phenotypers.create({
-     *   data: {
-     *     // ... data to create a Phenotypers
-     *   }
-     * })
-     * 
-    **/
-    create<T extends PhenotypersCreateArgs>(
-      args: SelectSubset<T, PhenotypersCreateArgs>
-    ): Prisma__PhenotypersClient<PhenotypersGetPayload<T>>
-
-    /**
-     * Create many Phenotypers.
-     *     @param {PhenotypersCreateManyArgs} args - Arguments to create many Phenotypers.
-     *     @example
-     *     // Create many Phenotypers
-     *     const phenotypers = await prisma.phenotypers.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends PhenotypersCreateManyArgs>(
-      args?: SelectSubset<T, PhenotypersCreateManyArgs>
-    ): PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a Phenotypers.
-     * @param {PhenotypersDeleteArgs} args - Arguments to delete one Phenotypers.
-     * @example
-     * // Delete one Phenotypers
-     * const Phenotypers = await prisma.phenotypers.delete({
-     *   where: {
-     *     // ... filter to delete one Phenotypers
-     *   }
-     * })
-     * 
-    **/
-    delete<T extends PhenotypersDeleteArgs>(
-      args: SelectSubset<T, PhenotypersDeleteArgs>
-    ): Prisma__PhenotypersClient<PhenotypersGetPayload<T>>
-
-    /**
-     * Update one Phenotypers.
-     * @param {PhenotypersUpdateArgs} args - Arguments to update one Phenotypers.
-     * @example
-     * // Update one Phenotypers
-     * const phenotypers = await prisma.phenotypers.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    update<T extends PhenotypersUpdateArgs>(
-      args: SelectSubset<T, PhenotypersUpdateArgs>
-    ): Prisma__PhenotypersClient<PhenotypersGetPayload<T>>
-
-    /**
-     * Delete zero or more Phenotypers.
-     * @param {PhenotypersDeleteManyArgs} args - Arguments to filter Phenotypers to delete.
-     * @example
-     * // Delete a few Phenotypers
-     * const { count } = await prisma.phenotypers.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-    **/
-    deleteMany<T extends PhenotypersDeleteManyArgs>(
-      args?: SelectSubset<T, PhenotypersDeleteManyArgs>
-    ): PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Phenotypers.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PhenotypersUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Phenotypers
-     * const phenotypers = await prisma.phenotypers.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    updateMany<T extends PhenotypersUpdateManyArgs>(
-      args: SelectSubset<T, PhenotypersUpdateManyArgs>
-    ): PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one Phenotypers.
-     * @param {PhenotypersUpsertArgs} args - Arguments to update or create a Phenotypers.
-     * @example
-     * // Update or create a Phenotypers
-     * const phenotypers = await prisma.phenotypers.upsert({
-     *   create: {
-     *     // ... data to create a Phenotypers
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Phenotypers we want to update
-     *   }
-     * })
-    **/
-    upsert<T extends PhenotypersUpsertArgs>(
-      args: SelectSubset<T, PhenotypersUpsertArgs>
-    ): Prisma__PhenotypersClient<PhenotypersGetPayload<T>>
-
-    /**
-     * Count the number of Phenotypers.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PhenotypersCountArgs} args - Arguments to filter Phenotypers to count.
-     * @example
-     * // Count the number of Phenotypers
-     * const count = await prisma.phenotypers.count({
-     *   where: {
-     *     // ... the filter for the Phenotypers we want to count
-     *   }
-     * })
-    **/
-    count<T extends PhenotypersCountArgs>(
-      args?: Subset<T, PhenotypersCountArgs>,
-    ): PrismaPromise<
-      T extends _Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], PhenotypersCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Phenotypers.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PhenotypersAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends PhenotypersAggregateArgs>(args: Subset<T, PhenotypersAggregateArgs>): PrismaPromise<GetPhenotypersAggregateType<T>>
-
-    /**
-     * Group by Phenotypers.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PhenotypersGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends PhenotypersGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: PhenotypersGroupByArgs['orderBy'] }
-        : { orderBy?: PhenotypersGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends TupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, PhenotypersGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPhenotypersGroupByPayload<T> : PrismaPromise<InputErrors>
-
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Phenotypers.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export class Prisma__PhenotypersClient<T, Null = never> implements PrismaPromise<T> {
-    [prisma]: true;
-    private readonly _dmmf;
-    private readonly _fetcher;
-    private readonly _queryType;
-    private readonly _rootField;
-    private readonly _clientMethod;
-    private readonly _args;
-    private readonly _dataPath;
-    private readonly _errorFormat;
-    private readonly _measurePerformance?;
-    private _isList;
-    private _callsite;
-    private _requestPromise?;
-    constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
-    readonly [Symbol.toStringTag]: 'PrismaClientPromise';
-
-    scans<T extends Phenotypers$scansArgs= {}>(args?: Subset<T, Phenotypers$scansArgs>): PrismaPromise<Array<ScansGetPayload<T>>| Null>;
-
-    private get _document();
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
-  }
-
-
-
-  // Custom InputTypes
-
-  /**
-   * Phenotypers base type for findUnique actions
-   */
-  export type PhenotypersFindUniqueArgsBase = {
-    /**
-     * Select specific fields to fetch from the Phenotypers
-     * 
-    **/
-    select?: PhenotypersSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     * 
-    **/
-    include?: PhenotypersInclude | null
-    /**
-     * Filter, which Phenotypers to fetch.
-     * 
-    **/
-    where: PhenotypersWhereUniqueInput
-  }
-
-  /**
-   * Phenotypers findUnique
-   */
-  export interface PhenotypersFindUniqueArgs extends PhenotypersFindUniqueArgsBase {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
-
-  /**
-   * Phenotypers findUniqueOrThrow
-   */
-  export type PhenotypersFindUniqueOrThrowArgs = {
-    /**
-     * Select specific fields to fetch from the Phenotypers
-     * 
-    **/
-    select?: PhenotypersSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     * 
-    **/
-    include?: PhenotypersInclude | null
-    /**
-     * Filter, which Phenotypers to fetch.
-     * 
-    **/
-    where: PhenotypersWhereUniqueInput
-  }
-
-
-  /**
-   * Phenotypers base type for findFirst actions
-   */
-  export type PhenotypersFindFirstArgsBase = {
-    /**
-     * Select specific fields to fetch from the Phenotypers
-     * 
-    **/
-    select?: PhenotypersSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     * 
-    **/
-    include?: PhenotypersInclude | null
-    /**
-     * Filter, which Phenotypers to fetch.
-     * 
-    **/
-    where?: PhenotypersWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Phenotypers to fetch.
-     * 
-    **/
-    orderBy?: Enumerable<PhenotypersOrderByWithRelationInput>
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Phenotypers.
-     * 
-    **/
-    cursor?: PhenotypersWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Phenotypers from the position of the cursor.
-     * 
-    **/
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Phenotypers.
-     * 
-    **/
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Phenotypers.
-     * 
-    **/
-    distinct?: Enumerable<PhenotypersScalarFieldEnum>
-  }
-
-  /**
-   * Phenotypers findFirst
-   */
-  export interface PhenotypersFindFirstArgs extends PhenotypersFindFirstArgsBase {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
-
-  /**
-   * Phenotypers findFirstOrThrow
-   */
-  export type PhenotypersFindFirstOrThrowArgs = {
-    /**
-     * Select specific fields to fetch from the Phenotypers
-     * 
-    **/
-    select?: PhenotypersSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     * 
-    **/
-    include?: PhenotypersInclude | null
-    /**
-     * Filter, which Phenotypers to fetch.
-     * 
-    **/
-    where?: PhenotypersWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Phenotypers to fetch.
-     * 
-    **/
-    orderBy?: Enumerable<PhenotypersOrderByWithRelationInput>
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Phenotypers.
-     * 
-    **/
-    cursor?: PhenotypersWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Phenotypers from the position of the cursor.
-     * 
-    **/
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Phenotypers.
-     * 
-    **/
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Phenotypers.
-     * 
-    **/
-    distinct?: Enumerable<PhenotypersScalarFieldEnum>
-  }
-
-
-  /**
-   * Phenotypers findMany
-   */
-  export type PhenotypersFindManyArgs = {
-    /**
-     * Select specific fields to fetch from the Phenotypers
-     * 
-    **/
-    select?: PhenotypersSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     * 
-    **/
-    include?: PhenotypersInclude | null
-    /**
-     * Filter, which Phenotypers to fetch.
-     * 
-    **/
-    where?: PhenotypersWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Phenotypers to fetch.
-     * 
-    **/
-    orderBy?: Enumerable<PhenotypersOrderByWithRelationInput>
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Phenotypers.
-     * 
-    **/
-    cursor?: PhenotypersWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Phenotypers from the position of the cursor.
-     * 
-    **/
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Phenotypers.
-     * 
-    **/
-    skip?: number
-    distinct?: Enumerable<PhenotypersScalarFieldEnum>
-  }
-
-
-  /**
-   * Phenotypers create
-   */
-  export type PhenotypersCreateArgs = {
-    /**
-     * Select specific fields to fetch from the Phenotypers
-     * 
-    **/
-    select?: PhenotypersSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     * 
-    **/
-    include?: PhenotypersInclude | null
-    /**
-     * The data needed to create a Phenotypers.
-     * 
-    **/
-    data: XOR<PhenotypersCreateInput, PhenotypersUncheckedCreateInput>
-  }
-
-
-  /**
-   * Phenotypers createMany
-   */
-  export type PhenotypersCreateManyArgs = {
-    /**
-     * The data used to create many Phenotypers.
-     * 
-    **/
-    data: Enumerable<PhenotypersCreateManyInput>
-    skipDuplicates?: boolean
-  }
-
-
-  /**
-   * Phenotypers update
-   */
-  export type PhenotypersUpdateArgs = {
-    /**
-     * Select specific fields to fetch from the Phenotypers
-     * 
-    **/
-    select?: PhenotypersSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     * 
-    **/
-    include?: PhenotypersInclude | null
-    /**
-     * The data needed to update a Phenotypers.
-     * 
-    **/
-    data: XOR<PhenotypersUpdateInput, PhenotypersUncheckedUpdateInput>
-    /**
-     * Choose, which Phenotypers to update.
-     * 
-    **/
-    where: PhenotypersWhereUniqueInput
-  }
-
-
-  /**
-   * Phenotypers updateMany
-   */
-  export type PhenotypersUpdateManyArgs = {
-    /**
-     * The data used to update Phenotypers.
-     * 
-    **/
-    data: XOR<PhenotypersUpdateManyMutationInput, PhenotypersUncheckedUpdateManyInput>
-    /**
-     * Filter which Phenotypers to update
-     * 
-    **/
-    where?: PhenotypersWhereInput
-  }
-
-
-  /**
-   * Phenotypers upsert
-   */
-  export type PhenotypersUpsertArgs = {
-    /**
-     * Select specific fields to fetch from the Phenotypers
-     * 
-    **/
-    select?: PhenotypersSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     * 
-    **/
-    include?: PhenotypersInclude | null
-    /**
-     * The filter to search for the Phenotypers to update in case it exists.
-     * 
-    **/
-    where: PhenotypersWhereUniqueInput
-    /**
-     * In case the Phenotypers found by the `where` argument doesn't exist, create a new Phenotypers with this data.
-     * 
-    **/
-    create: XOR<PhenotypersCreateInput, PhenotypersUncheckedCreateInput>
-    /**
-     * In case the Phenotypers was found with the provided `where` argument, update it with this data.
-     * 
-    **/
-    update: XOR<PhenotypersUpdateInput, PhenotypersUncheckedUpdateInput>
-  }
-
-
-  /**
-   * Phenotypers delete
-   */
-  export type PhenotypersDeleteArgs = {
-    /**
-     * Select specific fields to fetch from the Phenotypers
-     * 
-    **/
-    select?: PhenotypersSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     * 
-    **/
-    include?: PhenotypersInclude | null
-    /**
-     * Filter which Phenotypers to delete.
-     * 
-    **/
-    where: PhenotypersWhereUniqueInput
-  }
-
-
-  /**
-   * Phenotypers deleteMany
-   */
-  export type PhenotypersDeleteManyArgs = {
-    /**
-     * Filter which Phenotypers to delete
-     * 
-    **/
-    where?: PhenotypersWhereInput
-  }
-
-
-  /**
-   * Phenotypers.scans
-   */
-  export type Phenotypers$scansArgs = {
-    /**
-     * Select specific fields to fetch from the Scans
-     * 
-    **/
-    select?: ScansSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     * 
-    **/
-    include?: ScansInclude | null
-    where?: ScansWhereInput
-    orderBy?: Enumerable<ScansOrderByWithRelationInput>
-    cursor?: ScansWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Enumerable<ScansScalarFieldEnum>
-  }
-
-
-  /**
-   * Phenotypers without action
-   */
-  export type PhenotypersArgs = {
-    /**
-     * Select specific fields to fetch from the Phenotypers
-     * 
-    **/
-    select?: PhenotypersSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     * 
-    **/
-    include?: PhenotypersInclude | null
-  }
-
-
-
-  /**
-   * Model Scans
-   */
-
-
-  export type AggregateScans = {
-    _count: ScansCountAggregateOutputType | null
-    _avg: ScansAvgAggregateOutputType | null
-    _sum: ScansSumAggregateOutputType | null
-    _min: ScansMinAggregateOutputType | null
-    _max: ScansMaxAggregateOutputType | null
-  }
-
-  export type ScansAvgAggregateOutputType = {
+  export type Electric_cyl_scansAvgAggregateOutputType = {
     num_frames: number | null
     exposure_time: number | null
     gain: number | null
@@ -3079,7 +2080,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     seconds_per_rot: number | null
   }
 
-  export type ScansSumAggregateOutputType = {
+  export type Electric_cyl_scansSumAggregateOutputType = {
     num_frames: number | null
     exposure_time: number | null
     gain: number | null
@@ -3089,7 +2090,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     seconds_per_rot: number | null
   }
 
-  export type ScansMinAggregateOutputType = {
+  export type Electric_cyl_scansMinAggregateOutputType = {
     id: string | null
     phenotyper_id: string | null
     scanner_id: string | null
@@ -3105,7 +2106,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     seconds_per_rot: number | null
   }
 
-  export type ScansMaxAggregateOutputType = {
+  export type Electric_cyl_scansMaxAggregateOutputType = {
     id: string | null
     phenotyper_id: string | null
     scanner_id: string | null
@@ -3121,7 +2122,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     seconds_per_rot: number | null
   }
 
-  export type ScansCountAggregateOutputType = {
+  export type Electric_cyl_scansCountAggregateOutputType = {
     id: number
     phenotyper_id: number
     scanner_id: number
@@ -3139,7 +2140,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   }
 
 
-  export type ScansAvgAggregateInputType = {
+  export type Electric_cyl_scansAvgAggregateInputType = {
     num_frames?: true
     exposure_time?: true
     gain?: true
@@ -3149,7 +2150,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     seconds_per_rot?: true
   }
 
-  export type ScansSumAggregateInputType = {
+  export type Electric_cyl_scansSumAggregateInputType = {
     num_frames?: true
     exposure_time?: true
     gain?: true
@@ -3159,7 +2160,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     seconds_per_rot?: true
   }
 
-  export type ScansMinAggregateInputType = {
+  export type Electric_cyl_scansMinAggregateInputType = {
     id?: true
     phenotyper_id?: true
     scanner_id?: true
@@ -3175,7 +2176,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     seconds_per_rot?: true
   }
 
-  export type ScansMaxAggregateInputType = {
+  export type Electric_cyl_scansMaxAggregateInputType = {
     id?: true
     phenotyper_id?: true
     scanner_id?: true
@@ -3191,7 +2192,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     seconds_per_rot?: true
   }
 
-  export type ScansCountAggregateInputType = {
+  export type Electric_cyl_scansCountAggregateInputType = {
     id?: true
     phenotyper_id?: true
     scanner_id?: true
@@ -3208,99 +2209,99 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     _all?: true
   }
 
-  export type ScansAggregateArgs = {
+  export type Electric_cyl_scansAggregateArgs = {
     /**
-     * Filter which Scans to aggregate.
+     * Filter which Electric_cyl_scans to aggregate.
      * 
     **/
-    where?: ScansWhereInput
+    where?: Electric_cyl_scansWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Scans to fetch.
+     * Determine the order of Electric_cyl_scans to fetch.
      * 
     **/
-    orderBy?: Enumerable<ScansOrderByWithRelationInput>
+    orderBy?: Enumerable<Electric_cyl_scansOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      * 
     **/
-    cursor?: ScansWhereUniqueInput
+    cursor?: Electric_cyl_scansWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Scans from the position of the cursor.
+     * Take `±n` Electric_cyl_scans from the position of the cursor.
      * 
     **/
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Scans.
+     * Skip the first `n` Electric_cyl_scans.
      * 
     **/
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Scans
+     * Count returned Electric_cyl_scans
     **/
-    _count?: true | ScansCountAggregateInputType
+    _count?: true | Electric_cyl_scansCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: ScansAvgAggregateInputType
+    _avg?: Electric_cyl_scansAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: ScansSumAggregateInputType
+    _sum?: Electric_cyl_scansSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: ScansMinAggregateInputType
+    _min?: Electric_cyl_scansMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: ScansMaxAggregateInputType
+    _max?: Electric_cyl_scansMaxAggregateInputType
   }
 
-  export type GetScansAggregateType<T extends ScansAggregateArgs> = {
-        [P in keyof T & keyof AggregateScans]: P extends '_count' | 'count'
+  export type GetElectric_cyl_scansAggregateType<T extends Electric_cyl_scansAggregateArgs> = {
+        [P in keyof T & keyof AggregateElectric_cyl_scans]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateScans[P]>
-      : GetScalarType<T[P], AggregateScans[P]>
+        : GetScalarType<T[P], AggregateElectric_cyl_scans[P]>
+      : GetScalarType<T[P], AggregateElectric_cyl_scans[P]>
   }
 
 
 
 
-  export type ScansGroupByArgs = {
-    where?: ScansWhereInput
-    orderBy?: Enumerable<ScansOrderByWithAggregationInput>
-    by: Array<ScansScalarFieldEnum>
-    having?: ScansScalarWhereWithAggregatesInput
+  export type Electric_cyl_scansGroupByArgs = {
+    where?: Electric_cyl_scansWhereInput
+    orderBy?: Enumerable<Electric_cyl_scansOrderByWithAggregationInput>
+    by: Array<Electric_cyl_scansScalarFieldEnum>
+    having?: Electric_cyl_scansScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: ScansCountAggregateInputType | true
-    _avg?: ScansAvgAggregateInputType
-    _sum?: ScansSumAggregateInputType
-    _min?: ScansMinAggregateInputType
-    _max?: ScansMaxAggregateInputType
+    _count?: Electric_cyl_scansCountAggregateInputType | true
+    _avg?: Electric_cyl_scansAvgAggregateInputType
+    _sum?: Electric_cyl_scansSumAggregateInputType
+    _min?: Electric_cyl_scansMinAggregateInputType
+    _max?: Electric_cyl_scansMaxAggregateInputType
   }
 
 
-  export type ScansGroupByOutputType = {
+  export type Electric_cyl_scansGroupByOutputType = {
     id: string
     phenotyper_id: string | null
     scanner_id: string | null
@@ -3314,28 +2315,28 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast: number | null
     gamma: number | null
     seconds_per_rot: number | null
-    _count: ScansCountAggregateOutputType | null
-    _avg: ScansAvgAggregateOutputType | null
-    _sum: ScansSumAggregateOutputType | null
-    _min: ScansMinAggregateOutputType | null
-    _max: ScansMaxAggregateOutputType | null
+    _count: Electric_cyl_scansCountAggregateOutputType | null
+    _avg: Electric_cyl_scansAvgAggregateOutputType | null
+    _sum: Electric_cyl_scansSumAggregateOutputType | null
+    _min: Electric_cyl_scansMinAggregateOutputType | null
+    _max: Electric_cyl_scansMaxAggregateOutputType | null
   }
 
-  type GetScansGroupByPayload<T extends ScansGroupByArgs> = PrismaPromise<
+  type GetElectric_cyl_scansGroupByPayload<T extends Electric_cyl_scansGroupByArgs> = PrismaPromise<
     Array<
-      PickArray<ScansGroupByOutputType, T['by']> &
+      PickArray<Electric_cyl_scansGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof ScansGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof Electric_cyl_scansGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], ScansGroupByOutputType[P]>
-            : GetScalarType<T[P], ScansGroupByOutputType[P]>
+              : GetScalarType<T[P], Electric_cyl_scansGroupByOutputType[P]>
+            : GetScalarType<T[P], Electric_cyl_scansGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type ScansSelect = {
+  export type Electric_cyl_scansSelect = {
     id?: boolean
     phenotyper_id?: boolean
     scanner_id?: boolean
@@ -3349,186 +2350,186 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: boolean
     gamma?: boolean
     seconds_per_rot?: boolean
-    images?: boolean | Scans$imagesArgs
-    phenotypers?: boolean | Scans$phenotypersArgs
-    _count?: boolean | ScansCountOutputTypeArgs
+    electric_cyl_images?: boolean | Electric_cyl_scans$electric_cyl_imagesArgs
+    electric_phenotypers?: boolean | Electric_cyl_scans$electric_phenotypersArgs
+    _count?: boolean | Electric_cyl_scansCountOutputTypeArgs
   }
 
 
-  export type ScansInclude = {
-    images?: boolean | Scans$imagesArgs
-    phenotypers?: boolean | Scans$phenotypersArgs
-    _count?: boolean | ScansCountOutputTypeArgs
+  export type Electric_cyl_scansInclude = {
+    electric_cyl_images?: boolean | Electric_cyl_scans$electric_cyl_imagesArgs
+    electric_phenotypers?: boolean | Electric_cyl_scans$electric_phenotypersArgs
+    _count?: boolean | Electric_cyl_scansCountOutputTypeArgs
   } 
 
-  export type ScansGetPayload<S extends boolean | null | undefined | ScansArgs> =
+  export type Electric_cyl_scansGetPayload<S extends boolean | null | undefined | Electric_cyl_scansArgs> =
     S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
-    S extends true ? Scans :
+    S extends true ? Electric_cyl_scans :
     S extends undefined ? never :
-    S extends { include: any } & (ScansArgs | ScansFindManyArgs)
-    ? Scans  & {
+    S extends { include: any } & (Electric_cyl_scansArgs | Electric_cyl_scansFindManyArgs)
+    ? Electric_cyl_scans  & {
     [P in TruthyKeys<S['include']>]:
-        P extends 'images' ? Array < ImagesGetPayload<S['include'][P]>>  :
-        P extends 'phenotypers' ? PhenotypersGetPayload<S['include'][P]> | null :
-        P extends '_count' ? ScansCountOutputTypeGetPayload<S['include'][P]> :  never
+        P extends 'electric_cyl_images' ? Array < Electric_cyl_imagesGetPayload<S['include'][P]>>  :
+        P extends 'electric_phenotypers' ? Electric_phenotypersGetPayload<S['include'][P]> | null :
+        P extends '_count' ? Electric_cyl_scansCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
-    : S extends { select: any } & (ScansArgs | ScansFindManyArgs)
+    : S extends { select: any } & (Electric_cyl_scansArgs | Electric_cyl_scansFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-        P extends 'images' ? Array < ImagesGetPayload<S['select'][P]>>  :
-        P extends 'phenotypers' ? PhenotypersGetPayload<S['select'][P]> | null :
-        P extends '_count' ? ScansCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof Scans ? Scans[P] : never
+        P extends 'electric_cyl_images' ? Array < Electric_cyl_imagesGetPayload<S['select'][P]>>  :
+        P extends 'electric_phenotypers' ? Electric_phenotypersGetPayload<S['select'][P]> | null :
+        P extends '_count' ? Electric_cyl_scansCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof Electric_cyl_scans ? Electric_cyl_scans[P] : never
   } 
-      : Scans
+      : Electric_cyl_scans
 
 
-  type ScansCountArgs = Merge<
-    Omit<ScansFindManyArgs, 'select' | 'include'> & {
-      select?: ScansCountAggregateInputType | true
+  type Electric_cyl_scansCountArgs = Merge<
+    Omit<Electric_cyl_scansFindManyArgs, 'select' | 'include'> & {
+      select?: Electric_cyl_scansCountAggregateInputType | true
     }
   >
 
-  export interface ScansDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+  export interface Electric_cyl_scansDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
     /**
-     * Find zero or one Scans that matches the filter.
-     * @param {ScansFindUniqueArgs} args - Arguments to find a Scans
+     * Find zero or one Electric_cyl_scans that matches the filter.
+     * @param {Electric_cyl_scansFindUniqueArgs} args - Arguments to find a Electric_cyl_scans
      * @example
-     * // Get one Scans
-     * const scans = await prisma.scans.findUnique({
+     * // Get one Electric_cyl_scans
+     * const electric_cyl_scans = await prisma.electric_cyl_scans.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findUnique<T extends ScansFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args: SelectSubset<T, ScansFindUniqueArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Scans'> extends True ? Prisma__ScansClient<ScansGetPayload<T>> : Prisma__ScansClient<ScansGetPayload<T> | null, null>
+    findUnique<T extends Electric_cyl_scansFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, Electric_cyl_scansFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Electric_cyl_scans'> extends True ? Prisma__Electric_cyl_scansClient<Electric_cyl_scansGetPayload<T>> : Prisma__Electric_cyl_scansClient<Electric_cyl_scansGetPayload<T> | null, null>
 
     /**
-     * Find one Scans that matches the filter or throw an error  with `error.code='P2025'` 
+     * Find one Electric_cyl_scans that matches the filter or throw an error  with `error.code='P2025'` 
      *     if no matches were found.
-     * @param {ScansFindUniqueOrThrowArgs} args - Arguments to find a Scans
+     * @param {Electric_cyl_scansFindUniqueOrThrowArgs} args - Arguments to find a Electric_cyl_scans
      * @example
-     * // Get one Scans
-     * const scans = await prisma.scans.findUniqueOrThrow({
+     * // Get one Electric_cyl_scans
+     * const electric_cyl_scans = await prisma.electric_cyl_scans.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findUniqueOrThrow<T extends ScansFindUniqueOrThrowArgs>(
-      args?: SelectSubset<T, ScansFindUniqueOrThrowArgs>
-    ): Prisma__ScansClient<ScansGetPayload<T>>
+    findUniqueOrThrow<T extends Electric_cyl_scansFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, Electric_cyl_scansFindUniqueOrThrowArgs>
+    ): Prisma__Electric_cyl_scansClient<Electric_cyl_scansGetPayload<T>>
 
     /**
-     * Find the first Scans that matches the filter.
+     * Find the first Electric_cyl_scans that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ScansFindFirstArgs} args - Arguments to find a Scans
+     * @param {Electric_cyl_scansFindFirstArgs} args - Arguments to find a Electric_cyl_scans
      * @example
-     * // Get one Scans
-     * const scans = await prisma.scans.findFirst({
+     * // Get one Electric_cyl_scans
+     * const electric_cyl_scans = await prisma.electric_cyl_scans.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findFirst<T extends ScansFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args?: SelectSubset<T, ScansFindFirstArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Scans'> extends True ? Prisma__ScansClient<ScansGetPayload<T>> : Prisma__ScansClient<ScansGetPayload<T> | null, null>
+    findFirst<T extends Electric_cyl_scansFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, Electric_cyl_scansFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Electric_cyl_scans'> extends True ? Prisma__Electric_cyl_scansClient<Electric_cyl_scansGetPayload<T>> : Prisma__Electric_cyl_scansClient<Electric_cyl_scansGetPayload<T> | null, null>
 
     /**
-     * Find the first Scans that matches the filter or
+     * Find the first Electric_cyl_scans that matches the filter or
      * throw `NotFoundError` if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ScansFindFirstOrThrowArgs} args - Arguments to find a Scans
+     * @param {Electric_cyl_scansFindFirstOrThrowArgs} args - Arguments to find a Electric_cyl_scans
      * @example
-     * // Get one Scans
-     * const scans = await prisma.scans.findFirstOrThrow({
+     * // Get one Electric_cyl_scans
+     * const electric_cyl_scans = await prisma.electric_cyl_scans.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findFirstOrThrow<T extends ScansFindFirstOrThrowArgs>(
-      args?: SelectSubset<T, ScansFindFirstOrThrowArgs>
-    ): Prisma__ScansClient<ScansGetPayload<T>>
+    findFirstOrThrow<T extends Electric_cyl_scansFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, Electric_cyl_scansFindFirstOrThrowArgs>
+    ): Prisma__Electric_cyl_scansClient<Electric_cyl_scansGetPayload<T>>
 
     /**
-     * Find zero or more Scans that matches the filter.
+     * Find zero or more Electric_cyl_scans that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ScansFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @param {Electric_cyl_scansFindManyArgs=} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Scans
-     * const scans = await prisma.scans.findMany()
+     * // Get all Electric_cyl_scans
+     * const electric_cyl_scans = await prisma.electric_cyl_scans.findMany()
      * 
-     * // Get first 10 Scans
-     * const scans = await prisma.scans.findMany({ take: 10 })
+     * // Get first 10 Electric_cyl_scans
+     * const electric_cyl_scans = await prisma.electric_cyl_scans.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const scansWithIdOnly = await prisma.scans.findMany({ select: { id: true } })
+     * const electric_cyl_scansWithIdOnly = await prisma.electric_cyl_scans.findMany({ select: { id: true } })
      * 
     **/
-    findMany<T extends ScansFindManyArgs>(
-      args?: SelectSubset<T, ScansFindManyArgs>
-    ): PrismaPromise<Array<ScansGetPayload<T>>>
+    findMany<T extends Electric_cyl_scansFindManyArgs>(
+      args?: SelectSubset<T, Electric_cyl_scansFindManyArgs>
+    ): PrismaPromise<Array<Electric_cyl_scansGetPayload<T>>>
 
     /**
-     * Create a Scans.
-     * @param {ScansCreateArgs} args - Arguments to create a Scans.
+     * Create a Electric_cyl_scans.
+     * @param {Electric_cyl_scansCreateArgs} args - Arguments to create a Electric_cyl_scans.
      * @example
-     * // Create one Scans
-     * const Scans = await prisma.scans.create({
+     * // Create one Electric_cyl_scans
+     * const Electric_cyl_scans = await prisma.electric_cyl_scans.create({
      *   data: {
-     *     // ... data to create a Scans
+     *     // ... data to create a Electric_cyl_scans
      *   }
      * })
      * 
     **/
-    create<T extends ScansCreateArgs>(
-      args: SelectSubset<T, ScansCreateArgs>
-    ): Prisma__ScansClient<ScansGetPayload<T>>
+    create<T extends Electric_cyl_scansCreateArgs>(
+      args: SelectSubset<T, Electric_cyl_scansCreateArgs>
+    ): Prisma__Electric_cyl_scansClient<Electric_cyl_scansGetPayload<T>>
 
     /**
-     * Create many Scans.
-     *     @param {ScansCreateManyArgs} args - Arguments to create many Scans.
+     * Create many Electric_cyl_scans.
+     *     @param {Electric_cyl_scansCreateManyArgs} args - Arguments to create many Electric_cyl_scans.
      *     @example
-     *     // Create many Scans
-     *     const scans = await prisma.scans.createMany({
+     *     // Create many Electric_cyl_scans
+     *     const electric_cyl_scans = await prisma.electric_cyl_scans.createMany({
      *       data: {
      *         // ... provide data here
      *       }
      *     })
      *     
     **/
-    createMany<T extends ScansCreateManyArgs>(
-      args?: SelectSubset<T, ScansCreateManyArgs>
+    createMany<T extends Electric_cyl_scansCreateManyArgs>(
+      args?: SelectSubset<T, Electric_cyl_scansCreateManyArgs>
     ): PrismaPromise<BatchPayload>
 
     /**
-     * Delete a Scans.
-     * @param {ScansDeleteArgs} args - Arguments to delete one Scans.
+     * Delete a Electric_cyl_scans.
+     * @param {Electric_cyl_scansDeleteArgs} args - Arguments to delete one Electric_cyl_scans.
      * @example
-     * // Delete one Scans
-     * const Scans = await prisma.scans.delete({
+     * // Delete one Electric_cyl_scans
+     * const Electric_cyl_scans = await prisma.electric_cyl_scans.delete({
      *   where: {
-     *     // ... filter to delete one Scans
+     *     // ... filter to delete one Electric_cyl_scans
      *   }
      * })
      * 
     **/
-    delete<T extends ScansDeleteArgs>(
-      args: SelectSubset<T, ScansDeleteArgs>
-    ): Prisma__ScansClient<ScansGetPayload<T>>
+    delete<T extends Electric_cyl_scansDeleteArgs>(
+      args: SelectSubset<T, Electric_cyl_scansDeleteArgs>
+    ): Prisma__Electric_cyl_scansClient<Electric_cyl_scansGetPayload<T>>
 
     /**
-     * Update one Scans.
-     * @param {ScansUpdateArgs} args - Arguments to update one Scans.
+     * Update one Electric_cyl_scans.
+     * @param {Electric_cyl_scansUpdateArgs} args - Arguments to update one Electric_cyl_scans.
      * @example
-     * // Update one Scans
-     * const scans = await prisma.scans.update({
+     * // Update one Electric_cyl_scans
+     * const electric_cyl_scans = await prisma.electric_cyl_scans.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -3538,34 +2539,34 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
      * })
      * 
     **/
-    update<T extends ScansUpdateArgs>(
-      args: SelectSubset<T, ScansUpdateArgs>
-    ): Prisma__ScansClient<ScansGetPayload<T>>
+    update<T extends Electric_cyl_scansUpdateArgs>(
+      args: SelectSubset<T, Electric_cyl_scansUpdateArgs>
+    ): Prisma__Electric_cyl_scansClient<Electric_cyl_scansGetPayload<T>>
 
     /**
-     * Delete zero or more Scans.
-     * @param {ScansDeleteManyArgs} args - Arguments to filter Scans to delete.
+     * Delete zero or more Electric_cyl_scans.
+     * @param {Electric_cyl_scansDeleteManyArgs} args - Arguments to filter Electric_cyl_scans to delete.
      * @example
-     * // Delete a few Scans
-     * const { count } = await prisma.scans.deleteMany({
+     * // Delete a few Electric_cyl_scans
+     * const { count } = await prisma.electric_cyl_scans.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
     **/
-    deleteMany<T extends ScansDeleteManyArgs>(
-      args?: SelectSubset<T, ScansDeleteManyArgs>
+    deleteMany<T extends Electric_cyl_scansDeleteManyArgs>(
+      args?: SelectSubset<T, Electric_cyl_scansDeleteManyArgs>
     ): PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Scans.
+     * Update zero or more Electric_cyl_scans.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ScansUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {Electric_cyl_scansUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Scans
-     * const scans = await prisma.scans.updateMany({
+     * // Update many Electric_cyl_scans
+     * const electric_cyl_scans = await prisma.electric_cyl_scans.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -3575,59 +2576,59 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
      * })
      * 
     **/
-    updateMany<T extends ScansUpdateManyArgs>(
-      args: SelectSubset<T, ScansUpdateManyArgs>
+    updateMany<T extends Electric_cyl_scansUpdateManyArgs>(
+      args: SelectSubset<T, Electric_cyl_scansUpdateManyArgs>
     ): PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one Scans.
-     * @param {ScansUpsertArgs} args - Arguments to update or create a Scans.
+     * Create or update one Electric_cyl_scans.
+     * @param {Electric_cyl_scansUpsertArgs} args - Arguments to update or create a Electric_cyl_scans.
      * @example
-     * // Update or create a Scans
-     * const scans = await prisma.scans.upsert({
+     * // Update or create a Electric_cyl_scans
+     * const electric_cyl_scans = await prisma.electric_cyl_scans.upsert({
      *   create: {
-     *     // ... data to create a Scans
+     *     // ... data to create a Electric_cyl_scans
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Scans we want to update
+     *     // ... the filter for the Electric_cyl_scans we want to update
      *   }
      * })
     **/
-    upsert<T extends ScansUpsertArgs>(
-      args: SelectSubset<T, ScansUpsertArgs>
-    ): Prisma__ScansClient<ScansGetPayload<T>>
+    upsert<T extends Electric_cyl_scansUpsertArgs>(
+      args: SelectSubset<T, Electric_cyl_scansUpsertArgs>
+    ): Prisma__Electric_cyl_scansClient<Electric_cyl_scansGetPayload<T>>
 
     /**
-     * Count the number of Scans.
+     * Count the number of Electric_cyl_scans.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ScansCountArgs} args - Arguments to filter Scans to count.
+     * @param {Electric_cyl_scansCountArgs} args - Arguments to filter Electric_cyl_scans to count.
      * @example
-     * // Count the number of Scans
-     * const count = await prisma.scans.count({
+     * // Count the number of Electric_cyl_scans
+     * const count = await prisma.electric_cyl_scans.count({
      *   where: {
-     *     // ... the filter for the Scans we want to count
+     *     // ... the filter for the Electric_cyl_scans we want to count
      *   }
      * })
     **/
-    count<T extends ScansCountArgs>(
-      args?: Subset<T, ScansCountArgs>,
+    count<T extends Electric_cyl_scansCountArgs>(
+      args?: Subset<T, Electric_cyl_scansCountArgs>,
     ): PrismaPromise<
       T extends _Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], ScansCountAggregateOutputType>
+          : GetScalarType<T['select'], Electric_cyl_scansCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Scans.
+     * Allows you to perform aggregations operations on a Electric_cyl_scans.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ScansAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {Electric_cyl_scansAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -3647,13 +2648,13 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
      *   take: 10,
      * })
     **/
-    aggregate<T extends ScansAggregateArgs>(args: Subset<T, ScansAggregateArgs>): PrismaPromise<GetScansAggregateType<T>>
+    aggregate<T extends Electric_cyl_scansAggregateArgs>(args: Subset<T, Electric_cyl_scansAggregateArgs>): PrismaPromise<GetElectric_cyl_scansAggregateType<T>>
 
     /**
-     * Group by Scans.
+     * Group by Electric_cyl_scans.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ScansGroupByArgs} args - Group by arguments.
+     * @param {Electric_cyl_scansGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -3668,14 +2669,14 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
      * 
     **/
     groupBy<
-      T extends ScansGroupByArgs,
+      T extends Electric_cyl_scansGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ScansGroupByArgs['orderBy'] }
-        : { orderBy?: ScansGroupByArgs['orderBy'] },
+        ? { orderBy: Electric_cyl_scansGroupByArgs['orderBy'] }
+        : { orderBy?: Electric_cyl_scansGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends TupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -3724,17 +2725,17 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, ScansGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetScansGroupByPayload<T> : PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, Electric_cyl_scansGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetElectric_cyl_scansGroupByPayload<T> : PrismaPromise<InputErrors>
 
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Scans.
+   * The delegate class that acts as a "Promise-like" for Electric_cyl_scans.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export class Prisma__ScansClient<T, Null = never> implements PrismaPromise<T> {
+  export class Prisma__Electric_cyl_scansClient<T, Null = never> implements PrismaPromise<T> {
     [prisma]: true;
     private readonly _dmmf;
     private readonly _fetcher;
@@ -3751,9 +2752,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
     readonly [Symbol.toStringTag]: 'PrismaClientPromise';
 
-    images<T extends Scans$imagesArgs= {}>(args?: Subset<T, Scans$imagesArgs>): PrismaPromise<Array<ImagesGetPayload<T>>| Null>;
+    electric_cyl_images<T extends Electric_cyl_scans$electric_cyl_imagesArgs= {}>(args?: Subset<T, Electric_cyl_scans$electric_cyl_imagesArgs>): PrismaPromise<Array<Electric_cyl_imagesGetPayload<T>>| Null>;
 
-    phenotypers<T extends Scans$phenotypersArgs= {}>(args?: Subset<T, Scans$phenotypersArgs>): Prisma__PhenotypersClient<PhenotypersGetPayload<T> | Null>;
+    electric_phenotypers<T extends Electric_cyl_scans$electric_phenotypersArgs= {}>(args?: Subset<T, Electric_cyl_scans$electric_phenotypersArgs>): Prisma__Electric_phenotypersClient<Electric_phenotypersGetPayload<T> | Null>;
 
     private get _document();
     /**
@@ -3783,30 +2784,30 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   // Custom InputTypes
 
   /**
-   * Scans base type for findUnique actions
+   * Electric_cyl_scans base type for findUnique actions
    */
-  export type ScansFindUniqueArgsBase = {
+  export type Electric_cyl_scansFindUniqueArgsBase = {
     /**
-     * Select specific fields to fetch from the Scans
+     * Select specific fields to fetch from the Electric_cyl_scans
      * 
     **/
-    select?: ScansSelect | null
+    select?: Electric_cyl_scansSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: ScansInclude | null
+    include?: Electric_cyl_scansInclude | null
     /**
-     * Filter, which Scans to fetch.
+     * Filter, which Electric_cyl_scans to fetch.
      * 
     **/
-    where: ScansWhereUniqueInput
+    where: Electric_cyl_scansWhereUniqueInput
   }
 
   /**
-   * Scans findUnique
+   * Electric_cyl_scans findUnique
    */
-  export interface ScansFindUniqueArgs extends ScansFindUniqueArgsBase {
+  export interface Electric_cyl_scansFindUniqueArgs extends Electric_cyl_scansFindUniqueArgsBase {
    /**
     * Throw an Error if query returns no results
     * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
@@ -3816,87 +2817,87 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
       
 
   /**
-   * Scans findUniqueOrThrow
+   * Electric_cyl_scans findUniqueOrThrow
    */
-  export type ScansFindUniqueOrThrowArgs = {
+  export type Electric_cyl_scansFindUniqueOrThrowArgs = {
     /**
-     * Select specific fields to fetch from the Scans
+     * Select specific fields to fetch from the Electric_cyl_scans
      * 
     **/
-    select?: ScansSelect | null
+    select?: Electric_cyl_scansSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: ScansInclude | null
+    include?: Electric_cyl_scansInclude | null
     /**
-     * Filter, which Scans to fetch.
+     * Filter, which Electric_cyl_scans to fetch.
      * 
     **/
-    where: ScansWhereUniqueInput
+    where: Electric_cyl_scansWhereUniqueInput
   }
 
 
   /**
-   * Scans base type for findFirst actions
+   * Electric_cyl_scans base type for findFirst actions
    */
-  export type ScansFindFirstArgsBase = {
+  export type Electric_cyl_scansFindFirstArgsBase = {
     /**
-     * Select specific fields to fetch from the Scans
+     * Select specific fields to fetch from the Electric_cyl_scans
      * 
     **/
-    select?: ScansSelect | null
+    select?: Electric_cyl_scansSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: ScansInclude | null
+    include?: Electric_cyl_scansInclude | null
     /**
-     * Filter, which Scans to fetch.
+     * Filter, which Electric_cyl_scans to fetch.
      * 
     **/
-    where?: ScansWhereInput
+    where?: Electric_cyl_scansWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Scans to fetch.
+     * Determine the order of Electric_cyl_scans to fetch.
      * 
     **/
-    orderBy?: Enumerable<ScansOrderByWithRelationInput>
+    orderBy?: Enumerable<Electric_cyl_scansOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Scans.
+     * Sets the position for searching for Electric_cyl_scans.
      * 
     **/
-    cursor?: ScansWhereUniqueInput
+    cursor?: Electric_cyl_scansWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Scans from the position of the cursor.
+     * Take `±n` Electric_cyl_scans from the position of the cursor.
      * 
     **/
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Scans.
+     * Skip the first `n` Electric_cyl_scans.
      * 
     **/
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Scans.
+     * Filter by unique combinations of Electric_cyl_scans.
      * 
     **/
-    distinct?: Enumerable<ScansScalarFieldEnum>
+    distinct?: Enumerable<Electric_cyl_scansScalarFieldEnum>
   }
 
   /**
-   * Scans findFirst
+   * Electric_cyl_scans findFirst
    */
-  export interface ScansFindFirstArgs extends ScansFindFirstArgsBase {
+  export interface Electric_cyl_scansFindFirstArgs extends Electric_cyl_scansFindFirstArgsBase {
    /**
     * Throw an Error if query returns no results
     * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
@@ -3906,313 +2907,1312 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
       
 
   /**
-   * Scans findFirstOrThrow
+   * Electric_cyl_scans findFirstOrThrow
    */
-  export type ScansFindFirstOrThrowArgs = {
+  export type Electric_cyl_scansFindFirstOrThrowArgs = {
     /**
-     * Select specific fields to fetch from the Scans
+     * Select specific fields to fetch from the Electric_cyl_scans
      * 
     **/
-    select?: ScansSelect | null
+    select?: Electric_cyl_scansSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: ScansInclude | null
+    include?: Electric_cyl_scansInclude | null
     /**
-     * Filter, which Scans to fetch.
+     * Filter, which Electric_cyl_scans to fetch.
      * 
     **/
-    where?: ScansWhereInput
+    where?: Electric_cyl_scansWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Scans to fetch.
+     * Determine the order of Electric_cyl_scans to fetch.
      * 
     **/
-    orderBy?: Enumerable<ScansOrderByWithRelationInput>
+    orderBy?: Enumerable<Electric_cyl_scansOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Scans.
+     * Sets the position for searching for Electric_cyl_scans.
      * 
     **/
-    cursor?: ScansWhereUniqueInput
+    cursor?: Electric_cyl_scansWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Scans from the position of the cursor.
+     * Take `±n` Electric_cyl_scans from the position of the cursor.
      * 
     **/
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Scans.
+     * Skip the first `n` Electric_cyl_scans.
      * 
     **/
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Scans.
+     * Filter by unique combinations of Electric_cyl_scans.
      * 
     **/
-    distinct?: Enumerable<ScansScalarFieldEnum>
+    distinct?: Enumerable<Electric_cyl_scansScalarFieldEnum>
   }
 
 
   /**
-   * Scans findMany
+   * Electric_cyl_scans findMany
    */
-  export type ScansFindManyArgs = {
+  export type Electric_cyl_scansFindManyArgs = {
     /**
-     * Select specific fields to fetch from the Scans
+     * Select specific fields to fetch from the Electric_cyl_scans
      * 
     **/
-    select?: ScansSelect | null
+    select?: Electric_cyl_scansSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: ScansInclude | null
+    include?: Electric_cyl_scansInclude | null
     /**
-     * Filter, which Scans to fetch.
+     * Filter, which Electric_cyl_scans to fetch.
      * 
     **/
-    where?: ScansWhereInput
+    where?: Electric_cyl_scansWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Scans to fetch.
+     * Determine the order of Electric_cyl_scans to fetch.
      * 
     **/
-    orderBy?: Enumerable<ScansOrderByWithRelationInput>
+    orderBy?: Enumerable<Electric_cyl_scansOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Scans.
+     * Sets the position for listing Electric_cyl_scans.
      * 
     **/
-    cursor?: ScansWhereUniqueInput
+    cursor?: Electric_cyl_scansWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Scans from the position of the cursor.
+     * Take `±n` Electric_cyl_scans from the position of the cursor.
      * 
     **/
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Scans.
+     * Skip the first `n` Electric_cyl_scans.
      * 
     **/
     skip?: number
-    distinct?: Enumerable<ScansScalarFieldEnum>
+    distinct?: Enumerable<Electric_cyl_scansScalarFieldEnum>
   }
 
 
   /**
-   * Scans create
+   * Electric_cyl_scans create
    */
-  export type ScansCreateArgs = {
+  export type Electric_cyl_scansCreateArgs = {
     /**
-     * Select specific fields to fetch from the Scans
+     * Select specific fields to fetch from the Electric_cyl_scans
      * 
     **/
-    select?: ScansSelect | null
+    select?: Electric_cyl_scansSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: ScansInclude | null
+    include?: Electric_cyl_scansInclude | null
     /**
-     * The data needed to create a Scans.
+     * The data needed to create a Electric_cyl_scans.
      * 
     **/
-    data: XOR<ScansCreateInput, ScansUncheckedCreateInput>
+    data: XOR<Electric_cyl_scansCreateInput, Electric_cyl_scansUncheckedCreateInput>
   }
 
 
   /**
-   * Scans createMany
+   * Electric_cyl_scans createMany
    */
-  export type ScansCreateManyArgs = {
+  export type Electric_cyl_scansCreateManyArgs = {
     /**
-     * The data used to create many Scans.
+     * The data used to create many Electric_cyl_scans.
      * 
     **/
-    data: Enumerable<ScansCreateManyInput>
+    data: Enumerable<Electric_cyl_scansCreateManyInput>
     skipDuplicates?: boolean
   }
 
 
   /**
-   * Scans update
+   * Electric_cyl_scans update
    */
-  export type ScansUpdateArgs = {
+  export type Electric_cyl_scansUpdateArgs = {
     /**
-     * Select specific fields to fetch from the Scans
+     * Select specific fields to fetch from the Electric_cyl_scans
      * 
     **/
-    select?: ScansSelect | null
+    select?: Electric_cyl_scansSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: ScansInclude | null
+    include?: Electric_cyl_scansInclude | null
     /**
-     * The data needed to update a Scans.
+     * The data needed to update a Electric_cyl_scans.
      * 
     **/
-    data: XOR<ScansUpdateInput, ScansUncheckedUpdateInput>
+    data: XOR<Electric_cyl_scansUpdateInput, Electric_cyl_scansUncheckedUpdateInput>
     /**
-     * Choose, which Scans to update.
+     * Choose, which Electric_cyl_scans to update.
      * 
     **/
-    where: ScansWhereUniqueInput
+    where: Electric_cyl_scansWhereUniqueInput
   }
 
 
   /**
-   * Scans updateMany
+   * Electric_cyl_scans updateMany
    */
-  export type ScansUpdateManyArgs = {
+  export type Electric_cyl_scansUpdateManyArgs = {
     /**
-     * The data used to update Scans.
+     * The data used to update Electric_cyl_scans.
      * 
     **/
-    data: XOR<ScansUpdateManyMutationInput, ScansUncheckedUpdateManyInput>
+    data: XOR<Electric_cyl_scansUpdateManyMutationInput, Electric_cyl_scansUncheckedUpdateManyInput>
     /**
-     * Filter which Scans to update
+     * Filter which Electric_cyl_scans to update
      * 
     **/
-    where?: ScansWhereInput
+    where?: Electric_cyl_scansWhereInput
   }
 
 
   /**
-   * Scans upsert
+   * Electric_cyl_scans upsert
    */
-  export type ScansUpsertArgs = {
+  export type Electric_cyl_scansUpsertArgs = {
     /**
-     * Select specific fields to fetch from the Scans
+     * Select specific fields to fetch from the Electric_cyl_scans
      * 
     **/
-    select?: ScansSelect | null
+    select?: Electric_cyl_scansSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: ScansInclude | null
+    include?: Electric_cyl_scansInclude | null
     /**
-     * The filter to search for the Scans to update in case it exists.
+     * The filter to search for the Electric_cyl_scans to update in case it exists.
      * 
     **/
-    where: ScansWhereUniqueInput
+    where: Electric_cyl_scansWhereUniqueInput
     /**
-     * In case the Scans found by the `where` argument doesn't exist, create a new Scans with this data.
+     * In case the Electric_cyl_scans found by the `where` argument doesn't exist, create a new Electric_cyl_scans with this data.
      * 
     **/
-    create: XOR<ScansCreateInput, ScansUncheckedCreateInput>
+    create: XOR<Electric_cyl_scansCreateInput, Electric_cyl_scansUncheckedCreateInput>
     /**
-     * In case the Scans was found with the provided `where` argument, update it with this data.
+     * In case the Electric_cyl_scans was found with the provided `where` argument, update it with this data.
      * 
     **/
-    update: XOR<ScansUpdateInput, ScansUncheckedUpdateInput>
+    update: XOR<Electric_cyl_scansUpdateInput, Electric_cyl_scansUncheckedUpdateInput>
   }
 
 
   /**
-   * Scans delete
+   * Electric_cyl_scans delete
    */
-  export type ScansDeleteArgs = {
+  export type Electric_cyl_scansDeleteArgs = {
     /**
-     * Select specific fields to fetch from the Scans
+     * Select specific fields to fetch from the Electric_cyl_scans
      * 
     **/
-    select?: ScansSelect | null
+    select?: Electric_cyl_scansSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: ScansInclude | null
+    include?: Electric_cyl_scansInclude | null
     /**
-     * Filter which Scans to delete.
+     * Filter which Electric_cyl_scans to delete.
      * 
     **/
-    where: ScansWhereUniqueInput
+    where: Electric_cyl_scansWhereUniqueInput
   }
 
 
   /**
-   * Scans deleteMany
+   * Electric_cyl_scans deleteMany
    */
-  export type ScansDeleteManyArgs = {
+  export type Electric_cyl_scansDeleteManyArgs = {
     /**
-     * Filter which Scans to delete
+     * Filter which Electric_cyl_scans to delete
      * 
     **/
-    where?: ScansWhereInput
+    where?: Electric_cyl_scansWhereInput
   }
 
 
   /**
-   * Scans.images
+   * Electric_cyl_scans.electric_cyl_images
    */
-  export type Scans$imagesArgs = {
+  export type Electric_cyl_scans$electric_cyl_imagesArgs = {
     /**
-     * Select specific fields to fetch from the Images
+     * Select specific fields to fetch from the Electric_cyl_images
      * 
     **/
-    select?: ImagesSelect | null
+    select?: Electric_cyl_imagesSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: ImagesInclude | null
-    where?: ImagesWhereInput
-    orderBy?: Enumerable<ImagesOrderByWithRelationInput>
-    cursor?: ImagesWhereUniqueInput
+    include?: Electric_cyl_imagesInclude | null
+    where?: Electric_cyl_imagesWhereInput
+    orderBy?: Enumerable<Electric_cyl_imagesOrderByWithRelationInput>
+    cursor?: Electric_cyl_imagesWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Enumerable<ImagesScalarFieldEnum>
+    distinct?: Enumerable<Electric_cyl_imagesScalarFieldEnum>
   }
 
 
   /**
-   * Scans.phenotypers
+   * Electric_cyl_scans.electric_phenotypers
    */
-  export type Scans$phenotypersArgs = {
+  export type Electric_cyl_scans$electric_phenotypersArgs = {
     /**
-     * Select specific fields to fetch from the Phenotypers
+     * Select specific fields to fetch from the Electric_phenotypers
      * 
     **/
-    select?: PhenotypersSelect | null
+    select?: Electric_phenotypersSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: PhenotypersInclude | null
-    where?: PhenotypersWhereInput
+    include?: Electric_phenotypersInclude | null
+    where?: Electric_phenotypersWhereInput
   }
 
 
   /**
-   * Scans without action
+   * Electric_cyl_scans without action
    */
-  export type ScansArgs = {
+  export type Electric_cyl_scansArgs = {
     /**
-     * Select specific fields to fetch from the Scans
+     * Select specific fields to fetch from the Electric_cyl_scans
      * 
     **/
-    select?: ScansSelect | null
+    select?: Electric_cyl_scansSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: ScansInclude | null
+    include?: Electric_cyl_scansInclude | null
+  }
+
+
+
+  /**
+   * Model Electric_phenotypers
+   */
+
+
+  export type AggregateElectric_phenotypers = {
+    _count: Electric_phenotypersCountAggregateOutputType | null
+    _min: Electric_phenotypersMinAggregateOutputType | null
+    _max: Electric_phenotypersMaxAggregateOutputType | null
+  }
+
+  export type Electric_phenotypersMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    email: string | null
+  }
+
+  export type Electric_phenotypersMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    email: string | null
+  }
+
+  export type Electric_phenotypersCountAggregateOutputType = {
+    id: number
+    name: number
+    email: number
+    _all: number
+  }
+
+
+  export type Electric_phenotypersMinAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+  }
+
+  export type Electric_phenotypersMaxAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+  }
+
+  export type Electric_phenotypersCountAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+    _all?: true
+  }
+
+  export type Electric_phenotypersAggregateArgs = {
+    /**
+     * Filter which Electric_phenotypers to aggregate.
+     * 
+    **/
+    where?: Electric_phenotypersWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Electric_phenotypers to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<Electric_phenotypersOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     * 
+    **/
+    cursor?: Electric_phenotypersWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Electric_phenotypers from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Electric_phenotypers.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Electric_phenotypers
+    **/
+    _count?: true | Electric_phenotypersCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Electric_phenotypersMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Electric_phenotypersMaxAggregateInputType
+  }
+
+  export type GetElectric_phenotypersAggregateType<T extends Electric_phenotypersAggregateArgs> = {
+        [P in keyof T & keyof AggregateElectric_phenotypers]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateElectric_phenotypers[P]>
+      : GetScalarType<T[P], AggregateElectric_phenotypers[P]>
+  }
+
+
+
+
+  export type Electric_phenotypersGroupByArgs = {
+    where?: Electric_phenotypersWhereInput
+    orderBy?: Enumerable<Electric_phenotypersOrderByWithAggregationInput>
+    by: Array<Electric_phenotypersScalarFieldEnum>
+    having?: Electric_phenotypersScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Electric_phenotypersCountAggregateInputType | true
+    _min?: Electric_phenotypersMinAggregateInputType
+    _max?: Electric_phenotypersMaxAggregateInputType
+  }
+
+
+  export type Electric_phenotypersGroupByOutputType = {
+    id: string
+    name: string | null
+    email: string | null
+    _count: Electric_phenotypersCountAggregateOutputType | null
+    _min: Electric_phenotypersMinAggregateOutputType | null
+    _max: Electric_phenotypersMaxAggregateOutputType | null
+  }
+
+  type GetElectric_phenotypersGroupByPayload<T extends Electric_phenotypersGroupByArgs> = PrismaPromise<
+    Array<
+      PickArray<Electric_phenotypersGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Electric_phenotypersGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Electric_phenotypersGroupByOutputType[P]>
+            : GetScalarType<T[P], Electric_phenotypersGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type Electric_phenotypersSelect = {
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    electric_cyl_scans?: boolean | Electric_phenotypers$electric_cyl_scansArgs
+    _count?: boolean | Electric_phenotypersCountOutputTypeArgs
+  }
+
+
+  export type Electric_phenotypersInclude = {
+    electric_cyl_scans?: boolean | Electric_phenotypers$electric_cyl_scansArgs
+    _count?: boolean | Electric_phenotypersCountOutputTypeArgs
+  } 
+
+  export type Electric_phenotypersGetPayload<S extends boolean | null | undefined | Electric_phenotypersArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? Electric_phenotypers :
+    S extends undefined ? never :
+    S extends { include: any } & (Electric_phenotypersArgs | Electric_phenotypersFindManyArgs)
+    ? Electric_phenotypers  & {
+    [P in TruthyKeys<S['include']>]:
+        P extends 'electric_cyl_scans' ? Array < Electric_cyl_scansGetPayload<S['include'][P]>>  :
+        P extends '_count' ? Electric_phenotypersCountOutputTypeGetPayload<S['include'][P]> :  never
+  } 
+    : S extends { select: any } & (Electric_phenotypersArgs | Electric_phenotypersFindManyArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+        P extends 'electric_cyl_scans' ? Array < Electric_cyl_scansGetPayload<S['select'][P]>>  :
+        P extends '_count' ? Electric_phenotypersCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof Electric_phenotypers ? Electric_phenotypers[P] : never
+  } 
+      : Electric_phenotypers
+
+
+  type Electric_phenotypersCountArgs = Merge<
+    Omit<Electric_phenotypersFindManyArgs, 'select' | 'include'> & {
+      select?: Electric_phenotypersCountAggregateInputType | true
+    }
+  >
+
+  export interface Electric_phenotypersDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+    /**
+     * Find zero or one Electric_phenotypers that matches the filter.
+     * @param {Electric_phenotypersFindUniqueArgs} args - Arguments to find a Electric_phenotypers
+     * @example
+     * // Get one Electric_phenotypers
+     * const electric_phenotypers = await prisma.electric_phenotypers.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends Electric_phenotypersFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, Electric_phenotypersFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Electric_phenotypers'> extends True ? Prisma__Electric_phenotypersClient<Electric_phenotypersGetPayload<T>> : Prisma__Electric_phenotypersClient<Electric_phenotypersGetPayload<T> | null, null>
+
+    /**
+     * Find one Electric_phenotypers that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {Electric_phenotypersFindUniqueOrThrowArgs} args - Arguments to find a Electric_phenotypers
+     * @example
+     * // Get one Electric_phenotypers
+     * const electric_phenotypers = await prisma.electric_phenotypers.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends Electric_phenotypersFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, Electric_phenotypersFindUniqueOrThrowArgs>
+    ): Prisma__Electric_phenotypersClient<Electric_phenotypersGetPayload<T>>
+
+    /**
+     * Find the first Electric_phenotypers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Electric_phenotypersFindFirstArgs} args - Arguments to find a Electric_phenotypers
+     * @example
+     * // Get one Electric_phenotypers
+     * const electric_phenotypers = await prisma.electric_phenotypers.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends Electric_phenotypersFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, Electric_phenotypersFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Electric_phenotypers'> extends True ? Prisma__Electric_phenotypersClient<Electric_phenotypersGetPayload<T>> : Prisma__Electric_phenotypersClient<Electric_phenotypersGetPayload<T> | null, null>
+
+    /**
+     * Find the first Electric_phenotypers that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Electric_phenotypersFindFirstOrThrowArgs} args - Arguments to find a Electric_phenotypers
+     * @example
+     * // Get one Electric_phenotypers
+     * const electric_phenotypers = await prisma.electric_phenotypers.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends Electric_phenotypersFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, Electric_phenotypersFindFirstOrThrowArgs>
+    ): Prisma__Electric_phenotypersClient<Electric_phenotypersGetPayload<T>>
+
+    /**
+     * Find zero or more Electric_phenotypers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Electric_phenotypersFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Electric_phenotypers
+     * const electric_phenotypers = await prisma.electric_phenotypers.findMany()
+     * 
+     * // Get first 10 Electric_phenotypers
+     * const electric_phenotypers = await prisma.electric_phenotypers.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const electric_phenotypersWithIdOnly = await prisma.electric_phenotypers.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends Electric_phenotypersFindManyArgs>(
+      args?: SelectSubset<T, Electric_phenotypersFindManyArgs>
+    ): PrismaPromise<Array<Electric_phenotypersGetPayload<T>>>
+
+    /**
+     * Create a Electric_phenotypers.
+     * @param {Electric_phenotypersCreateArgs} args - Arguments to create a Electric_phenotypers.
+     * @example
+     * // Create one Electric_phenotypers
+     * const Electric_phenotypers = await prisma.electric_phenotypers.create({
+     *   data: {
+     *     // ... data to create a Electric_phenotypers
+     *   }
+     * })
+     * 
+    **/
+    create<T extends Electric_phenotypersCreateArgs>(
+      args: SelectSubset<T, Electric_phenotypersCreateArgs>
+    ): Prisma__Electric_phenotypersClient<Electric_phenotypersGetPayload<T>>
+
+    /**
+     * Create many Electric_phenotypers.
+     *     @param {Electric_phenotypersCreateManyArgs} args - Arguments to create many Electric_phenotypers.
+     *     @example
+     *     // Create many Electric_phenotypers
+     *     const electric_phenotypers = await prisma.electric_phenotypers.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends Electric_phenotypersCreateManyArgs>(
+      args?: SelectSubset<T, Electric_phenotypersCreateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Electric_phenotypers.
+     * @param {Electric_phenotypersDeleteArgs} args - Arguments to delete one Electric_phenotypers.
+     * @example
+     * // Delete one Electric_phenotypers
+     * const Electric_phenotypers = await prisma.electric_phenotypers.delete({
+     *   where: {
+     *     // ... filter to delete one Electric_phenotypers
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends Electric_phenotypersDeleteArgs>(
+      args: SelectSubset<T, Electric_phenotypersDeleteArgs>
+    ): Prisma__Electric_phenotypersClient<Electric_phenotypersGetPayload<T>>
+
+    /**
+     * Update one Electric_phenotypers.
+     * @param {Electric_phenotypersUpdateArgs} args - Arguments to update one Electric_phenotypers.
+     * @example
+     * // Update one Electric_phenotypers
+     * const electric_phenotypers = await prisma.electric_phenotypers.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends Electric_phenotypersUpdateArgs>(
+      args: SelectSubset<T, Electric_phenotypersUpdateArgs>
+    ): Prisma__Electric_phenotypersClient<Electric_phenotypersGetPayload<T>>
+
+    /**
+     * Delete zero or more Electric_phenotypers.
+     * @param {Electric_phenotypersDeleteManyArgs} args - Arguments to filter Electric_phenotypers to delete.
+     * @example
+     * // Delete a few Electric_phenotypers
+     * const { count } = await prisma.electric_phenotypers.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends Electric_phenotypersDeleteManyArgs>(
+      args?: SelectSubset<T, Electric_phenotypersDeleteManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Electric_phenotypers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Electric_phenotypersUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Electric_phenotypers
+     * const electric_phenotypers = await prisma.electric_phenotypers.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends Electric_phenotypersUpdateManyArgs>(
+      args: SelectSubset<T, Electric_phenotypersUpdateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Electric_phenotypers.
+     * @param {Electric_phenotypersUpsertArgs} args - Arguments to update or create a Electric_phenotypers.
+     * @example
+     * // Update or create a Electric_phenotypers
+     * const electric_phenotypers = await prisma.electric_phenotypers.upsert({
+     *   create: {
+     *     // ... data to create a Electric_phenotypers
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Electric_phenotypers we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends Electric_phenotypersUpsertArgs>(
+      args: SelectSubset<T, Electric_phenotypersUpsertArgs>
+    ): Prisma__Electric_phenotypersClient<Electric_phenotypersGetPayload<T>>
+
+    /**
+     * Count the number of Electric_phenotypers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Electric_phenotypersCountArgs} args - Arguments to filter Electric_phenotypers to count.
+     * @example
+     * // Count the number of Electric_phenotypers
+     * const count = await prisma.electric_phenotypers.count({
+     *   where: {
+     *     // ... the filter for the Electric_phenotypers we want to count
+     *   }
+     * })
+    **/
+    count<T extends Electric_phenotypersCountArgs>(
+      args?: Subset<T, Electric_phenotypersCountArgs>,
+    ): PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Electric_phenotypersCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Electric_phenotypers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Electric_phenotypersAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Electric_phenotypersAggregateArgs>(args: Subset<T, Electric_phenotypersAggregateArgs>): PrismaPromise<GetElectric_phenotypersAggregateType<T>>
+
+    /**
+     * Group by Electric_phenotypers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Electric_phenotypersGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends Electric_phenotypersGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: Electric_phenotypersGroupByArgs['orderBy'] }
+        : { orderBy?: Electric_phenotypersGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, Electric_phenotypersGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetElectric_phenotypersGroupByPayload<T> : PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Electric_phenotypers.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__Electric_phenotypersClient<T, Null = never> implements PrismaPromise<T> {
+    [prisma]: true;
+    private readonly _dmmf;
+    private readonly _fetcher;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+    readonly [Symbol.toStringTag]: 'PrismaClientPromise';
+
+    electric_cyl_scans<T extends Electric_phenotypers$electric_cyl_scansArgs= {}>(args?: Subset<T, Electric_phenotypers$electric_cyl_scansArgs>): PrismaPromise<Array<Electric_cyl_scansGetPayload<T>>| Null>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * Electric_phenotypers base type for findUnique actions
+   */
+  export type Electric_phenotypersFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the Electric_phenotypers
+     * 
+    **/
+    select?: Electric_phenotypersSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: Electric_phenotypersInclude | null
+    /**
+     * Filter, which Electric_phenotypers to fetch.
+     * 
+    **/
+    where: Electric_phenotypersWhereUniqueInput
+  }
+
+  /**
+   * Electric_phenotypers findUnique
+   */
+  export interface Electric_phenotypersFindUniqueArgs extends Electric_phenotypersFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * Electric_phenotypers findUniqueOrThrow
+   */
+  export type Electric_phenotypersFindUniqueOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the Electric_phenotypers
+     * 
+    **/
+    select?: Electric_phenotypersSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: Electric_phenotypersInclude | null
+    /**
+     * Filter, which Electric_phenotypers to fetch.
+     * 
+    **/
+    where: Electric_phenotypersWhereUniqueInput
+  }
+
+
+  /**
+   * Electric_phenotypers base type for findFirst actions
+   */
+  export type Electric_phenotypersFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the Electric_phenotypers
+     * 
+    **/
+    select?: Electric_phenotypersSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: Electric_phenotypersInclude | null
+    /**
+     * Filter, which Electric_phenotypers to fetch.
+     * 
+    **/
+    where?: Electric_phenotypersWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Electric_phenotypers to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<Electric_phenotypersOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Electric_phenotypers.
+     * 
+    **/
+    cursor?: Electric_phenotypersWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Electric_phenotypers from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Electric_phenotypers.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Electric_phenotypers.
+     * 
+    **/
+    distinct?: Enumerable<Electric_phenotypersScalarFieldEnum>
+  }
+
+  /**
+   * Electric_phenotypers findFirst
+   */
+  export interface Electric_phenotypersFindFirstArgs extends Electric_phenotypersFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * Electric_phenotypers findFirstOrThrow
+   */
+  export type Electric_phenotypersFindFirstOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the Electric_phenotypers
+     * 
+    **/
+    select?: Electric_phenotypersSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: Electric_phenotypersInclude | null
+    /**
+     * Filter, which Electric_phenotypers to fetch.
+     * 
+    **/
+    where?: Electric_phenotypersWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Electric_phenotypers to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<Electric_phenotypersOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Electric_phenotypers.
+     * 
+    **/
+    cursor?: Electric_phenotypersWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Electric_phenotypers from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Electric_phenotypers.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Electric_phenotypers.
+     * 
+    **/
+    distinct?: Enumerable<Electric_phenotypersScalarFieldEnum>
+  }
+
+
+  /**
+   * Electric_phenotypers findMany
+   */
+  export type Electric_phenotypersFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the Electric_phenotypers
+     * 
+    **/
+    select?: Electric_phenotypersSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: Electric_phenotypersInclude | null
+    /**
+     * Filter, which Electric_phenotypers to fetch.
+     * 
+    **/
+    where?: Electric_phenotypersWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Electric_phenotypers to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<Electric_phenotypersOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Electric_phenotypers.
+     * 
+    **/
+    cursor?: Electric_phenotypersWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Electric_phenotypers from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Electric_phenotypers.
+     * 
+    **/
+    skip?: number
+    distinct?: Enumerable<Electric_phenotypersScalarFieldEnum>
+  }
+
+
+  /**
+   * Electric_phenotypers create
+   */
+  export type Electric_phenotypersCreateArgs = {
+    /**
+     * Select specific fields to fetch from the Electric_phenotypers
+     * 
+    **/
+    select?: Electric_phenotypersSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: Electric_phenotypersInclude | null
+    /**
+     * The data needed to create a Electric_phenotypers.
+     * 
+    **/
+    data: XOR<Electric_phenotypersCreateInput, Electric_phenotypersUncheckedCreateInput>
+  }
+
+
+  /**
+   * Electric_phenotypers createMany
+   */
+  export type Electric_phenotypersCreateManyArgs = {
+    /**
+     * The data used to create many Electric_phenotypers.
+     * 
+    **/
+    data: Enumerable<Electric_phenotypersCreateManyInput>
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * Electric_phenotypers update
+   */
+  export type Electric_phenotypersUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the Electric_phenotypers
+     * 
+    **/
+    select?: Electric_phenotypersSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: Electric_phenotypersInclude | null
+    /**
+     * The data needed to update a Electric_phenotypers.
+     * 
+    **/
+    data: XOR<Electric_phenotypersUpdateInput, Electric_phenotypersUncheckedUpdateInput>
+    /**
+     * Choose, which Electric_phenotypers to update.
+     * 
+    **/
+    where: Electric_phenotypersWhereUniqueInput
+  }
+
+
+  /**
+   * Electric_phenotypers updateMany
+   */
+  export type Electric_phenotypersUpdateManyArgs = {
+    /**
+     * The data used to update Electric_phenotypers.
+     * 
+    **/
+    data: XOR<Electric_phenotypersUpdateManyMutationInput, Electric_phenotypersUncheckedUpdateManyInput>
+    /**
+     * Filter which Electric_phenotypers to update
+     * 
+    **/
+    where?: Electric_phenotypersWhereInput
+  }
+
+
+  /**
+   * Electric_phenotypers upsert
+   */
+  export type Electric_phenotypersUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the Electric_phenotypers
+     * 
+    **/
+    select?: Electric_phenotypersSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: Electric_phenotypersInclude | null
+    /**
+     * The filter to search for the Electric_phenotypers to update in case it exists.
+     * 
+    **/
+    where: Electric_phenotypersWhereUniqueInput
+    /**
+     * In case the Electric_phenotypers found by the `where` argument doesn't exist, create a new Electric_phenotypers with this data.
+     * 
+    **/
+    create: XOR<Electric_phenotypersCreateInput, Electric_phenotypersUncheckedCreateInput>
+    /**
+     * In case the Electric_phenotypers was found with the provided `where` argument, update it with this data.
+     * 
+    **/
+    update: XOR<Electric_phenotypersUpdateInput, Electric_phenotypersUncheckedUpdateInput>
+  }
+
+
+  /**
+   * Electric_phenotypers delete
+   */
+  export type Electric_phenotypersDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the Electric_phenotypers
+     * 
+    **/
+    select?: Electric_phenotypersSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: Electric_phenotypersInclude | null
+    /**
+     * Filter which Electric_phenotypers to delete.
+     * 
+    **/
+    where: Electric_phenotypersWhereUniqueInput
+  }
+
+
+  /**
+   * Electric_phenotypers deleteMany
+   */
+  export type Electric_phenotypersDeleteManyArgs = {
+    /**
+     * Filter which Electric_phenotypers to delete
+     * 
+    **/
+    where?: Electric_phenotypersWhereInput
+  }
+
+
+  /**
+   * Electric_phenotypers.electric_cyl_scans
+   */
+  export type Electric_phenotypers$electric_cyl_scansArgs = {
+    /**
+     * Select specific fields to fetch from the Electric_cyl_scans
+     * 
+    **/
+    select?: Electric_cyl_scansSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: Electric_cyl_scansInclude | null
+    where?: Electric_cyl_scansWhereInput
+    orderBy?: Enumerable<Electric_cyl_scansOrderByWithRelationInput>
+    cursor?: Electric_cyl_scansWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Enumerable<Electric_cyl_scansScalarFieldEnum>
+  }
+
+
+  /**
+   * Electric_phenotypers without action
+   */
+  export type Electric_phenotypersArgs = {
+    /**
+     * Select specific fields to fetch from the Electric_phenotypers
+     * 
+    **/
+    select?: Electric_phenotypersSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: Electric_phenotypersInclude | null
   }
 
 
@@ -4234,7 +4234,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-  export const ImagesScalarFieldEnum: {
+  export const Electric_cyl_imagesScalarFieldEnum: {
     id: 'id',
     scan_id: 'scan_id',
     frame_number: 'frame_number',
@@ -4244,19 +4244,10 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     supabase_object_path: 'supabase_object_path'
   };
 
-  export type ImagesScalarFieldEnum = (typeof ImagesScalarFieldEnum)[keyof typeof ImagesScalarFieldEnum]
+  export type Electric_cyl_imagesScalarFieldEnum = (typeof Electric_cyl_imagesScalarFieldEnum)[keyof typeof Electric_cyl_imagesScalarFieldEnum]
 
 
-  export const PhenotypersScalarFieldEnum: {
-    id: 'id',
-    name: 'name',
-    email: 'email'
-  };
-
-  export type PhenotypersScalarFieldEnum = (typeof PhenotypersScalarFieldEnum)[keyof typeof PhenotypersScalarFieldEnum]
-
-
-  export const ScansScalarFieldEnum: {
+  export const Electric_cyl_scansScalarFieldEnum: {
     id: 'id',
     phenotyper_id: 'phenotyper_id',
     scanner_id: 'scanner_id',
@@ -4272,7 +4263,16 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     seconds_per_rot: 'seconds_per_rot'
   };
 
-  export type ScansScalarFieldEnum = (typeof ScansScalarFieldEnum)[keyof typeof ScansScalarFieldEnum]
+  export type Electric_cyl_scansScalarFieldEnum = (typeof Electric_cyl_scansScalarFieldEnum)[keyof typeof Electric_cyl_scansScalarFieldEnum]
+
+
+  export const Electric_phenotypersScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    email: 'email'
+  };
+
+  export type Electric_phenotypersScalarFieldEnum = (typeof Electric_phenotypersScalarFieldEnum)[keyof typeof Electric_phenotypersScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -4363,21 +4363,21 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
    */
 
 
-  export type ImagesWhereInput = {
-    AND?: Enumerable<ImagesWhereInput>
-    OR?: Enumerable<ImagesWhereInput>
-    NOT?: Enumerable<ImagesWhereInput>
-    id?: UuidFilter<"Images"> | string
-    scan_id?: UuidNullableFilter<"Images"> | string | null
-    frame_number?: IntNullableFilter<"Images"> | number | null
-    path?: StringNullableFilter<"Images"> | string | null
-    url?: StringNullableFilter<"Images"> | string | null
-    status?: StringNullableFilter<"Images"> | string | null
-    supabase_object_path?: StringNullableFilter<"Images"> | string | null
-    scans?: XOR<ScansNullableRelationFilter, ScansWhereInput> | null
+  export type Electric_cyl_imagesWhereInput = {
+    AND?: Enumerable<Electric_cyl_imagesWhereInput>
+    OR?: Enumerable<Electric_cyl_imagesWhereInput>
+    NOT?: Enumerable<Electric_cyl_imagesWhereInput>
+    id?: UuidFilter<"Electric_cyl_images"> | string
+    scan_id?: UuidNullableFilter<"Electric_cyl_images"> | string | null
+    frame_number?: IntNullableFilter<"Electric_cyl_images"> | number | null
+    path?: StringNullableFilter<"Electric_cyl_images"> | string | null
+    url?: StringNullableFilter<"Electric_cyl_images"> | string | null
+    status?: StringNullableFilter<"Electric_cyl_images"> | string | null
+    supabase_object_path?: StringNullableFilter<"Electric_cyl_images"> | string | null
+    electric_cyl_scans?: XOR<Electric_cyl_scansNullableRelationFilter, Electric_cyl_scansWhereInput> | null
   }
 
-  export type ImagesOrderByWithRelationInput = {
+  export type Electric_cyl_imagesOrderByWithRelationInput = {
     id?: SortOrder
     scan_id?: SortOrderInput | SortOrder
     frame_number?: SortOrderInput | SortOrder
@@ -4385,24 +4385,24 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     url?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
     supabase_object_path?: SortOrderInput | SortOrder
-    scans?: ScansOrderByWithRelationInput
+    electric_cyl_scans?: Electric_cyl_scansOrderByWithRelationInput
   }
 
-  export type ImagesWhereUniqueInput = Prisma.AtLeast<{
+  export type Electric_cyl_imagesWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    AND?: Enumerable<ImagesWhereInput>
-    OR?: Enumerable<ImagesWhereInput>
-    NOT?: Enumerable<ImagesWhereInput>
-    scan_id?: UuidNullableFilter<"Images"> | string | null
-    frame_number?: IntNullableFilter<"Images"> | number | null
-    path?: StringNullableFilter<"Images"> | string | null
-    url?: StringNullableFilter<"Images"> | string | null
-    status?: StringNullableFilter<"Images"> | string | null
-    supabase_object_path?: StringNullableFilter<"Images"> | string | null
-    scans?: XOR<ScansNullableRelationFilter, ScansWhereInput> | null
+    AND?: Enumerable<Electric_cyl_imagesWhereInput>
+    OR?: Enumerable<Electric_cyl_imagesWhereInput>
+    NOT?: Enumerable<Electric_cyl_imagesWhereInput>
+    scan_id?: UuidNullableFilter<"Electric_cyl_images"> | string | null
+    frame_number?: IntNullableFilter<"Electric_cyl_images"> | number | null
+    path?: StringNullableFilter<"Electric_cyl_images"> | string | null
+    url?: StringNullableFilter<"Electric_cyl_images"> | string | null
+    status?: StringNullableFilter<"Electric_cyl_images"> | string | null
+    supabase_object_path?: StringNullableFilter<"Electric_cyl_images"> | string | null
+    electric_cyl_scans?: XOR<Electric_cyl_scansNullableRelationFilter, Electric_cyl_scansWhereInput> | null
   }, "id">
 
-  export type ImagesOrderByWithAggregationInput = {
+  export type Electric_cyl_imagesOrderByWithAggregationInput = {
     id?: SortOrder
     scan_id?: SortOrderInput | SortOrder
     frame_number?: SortOrderInput | SortOrder
@@ -4410,93 +4410,48 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     url?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
     supabase_object_path?: SortOrderInput | SortOrder
-    _count?: ImagesCountOrderByAggregateInput
-    _avg?: ImagesAvgOrderByAggregateInput
-    _max?: ImagesMaxOrderByAggregateInput
-    _min?: ImagesMinOrderByAggregateInput
-    _sum?: ImagesSumOrderByAggregateInput
+    _count?: Electric_cyl_imagesCountOrderByAggregateInput
+    _avg?: Electric_cyl_imagesAvgOrderByAggregateInput
+    _max?: Electric_cyl_imagesMaxOrderByAggregateInput
+    _min?: Electric_cyl_imagesMinOrderByAggregateInput
+    _sum?: Electric_cyl_imagesSumOrderByAggregateInput
   }
 
-  export type ImagesScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<ImagesScalarWhereWithAggregatesInput>
-    OR?: Enumerable<ImagesScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<ImagesScalarWhereWithAggregatesInput>
-    id?: UuidWithAggregatesFilter<"Images"> | string
-    scan_id?: UuidNullableWithAggregatesFilter<"Images"> | string | null
-    frame_number?: IntNullableWithAggregatesFilter<"Images"> | number | null
-    path?: StringNullableWithAggregatesFilter<"Images"> | string | null
-    url?: StringNullableWithAggregatesFilter<"Images"> | string | null
-    status?: StringNullableWithAggregatesFilter<"Images"> | string | null
-    supabase_object_path?: StringNullableWithAggregatesFilter<"Images"> | string | null
+  export type Electric_cyl_imagesScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<Electric_cyl_imagesScalarWhereWithAggregatesInput>
+    OR?: Enumerable<Electric_cyl_imagesScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<Electric_cyl_imagesScalarWhereWithAggregatesInput>
+    id?: UuidWithAggregatesFilter<"Electric_cyl_images"> | string
+    scan_id?: UuidNullableWithAggregatesFilter<"Electric_cyl_images"> | string | null
+    frame_number?: IntNullableWithAggregatesFilter<"Electric_cyl_images"> | number | null
+    path?: StringNullableWithAggregatesFilter<"Electric_cyl_images"> | string | null
+    url?: StringNullableWithAggregatesFilter<"Electric_cyl_images"> | string | null
+    status?: StringNullableWithAggregatesFilter<"Electric_cyl_images"> | string | null
+    supabase_object_path?: StringNullableWithAggregatesFilter<"Electric_cyl_images"> | string | null
   }
 
-  export type PhenotypersWhereInput = {
-    AND?: Enumerable<PhenotypersWhereInput>
-    OR?: Enumerable<PhenotypersWhereInput>
-    NOT?: Enumerable<PhenotypersWhereInput>
-    id?: UuidFilter<"Phenotypers"> | string
-    name?: StringNullableFilter<"Phenotypers"> | string | null
-    email?: StringNullableFilter<"Phenotypers"> | string | null
-    scans?: ScansListRelationFilter
+  export type Electric_cyl_scansWhereInput = {
+    AND?: Enumerable<Electric_cyl_scansWhereInput>
+    OR?: Enumerable<Electric_cyl_scansWhereInput>
+    NOT?: Enumerable<Electric_cyl_scansWhereInput>
+    id?: UuidFilter<"Electric_cyl_scans"> | string
+    phenotyper_id?: UuidNullableFilter<"Electric_cyl_scans"> | string | null
+    scanner_id?: StringNullableFilter<"Electric_cyl_scans"> | string | null
+    plant_qr_code?: StringNullableFilter<"Electric_cyl_scans"> | string | null
+    path?: StringNullableFilter<"Electric_cyl_scans"> | string | null
+    capture_date?: DateTimeNullableFilter<"Electric_cyl_scans"> | Date | string | null
+    num_frames?: IntNullableFilter<"Electric_cyl_scans"> | number | null
+    exposure_time?: IntNullableFilter<"Electric_cyl_scans"> | number | null
+    gain?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
+    brightness?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
+    contrast?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
+    gamma?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
+    seconds_per_rot?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
+    electric_cyl_images?: Electric_cyl_imagesListRelationFilter
+    electric_phenotypers?: XOR<Electric_phenotypersNullableRelationFilter, Electric_phenotypersWhereInput> | null
   }
 
-  export type PhenotypersOrderByWithRelationInput = {
-    id?: SortOrder
-    name?: SortOrderInput | SortOrder
-    email?: SortOrderInput | SortOrder
-    scans?: ScansOrderByRelationAggregateInput
-  }
-
-  export type PhenotypersWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: Enumerable<PhenotypersWhereInput>
-    OR?: Enumerable<PhenotypersWhereInput>
-    NOT?: Enumerable<PhenotypersWhereInput>
-    name?: StringNullableFilter<"Phenotypers"> | string | null
-    email?: StringNullableFilter<"Phenotypers"> | string | null
-    scans?: ScansListRelationFilter
-  }, "id">
-
-  export type PhenotypersOrderByWithAggregationInput = {
-    id?: SortOrder
-    name?: SortOrderInput | SortOrder
-    email?: SortOrderInput | SortOrder
-    _count?: PhenotypersCountOrderByAggregateInput
-    _max?: PhenotypersMaxOrderByAggregateInput
-    _min?: PhenotypersMinOrderByAggregateInput
-  }
-
-  export type PhenotypersScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<PhenotypersScalarWhereWithAggregatesInput>
-    OR?: Enumerable<PhenotypersScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<PhenotypersScalarWhereWithAggregatesInput>
-    id?: UuidWithAggregatesFilter<"Phenotypers"> | string
-    name?: StringNullableWithAggregatesFilter<"Phenotypers"> | string | null
-    email?: StringNullableWithAggregatesFilter<"Phenotypers"> | string | null
-  }
-
-  export type ScansWhereInput = {
-    AND?: Enumerable<ScansWhereInput>
-    OR?: Enumerable<ScansWhereInput>
-    NOT?: Enumerable<ScansWhereInput>
-    id?: UuidFilter<"Scans"> | string
-    phenotyper_id?: UuidNullableFilter<"Scans"> | string | null
-    scanner_id?: StringNullableFilter<"Scans"> | string | null
-    plant_qr_code?: StringNullableFilter<"Scans"> | string | null
-    path?: StringNullableFilter<"Scans"> | string | null
-    capture_date?: DateTimeNullableFilter<"Scans"> | Date | string | null
-    num_frames?: IntNullableFilter<"Scans"> | number | null
-    exposure_time?: IntNullableFilter<"Scans"> | number | null
-    gain?: FloatNullableFilter<"Scans"> | number | null
-    brightness?: FloatNullableFilter<"Scans"> | number | null
-    contrast?: FloatNullableFilter<"Scans"> | number | null
-    gamma?: FloatNullableFilter<"Scans"> | number | null
-    seconds_per_rot?: FloatNullableFilter<"Scans"> | number | null
-    images?: ImagesListRelationFilter
-    phenotypers?: XOR<PhenotypersNullableRelationFilter, PhenotypersWhereInput> | null
-  }
-
-  export type ScansOrderByWithRelationInput = {
+  export type Electric_cyl_scansOrderByWithRelationInput = {
     id?: SortOrder
     phenotyper_id?: SortOrderInput | SortOrder
     scanner_id?: SortOrderInput | SortOrder
@@ -4510,32 +4465,32 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: SortOrderInput | SortOrder
     gamma?: SortOrderInput | SortOrder
     seconds_per_rot?: SortOrderInput | SortOrder
-    images?: ImagesOrderByRelationAggregateInput
-    phenotypers?: PhenotypersOrderByWithRelationInput
+    electric_cyl_images?: Electric_cyl_imagesOrderByRelationAggregateInput
+    electric_phenotypers?: Electric_phenotypersOrderByWithRelationInput
   }
 
-  export type ScansWhereUniqueInput = Prisma.AtLeast<{
+  export type Electric_cyl_scansWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    AND?: Enumerable<ScansWhereInput>
-    OR?: Enumerable<ScansWhereInput>
-    NOT?: Enumerable<ScansWhereInput>
-    phenotyper_id?: UuidNullableFilter<"Scans"> | string | null
-    scanner_id?: StringNullableFilter<"Scans"> | string | null
-    plant_qr_code?: StringNullableFilter<"Scans"> | string | null
-    path?: StringNullableFilter<"Scans"> | string | null
-    capture_date?: DateTimeNullableFilter<"Scans"> | Date | string | null
-    num_frames?: IntNullableFilter<"Scans"> | number | null
-    exposure_time?: IntNullableFilter<"Scans"> | number | null
-    gain?: FloatNullableFilter<"Scans"> | number | null
-    brightness?: FloatNullableFilter<"Scans"> | number | null
-    contrast?: FloatNullableFilter<"Scans"> | number | null
-    gamma?: FloatNullableFilter<"Scans"> | number | null
-    seconds_per_rot?: FloatNullableFilter<"Scans"> | number | null
-    images?: ImagesListRelationFilter
-    phenotypers?: XOR<PhenotypersNullableRelationFilter, PhenotypersWhereInput> | null
+    AND?: Enumerable<Electric_cyl_scansWhereInput>
+    OR?: Enumerable<Electric_cyl_scansWhereInput>
+    NOT?: Enumerable<Electric_cyl_scansWhereInput>
+    phenotyper_id?: UuidNullableFilter<"Electric_cyl_scans"> | string | null
+    scanner_id?: StringNullableFilter<"Electric_cyl_scans"> | string | null
+    plant_qr_code?: StringNullableFilter<"Electric_cyl_scans"> | string | null
+    path?: StringNullableFilter<"Electric_cyl_scans"> | string | null
+    capture_date?: DateTimeNullableFilter<"Electric_cyl_scans"> | Date | string | null
+    num_frames?: IntNullableFilter<"Electric_cyl_scans"> | number | null
+    exposure_time?: IntNullableFilter<"Electric_cyl_scans"> | number | null
+    gain?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
+    brightness?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
+    contrast?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
+    gamma?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
+    seconds_per_rot?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
+    electric_cyl_images?: Electric_cyl_imagesListRelationFilter
+    electric_phenotypers?: XOR<Electric_phenotypersNullableRelationFilter, Electric_phenotypersWhereInput> | null
   }, "id">
 
-  export type ScansOrderByWithAggregationInput = {
+  export type Electric_cyl_scansOrderByWithAggregationInput = {
     id?: SortOrder
     phenotyper_id?: SortOrderInput | SortOrder
     scanner_id?: SortOrderInput | SortOrder
@@ -4549,43 +4504,88 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: SortOrderInput | SortOrder
     gamma?: SortOrderInput | SortOrder
     seconds_per_rot?: SortOrderInput | SortOrder
-    _count?: ScansCountOrderByAggregateInput
-    _avg?: ScansAvgOrderByAggregateInput
-    _max?: ScansMaxOrderByAggregateInput
-    _min?: ScansMinOrderByAggregateInput
-    _sum?: ScansSumOrderByAggregateInput
+    _count?: Electric_cyl_scansCountOrderByAggregateInput
+    _avg?: Electric_cyl_scansAvgOrderByAggregateInput
+    _max?: Electric_cyl_scansMaxOrderByAggregateInput
+    _min?: Electric_cyl_scansMinOrderByAggregateInput
+    _sum?: Electric_cyl_scansSumOrderByAggregateInput
   }
 
-  export type ScansScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<ScansScalarWhereWithAggregatesInput>
-    OR?: Enumerable<ScansScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<ScansScalarWhereWithAggregatesInput>
-    id?: UuidWithAggregatesFilter<"Scans"> | string
-    phenotyper_id?: UuidNullableWithAggregatesFilter<"Scans"> | string | null
-    scanner_id?: StringNullableWithAggregatesFilter<"Scans"> | string | null
-    plant_qr_code?: StringNullableWithAggregatesFilter<"Scans"> | string | null
-    path?: StringNullableWithAggregatesFilter<"Scans"> | string | null
-    capture_date?: DateTimeNullableWithAggregatesFilter<"Scans"> | Date | string | null
-    num_frames?: IntNullableWithAggregatesFilter<"Scans"> | number | null
-    exposure_time?: IntNullableWithAggregatesFilter<"Scans"> | number | null
-    gain?: FloatNullableWithAggregatesFilter<"Scans"> | number | null
-    brightness?: FloatNullableWithAggregatesFilter<"Scans"> | number | null
-    contrast?: FloatNullableWithAggregatesFilter<"Scans"> | number | null
-    gamma?: FloatNullableWithAggregatesFilter<"Scans"> | number | null
-    seconds_per_rot?: FloatNullableWithAggregatesFilter<"Scans"> | number | null
+  export type Electric_cyl_scansScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<Electric_cyl_scansScalarWhereWithAggregatesInput>
+    OR?: Enumerable<Electric_cyl_scansScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<Electric_cyl_scansScalarWhereWithAggregatesInput>
+    id?: UuidWithAggregatesFilter<"Electric_cyl_scans"> | string
+    phenotyper_id?: UuidNullableWithAggregatesFilter<"Electric_cyl_scans"> | string | null
+    scanner_id?: StringNullableWithAggregatesFilter<"Electric_cyl_scans"> | string | null
+    plant_qr_code?: StringNullableWithAggregatesFilter<"Electric_cyl_scans"> | string | null
+    path?: StringNullableWithAggregatesFilter<"Electric_cyl_scans"> | string | null
+    capture_date?: DateTimeNullableWithAggregatesFilter<"Electric_cyl_scans"> | Date | string | null
+    num_frames?: IntNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
+    exposure_time?: IntNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
+    gain?: FloatNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
+    brightness?: FloatNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
+    contrast?: FloatNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
+    gamma?: FloatNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
+    seconds_per_rot?: FloatNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
   }
 
-  export type ImagesCreateInput = {
+  export type Electric_phenotypersWhereInput = {
+    AND?: Enumerable<Electric_phenotypersWhereInput>
+    OR?: Enumerable<Electric_phenotypersWhereInput>
+    NOT?: Enumerable<Electric_phenotypersWhereInput>
+    id?: UuidFilter<"Electric_phenotypers"> | string
+    name?: StringNullableFilter<"Electric_phenotypers"> | string | null
+    email?: StringNullableFilter<"Electric_phenotypers"> | string | null
+    electric_cyl_scans?: Electric_cyl_scansListRelationFilter
+  }
+
+  export type Electric_phenotypersOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrderInput | SortOrder
+    email?: SortOrderInput | SortOrder
+    electric_cyl_scans?: Electric_cyl_scansOrderByRelationAggregateInput
+  }
+
+  export type Electric_phenotypersWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: Enumerable<Electric_phenotypersWhereInput>
+    OR?: Enumerable<Electric_phenotypersWhereInput>
+    NOT?: Enumerable<Electric_phenotypersWhereInput>
+    name?: StringNullableFilter<"Electric_phenotypers"> | string | null
+    email?: StringNullableFilter<"Electric_phenotypers"> | string | null
+    electric_cyl_scans?: Electric_cyl_scansListRelationFilter
+  }, "id">
+
+  export type Electric_phenotypersOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrderInput | SortOrder
+    email?: SortOrderInput | SortOrder
+    _count?: Electric_phenotypersCountOrderByAggregateInput
+    _max?: Electric_phenotypersMaxOrderByAggregateInput
+    _min?: Electric_phenotypersMinOrderByAggregateInput
+  }
+
+  export type Electric_phenotypersScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<Electric_phenotypersScalarWhereWithAggregatesInput>
+    OR?: Enumerable<Electric_phenotypersScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<Electric_phenotypersScalarWhereWithAggregatesInput>
+    id?: UuidWithAggregatesFilter<"Electric_phenotypers"> | string
+    name?: StringNullableWithAggregatesFilter<"Electric_phenotypers"> | string | null
+    email?: StringNullableWithAggregatesFilter<"Electric_phenotypers"> | string | null
+  }
+
+  export type Electric_cyl_imagesCreateInput = {
     id: string
     frame_number?: number | null
     path?: string | null
     url?: string | null
     status?: string | null
     supabase_object_path?: string | null
-    scans?: ScansCreateNestedOneWithoutImagesInput
+    electric_cyl_scans?: Electric_cyl_scansCreateNestedOneWithoutElectric_cyl_imagesInput
   }
 
-  export type ImagesUncheckedCreateInput = {
+  export type Electric_cyl_imagesUncheckedCreateInput = {
     id: string
     scan_id?: string | null
     frame_number?: number | null
@@ -4595,17 +4595,17 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     supabase_object_path?: string | null
   }
 
-  export type ImagesUpdateInput = {
+  export type Electric_cyl_imagesUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     frame_number?: NullableIntFieldUpdateOperationsInput | number | null
     path?: NullableStringFieldUpdateOperationsInput | string | null
     url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableStringFieldUpdateOperationsInput | string | null
     supabase_object_path?: NullableStringFieldUpdateOperationsInput | string | null
-    scans?: ScansUpdateOneWithoutImagesNestedInput
+    electric_cyl_scans?: Electric_cyl_scansUpdateOneWithoutElectric_cyl_imagesNestedInput
   }
 
-  export type ImagesUncheckedUpdateInput = {
+  export type Electric_cyl_imagesUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     scan_id?: NullableStringFieldUpdateOperationsInput | string | null
     frame_number?: NullableIntFieldUpdateOperationsInput | number | null
@@ -4615,7 +4615,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     supabase_object_path?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type ImagesCreateManyInput = {
+  export type Electric_cyl_imagesCreateManyInput = {
     id: string
     scan_id?: string | null
     frame_number?: number | null
@@ -4625,7 +4625,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     supabase_object_path?: string | null
   }
 
-  export type ImagesUpdateManyMutationInput = {
+  export type Electric_cyl_imagesUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     frame_number?: NullableIntFieldUpdateOperationsInput | number | null
     path?: NullableStringFieldUpdateOperationsInput | string | null
@@ -4634,7 +4634,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     supabase_object_path?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type ImagesUncheckedUpdateManyInput = {
+  export type Electric_cyl_imagesUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     scan_id?: NullableStringFieldUpdateOperationsInput | string | null
     frame_number?: NullableIntFieldUpdateOperationsInput | number | null
@@ -4644,53 +4644,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     supabase_object_path?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type PhenotypersCreateInput = {
-    id: string
-    name?: string | null
-    email?: string | null
-    scans?: ScansCreateNestedManyWithoutPhenotypersInput
-  }
-
-  export type PhenotypersUncheckedCreateInput = {
-    id: string
-    name?: string | null
-    email?: string | null
-    scans?: ScansUncheckedCreateNestedManyWithoutPhenotypersInput
-  }
-
-  export type PhenotypersUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    scans?: ScansUpdateManyWithoutPhenotypersNestedInput
-  }
-
-  export type PhenotypersUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    scans?: ScansUncheckedUpdateManyWithoutPhenotypersNestedInput
-  }
-
-  export type PhenotypersCreateManyInput = {
-    id: string
-    name?: string | null
-    email?: string | null
-  }
-
-  export type PhenotypersUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type PhenotypersUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type ScansCreateInput = {
+  export type Electric_cyl_scansCreateInput = {
     id: string
     scanner_id?: string | null
     plant_qr_code?: string | null
@@ -4703,11 +4657,11 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: number | null
     gamma?: number | null
     seconds_per_rot?: number | null
-    images?: ImagesCreateNestedManyWithoutScansInput
-    phenotypers?: PhenotypersCreateNestedOneWithoutScansInput
+    electric_cyl_images?: Electric_cyl_imagesCreateNestedManyWithoutElectric_cyl_scansInput
+    electric_phenotypers?: Electric_phenotypersCreateNestedOneWithoutElectric_cyl_scansInput
   }
 
-  export type ScansUncheckedCreateInput = {
+  export type Electric_cyl_scansUncheckedCreateInput = {
     id: string
     phenotyper_id?: string | null
     scanner_id?: string | null
@@ -4721,10 +4675,10 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: number | null
     gamma?: number | null
     seconds_per_rot?: number | null
-    images?: ImagesUncheckedCreateNestedManyWithoutScansInput
+    electric_cyl_images?: Electric_cyl_imagesUncheckedCreateNestedManyWithoutElectric_cyl_scansInput
   }
 
-  export type ScansUpdateInput = {
+  export type Electric_cyl_scansUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     scanner_id?: NullableStringFieldUpdateOperationsInput | string | null
     plant_qr_code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -4737,11 +4691,11 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
     seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
-    images?: ImagesUpdateManyWithoutScansNestedInput
-    phenotypers?: PhenotypersUpdateOneWithoutScansNestedInput
+    electric_cyl_images?: Electric_cyl_imagesUpdateManyWithoutElectric_cyl_scansNestedInput
+    electric_phenotypers?: Electric_phenotypersUpdateOneWithoutElectric_cyl_scansNestedInput
   }
 
-  export type ScansUncheckedUpdateInput = {
+  export type Electric_cyl_scansUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     phenotyper_id?: NullableStringFieldUpdateOperationsInput | string | null
     scanner_id?: NullableStringFieldUpdateOperationsInput | string | null
@@ -4755,10 +4709,10 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
     seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
-    images?: ImagesUncheckedUpdateManyWithoutScansNestedInput
+    electric_cyl_images?: Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_scansNestedInput
   }
 
-  export type ScansCreateManyInput = {
+  export type Electric_cyl_scansCreateManyInput = {
     id: string
     phenotyper_id?: string | null
     scanner_id?: string | null
@@ -4774,7 +4728,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     seconds_per_rot?: number | null
   }
 
-  export type ScansUpdateManyMutationInput = {
+  export type Electric_cyl_scansUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     scanner_id?: NullableStringFieldUpdateOperationsInput | string | null
     plant_qr_code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -4789,7 +4743,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
-  export type ScansUncheckedUpdateManyInput = {
+  export type Electric_cyl_scansUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     phenotyper_id?: NullableStringFieldUpdateOperationsInput | string | null
     scanner_id?: NullableStringFieldUpdateOperationsInput | string | null
@@ -4803,6 +4757,52 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
     seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
+  }
+
+  export type Electric_phenotypersCreateInput = {
+    id: string
+    name?: string | null
+    email?: string | null
+    electric_cyl_scans?: Electric_cyl_scansCreateNestedManyWithoutElectric_phenotypersInput
+  }
+
+  export type Electric_phenotypersUncheckedCreateInput = {
+    id: string
+    name?: string | null
+    email?: string | null
+    electric_cyl_scans?: Electric_cyl_scansUncheckedCreateNestedManyWithoutElectric_phenotypersInput
+  }
+
+  export type Electric_phenotypersUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    electric_cyl_scans?: Electric_cyl_scansUpdateManyWithoutElectric_phenotypersNestedInput
+  }
+
+  export type Electric_phenotypersUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    electric_cyl_scans?: Electric_cyl_scansUncheckedUpdateManyWithoutElectric_phenotypersNestedInput
+  }
+
+  export type Electric_phenotypersCreateManyInput = {
+    id: string
+    name?: string | null
+    email?: string | null
+  }
+
+  export type Electric_phenotypersUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type Electric_phenotypersUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UuidFilter<$PrismaModel = never> = {
@@ -4855,9 +4855,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type ScansNullableRelationFilter = {
-    is?: ScansWhereInput | null
-    isNot?: ScansWhereInput | null
+  export type Electric_cyl_scansNullableRelationFilter = {
+    is?: Electric_cyl_scansWhereInput | null
+    isNot?: Electric_cyl_scansWhereInput | null
   }
 
   export type SortOrderInput = {
@@ -4865,7 +4865,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     nulls?: NullsOrder
   }
 
-  export type ImagesCountOrderByAggregateInput = {
+  export type Electric_cyl_imagesCountOrderByAggregateInput = {
     id?: SortOrder
     scan_id?: SortOrder
     frame_number?: SortOrder
@@ -4875,11 +4875,11 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     supabase_object_path?: SortOrder
   }
 
-  export type ImagesAvgOrderByAggregateInput = {
+  export type Electric_cyl_imagesAvgOrderByAggregateInput = {
     frame_number?: SortOrder
   }
 
-  export type ImagesMaxOrderByAggregateInput = {
+  export type Electric_cyl_imagesMaxOrderByAggregateInput = {
     id?: SortOrder
     scan_id?: SortOrder
     frame_number?: SortOrder
@@ -4889,7 +4889,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     supabase_object_path?: SortOrder
   }
 
-  export type ImagesMinOrderByAggregateInput = {
+  export type Electric_cyl_imagesMinOrderByAggregateInput = {
     id?: SortOrder
     scan_id?: SortOrder
     frame_number?: SortOrder
@@ -4899,7 +4899,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     supabase_object_path?: SortOrder
   }
 
-  export type ImagesSumOrderByAggregateInput = {
+  export type Electric_cyl_imagesSumOrderByAggregateInput = {
     frame_number?: SortOrder
   }
 
@@ -4967,34 +4967,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type ScansListRelationFilter = {
-    every?: ScansWhereInput
-    some?: ScansWhereInput
-    none?: ScansWhereInput
-  }
-
-  export type ScansOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type PhenotypersCountOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
-  }
-
-  export type PhenotypersMaxOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
-  }
-
-  export type PhenotypersMinOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
-  }
-
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Enumerable<Date> | Enumerable<string> | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -5017,22 +4989,22 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
-  export type ImagesListRelationFilter = {
-    every?: ImagesWhereInput
-    some?: ImagesWhereInput
-    none?: ImagesWhereInput
+  export type Electric_cyl_imagesListRelationFilter = {
+    every?: Electric_cyl_imagesWhereInput
+    some?: Electric_cyl_imagesWhereInput
+    none?: Electric_cyl_imagesWhereInput
   }
 
-  export type PhenotypersNullableRelationFilter = {
-    is?: PhenotypersWhereInput | null
-    isNot?: PhenotypersWhereInput | null
+  export type Electric_phenotypersNullableRelationFilter = {
+    is?: Electric_phenotypersWhereInput | null
+    isNot?: Electric_phenotypersWhereInput | null
   }
 
-  export type ImagesOrderByRelationAggregateInput = {
+  export type Electric_cyl_imagesOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
-  export type ScansCountOrderByAggregateInput = {
+  export type Electric_cyl_scansCountOrderByAggregateInput = {
     id?: SortOrder
     phenotyper_id?: SortOrder
     scanner_id?: SortOrder
@@ -5048,7 +5020,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     seconds_per_rot?: SortOrder
   }
 
-  export type ScansAvgOrderByAggregateInput = {
+  export type Electric_cyl_scansAvgOrderByAggregateInput = {
     num_frames?: SortOrder
     exposure_time?: SortOrder
     gain?: SortOrder
@@ -5058,7 +5030,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     seconds_per_rot?: SortOrder
   }
 
-  export type ScansMaxOrderByAggregateInput = {
+  export type Electric_cyl_scansMaxOrderByAggregateInput = {
     id?: SortOrder
     phenotyper_id?: SortOrder
     scanner_id?: SortOrder
@@ -5074,7 +5046,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     seconds_per_rot?: SortOrder
   }
 
-  export type ScansMinOrderByAggregateInput = {
+  export type Electric_cyl_scansMinOrderByAggregateInput = {
     id?: SortOrder
     phenotyper_id?: SortOrder
     scanner_id?: SortOrder
@@ -5090,7 +5062,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     seconds_per_rot?: SortOrder
   }
 
-  export type ScansSumOrderByAggregateInput = {
+  export type Electric_cyl_scansSumOrderByAggregateInput = {
     num_frames?: SortOrder
     exposure_time?: SortOrder
     gain?: SortOrder
@@ -5130,10 +5102,38 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
-  export type ScansCreateNestedOneWithoutImagesInput = {
-    create?: XOR<ScansCreateWithoutImagesInput, ScansUncheckedCreateWithoutImagesInput>
-    connectOrCreate?: ScansCreateOrConnectWithoutImagesInput
-    connect?: ScansWhereUniqueInput
+  export type Electric_cyl_scansListRelationFilter = {
+    every?: Electric_cyl_scansWhereInput
+    some?: Electric_cyl_scansWhereInput
+    none?: Electric_cyl_scansWhereInput
+  }
+
+  export type Electric_cyl_scansOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type Electric_phenotypersCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+  }
+
+  export type Electric_phenotypersMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+  }
+
+  export type Electric_phenotypersMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+  }
+
+  export type Electric_cyl_scansCreateNestedOneWithoutElectric_cyl_imagesInput = {
+    create?: XOR<Electric_cyl_scansCreateWithoutElectric_cyl_imagesInput, Electric_cyl_scansUncheckedCreateWithoutElectric_cyl_imagesInput>
+    connectOrCreate?: Electric_cyl_scansCreateOrConnectWithoutElectric_cyl_imagesInput
+    connect?: Electric_cyl_scansWhereUniqueInput
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -5152,76 +5152,34 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     set?: string | null
   }
 
-  export type ScansUpdateOneWithoutImagesNestedInput = {
-    create?: XOR<ScansCreateWithoutImagesInput, ScansUncheckedCreateWithoutImagesInput>
-    connectOrCreate?: ScansCreateOrConnectWithoutImagesInput
-    upsert?: ScansUpsertWithoutImagesInput
-    disconnect?: ScansWhereInput | boolean
-    delete?: ScansWhereInput | boolean
-    connect?: ScansWhereUniqueInput
-    update?: XOR<XOR<ScansUpdateToOneWithWhereWithoutImagesInput, ScansUpdateWithoutImagesInput>, ScansUncheckedUpdateWithoutImagesInput>
+  export type Electric_cyl_scansUpdateOneWithoutElectric_cyl_imagesNestedInput = {
+    create?: XOR<Electric_cyl_scansCreateWithoutElectric_cyl_imagesInput, Electric_cyl_scansUncheckedCreateWithoutElectric_cyl_imagesInput>
+    connectOrCreate?: Electric_cyl_scansCreateOrConnectWithoutElectric_cyl_imagesInput
+    upsert?: Electric_cyl_scansUpsertWithoutElectric_cyl_imagesInput
+    disconnect?: Electric_cyl_scansWhereInput | boolean
+    delete?: Electric_cyl_scansWhereInput | boolean
+    connect?: Electric_cyl_scansWhereUniqueInput
+    update?: XOR<XOR<Electric_cyl_scansUpdateToOneWithWhereWithoutElectric_cyl_imagesInput, Electric_cyl_scansUpdateWithoutElectric_cyl_imagesInput>, Electric_cyl_scansUncheckedUpdateWithoutElectric_cyl_imagesInput>
   }
 
-  export type ScansCreateNestedManyWithoutPhenotypersInput = {
-    create?: XOR<Enumerable<ScansCreateWithoutPhenotypersInput>, Enumerable<ScansUncheckedCreateWithoutPhenotypersInput>>
-    connectOrCreate?: Enumerable<ScansCreateOrConnectWithoutPhenotypersInput>
-    createMany?: ScansCreateManyPhenotypersInputEnvelope
-    connect?: Enumerable<ScansWhereUniqueInput>
+  export type Electric_cyl_imagesCreateNestedManyWithoutElectric_cyl_scansInput = {
+    create?: XOR<Enumerable<Electric_cyl_imagesCreateWithoutElectric_cyl_scansInput>, Enumerable<Electric_cyl_imagesUncheckedCreateWithoutElectric_cyl_scansInput>>
+    connectOrCreate?: Enumerable<Electric_cyl_imagesCreateOrConnectWithoutElectric_cyl_scansInput>
+    createMany?: Electric_cyl_imagesCreateManyElectric_cyl_scansInputEnvelope
+    connect?: Enumerable<Electric_cyl_imagesWhereUniqueInput>
   }
 
-  export type ScansUncheckedCreateNestedManyWithoutPhenotypersInput = {
-    create?: XOR<Enumerable<ScansCreateWithoutPhenotypersInput>, Enumerable<ScansUncheckedCreateWithoutPhenotypersInput>>
-    connectOrCreate?: Enumerable<ScansCreateOrConnectWithoutPhenotypersInput>
-    createMany?: ScansCreateManyPhenotypersInputEnvelope
-    connect?: Enumerable<ScansWhereUniqueInput>
+  export type Electric_phenotypersCreateNestedOneWithoutElectric_cyl_scansInput = {
+    create?: XOR<Electric_phenotypersCreateWithoutElectric_cyl_scansInput, Electric_phenotypersUncheckedCreateWithoutElectric_cyl_scansInput>
+    connectOrCreate?: Electric_phenotypersCreateOrConnectWithoutElectric_cyl_scansInput
+    connect?: Electric_phenotypersWhereUniqueInput
   }
 
-  export type ScansUpdateManyWithoutPhenotypersNestedInput = {
-    create?: XOR<Enumerable<ScansCreateWithoutPhenotypersInput>, Enumerable<ScansUncheckedCreateWithoutPhenotypersInput>>
-    connectOrCreate?: Enumerable<ScansCreateOrConnectWithoutPhenotypersInput>
-    upsert?: Enumerable<ScansUpsertWithWhereUniqueWithoutPhenotypersInput>
-    createMany?: ScansCreateManyPhenotypersInputEnvelope
-    set?: Enumerable<ScansWhereUniqueInput>
-    disconnect?: Enumerable<ScansWhereUniqueInput>
-    delete?: Enumerable<ScansWhereUniqueInput>
-    connect?: Enumerable<ScansWhereUniqueInput>
-    update?: Enumerable<ScansUpdateWithWhereUniqueWithoutPhenotypersInput>
-    updateMany?: Enumerable<ScansUpdateManyWithWhereWithoutPhenotypersInput>
-    deleteMany?: Enumerable<ScansScalarWhereInput>
-  }
-
-  export type ScansUncheckedUpdateManyWithoutPhenotypersNestedInput = {
-    create?: XOR<Enumerable<ScansCreateWithoutPhenotypersInput>, Enumerable<ScansUncheckedCreateWithoutPhenotypersInput>>
-    connectOrCreate?: Enumerable<ScansCreateOrConnectWithoutPhenotypersInput>
-    upsert?: Enumerable<ScansUpsertWithWhereUniqueWithoutPhenotypersInput>
-    createMany?: ScansCreateManyPhenotypersInputEnvelope
-    set?: Enumerable<ScansWhereUniqueInput>
-    disconnect?: Enumerable<ScansWhereUniqueInput>
-    delete?: Enumerable<ScansWhereUniqueInput>
-    connect?: Enumerable<ScansWhereUniqueInput>
-    update?: Enumerable<ScansUpdateWithWhereUniqueWithoutPhenotypersInput>
-    updateMany?: Enumerable<ScansUpdateManyWithWhereWithoutPhenotypersInput>
-    deleteMany?: Enumerable<ScansScalarWhereInput>
-  }
-
-  export type ImagesCreateNestedManyWithoutScansInput = {
-    create?: XOR<Enumerable<ImagesCreateWithoutScansInput>, Enumerable<ImagesUncheckedCreateWithoutScansInput>>
-    connectOrCreate?: Enumerable<ImagesCreateOrConnectWithoutScansInput>
-    createMany?: ImagesCreateManyScansInputEnvelope
-    connect?: Enumerable<ImagesWhereUniqueInput>
-  }
-
-  export type PhenotypersCreateNestedOneWithoutScansInput = {
-    create?: XOR<PhenotypersCreateWithoutScansInput, PhenotypersUncheckedCreateWithoutScansInput>
-    connectOrCreate?: PhenotypersCreateOrConnectWithoutScansInput
-    connect?: PhenotypersWhereUniqueInput
-  }
-
-  export type ImagesUncheckedCreateNestedManyWithoutScansInput = {
-    create?: XOR<Enumerable<ImagesCreateWithoutScansInput>, Enumerable<ImagesUncheckedCreateWithoutScansInput>>
-    connectOrCreate?: Enumerable<ImagesCreateOrConnectWithoutScansInput>
-    createMany?: ImagesCreateManyScansInputEnvelope
-    connect?: Enumerable<ImagesWhereUniqueInput>
+  export type Electric_cyl_imagesUncheckedCreateNestedManyWithoutElectric_cyl_scansInput = {
+    create?: XOR<Enumerable<Electric_cyl_imagesCreateWithoutElectric_cyl_scansInput>, Enumerable<Electric_cyl_imagesUncheckedCreateWithoutElectric_cyl_scansInput>>
+    connectOrCreate?: Enumerable<Electric_cyl_imagesCreateOrConnectWithoutElectric_cyl_scansInput>
+    createMany?: Electric_cyl_imagesCreateManyElectric_cyl_scansInputEnvelope
+    connect?: Enumerable<Electric_cyl_imagesWhereUniqueInput>
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -5236,42 +5194,84 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     divide?: number
   }
 
-  export type ImagesUpdateManyWithoutScansNestedInput = {
-    create?: XOR<Enumerable<ImagesCreateWithoutScansInput>, Enumerable<ImagesUncheckedCreateWithoutScansInput>>
-    connectOrCreate?: Enumerable<ImagesCreateOrConnectWithoutScansInput>
-    upsert?: Enumerable<ImagesUpsertWithWhereUniqueWithoutScansInput>
-    createMany?: ImagesCreateManyScansInputEnvelope
-    set?: Enumerable<ImagesWhereUniqueInput>
-    disconnect?: Enumerable<ImagesWhereUniqueInput>
-    delete?: Enumerable<ImagesWhereUniqueInput>
-    connect?: Enumerable<ImagesWhereUniqueInput>
-    update?: Enumerable<ImagesUpdateWithWhereUniqueWithoutScansInput>
-    updateMany?: Enumerable<ImagesUpdateManyWithWhereWithoutScansInput>
-    deleteMany?: Enumerable<ImagesScalarWhereInput>
+  export type Electric_cyl_imagesUpdateManyWithoutElectric_cyl_scansNestedInput = {
+    create?: XOR<Enumerable<Electric_cyl_imagesCreateWithoutElectric_cyl_scansInput>, Enumerable<Electric_cyl_imagesUncheckedCreateWithoutElectric_cyl_scansInput>>
+    connectOrCreate?: Enumerable<Electric_cyl_imagesCreateOrConnectWithoutElectric_cyl_scansInput>
+    upsert?: Enumerable<Electric_cyl_imagesUpsertWithWhereUniqueWithoutElectric_cyl_scansInput>
+    createMany?: Electric_cyl_imagesCreateManyElectric_cyl_scansInputEnvelope
+    set?: Enumerable<Electric_cyl_imagesWhereUniqueInput>
+    disconnect?: Enumerable<Electric_cyl_imagesWhereUniqueInput>
+    delete?: Enumerable<Electric_cyl_imagesWhereUniqueInput>
+    connect?: Enumerable<Electric_cyl_imagesWhereUniqueInput>
+    update?: Enumerable<Electric_cyl_imagesUpdateWithWhereUniqueWithoutElectric_cyl_scansInput>
+    updateMany?: Enumerable<Electric_cyl_imagesUpdateManyWithWhereWithoutElectric_cyl_scansInput>
+    deleteMany?: Enumerable<Electric_cyl_imagesScalarWhereInput>
   }
 
-  export type PhenotypersUpdateOneWithoutScansNestedInput = {
-    create?: XOR<PhenotypersCreateWithoutScansInput, PhenotypersUncheckedCreateWithoutScansInput>
-    connectOrCreate?: PhenotypersCreateOrConnectWithoutScansInput
-    upsert?: PhenotypersUpsertWithoutScansInput
-    disconnect?: PhenotypersWhereInput | boolean
-    delete?: PhenotypersWhereInput | boolean
-    connect?: PhenotypersWhereUniqueInput
-    update?: XOR<XOR<PhenotypersUpdateToOneWithWhereWithoutScansInput, PhenotypersUpdateWithoutScansInput>, PhenotypersUncheckedUpdateWithoutScansInput>
+  export type Electric_phenotypersUpdateOneWithoutElectric_cyl_scansNestedInput = {
+    create?: XOR<Electric_phenotypersCreateWithoutElectric_cyl_scansInput, Electric_phenotypersUncheckedCreateWithoutElectric_cyl_scansInput>
+    connectOrCreate?: Electric_phenotypersCreateOrConnectWithoutElectric_cyl_scansInput
+    upsert?: Electric_phenotypersUpsertWithoutElectric_cyl_scansInput
+    disconnect?: Electric_phenotypersWhereInput | boolean
+    delete?: Electric_phenotypersWhereInput | boolean
+    connect?: Electric_phenotypersWhereUniqueInput
+    update?: XOR<XOR<Electric_phenotypersUpdateToOneWithWhereWithoutElectric_cyl_scansInput, Electric_phenotypersUpdateWithoutElectric_cyl_scansInput>, Electric_phenotypersUncheckedUpdateWithoutElectric_cyl_scansInput>
   }
 
-  export type ImagesUncheckedUpdateManyWithoutScansNestedInput = {
-    create?: XOR<Enumerable<ImagesCreateWithoutScansInput>, Enumerable<ImagesUncheckedCreateWithoutScansInput>>
-    connectOrCreate?: Enumerable<ImagesCreateOrConnectWithoutScansInput>
-    upsert?: Enumerable<ImagesUpsertWithWhereUniqueWithoutScansInput>
-    createMany?: ImagesCreateManyScansInputEnvelope
-    set?: Enumerable<ImagesWhereUniqueInput>
-    disconnect?: Enumerable<ImagesWhereUniqueInput>
-    delete?: Enumerable<ImagesWhereUniqueInput>
-    connect?: Enumerable<ImagesWhereUniqueInput>
-    update?: Enumerable<ImagesUpdateWithWhereUniqueWithoutScansInput>
-    updateMany?: Enumerable<ImagesUpdateManyWithWhereWithoutScansInput>
-    deleteMany?: Enumerable<ImagesScalarWhereInput>
+  export type Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_scansNestedInput = {
+    create?: XOR<Enumerable<Electric_cyl_imagesCreateWithoutElectric_cyl_scansInput>, Enumerable<Electric_cyl_imagesUncheckedCreateWithoutElectric_cyl_scansInput>>
+    connectOrCreate?: Enumerable<Electric_cyl_imagesCreateOrConnectWithoutElectric_cyl_scansInput>
+    upsert?: Enumerable<Electric_cyl_imagesUpsertWithWhereUniqueWithoutElectric_cyl_scansInput>
+    createMany?: Electric_cyl_imagesCreateManyElectric_cyl_scansInputEnvelope
+    set?: Enumerable<Electric_cyl_imagesWhereUniqueInput>
+    disconnect?: Enumerable<Electric_cyl_imagesWhereUniqueInput>
+    delete?: Enumerable<Electric_cyl_imagesWhereUniqueInput>
+    connect?: Enumerable<Electric_cyl_imagesWhereUniqueInput>
+    update?: Enumerable<Electric_cyl_imagesUpdateWithWhereUniqueWithoutElectric_cyl_scansInput>
+    updateMany?: Enumerable<Electric_cyl_imagesUpdateManyWithWhereWithoutElectric_cyl_scansInput>
+    deleteMany?: Enumerable<Electric_cyl_imagesScalarWhereInput>
+  }
+
+  export type Electric_cyl_scansCreateNestedManyWithoutElectric_phenotypersInput = {
+    create?: XOR<Enumerable<Electric_cyl_scansCreateWithoutElectric_phenotypersInput>, Enumerable<Electric_cyl_scansUncheckedCreateWithoutElectric_phenotypersInput>>
+    connectOrCreate?: Enumerable<Electric_cyl_scansCreateOrConnectWithoutElectric_phenotypersInput>
+    createMany?: Electric_cyl_scansCreateManyElectric_phenotypersInputEnvelope
+    connect?: Enumerable<Electric_cyl_scansWhereUniqueInput>
+  }
+
+  export type Electric_cyl_scansUncheckedCreateNestedManyWithoutElectric_phenotypersInput = {
+    create?: XOR<Enumerable<Electric_cyl_scansCreateWithoutElectric_phenotypersInput>, Enumerable<Electric_cyl_scansUncheckedCreateWithoutElectric_phenotypersInput>>
+    connectOrCreate?: Enumerable<Electric_cyl_scansCreateOrConnectWithoutElectric_phenotypersInput>
+    createMany?: Electric_cyl_scansCreateManyElectric_phenotypersInputEnvelope
+    connect?: Enumerable<Electric_cyl_scansWhereUniqueInput>
+  }
+
+  export type Electric_cyl_scansUpdateManyWithoutElectric_phenotypersNestedInput = {
+    create?: XOR<Enumerable<Electric_cyl_scansCreateWithoutElectric_phenotypersInput>, Enumerable<Electric_cyl_scansUncheckedCreateWithoutElectric_phenotypersInput>>
+    connectOrCreate?: Enumerable<Electric_cyl_scansCreateOrConnectWithoutElectric_phenotypersInput>
+    upsert?: Enumerable<Electric_cyl_scansUpsertWithWhereUniqueWithoutElectric_phenotypersInput>
+    createMany?: Electric_cyl_scansCreateManyElectric_phenotypersInputEnvelope
+    set?: Enumerable<Electric_cyl_scansWhereUniqueInput>
+    disconnect?: Enumerable<Electric_cyl_scansWhereUniqueInput>
+    delete?: Enumerable<Electric_cyl_scansWhereUniqueInput>
+    connect?: Enumerable<Electric_cyl_scansWhereUniqueInput>
+    update?: Enumerable<Electric_cyl_scansUpdateWithWhereUniqueWithoutElectric_phenotypersInput>
+    updateMany?: Enumerable<Electric_cyl_scansUpdateManyWithWhereWithoutElectric_phenotypersInput>
+    deleteMany?: Enumerable<Electric_cyl_scansScalarWhereInput>
+  }
+
+  export type Electric_cyl_scansUncheckedUpdateManyWithoutElectric_phenotypersNestedInput = {
+    create?: XOR<Enumerable<Electric_cyl_scansCreateWithoutElectric_phenotypersInput>, Enumerable<Electric_cyl_scansUncheckedCreateWithoutElectric_phenotypersInput>>
+    connectOrCreate?: Enumerable<Electric_cyl_scansCreateOrConnectWithoutElectric_phenotypersInput>
+    upsert?: Enumerable<Electric_cyl_scansUpsertWithWhereUniqueWithoutElectric_phenotypersInput>
+    createMany?: Electric_cyl_scansCreateManyElectric_phenotypersInputEnvelope
+    set?: Enumerable<Electric_cyl_scansWhereUniqueInput>
+    disconnect?: Enumerable<Electric_cyl_scansWhereUniqueInput>
+    delete?: Enumerable<Electric_cyl_scansWhereUniqueInput>
+    connect?: Enumerable<Electric_cyl_scansWhereUniqueInput>
+    update?: Enumerable<Electric_cyl_scansUpdateWithWhereUniqueWithoutElectric_phenotypersInput>
+    updateMany?: Enumerable<Electric_cyl_scansUpdateManyWithWhereWithoutElectric_phenotypersInput>
+    deleteMany?: Enumerable<Electric_cyl_scansScalarWhereInput>
   }
 
   export type NestedUuidFilter<$PrismaModel = never> = {
@@ -5459,7 +5459,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
-  export type ScansCreateWithoutImagesInput = {
+  export type Electric_cyl_scansCreateWithoutElectric_cyl_imagesInput = {
     id: string
     scanner_id?: string | null
     plant_qr_code?: string | null
@@ -5472,10 +5472,10 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: number | null
     gamma?: number | null
     seconds_per_rot?: number | null
-    phenotypers?: PhenotypersCreateNestedOneWithoutScansInput
+    electric_phenotypers?: Electric_phenotypersCreateNestedOneWithoutElectric_cyl_scansInput
   }
 
-  export type ScansUncheckedCreateWithoutImagesInput = {
+  export type Electric_cyl_scansUncheckedCreateWithoutElectric_cyl_imagesInput = {
     id: string
     phenotyper_id?: string | null
     scanner_id?: string | null
@@ -5491,23 +5491,23 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     seconds_per_rot?: number | null
   }
 
-  export type ScansCreateOrConnectWithoutImagesInput = {
-    where: ScansWhereUniqueInput
-    create: XOR<ScansCreateWithoutImagesInput, ScansUncheckedCreateWithoutImagesInput>
+  export type Electric_cyl_scansCreateOrConnectWithoutElectric_cyl_imagesInput = {
+    where: Electric_cyl_scansWhereUniqueInput
+    create: XOR<Electric_cyl_scansCreateWithoutElectric_cyl_imagesInput, Electric_cyl_scansUncheckedCreateWithoutElectric_cyl_imagesInput>
   }
 
-  export type ScansUpsertWithoutImagesInput = {
-    update: XOR<ScansUpdateWithoutImagesInput, ScansUncheckedUpdateWithoutImagesInput>
-    create: XOR<ScansCreateWithoutImagesInput, ScansUncheckedCreateWithoutImagesInput>
-    where?: ScansWhereInput
+  export type Electric_cyl_scansUpsertWithoutElectric_cyl_imagesInput = {
+    update: XOR<Electric_cyl_scansUpdateWithoutElectric_cyl_imagesInput, Electric_cyl_scansUncheckedUpdateWithoutElectric_cyl_imagesInput>
+    create: XOR<Electric_cyl_scansCreateWithoutElectric_cyl_imagesInput, Electric_cyl_scansUncheckedCreateWithoutElectric_cyl_imagesInput>
+    where?: Electric_cyl_scansWhereInput
   }
 
-  export type ScansUpdateToOneWithWhereWithoutImagesInput = {
-    where?: ScansWhereInput
-    data: XOR<ScansUpdateWithoutImagesInput, ScansUncheckedUpdateWithoutImagesInput>
+  export type Electric_cyl_scansUpdateToOneWithWhereWithoutElectric_cyl_imagesInput = {
+    where?: Electric_cyl_scansWhereInput
+    data: XOR<Electric_cyl_scansUpdateWithoutElectric_cyl_imagesInput, Electric_cyl_scansUncheckedUpdateWithoutElectric_cyl_imagesInput>
   }
 
-  export type ScansUpdateWithoutImagesInput = {
+  export type Electric_cyl_scansUpdateWithoutElectric_cyl_imagesInput = {
     id?: StringFieldUpdateOperationsInput | string
     scanner_id?: NullableStringFieldUpdateOperationsInput | string | null
     plant_qr_code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -5520,10 +5520,10 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
     seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
-    phenotypers?: PhenotypersUpdateOneWithoutScansNestedInput
+    electric_phenotypers?: Electric_phenotypersUpdateOneWithoutElectric_cyl_scansNestedInput
   }
 
-  export type ScansUncheckedUpdateWithoutImagesInput = {
+  export type Electric_cyl_scansUncheckedUpdateWithoutElectric_cyl_imagesInput = {
     id?: StringFieldUpdateOperationsInput | string
     phenotyper_id?: NullableStringFieldUpdateOperationsInput | string | null
     scanner_id?: NullableStringFieldUpdateOperationsInput | string | null
@@ -5539,84 +5539,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
-  export type ScansCreateWithoutPhenotypersInput = {
-    id: string
-    scanner_id?: string | null
-    plant_qr_code?: string | null
-    path?: string | null
-    capture_date?: Date | string | null
-    num_frames?: number | null
-    exposure_time?: number | null
-    gain?: number | null
-    brightness?: number | null
-    contrast?: number | null
-    gamma?: number | null
-    seconds_per_rot?: number | null
-    images?: ImagesCreateNestedManyWithoutScansInput
-  }
-
-  export type ScansUncheckedCreateWithoutPhenotypersInput = {
-    id: string
-    scanner_id?: string | null
-    plant_qr_code?: string | null
-    path?: string | null
-    capture_date?: Date | string | null
-    num_frames?: number | null
-    exposure_time?: number | null
-    gain?: number | null
-    brightness?: number | null
-    contrast?: number | null
-    gamma?: number | null
-    seconds_per_rot?: number | null
-    images?: ImagesUncheckedCreateNestedManyWithoutScansInput
-  }
-
-  export type ScansCreateOrConnectWithoutPhenotypersInput = {
-    where: ScansWhereUniqueInput
-    create: XOR<ScansCreateWithoutPhenotypersInput, ScansUncheckedCreateWithoutPhenotypersInput>
-  }
-
-  export type ScansCreateManyPhenotypersInputEnvelope = {
-    data: Enumerable<ScansCreateManyPhenotypersInput>
-    skipDuplicates?: boolean
-  }
-
-  export type ScansUpsertWithWhereUniqueWithoutPhenotypersInput = {
-    where: ScansWhereUniqueInput
-    update: XOR<ScansUpdateWithoutPhenotypersInput, ScansUncheckedUpdateWithoutPhenotypersInput>
-    create: XOR<ScansCreateWithoutPhenotypersInput, ScansUncheckedCreateWithoutPhenotypersInput>
-  }
-
-  export type ScansUpdateWithWhereUniqueWithoutPhenotypersInput = {
-    where: ScansWhereUniqueInput
-    data: XOR<ScansUpdateWithoutPhenotypersInput, ScansUncheckedUpdateWithoutPhenotypersInput>
-  }
-
-  export type ScansUpdateManyWithWhereWithoutPhenotypersInput = {
-    where: ScansScalarWhereInput
-    data: XOR<ScansUpdateManyMutationInput, ScansUncheckedUpdateManyWithoutPhenotypersInput>
-  }
-
-  export type ScansScalarWhereInput = {
-    AND?: Enumerable<ScansScalarWhereInput>
-    OR?: Enumerable<ScansScalarWhereInput>
-    NOT?: Enumerable<ScansScalarWhereInput>
-    id?: UuidFilter<"Scans"> | string
-    phenotyper_id?: UuidNullableFilter<"Scans"> | string | null
-    scanner_id?: StringNullableFilter<"Scans"> | string | null
-    plant_qr_code?: StringNullableFilter<"Scans"> | string | null
-    path?: StringNullableFilter<"Scans"> | string | null
-    capture_date?: DateTimeNullableFilter<"Scans"> | Date | string | null
-    num_frames?: IntNullableFilter<"Scans"> | number | null
-    exposure_time?: IntNullableFilter<"Scans"> | number | null
-    gain?: FloatNullableFilter<"Scans"> | number | null
-    brightness?: FloatNullableFilter<"Scans"> | number | null
-    contrast?: FloatNullableFilter<"Scans"> | number | null
-    gamma?: FloatNullableFilter<"Scans"> | number | null
-    seconds_per_rot?: FloatNullableFilter<"Scans"> | number | null
-  }
-
-  export type ImagesCreateWithoutScansInput = {
+  export type Electric_cyl_imagesCreateWithoutElectric_cyl_scansInput = {
     id: string
     frame_number?: number | null
     path?: string | null
@@ -5625,7 +5548,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     supabase_object_path?: string | null
   }
 
-  export type ImagesUncheckedCreateWithoutScansInput = {
+  export type Electric_cyl_imagesUncheckedCreateWithoutElectric_cyl_scansInput = {
     id: string
     frame_number?: number | null
     path?: string | null
@@ -5634,86 +5557,199 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     supabase_object_path?: string | null
   }
 
-  export type ImagesCreateOrConnectWithoutScansInput = {
-    where: ImagesWhereUniqueInput
-    create: XOR<ImagesCreateWithoutScansInput, ImagesUncheckedCreateWithoutScansInput>
+  export type Electric_cyl_imagesCreateOrConnectWithoutElectric_cyl_scansInput = {
+    where: Electric_cyl_imagesWhereUniqueInput
+    create: XOR<Electric_cyl_imagesCreateWithoutElectric_cyl_scansInput, Electric_cyl_imagesUncheckedCreateWithoutElectric_cyl_scansInput>
   }
 
-  export type ImagesCreateManyScansInputEnvelope = {
-    data: Enumerable<ImagesCreateManyScansInput>
+  export type Electric_cyl_imagesCreateManyElectric_cyl_scansInputEnvelope = {
+    data: Enumerable<Electric_cyl_imagesCreateManyElectric_cyl_scansInput>
     skipDuplicates?: boolean
   }
 
-  export type PhenotypersCreateWithoutScansInput = {
+  export type Electric_phenotypersCreateWithoutElectric_cyl_scansInput = {
     id: string
     name?: string | null
     email?: string | null
   }
 
-  export type PhenotypersUncheckedCreateWithoutScansInput = {
+  export type Electric_phenotypersUncheckedCreateWithoutElectric_cyl_scansInput = {
     id: string
     name?: string | null
     email?: string | null
   }
 
-  export type PhenotypersCreateOrConnectWithoutScansInput = {
-    where: PhenotypersWhereUniqueInput
-    create: XOR<PhenotypersCreateWithoutScansInput, PhenotypersUncheckedCreateWithoutScansInput>
+  export type Electric_phenotypersCreateOrConnectWithoutElectric_cyl_scansInput = {
+    where: Electric_phenotypersWhereUniqueInput
+    create: XOR<Electric_phenotypersCreateWithoutElectric_cyl_scansInput, Electric_phenotypersUncheckedCreateWithoutElectric_cyl_scansInput>
   }
 
-  export type ImagesUpsertWithWhereUniqueWithoutScansInput = {
-    where: ImagesWhereUniqueInput
-    update: XOR<ImagesUpdateWithoutScansInput, ImagesUncheckedUpdateWithoutScansInput>
-    create: XOR<ImagesCreateWithoutScansInput, ImagesUncheckedCreateWithoutScansInput>
+  export type Electric_cyl_imagesUpsertWithWhereUniqueWithoutElectric_cyl_scansInput = {
+    where: Electric_cyl_imagesWhereUniqueInput
+    update: XOR<Electric_cyl_imagesUpdateWithoutElectric_cyl_scansInput, Electric_cyl_imagesUncheckedUpdateWithoutElectric_cyl_scansInput>
+    create: XOR<Electric_cyl_imagesCreateWithoutElectric_cyl_scansInput, Electric_cyl_imagesUncheckedCreateWithoutElectric_cyl_scansInput>
   }
 
-  export type ImagesUpdateWithWhereUniqueWithoutScansInput = {
-    where: ImagesWhereUniqueInput
-    data: XOR<ImagesUpdateWithoutScansInput, ImagesUncheckedUpdateWithoutScansInput>
+  export type Electric_cyl_imagesUpdateWithWhereUniqueWithoutElectric_cyl_scansInput = {
+    where: Electric_cyl_imagesWhereUniqueInput
+    data: XOR<Electric_cyl_imagesUpdateWithoutElectric_cyl_scansInput, Electric_cyl_imagesUncheckedUpdateWithoutElectric_cyl_scansInput>
   }
 
-  export type ImagesUpdateManyWithWhereWithoutScansInput = {
-    where: ImagesScalarWhereInput
-    data: XOR<ImagesUpdateManyMutationInput, ImagesUncheckedUpdateManyWithoutScansInput>
+  export type Electric_cyl_imagesUpdateManyWithWhereWithoutElectric_cyl_scansInput = {
+    where: Electric_cyl_imagesScalarWhereInput
+    data: XOR<Electric_cyl_imagesUpdateManyMutationInput, Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_scansInput>
   }
 
-  export type ImagesScalarWhereInput = {
-    AND?: Enumerable<ImagesScalarWhereInput>
-    OR?: Enumerable<ImagesScalarWhereInput>
-    NOT?: Enumerable<ImagesScalarWhereInput>
-    id?: UuidFilter<"Images"> | string
-    scan_id?: UuidNullableFilter<"Images"> | string | null
-    frame_number?: IntNullableFilter<"Images"> | number | null
-    path?: StringNullableFilter<"Images"> | string | null
-    url?: StringNullableFilter<"Images"> | string | null
-    status?: StringNullableFilter<"Images"> | string | null
-    supabase_object_path?: StringNullableFilter<"Images"> | string | null
+  export type Electric_cyl_imagesScalarWhereInput = {
+    AND?: Enumerable<Electric_cyl_imagesScalarWhereInput>
+    OR?: Enumerable<Electric_cyl_imagesScalarWhereInput>
+    NOT?: Enumerable<Electric_cyl_imagesScalarWhereInput>
+    id?: UuidFilter<"Electric_cyl_images"> | string
+    scan_id?: UuidNullableFilter<"Electric_cyl_images"> | string | null
+    frame_number?: IntNullableFilter<"Electric_cyl_images"> | number | null
+    path?: StringNullableFilter<"Electric_cyl_images"> | string | null
+    url?: StringNullableFilter<"Electric_cyl_images"> | string | null
+    status?: StringNullableFilter<"Electric_cyl_images"> | string | null
+    supabase_object_path?: StringNullableFilter<"Electric_cyl_images"> | string | null
   }
 
-  export type PhenotypersUpsertWithoutScansInput = {
-    update: XOR<PhenotypersUpdateWithoutScansInput, PhenotypersUncheckedUpdateWithoutScansInput>
-    create: XOR<PhenotypersCreateWithoutScansInput, PhenotypersUncheckedCreateWithoutScansInput>
-    where?: PhenotypersWhereInput
+  export type Electric_phenotypersUpsertWithoutElectric_cyl_scansInput = {
+    update: XOR<Electric_phenotypersUpdateWithoutElectric_cyl_scansInput, Electric_phenotypersUncheckedUpdateWithoutElectric_cyl_scansInput>
+    create: XOR<Electric_phenotypersCreateWithoutElectric_cyl_scansInput, Electric_phenotypersUncheckedCreateWithoutElectric_cyl_scansInput>
+    where?: Electric_phenotypersWhereInput
   }
 
-  export type PhenotypersUpdateToOneWithWhereWithoutScansInput = {
-    where?: PhenotypersWhereInput
-    data: XOR<PhenotypersUpdateWithoutScansInput, PhenotypersUncheckedUpdateWithoutScansInput>
+  export type Electric_phenotypersUpdateToOneWithWhereWithoutElectric_cyl_scansInput = {
+    where?: Electric_phenotypersWhereInput
+    data: XOR<Electric_phenotypersUpdateWithoutElectric_cyl_scansInput, Electric_phenotypersUncheckedUpdateWithoutElectric_cyl_scansInput>
   }
 
-  export type PhenotypersUpdateWithoutScansInput = {
+  export type Electric_phenotypersUpdateWithoutElectric_cyl_scansInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type PhenotypersUncheckedUpdateWithoutScansInput = {
+  export type Electric_phenotypersUncheckedUpdateWithoutElectric_cyl_scansInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type ScansCreateManyPhenotypersInput = {
+  export type Electric_cyl_scansCreateWithoutElectric_phenotypersInput = {
+    id: string
+    scanner_id?: string | null
+    plant_qr_code?: string | null
+    path?: string | null
+    capture_date?: Date | string | null
+    num_frames?: number | null
+    exposure_time?: number | null
+    gain?: number | null
+    brightness?: number | null
+    contrast?: number | null
+    gamma?: number | null
+    seconds_per_rot?: number | null
+    electric_cyl_images?: Electric_cyl_imagesCreateNestedManyWithoutElectric_cyl_scansInput
+  }
+
+  export type Electric_cyl_scansUncheckedCreateWithoutElectric_phenotypersInput = {
+    id: string
+    scanner_id?: string | null
+    plant_qr_code?: string | null
+    path?: string | null
+    capture_date?: Date | string | null
+    num_frames?: number | null
+    exposure_time?: number | null
+    gain?: number | null
+    brightness?: number | null
+    contrast?: number | null
+    gamma?: number | null
+    seconds_per_rot?: number | null
+    electric_cyl_images?: Electric_cyl_imagesUncheckedCreateNestedManyWithoutElectric_cyl_scansInput
+  }
+
+  export type Electric_cyl_scansCreateOrConnectWithoutElectric_phenotypersInput = {
+    where: Electric_cyl_scansWhereUniqueInput
+    create: XOR<Electric_cyl_scansCreateWithoutElectric_phenotypersInput, Electric_cyl_scansUncheckedCreateWithoutElectric_phenotypersInput>
+  }
+
+  export type Electric_cyl_scansCreateManyElectric_phenotypersInputEnvelope = {
+    data: Enumerable<Electric_cyl_scansCreateManyElectric_phenotypersInput>
+    skipDuplicates?: boolean
+  }
+
+  export type Electric_cyl_scansUpsertWithWhereUniqueWithoutElectric_phenotypersInput = {
+    where: Electric_cyl_scansWhereUniqueInput
+    update: XOR<Electric_cyl_scansUpdateWithoutElectric_phenotypersInput, Electric_cyl_scansUncheckedUpdateWithoutElectric_phenotypersInput>
+    create: XOR<Electric_cyl_scansCreateWithoutElectric_phenotypersInput, Electric_cyl_scansUncheckedCreateWithoutElectric_phenotypersInput>
+  }
+
+  export type Electric_cyl_scansUpdateWithWhereUniqueWithoutElectric_phenotypersInput = {
+    where: Electric_cyl_scansWhereUniqueInput
+    data: XOR<Electric_cyl_scansUpdateWithoutElectric_phenotypersInput, Electric_cyl_scansUncheckedUpdateWithoutElectric_phenotypersInput>
+  }
+
+  export type Electric_cyl_scansUpdateManyWithWhereWithoutElectric_phenotypersInput = {
+    where: Electric_cyl_scansScalarWhereInput
+    data: XOR<Electric_cyl_scansUpdateManyMutationInput, Electric_cyl_scansUncheckedUpdateManyWithoutElectric_phenotypersInput>
+  }
+
+  export type Electric_cyl_scansScalarWhereInput = {
+    AND?: Enumerable<Electric_cyl_scansScalarWhereInput>
+    OR?: Enumerable<Electric_cyl_scansScalarWhereInput>
+    NOT?: Enumerable<Electric_cyl_scansScalarWhereInput>
+    id?: UuidFilter<"Electric_cyl_scans"> | string
+    phenotyper_id?: UuidNullableFilter<"Electric_cyl_scans"> | string | null
+    scanner_id?: StringNullableFilter<"Electric_cyl_scans"> | string | null
+    plant_qr_code?: StringNullableFilter<"Electric_cyl_scans"> | string | null
+    path?: StringNullableFilter<"Electric_cyl_scans"> | string | null
+    capture_date?: DateTimeNullableFilter<"Electric_cyl_scans"> | Date | string | null
+    num_frames?: IntNullableFilter<"Electric_cyl_scans"> | number | null
+    exposure_time?: IntNullableFilter<"Electric_cyl_scans"> | number | null
+    gain?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
+    brightness?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
+    contrast?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
+    gamma?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
+    seconds_per_rot?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
+  }
+
+  export type Electric_cyl_imagesCreateManyElectric_cyl_scansInput = {
+    id: string
+    frame_number?: number | null
+    path?: string | null
+    url?: string | null
+    status?: string | null
+    supabase_object_path?: string | null
+  }
+
+  export type Electric_cyl_imagesUpdateWithoutElectric_cyl_scansInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    frame_number?: NullableIntFieldUpdateOperationsInput | number | null
+    path?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
+    supabase_object_path?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type Electric_cyl_imagesUncheckedUpdateWithoutElectric_cyl_scansInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    frame_number?: NullableIntFieldUpdateOperationsInput | number | null
+    path?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
+    supabase_object_path?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_scansInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    frame_number?: NullableIntFieldUpdateOperationsInput | number | null
+    path?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableStringFieldUpdateOperationsInput | string | null
+    supabase_object_path?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type Electric_cyl_scansCreateManyElectric_phenotypersInput = {
     id: string
     scanner_id?: string | null
     plant_qr_code?: string | null
@@ -5728,7 +5764,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     seconds_per_rot?: number | null
   }
 
-  export type ScansUpdateWithoutPhenotypersInput = {
+  export type Electric_cyl_scansUpdateWithoutElectric_phenotypersInput = {
     id?: StringFieldUpdateOperationsInput | string
     scanner_id?: NullableStringFieldUpdateOperationsInput | string | null
     plant_qr_code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -5741,10 +5777,10 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
     seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
-    images?: ImagesUpdateManyWithoutScansNestedInput
+    electric_cyl_images?: Electric_cyl_imagesUpdateManyWithoutElectric_cyl_scansNestedInput
   }
 
-  export type ScansUncheckedUpdateWithoutPhenotypersInput = {
+  export type Electric_cyl_scansUncheckedUpdateWithoutElectric_phenotypersInput = {
     id?: StringFieldUpdateOperationsInput | string
     scanner_id?: NullableStringFieldUpdateOperationsInput | string | null
     plant_qr_code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -5757,10 +5793,10 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
     seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
-    images?: ImagesUncheckedUpdateManyWithoutScansNestedInput
+    electric_cyl_images?: Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_scansNestedInput
   }
 
-  export type ScansUncheckedUpdateManyWithoutPhenotypersInput = {
+  export type Electric_cyl_scansUncheckedUpdateManyWithoutElectric_phenotypersInput = {
     id?: StringFieldUpdateOperationsInput | string
     scanner_id?: NullableStringFieldUpdateOperationsInput | string | null
     plant_qr_code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -5773,42 +5809,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
     seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
-  }
-
-  export type ImagesCreateManyScansInput = {
-    id: string
-    frame_number?: number | null
-    path?: string | null
-    url?: string | null
-    status?: string | null
-    supabase_object_path?: string | null
-  }
-
-  export type ImagesUpdateWithoutScansInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    frame_number?: NullableIntFieldUpdateOperationsInput | number | null
-    path?: NullableStringFieldUpdateOperationsInput | string | null
-    url?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: NullableStringFieldUpdateOperationsInput | string | null
-    supabase_object_path?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type ImagesUncheckedUpdateWithoutScansInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    frame_number?: NullableIntFieldUpdateOperationsInput | number | null
-    path?: NullableStringFieldUpdateOperationsInput | string | null
-    url?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: NullableStringFieldUpdateOperationsInput | string | null
-    supabase_object_path?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type ImagesUncheckedUpdateManyWithoutScansInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    frame_number?: NullableIntFieldUpdateOperationsInput | number | null
-    path?: NullableStringFieldUpdateOperationsInput | string | null
-    url?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: NullableStringFieldUpdateOperationsInput | string | null
-    supabase_object_path?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
 
