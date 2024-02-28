@@ -1,4 +1,5 @@
 import glob
+import json
 import os
 import sys
 import time
@@ -10,7 +11,8 @@ import imageio as iio
 sample_scan = '/Users/djbutler/dev/bloom-desktop-pilot/test/sample_scan'
 
 
-def grab_frames(n):
+def grab_frames(camera_settings):
+    n = camera_settings.num_frames
     assert(n == 72)
     src_frames = glob.glob(os.path.join(sample_scan, '*.png'))
     src_frames.sort(key=lambda x: int(os.path.basename(x).split('.')[0]))
@@ -23,14 +25,16 @@ def grab_frames(n):
 
 if __name__ == '__main__':
 
-    assert(len(sys.argv) == 2)
+    assert(len(sys.argv) == 3)
     
     output_path = sys.argv[1]
+    camera_settings = json.loads(sys.argv[2])
+
 
     output_path = pathlib.Path(output_path)
     os.makedirs(output_path, exist_ok=True)
 
-    frames = grab_frames(72)
+    frames = grab_frames(camera_settings)
     for (i, frame) in enumerate(frames):
         fname = output_path / f'{i + 1:03d}.png'
         iio.imwrite(str(fname), frame)

@@ -55,3 +55,13 @@ type Phenotyper = {
 interface PhenotyperRetriever {
   getPhenotypers: () => [Phenotyper];
 }
+
+type CameraSettings = {
+  exposure_time: number;
+  gain: number;
+  brightness: number;
+  contrast: number;
+  gamma: number;
+  seconds_per_rot: number;
+  num_frames: number;
+};

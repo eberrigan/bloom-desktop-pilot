@@ -103,6 +103,10 @@ ipcMain.handle("scanner:get-scan-data", scanner.getScanData);
 scanner.onScanUpdate = () => {
   mainWindow?.webContents.send("scanner:scan-update");
 };
+ipcMain.handle("scanner:get-settings", scanner.getCameraSettings);
+ipcMain.handle("scanner:set-settings", async (event, args) => {
+  scanner.setCameraSettings(args[0]);
+});
 ipcMain.on("scanner:start-scan", (event, args) => {
   console.log("scanner:start-scan event received");
   scanner.startScan({

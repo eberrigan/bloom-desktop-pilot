@@ -1,3 +1,4 @@
+import json
 import sys
 import os
 import pathlib
@@ -15,11 +16,33 @@ from pypylon import pylon
 ip_address = '10.0.0.23'
 
 
-def grab_frames(n):
+# create a CameraSettings class with the following attributes:
+#   - exposure_time
+#   - gain
+#   - gamma
+#   - brightness
+#   - contrast
+#   - seconds_per_rot
+
+class CameraSettings:
+    def __init__(self, exposure_time, gain, gamma, brightness, contrast, seconds_per_rot):
+        self.exposure_time = exposure_time
+        self.gain = gain
+        self.gamma = gamma
+        self.brightness = brightness
+        self.contrast = contrast
+        self.seconds_per_rot = seconds_per_rot
+        
+
+def grab_frames(camera_settings):
+
+    n = camera_settings.num_frames
+    assert(n == 72)
+    
     print('START', flush=True)
 
     # input params
-    time_per_rev = 10  # seconds
+    time_per_rev = camera_settings.seconds_per_rot
     n_photos = n
     # setup constants for DAQ / Cyth Scanner
     Fs = 40_000  # DAQ sampling rate (Hz)
@@ -166,11 +189,12 @@ if __name__ == '__main__':
     assert(len(sys.argv) == 2)
     
     output_path = sys.argv[1]
+    camera_settings = json.loads(sys.argv[2])
 
     output_path = pathlib.Path(output_path)
     os.makedirs(output_path, exist_ok=True)
 
-    frames = grab_frames(72)
+    frames = grab_frames(camera_settings)
     for (i, frame) in enumerate(frames):
         fname = output_path / f'{i + 1:03d}.png'
         iio.imwrite(str(fname), frame)

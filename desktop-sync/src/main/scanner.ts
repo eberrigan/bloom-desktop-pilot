@@ -18,6 +18,7 @@ class Scanner {
   private scanMetadata: ScanMetadata | null = null;
   private scanProgress: ScanProgress | null = defaultProgress();
   private images: ScanImages = [];
+  private cameraSettings: CameraSettings = defaultCameraSettings();
 
   public onScanUpdate: () => void = () => {};
   public onScanComplete: (scan: Scan) => void = () => {};
@@ -49,6 +50,7 @@ class Scanner {
     const grab_frames = spawn(this.python, [
       this.capture_scan_py,
       this.scanPath,
+      JSON.stringify(this.cameraSettings),
     ]);
 
     grab_frames.stdout.on("data", (data) => {
@@ -67,6 +69,14 @@ class Scanner {
         this.imageSaved(imagePath);
       }
     });
+  };
+
+  getCameraSettings = () => {
+    return this.cameraSettings;
+  };
+
+  setCameraSettings = (settings: CameraSettings) => {
+    this.cameraSettings = settings;
   };
 
   getScannerId = () => {
@@ -119,13 +129,7 @@ class Scanner {
       plant_qr_code: this.plantQrCode,
       path: this.scanPath,
       capture_date: new Date().toISOString(),
-      num_frames: 72,
-      exposure_time: 0,
-      gain: 0,
-      brightness: 0,
-      contrast: 0,
-      gamma: 0,
-      seconds_per_rot: 0,
+      ...this.cameraSettings,
     };
     this.scanMetadata = metadata;
     this.onScanUpdate();
@@ -161,6 +165,18 @@ class Scanner {
       this.onScanComplete(makeScan(this.scanMetadata, this.images));
     }
     this.onScanUpdate();
+  };
+}
+
+function defaultCameraSettings(): CameraSettings {
+  return {
+    num_frames: 72,
+    exposure_time: 2000,
+    gain: 0,
+    brightness: 0,
+    contrast: 0,
+    gamma: 0,
+    seconds_per_rot: 10,
   };
 }
 
