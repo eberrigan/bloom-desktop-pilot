@@ -135,10 +135,34 @@ export class ElectricStore {
     if (this.electric === null) {
       return [];
     }
-    return this.electric.db.electric_cyl_images.findMany({
-      where: { status: { not: "UPLOADED" } },
-      include: { electric_cyl_scans: true },
-    });
+    return this.electric.db.electric_cyl_images
+      .findMany({
+        where: { status: { not: "UPLOADED" } },
+        include: { electric_cyl_scans: true },
+      })
+      .then((images) => {
+        const sorted_images = images.slice();
+        sorted_images.sort((a, b) => {
+          // check for undefined capture_date
+          if (!("electric_cyl_scans" in a && "electric_cyl_scans" in b)) {
+            return 0;
+          }
+          if (
+            a.electric_cyl_scans.capture_date <
+            b.electric_cyl_scans.capture_date
+          ) {
+            return -1;
+          }
+          if (
+            a.electric_cyl_scans.capture_date >
+            b.electric_cyl_scans.capture_date
+          ) {
+            return 1;
+          }
+          return 0;
+        });
+        return sorted_images;
+      });
   };
 
   getScans = async () => {
