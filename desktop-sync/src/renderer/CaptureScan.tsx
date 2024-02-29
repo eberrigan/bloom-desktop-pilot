@@ -6,9 +6,10 @@ import { PlantQrCodeTextBox } from "./PlantQrCodeTextBox";
 
 const ipcRenderer = window.electron.ipcRenderer;
 const getScanData = window.electron.scanner.getScanData;
+const getScannerSettings = window.electron.scanner.getScannerSettings;
 
 export function CaptureScan() {
-  const nImages = 72;
+  const [nImages, setNImages] = useState<number>(0);
 
   const [images, setImages] = useState<string[]>([]);
   const [isScanning, setIsScanning] = useState<boolean>(false);
@@ -32,6 +33,12 @@ export function CaptureScan() {
     setIsSaving(scanData.progress.status === "saving");
     setNumCaptured(scanData.progress.nImagesCaptured);
     setNumSaved(scanData.progress.nImagesSaved);
+  }, []);
+
+  useEffect(() => {
+    getScannerSettings().then((settings) => {
+      setNImages(settings.num_frames);
+    });
   }, []);
 
   useEffect(() => {
