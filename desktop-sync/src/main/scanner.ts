@@ -44,7 +44,9 @@ class Scanner {
     this.resetProgress();
 
     console.log(
-      `calling: ${this.python} ${this.capture_scan_py} ${this.scanPath}`
+      `calling: ${this.python} ${this.capture_scan_py} ${
+        this.scanPath
+      } ${JSON.stringify(this.cameraSettings)}`
     );
 
     const grab_frames = spawn(this.python, [

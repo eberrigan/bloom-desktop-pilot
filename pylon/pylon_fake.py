@@ -12,7 +12,7 @@ sample_scan = '/Users/djbutler/dev/bloom-desktop-pilot/test/sample_scan'
 
 
 def grab_frames(camera_settings):
-    n = camera_settings.num_frames
+    n = camera_settings['num_frames']
     assert(n == 72)
     src_frames = glob.glob(os.path.join(sample_scan, '*.png'))
     src_frames.sort(key=lambda x: int(os.path.basename(x).split('.')[0]))

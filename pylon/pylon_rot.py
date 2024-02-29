@@ -36,13 +36,13 @@ class CameraSettings:
 
 def grab_frames(camera_settings):
 
-    n = camera_settings.num_frames
+    n = camera_settings['num_frames']
     assert(n == 72)
     
     print('START', flush=True)
 
     # input params
-    time_per_rev = camera_settings.seconds_per_rot
+    time_per_rev = camera_settings['seconds_per_rot']
     n_photos = n
     # setup constants for DAQ / Cyth Scanner
     Fs = 40_000  # DAQ sampling rate (Hz)
