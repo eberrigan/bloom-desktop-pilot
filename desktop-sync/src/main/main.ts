@@ -87,6 +87,7 @@ const config = yaml.load(fs.readFileSync(config_yaml, "utf8")) as {
   capture_scan_py: string;
   scans_dir: string;
   scanner_id: string;
+  electric_jwt: string;
 };
 
 const scanner = createScanner(config);
@@ -162,15 +163,18 @@ resetIdleTimer();
 const acquireToken = async () => {
   const tokenPromise = new Promise(
     (resolve: (value: string) => void, reject) => {
-      resolve(auth.token);
+      // resolve(auth.token);
+      resolve(config.electric_jwt);
     }
   );
   return tokenPromise;
 };
 
 createElectricStore(
-  "http://localhost:5133",
-  "/Users/djbutler/.bloom/bloom.db",
+  "http://api.bloom-staging.salkhpi.org:5133",
+  "/Users/djbutler/.bloom/bloom-staging.db",
+  // "http://localhost:5133",
+  // "/Users/djbutler/.bloom/bloom.db",
   acquireToken,
   // getSupabaseJWT,
   () => {

@@ -306,6 +306,8 @@ function isJwtExpired(token: string) {
   const jsonPayload = getJsonPayload(token);
   const { exp } = JSON.parse(jsonPayload);
   const currentTime = Math.floor(Date.now() / 1000);
+  // console.log(`token: ${token}`);
+  // console.log(`exp: ${exp}, currentTime: ${currentTime}`);
   return exp < currentTime;
 }
 

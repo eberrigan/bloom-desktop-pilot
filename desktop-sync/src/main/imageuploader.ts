@@ -36,7 +36,9 @@ export class ImageUploader {
         pngCompression,
       });
       if (error) {
-        console.error(`Error uploading image ${image.path}: ${error}`);
+        console.error(
+          `Error uploading image ${image.path}: ${JSON.stringify(error)}`
+        );
       }
       if (created) {
         console.log(`Uploaded image ${image.path}`);
