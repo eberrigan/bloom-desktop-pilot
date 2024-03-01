@@ -88,6 +88,7 @@ const config = yaml.load(fs.readFileSync(config_yaml, "utf8")) as {
   scans_dir: string;
   scanner_id: string;
   electric_jwt: string;
+  local_db_path: string;
 };
 
 const scanner = createScanner(config);
@@ -172,7 +173,7 @@ const acquireToken = async () => {
 
 createElectricStore(
   "http://api.bloom-staging.salkhpi.org:5133",
-  "/Users/djbutler/.bloom/bloom-staging.db",
+  config.local_db_path,
   // "http://localhost:5133",
   // "/Users/djbutler/.bloom/bloom.db",
   acquireToken,
