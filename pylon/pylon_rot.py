@@ -93,7 +93,7 @@ def grab_frames(camera_settings):
     # The following might also be necessary
     # camera.ExposureMode.Value = "Timed"
     # Set the exposure time mode to Standard
-    camera.ExposureTimeMode.Value = "Standard"
+    # camera.ExposureTimeMode.Value = "Standard"
     # Set the exposure time 
     camera.ExposureTimeAbs.Value = camera_settings["exposure_time"]    
 
@@ -111,16 +111,16 @@ def grab_frames(camera_settings):
     # Set the Gamma value
     camera.Gamma.Value = camera_settings["gamma"]
 
-    # Set brightness
+    # Set brightness (not supported for our Basler camera aca2000-50gm)
 
-    camera.BslBrightness.Value = camera_settings["brightness"]
+    # camera.BslBrightness.Value = camera_settings["brightness"]
 
-    # Set contrast
+    # Set contrast (not supported for our Basler camera aca2000-50gm)
 
     # Set the contrast mode to Linear
-    camera.BslContrastMode.Value = "Linear"
+    # camera.BslContrastMode.Value = "Linear"
     # Set the Contrast parameter
-    camera.BslContrast.Value = camera_settings["contrast"]
+    # camera.BslContrast.Value = camera_settings["contrast"]
 
     camera.StartGrabbing(pylon.GrabStrategy_OneByOne)  # requires software triggering
 
