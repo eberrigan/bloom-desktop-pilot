@@ -71,6 +71,10 @@ class Scanner {
         this.imageSaved(imagePath);
       }
     });
+
+    grab_frames.stderr.on("data", (data) => {
+      console.error(`stderr: ${data}`);
+    });
   };
 
   getCameraSettings = () => {
