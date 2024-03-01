@@ -121,7 +121,7 @@ export function CameraSettings() {
               }
             />
           </div>
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <div className="block text-xs font-bold text-gray-700 text-left">
               Brightness
             </div>
@@ -152,7 +152,7 @@ export function CameraSettings() {
                 }))
               }
             />
-          </div>
+          </div> */}
           <div className="mb-4">
             <div className="block text-xs font-bold text-gray-700 text-left">
               Gamma
