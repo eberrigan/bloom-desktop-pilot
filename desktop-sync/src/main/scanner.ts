@@ -178,7 +178,7 @@ function defaultCameraSettings(): CameraSettings {
   return {
     num_frames: 72,
     exposure_time: 2000,
-    gain: 0,
+    gain: 36,
     brightness: 0,
     contrast: 0,
     gamma: 1,
