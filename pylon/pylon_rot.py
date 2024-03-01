@@ -86,6 +86,40 @@ def grab_frames(camera_settings):
 
     camera.MaxNumBuffer.Value = n_photos  # defaults to 10
 
+    # Set exposure time
+
+    # The following might also be necessary
+    # camera.ExposureMode.Value = "Timed"
+    # Set the exposure time mode to Standard
+    camera.ExposureTimeMode.Value = "Standard"
+    # Set the exposure time 
+    camera.ExposureTimeAbs.Value = camera_settings["exposure_time"]    
+
+    # Set gain
+
+    camera.GainAuto.Value = "Off"
+    camera.GainRaw.Value = camera_settings["gain"]
+
+    # Set gamma
+
+    # Enable the Gamma feature
+    camera.GammaEnable.Value = True
+    # Set the gamma type to User
+    camera.GammaSelector.Value = "User"
+    # Set the Gamma value
+    camera.Gamma.Value = camera_settings["gamma"]
+
+    # Set brightness
+
+    camera.BslBrightness.Value = camera_settings["brightness"]
+
+    # Set contrast
+
+    # Set the contrast mode to Linear
+    camera.BslContrastMode.Value = "Linear"
+    # Set the Contrast parameter
+    camera.BslContrast.Value = camera_settings["contrast"]
+
     camera.Open()
     camera.StartGrabbing(pylon.GrabStrategy_OneByOne)  # requires software triggering
 

@@ -177,7 +177,7 @@ function defaultCameraSettings(): CameraSettings {
     gain: 0,
     brightness: 0,
     contrast: 0,
-    gamma: 0,
+    gamma: 1,
     seconds_per_rot: 10,
   };
 }
