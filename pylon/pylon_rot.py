@@ -86,6 +86,8 @@ def grab_frames(camera_settings):
 
     camera.MaxNumBuffer.Value = n_photos  # defaults to 10
 
+    camera.Open()
+
     # Set exposure time
 
     # The following might also be necessary
@@ -120,7 +122,6 @@ def grab_frames(camera_settings):
     # Set the Contrast parameter
     camera.BslContrast.Value = camera_settings["contrast"]
 
-    camera.Open()
     camera.StartGrabbing(pylon.GrabStrategy_OneByOne)  # requires software triggering
 
     frames = []
