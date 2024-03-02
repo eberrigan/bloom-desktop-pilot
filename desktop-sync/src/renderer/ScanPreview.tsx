@@ -3,6 +3,8 @@ import { Database } from "../types/database.types";
 import { useEffect, useState } from "react";
 import { ScansWithPhenotypers } from "../types/electric.types";
 
+const getScannerId = window.electron.scanner.getScannerId;
+
 export function ScanPreview({
   scan,
   supabase,
@@ -13,6 +15,11 @@ export function ScanPreview({
   thumb: boolean;
 }) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [scannerId, setScannerId] = useState<string | null>(null);
+
+  useEffect(() => {
+    getScannerId().then((response: string) => setScannerId(response));
+  }, []);
 
   useEffect(() => {
     if (scan.electric_cyl_images.length > 0) {
@@ -31,10 +38,18 @@ export function ScanPreview({
 
   return (
     <div>
-      {imageUrl === null ? (
+      {scannerId !== null && scannerId == scan.scanner_id ? (
+        <img
+          src={"file://" + scan.electric_cyl_images[0].path}
+          className={thumb ? "h-20" : "w-[600px] rounded-md"}
+        />
+      ) : imageUrl === null ? (
         <LoadingImage />
       ) : (
-        <img src={imageUrl} className={thumb ? "h-20" : "w-[600px]"} />
+        <img
+          src={imageUrl}
+          className={thumb ? "h-20" : "w-[600px] rounded-md"}
+        />
       )}
     </div>
   );

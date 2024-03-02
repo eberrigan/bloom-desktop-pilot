@@ -14,7 +14,6 @@ import { getSupabaseClient } from "./util";
 const ipcRenderer = window.electron.ipcRenderer;
 const getScans = window.electron.scanStore.getScans;
 const uploadImages = window.electron.electric.uploadImages;
-const getBloomCredentials = window.electron.bloom.getCredentials;
 // const getScansWithEmail = window.electron.scanStore.getScansWithEmail;
 
 export function BrowseScans() {

@@ -67,11 +67,6 @@ export function ViewScan() {
           <div className="mb-8">
             <ScanPreview scan={scan} supabase={supabase} thumb={false} />
           </div>
-          {/* <img
-            src={"file://" + scan?.electric_cyl_images[0].path}
-            style={{ width: "500px" }}
-            className="rounded-md mt-2"
-          /> */}
         </div>
       ) : (
         <span>Loading scan...</span>

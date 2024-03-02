@@ -131,7 +131,7 @@ export class ElectricStore {
     return this.electric.db.electric_phenotypers.findMany();
   };
 
-  getImagesToUpload = async () => {
+  getImagesToUpload = async (scannerId: string) => {
     if (this.electric === null) {
       return [];
     }
@@ -161,6 +161,11 @@ export class ElectricStore {
           }
           return 0;
         });
+        const filtered_images = sorted_images.filter(
+          (image) =>
+            "electric_cyl_scans" in image &&
+            image.electric_cyl_scans.scanner_id === scannerId
+        );
         return sorted_images;
       });
   };
