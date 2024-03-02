@@ -19,6 +19,7 @@ class Scanner {
   private scanProgress: ScanProgress | null = defaultProgress();
   private images: ScanImages = [];
   private cameraSettings: CameraSettings = defaultCameraSettings();
+  private cameraIpAddress: string;
 
   public onScanUpdate: () => void = () => {};
   public onScanComplete: (scan: Scan) => void = () => {};
@@ -29,6 +30,7 @@ class Scanner {
     this.capture_scan_py = config.capture_scan_py;
     this.scans_dir = config.scans_dir;
     this.scanner_id = config.scanner_id;
+    this.cameraIpAddress = config.camera_ip_address;
   }
 
   startScan = (options: {
@@ -52,7 +54,10 @@ class Scanner {
     const grab_frames = spawn(this.python, [
       this.capture_scan_py,
       this.scanPath,
-      JSON.stringify(this.cameraSettings),
+      JSON.stringify({
+        ...this.cameraSettings,
+        camera_ip_address: this.cameraIpAddress,
+      }),
     ]);
 
     grab_frames.stdout.on("data", (data) => {
@@ -177,8 +182,8 @@ class Scanner {
 function defaultCameraSettings(): CameraSettings {
   return {
     num_frames: 72,
-    exposure_time: 2000,
-    gain: 36,
+    exposure_time: 10000,
+    gain: 100,
     brightness: 0,
     contrast: 0,
     gamma: 1,

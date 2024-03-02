@@ -6,6 +6,10 @@ import {
   Electric_cyl_images,
   Electric_phenotypers,
 } from "../generated/client";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { Database } from "../types/database.types";
+import { getSupabaseClient } from "./util";
+import { ScanPreview } from "./ScanPreview";
 
 const getScan = window.electron.scanStore.getScan;
 // const getScanWithEmail = window.electron.scanStore.getScanWithEmail;
@@ -20,6 +24,15 @@ export function ViewScan() {
   const scanId = params.scanId;
 
   const [scan, setScan] = useState<ScansWithPhenotypers | null>(null);
+  const [supabase, setSupabase] = useState<SupabaseClient<Database> | null>(
+    null
+  );
+
+  useEffect(() => {
+    getSupabaseClient().then((client) => {
+      setSupabase(client);
+    });
+  }, []);
 
   useEffect(() => {
     if (!scanId) return;
@@ -50,11 +63,15 @@ export function ViewScan() {
           </div>
           <div className="text-xs mt-2 font-bold">Scan ID</div>
           <div>{scanId}</div>
-          <img
+          <div className="text-xs mt-2 font-bold">Preview</div>
+          <div className="mb-8">
+            <ScanPreview scan={scan} supabase={supabase} thumb={false} />
+          </div>
+          {/* <img
             src={"file://" + scan?.electric_cyl_images[0].path}
             style={{ width: "500px" }}
             className="rounded-md mt-2"
-          />
+          /> */}
         </div>
       ) : (
         <span>Loading scan...</span>

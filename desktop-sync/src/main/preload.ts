@@ -79,6 +79,15 @@ const electronHandler = {
     getStatus: () => ipcRenderer.invoke("electric:get-status"),
     uploadImages: () => ipcRenderer.invoke("electric:upload-images"),
   },
+  bloom: {
+    getCredentials: () =>
+      ipcRenderer.invoke("bloom:get-credentials") as Promise<{
+        email: string;
+        password: string;
+        bloom_api_url: string;
+        bloom_anon_key: string;
+      }>,
+  },
 };
 
 contextBridge.exposeInMainWorld("electron", electronHandler);

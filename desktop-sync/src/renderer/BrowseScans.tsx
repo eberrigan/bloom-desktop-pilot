@@ -5,20 +5,24 @@ import {
   Electric_phenotypers,
   Electric_cyl_images,
 } from "../generated/client";
+import { Database } from "../types/database.types";
+import { ScansWithPhenotypers } from "../types/electric.types";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { ScanPreview } from "./ScanPreview";
+import { getSupabaseClient } from "./util";
 
 const ipcRenderer = window.electron.ipcRenderer;
 const getScans = window.electron.scanStore.getScans;
 const uploadImages = window.electron.electric.uploadImages;
+const getBloomCredentials = window.electron.bloom.getCredentials;
 // const getScansWithEmail = window.electron.scanStore.getScansWithEmail;
-
-type ScansWithPhenotypers = Electric_cyl_scans & {
-  electric_phenotypers: Electric_phenotypers;
-  electric_cyl_images: Electric_cyl_images[];
-};
 
 export function BrowseScans() {
   const [scans, setScans] = useState<ScansWithPhenotypers[]>([]);
   const [selectedScan, setSelectedScan] = useState<number | null>(null);
+  const [supabase, setSupabase] = useState<SupabaseClient<Database> | null>(
+    null
+  );
 
   const fetchScans = useCallback(() => {
     getScans().then((response: ScansWithPhenotypers[]) => setScans(response));
@@ -32,10 +36,16 @@ export function BrowseScans() {
     return ipcRenderer.on("electric:scans-updated", fetchScans);
   }, []);
 
+  useEffect(() => {
+    getSupabaseClient().then((client) => {
+      setSupabase(client);
+    });
+  }, []);
+
   return (
     <div>
       <UploadControls />
-      <table className="rounded-md">
+      <table className="rounded-md mb-8">
         <thead>
           <tr>
             <th className="text-xs text-left px-2 pb-4 align-bottom">
@@ -49,7 +59,13 @@ export function BrowseScans() {
             <th className="text-xs text-left px-2 pb-4 align-bottom">
               Exposure
             </th>
-            <th className="text-xs text-left px-2 pb-4 align-bottom">Upload</th>
+            <th className="text-xs text-left px-2 pb-4 align-bottom">Gain</th>
+            <th className="text-xs text-left px-2 pb-4 align-bottom">
+              Uploaded
+            </th>
+            <th className="text-xs text-left px-2 pb-4 align-bottom">
+              Preview
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -74,6 +90,7 @@ export function BrowseScans() {
                 </td>
                 <td className="px-2 py-2">{scan.scanner_id}</td>
                 <td className="px-2 py-2">{scan.exposure_time}</td>
+                <td className="px-2 py-2">{scan.gain}</td>
                 <td className="px-2 py-2">
                   <ProgressBar
                     value={
@@ -83,6 +100,9 @@ export function BrowseScans() {
                     }
                     max={scan.electric_cyl_images.length}
                   />
+                </td>
+                <td>
+                  <ScanPreview scan={scan} supabase={supabase} thumb={true} />
                 </td>
               </tr>
             ))}
@@ -131,9 +151,9 @@ function Phenotyper({ phenotyper }: { phenotyper: Electric_phenotypers }) {
   return (
     <div>
       <span className="inline-block">{formatName(phenotyper.name)}</span>
-      <span className="text-xs font-bold text-stone-400 ml-2 inline-block">
+      {/* <span className="text-xs font-bold text-stone-400 ml-2 inline-block">
         {phenotyper.email}
-      </span>
+      </span> */}
     </div>
   );
 }
@@ -161,7 +181,7 @@ function ProgressBar({ value, max }: { value: number; max: number }) {
           ></div>
         </div>
       ) : (
-        <div className="text-lime-700">
+        <div className="text-lime-700 text-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

@@ -12,9 +12,6 @@ from pypylon import pylon
 # Slow Scanner @ GH
 # ip_address = '10.0.0.45'
 
-# Scanner @ PBIO
-ip_address = '10.0.0.23'
-
 
 # create a CameraSettings class with the following attributes:
 #   - exposure_time
@@ -38,6 +35,8 @@ def grab_frames(camera_settings):
 
     n = camera_settings['num_frames']
     assert(n == 72)
+
+    ip_address = camera_settings['camera_ip_address']
     
     print('START', flush=True)
 

@@ -3,6 +3,7 @@ type ScannerConfig = {
   capture_scan_py: string;
   scans_dir: string;
   scanner_id: string;
+  camera_ip_address: string;
 };
 
 type ScanMetadata = Readonly<{

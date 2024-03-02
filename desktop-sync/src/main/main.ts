@@ -40,11 +40,14 @@ const createWindow = (): void => {
     },
   });
 
+  mainWindow.menuBarVisible = false;
+  mainWindow.setMenu(null);
+
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
@@ -89,7 +92,19 @@ const config = yaml.load(fs.readFileSync(config_yaml, "utf8")) as {
   scanner_id: string;
   electric_jwt: string;
   local_db_path: string;
+  camera_ip_address: string;
+  bloom_scanner_username: string;
+  bloom_scanner_password: string;
+  bloom_api_url: string;
+  bloom_anon_key: string;
 };
+
+ipcMain.handle("bloom:get-credentials", (event, args) => ({
+  email: config.bloom_scanner_username,
+  password: config.bloom_scanner_password,
+  bloom_api_url: config.bloom_api_url,
+  bloom_anon_key: config.bloom_anon_key,
+}));
 
 const scanner = createScanner(config);
 ipcMain.handle("scanner:get-scanner-id", scanner.getScannerId);
