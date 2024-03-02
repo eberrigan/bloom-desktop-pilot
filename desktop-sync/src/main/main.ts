@@ -214,10 +214,11 @@ createElectricStore(
     });
 
     async function uploadImages() {
-      const images =
-        (await electricStore.getImagesToUpload()) as (Electric_cyl_images & {
-          electric_cyl_scans: Electric_cyl_images;
-        })[];
+      const images = (await electricStore.getImagesToUpload(
+        config.scanner_id
+      )) as (Electric_cyl_images & {
+        electric_cyl_scans: Electric_cyl_images;
+      })[];
       const imageUploader = await createImageUploader(electricStore);
       await imageUploader.uploadImages(images);
     }
