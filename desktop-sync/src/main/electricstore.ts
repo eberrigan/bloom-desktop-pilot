@@ -166,7 +166,7 @@ export class ElectricStore {
             "electric_cyl_scans" in image &&
             image.electric_cyl_scans.scanner_id === scannerId
         );
-        return sorted_images;
+        return filtered_images;
       });
   };
 
