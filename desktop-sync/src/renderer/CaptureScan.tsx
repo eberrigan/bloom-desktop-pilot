@@ -7,6 +7,7 @@ import { PlantQrCodeTextBox } from "./PlantQrCodeTextBox";
 const ipcRenderer = window.electron.ipcRenderer;
 const getScanData = window.electron.scanner.getScanData;
 const getScannerSettings = window.electron.scanner.getScannerSettings;
+const getScansDir = window.electron.scanner.getScansDir;
 
 export function CaptureScan() {
   const [nImages, setNImages] = useState<number>(0);
@@ -17,6 +18,7 @@ export function CaptureScan() {
   const [numCaptured, setNumCaptured] = useState<number>(0);
   const [numSaved, setNumSaved] = useState<number>(0);
   const [selectedImage, setSelectedImage] = useState<number>(0);
+  const [scansDir, setScansDir] = useState<string | null>(null);
 
   const [phenotyperId, setPhenotyperId] = useState<string | null>(null);
   const [plantQrCode, setPlantQrCode] = useState<string | null>(null);
@@ -33,6 +35,12 @@ export function CaptureScan() {
     setIsSaving(scanData.progress.status === "saving");
     setNumCaptured(scanData.progress.nImagesCaptured);
     setNumSaved(scanData.progress.nImagesSaved);
+  }, []);
+
+  useEffect(() => {
+    getScansDir().then((dir) => {
+      setScansDir(dir);
+    });
   }, []);
 
   useEffect(() => {
@@ -140,9 +148,12 @@ export function CaptureScan() {
           ) : null}
           <div className="m-4">
             <div className="">
-              {images.length > 0 ? (
+              {images.length > 0 && scansDir !== null ? (
                 <img
-                  src={"file://" + images[selectedImage].replaceAll("\\", "/")}
+                  src={`file://${scansDir}/${images[selectedImage].replaceAll(
+                    "\\",
+                    "/"
+                  )}`}
                   style={{ width: "500px" }}
                   className="rounded-md"
                 />

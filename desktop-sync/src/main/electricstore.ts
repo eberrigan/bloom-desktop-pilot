@@ -75,6 +75,8 @@ export class ElectricStore {
       this.statusChanged();
       try {
         this.electric = await electrify(this.conn, schema, electric_config);
+        // sleep for 3 seconds to allow the electric client to sync
+        await sleepAsync(3000);
         // this.electric.connect(this.jwt || "dummy-jwt");
         console.log("Connected to the electric service");
         this.electric.notifier.subscribeToConnectivityStateChanges(() => {
@@ -106,21 +108,27 @@ export class ElectricStore {
       return;
     }
 
+    console.log("syncing electric_cyl_scans...");
     // sync the tables
     const scans = await this.electric.db.electric_cyl_scans.sync({
       include: { electric_phenotypers: true, electric_cyl_images: true },
     });
     await scans.synced;
+    console.log("synced electric_cyl_scans");
 
+    console.log("syncing electric_phenotypers...");
     const phenotypers = await this.electric.db.electric_phenotypers.sync();
     await phenotypers.synced;
+    console.log("synced electric_phenotypers");
 
+    console.log("syncing electric_cyl_images...");
     const images = await this.electric.db.electric_cyl_images.sync({
       include: {
         electric_cyl_scans: { include: { electric_phenotypers: true } },
       },
     });
     await images.synced;
+    console.log("synced electric_cyl_images");
   };
 
   getPhenotypers = async () => {

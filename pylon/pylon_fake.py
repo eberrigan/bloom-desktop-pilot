@@ -35,6 +35,8 @@ if __name__ == '__main__':
 
     frames = grab_frames(camera_settings)
     for (i, frame) in enumerate(frames):
-        fname = output_path / f'{i + 1:03d}.png'
-        iio.imwrite(str(fname), frame)
-        print("IMAGE_PATH " + str(fname), flush=True)
+        image_num = i + 1
+        image_file = f'{image_num:03d}.png'
+        image_path = output_path / image_file
+        iio.imwrite(str(image_path), frame)
+        print("IMAGE_PATH " + str(image_file), flush=True)

@@ -124,6 +124,7 @@ ipcMain.handle("scanner:get-settings", scanner.getCameraSettings);
 ipcMain.handle("scanner:set-settings", async (event, args) => {
   scanner.setCameraSettings(args[0]);
 });
+ipcMain.handle("scanner:get-scans-dir", scanner.getScansDir);
 ipcMain.on("scanner:start-scan", (event, args) => {
   console.log("scanner:start-scan event received");
   scanner.startScan({
@@ -219,7 +220,10 @@ createElectricStore(
       )) as (Electric_cyl_images & {
         electric_cyl_scans: Electric_cyl_images;
       })[];
-      const imageUploader = await createImageUploader(electricStore);
+      const imageUploader = await createImageUploader(
+        electricStore,
+        config.scans_dir
+      );
       await imageUploader.uploadImages(images);
     }
     ipcMain.handle("electric:upload-images", uploadImages);

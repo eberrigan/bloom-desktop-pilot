@@ -18,10 +18,12 @@ type ImagesWithScans = Electric_cyl_images & {
 export class ImageUploader {
   private supabase: SupabaseClient<Database> | null = null;
   private electricStore: ElectricStore;
+  private scans_dir: string;
   // private localStorage: LocalStorage = new LocalStorage();
 
-  constructor(electricStore: ElectricStore) {
+  constructor(electricStore: ElectricStore, scans_dir: string) {
     this.electricStore = electricStore;
+    this.scans_dir = scans_dir;
   }
 
   init = async () => {
@@ -52,7 +54,7 @@ export class ImageUploader {
   ) => {
     const pngCompression = opts?.pngCompression || 9;
 
-    const src = image.path;
+    const src = path.join(this.scans_dir, image.path);
 
     const dst = `bloom-desktop-cyl-scans/${
       image.electric_cyl_scans.scanner_id
@@ -111,8 +113,11 @@ export class ImageUploader {
   };
 }
 
-export async function createImageUploader(electricStore: ElectricStore) {
-  const bloom_uploader = new ImageUploader(electricStore);
+export async function createImageUploader(
+  electricStore: ElectricStore,
+  scans_dir: string
+) {
+  const bloom_uploader = new ImageUploader(electricStore, scans_dir);
   await bloom_uploader.init();
   return bloom_uploader;
 }

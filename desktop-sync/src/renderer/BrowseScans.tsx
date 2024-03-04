@@ -180,7 +180,13 @@ function ProgressBar({ value, max }: { value: number; max: number }) {
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="m9 13.5 3 3m0 0 3-3m-3 3v-6m1.06-4.19-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"
+              d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15Z"
+            />
+            {/* <path strokeLinecap="round" strokeLinejoin="round" d="M4 4l18 18" /> */}
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M10 11v4.5 M13 11v4.5"
             />
           </svg>
         </div>
@@ -225,6 +231,12 @@ function ProgressBar({ value, max }: { value: number; max: number }) {
               strokeLinecap="round"
               strokeLinejoin="round"
               d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15Z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              // d="M9 12.75 11.25 15 15 9.75"
+              d="M8.5 13.75 10.75 16 14.5 10.75"
             />
           </svg>
         </div>

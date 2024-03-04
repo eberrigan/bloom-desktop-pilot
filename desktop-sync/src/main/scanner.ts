@@ -10,6 +10,7 @@ class Scanner {
   private scanId: string | null = null;
   private phenotyperId: string | null = null;
   private scanPath: string | null = null;
+  private scanPartialPath: string | null = null;
   private plantQrCode: string | null = null;
   private python: string;
   private capture_scan_py: string;
@@ -43,11 +44,11 @@ class Scanner {
     this.scanId = uuidv4();
     this.captureDate = new Date();
     // get the date in the format YYYY-MM-DD in the local timezone
-    this.scanPath = path.join(
-      this.scans_dir,
+    this.scanPartialPath = path.join(
       getLocalDateInYYYYMMDD(this.captureDate),
       this.scanId
     );
+    this.scanPath = path.join(this.scans_dir, this.scanPartialPath);
 
     this.captureMetadata();
     this.resetProgress();
@@ -79,8 +80,9 @@ class Scanner {
       if (str.slice(0, 10) === "IMAGE_PATH") {
         console.log("data matches IMAGE_PATH");
         const imagePath = str.slice(11).trim();
-        options.onImageSaved(imagePath);
-        this.imageSaved(imagePath);
+        const imagePartialPath = path.join(this.scanPartialPath, imagePath);
+        options.onImageSaved(imagePartialPath);
+        this.imageSaved(imagePartialPath);
       }
     });
 
@@ -99,6 +101,10 @@ class Scanner {
 
   getScannerId = () => {
     return this.scanner_id;
+  };
+
+  getScansDir = () => {
+    return this.scans_dir;
   };
 
   getPhenotyperId = () => {
@@ -134,8 +140,8 @@ class Scanner {
     if (this.phenotyperId === null) {
       throw new Error("personId is null");
     }
-    if (this.scanPath === null) {
-      throw new Error("scanPath is null");
+    if (this.scanPartialPath === null) {
+      throw new Error("scanPartialPath is null");
     }
     if (this.plantQrCode === null) {
       throw new Error("plantQrCode is null");
@@ -148,7 +154,7 @@ class Scanner {
       phenotyper_id: this.phenotyperId,
       scanner_id: this.scanner_id,
       plant_qr_code: this.plantQrCode,
-      path: this.scanPath,
+      path: this.scanPartialPath,
       capture_date: this.captureDate.toISOString(),
       ...this.cameraSettings,
     };

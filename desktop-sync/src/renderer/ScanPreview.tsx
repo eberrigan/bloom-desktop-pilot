@@ -5,6 +5,7 @@ import { ScansWithPhenotypers } from "../types/electric.types";
 import { Electric_cyl_images } from "../generated/client";
 
 const getScannerId = window.electron.scanner.getScannerId;
+const getScansDir = window.electron.scanner.getScansDir;
 
 export function ScanPreview({
   scan,
@@ -17,6 +18,11 @@ export function ScanPreview({
 }) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [scannerId, setScannerId] = useState<string | null>(null);
+  const [scansDir, setScansDir] = useState<string | null>(null);
+
+  useEffect(() => {
+    getScansDir().then((dir) => setScansDir(dir));
+  }, []);
 
   useEffect(() => {
     getScannerId().then((response: string) => setScannerId(response));
@@ -39,9 +45,13 @@ export function ScanPreview({
 
   return (
     <div>
-      {scannerId !== null && scannerId == scan.scanner_id ? (
+      {scannerId !== null &&
+      scannerId == scan.scanner_id &&
+      scansDir !== null ? (
         <img
-          src={"file://" + sortImages(scan.electric_cyl_images)[0].path}
+          src={`file://${scansDir}/${
+            sortImages(scan.electric_cyl_images)[0].path
+          }`}
           className={thumb ? "h-20" : "w-[600px] rounded-md"}
         />
       ) : imageUrl === null ? (

@@ -47,6 +47,7 @@ const electronHandler = {
       ipcRenderer.invoke("scanner:set-plant-qr-code", [plantQrCode]),
     startScan: () => ipcRenderer.send("scanner:start-scan"),
     getScanData: () => ipcRenderer.invoke("scanner:get-scan-data"),
+    getScansDir: () => ipcRenderer.invoke("scanner:get-scans-dir"),
     getScannerSettings: () => ipcRenderer.invoke("scanner:get-settings"),
     setScannerSettings: (settings: {
       exposure_time: number;
