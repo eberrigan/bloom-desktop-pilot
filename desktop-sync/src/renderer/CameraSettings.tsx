@@ -160,11 +160,12 @@ export function CameraSettings() {
             <input
               className="w-40 h-8 px-2 border rounded-md text-xl"
               type="number"
+              step="0.1"
               value={newSettings?.gamma}
               onChange={(e) =>
                 handleSetSettings((settings) => ({
                   ...settings,
-                  gamma: parseInt(e.target.value, 10),
+                  gamma: parseFloat(e.target.value),
                 }))
               }
             />
@@ -173,7 +174,7 @@ export function CameraSettings() {
             <button
               className={`rounded-md border border-gray-300 px-4 py-2 mr-2 text-sm font-medium ${
                 !dirty
-                  ? "text-gray-300 cursor-not-allowed"
+                  ? "text-gray-300"
                   : "text-green-700 bg-green-100 hover:bg-gray-50"
               }`}
               disabled={!dirty}
@@ -184,7 +185,7 @@ export function CameraSettings() {
             <button
               className={`rounded-md border border-gray-300 px-4 py-2 mr-2 text-sm font-medium ${
                 !dirty
-                  ? "text-gray-300 cursor-not-allowed"
+                  ? "text-gray-300"
                   : "text-red-700 bg-red-100 hover:bg-gray-50"
               }`}
               disabled={!dirty}
