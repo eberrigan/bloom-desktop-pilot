@@ -20,6 +20,7 @@ class Scanner {
   private images: ScanImages = [];
   private cameraSettings: CameraSettings = defaultCameraSettings();
   private cameraIpAddress: string;
+  private captureDate: Date | null = null;
 
   public onScanUpdate: () => void = () => {};
   public onScanComplete: (scan: Scan) => void = () => {};
@@ -40,7 +41,13 @@ class Scanner {
     this.images = [];
 
     this.scanId = uuidv4();
-    this.scanPath = path.join(this.scans_dir, this.scanId);
+    this.captureDate = new Date();
+    // get the date in the format YYYY-MM-DD in the local timezone
+    this.scanPath = path.join(
+      this.scans_dir,
+      getLocalDateInYYYYMMDD(this.captureDate),
+      this.scanId
+    );
 
     this.captureMetadata();
     this.resetProgress();
@@ -133,13 +140,16 @@ class Scanner {
     if (this.plantQrCode === null) {
       throw new Error("plantQrCode is null");
     }
+    if (this.captureDate === null) {
+      throw new Error("captureDate is null");
+    }
     const metadata = {
       id: this.scanId,
       phenotyper_id: this.phenotyperId,
       scanner_id: this.scanner_id,
       plant_qr_code: this.plantQrCode,
       path: this.scanPath,
-      capture_date: new Date().toISOString(),
+      capture_date: this.captureDate.toISOString(),
       ...this.cameraSettings,
     };
     this.scanMetadata = metadata;
@@ -204,6 +214,14 @@ function defaultProgress(): ScanProgress {
     nImagesSaved: 0,
     status: "idle",
   };
+}
+
+function getLocalDateInYYYYMMDD(date: Date) {
+  // Convert offset to milliseconds
+  const timeZoneOffsetInMs = date.getTimezoneOffset() * 60000;
+  const localDate = new Date(date.getTime() - timeZoneOffsetInMs);
+  const yyyyMMdd = localDate.toISOString().slice(0, 10);
+  return yyyyMMdd;
 }
 
 function createScanner(config: ScannerConfig) {
