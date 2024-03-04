@@ -2,6 +2,7 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "../types/database.types";
 import { useEffect, useState } from "react";
 import { ScansWithPhenotypers } from "../types/electric.types";
+import { Electric_cyl_images } from "../generated/client";
 
 const getScannerId = window.electron.scanner.getScannerId;
 
@@ -23,7 +24,7 @@ export function ScanPreview({
 
   useEffect(() => {
     if (scan.electric_cyl_images.length > 0) {
-      const image = scan.electric_cyl_images[0];
+      const image = sortImages(scan.electric_cyl_images)[0];
       if (supabase) {
         getImageUrl({
           supabase,
@@ -40,7 +41,7 @@ export function ScanPreview({
     <div>
       {scannerId !== null && scannerId == scan.scanner_id ? (
         <img
-          src={"file://" + scan.electric_cyl_images[0].path}
+          src={"file://" + sortImages(scan.electric_cyl_images)[0].path}
           className={thumb ? "h-20" : "w-[600px] rounded-md"}
         />
       ) : imageUrl === null ? (
@@ -85,4 +86,11 @@ async function getImageUrl({
 
   const signedUrl = data?.signedUrl ?? "";
   return signedUrl;
+}
+
+function sortImages(images: Electric_cyl_images[]) {
+  const imagesCopy = images.slice();
+  return imagesCopy.sort((a, b) => {
+    return a.frame_number > b.frame_number ? 1 : -1;
+  });
 }
