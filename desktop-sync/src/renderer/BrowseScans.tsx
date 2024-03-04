@@ -60,11 +60,9 @@ export function BrowseScans() {
             </th>
             <th className="text-xs text-left px-2 pb-4 align-bottom">Gain</th>
             <th className="text-xs text-left px-2 pb-4 align-bottom">
-              Uploaded
-            </th>
-            <th className="text-xs text-left px-2 pb-4 align-bottom">
               Preview
             </th>
+            <th className="text-xs text-left px-2 pb-4 align-bottom">Status</th>
           </tr>
         </thead>
         <tbody>
@@ -90,6 +88,9 @@ export function BrowseScans() {
                 <td className="px-2 py-2">{scan.scanner_id}</td>
                 <td className="px-2 py-2">{scan.exposure_time}</td>
                 <td className="px-2 py-2">{scan.gain}</td>
+                <td>
+                  <ScanPreview scan={scan} supabase={supabase} thumb={true} />
+                </td>
                 <td className="px-2 py-2">
                   <ProgressBar
                     value={
@@ -99,9 +100,6 @@ export function BrowseScans() {
                     }
                     max={scan.electric_cyl_images.length}
                   />
-                </td>
-                <td>
-                  <ScanPreview scan={scan} supabase={supabase} thumb={true} />
                 </td>
               </tr>
             ))}
@@ -170,14 +168,48 @@ function ProgressBar({ value, max }: { value: number; max: number }) {
   return (
     <div>
       {value == 0 ? (
-        <span></span>
+        <div className="text-amber-700 text-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="inline w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="m9 13.5 3 3m0 0 3-3m-3 3v-6m1.06-4.19-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"
+            />
+          </svg>
+        </div>
       ) : value < max ? (
-        <div className="h-2 relative max-w-xs rounded-full overflow-hidden">
-          <div className="w-full h-full border border-stone-800 absolute z-10 rounded-full"></div>
-          <div
-            className="h-full bg-lime-400 absolute z-1 rounded-full"
-            style={{ width: `${(value / max) * 100}%` }}
-          ></div>
+        <div className="flex flex-col">
+          <div className="text-lime-700 text-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="inline w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 16.5V9.75m0 0 3 3m-3-3-3 3M6.75 19.5a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z"
+              />
+            </svg>
+          </div>
+
+          <div className="h-2 relative max-w-xs rounded-full overflow-hidden">
+            <div className="w-full h-full border border-stone-800 absolute z-10 rounded-full"></div>
+            <div
+              className="h-full bg-lime-400 absolute z-1 rounded-full"
+              style={{ width: `${(value / max) * 100}%` }}
+            ></div>
+          </div>
         </div>
       ) : (
         <div className="text-lime-700 text-center">
@@ -187,12 +219,12 @@ function ProgressBar({ value, max }: { value: number; max: number }) {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="inline w-4 h-4 mr-1"
+            className="inline w-6 h-6"
           >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="m4.5 12.75 6 6 9-13.5"
+              d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15Z"
             />
           </svg>
         </div>
