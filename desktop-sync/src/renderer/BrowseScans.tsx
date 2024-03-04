@@ -235,7 +235,6 @@ function ProgressBar({ value, max }: { value: number; max: number }) {
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              // d="M9 12.75 11.25 15 15 9.75"
               d="M8.5 13.75 10.75 16 14.5 10.75"
             />
           </svg>
