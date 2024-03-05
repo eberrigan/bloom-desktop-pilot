@@ -4,6 +4,9 @@ import { v4 as uuidv4 } from "uuid";
 import { PersonChooser } from "./PersonChooser";
 import { PlantQrCodeTextBox } from "./PlantQrCodeTextBox";
 
+const setScannerPlantQrCode = window.electron.scanner.setPlantQrCode;
+const getScannerPlantQrCode = window.electron.scanner.getPlantQrCode;
+
 const ipcRenderer = window.electron.ipcRenderer;
 const getScanData = window.electron.scanner.getScanData;
 const getScannerSettings = window.electron.scanner.getScannerSettings;
@@ -54,6 +57,13 @@ export function CaptureScan() {
   }, []);
 
   useEffect(() => {
+    getScannerPlantQrCode().then((qrCode) => {
+      setPlantQrCode(qrCode);
+      console.log("got qr code from scanner: " + qrCode);
+    });
+  }, []);
+
+  useEffect(() => {
     return ipcRenderer.on("scanner:scan-update", pullScanData);
   }, []);
 
@@ -73,6 +83,10 @@ export function CaptureScan() {
     return ((n % m) + m) % m;
   }
 
+  const handleSliderChange = (e: any) => {
+    setSelectedImage(parseInt(e.target.value, 10));
+  };
+
   const nextImage = () => {
     if (images.length === 0) {
       return;
@@ -89,43 +103,67 @@ export function CaptureScan() {
     setSelectedImage(nextIndex);
   };
 
+  useEffect(() => {
+    if (numSaved === nImages) {
+      setScannerPlantQrCode("");
+      setPlantQrCode("");
+      setIsScanning(false);
+      setIsSaving(false);
+    }
+  }, [numSaved]);
+
   return (
-    <div className="flex flex-col">
-      {
-        <div className="mb-2 text-left">
-          <div className="block text-xs font-bold text-gray-700 text-left">
-            Phenotyper
+    <div className="flex flex-row">
+      <div className="flex flex-col">
+        {
+          <div className="mb-2 text-left">
+            <div className="block text-xs font-bold text-gray-700 text-left">
+              Phenotyper
+            </div>
+            <div className="mt-1">
+              <PersonChooser
+                phenotyperIdChanged={(id: string) => setPhenotyperId(id)}
+              />
+            </div>
           </div>
-          <div className="mt-1">
-            <PersonChooser
-              phenotyperIdChanged={(id: string) => setPhenotyperId(id)}
-            />
+        }
+        {phenotyperId === null ? null : (
+          <div className="mb-2 text-left">
+            <div className="block text-xs font-bold text-gray-700 text-left">
+              Plant QR Code
+            </div>
+            <div className="mt-1">
+              <PlantQrCodeTextBox
+                qrCode={plantQrCode}
+                plantQrCodeChanged={(qrCode) => {
+                  setPlantQrCode(qrCode);
+                  setScannerPlantQrCode(qrCode);
+                  console.log("hi");
+                }}
+              />
+            </div>
           </div>
-        </div>
-      }
+        )}
+      </div>
       {phenotyperId === null ? null : (
-        <div className="mb-2 text-left">
-          <div className="block text-xs font-bold text-gray-700 text-left">
-            Plant QR Code
-          </div>
-          <div className="mt-1">
-            <PlantQrCodeTextBox
-              plantQrCodeChanged={(qrCode) => setPlantQrCode(qrCode)}
-            />
-          </div>
-        </div>
-      )}
-      {phenotyperId === null ||
-      plantQrCode === null ||
-      plantQrCode === "" ? null : (
-        <div className="mt-4 mr-4 border-t p-4">
+        <div className="ml-8 border-l px-8">
           {
             <div className="">
               <div className="text-center" style={{ width: "500px" }}>
                 <button
-                  className="rounded-md border border-gray-300 px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  className={
+                    "rounded-md border border-gray-300 px-4 py-2 bg-white text-sm font-medium " +
+                    (plantQrCode === null || plantQrCode === ""
+                      ? "text-gray-400"
+                      : "text-gray-700 hover:bg-gray-50")
+                  }
                   onClick={(e) => startScan()}
-                  disabled={isScanning || isSaving}
+                  disabled={
+                    plantQrCode === null ||
+                    plantQrCode === "" ||
+                    isScanning ||
+                    isSaving
+                  }
                 >
                   Start Scan
                 </button>
@@ -163,30 +201,23 @@ export function CaptureScan() {
             </div>
           </div>
           <div className="">
-            <div className="text-center" style={{ width: "500px" }}>
-              <button
-                className="rounded-md border border-gray-300 px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                onClick={(e) => {
-                  prevImage();
-                }}
-              >
-                &larr; Prev
-              </button>
-              &nbsp;
-              <button
-                className="rounded-md border border-gray-300 px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                onClick={(e) => {
-                  nextImage();
-                }}
-              >
-                Next &rarr;
-              </button>
+            <div className="text-center w-[500px]">
               {images.length > 0 ? (
-                <div className="mt-2">
-                  <span className="px-4">
-                    {selectedImage + 1} / {images.length}
-                  </span>
-                </div>
+                <>
+                  <input
+                    type="range"
+                    min="0"
+                    max={images.length - 1}
+                    value={selectedImage}
+                    onChange={handleSliderChange}
+                    className="w-[200px]"
+                  />
+                  <div className="mt-2">
+                    <span className="px-4">
+                      {selectedImage + 1} / {images.length}
+                    </span>
+                  </div>
+                </>
               ) : null}
             </div>
           </div>

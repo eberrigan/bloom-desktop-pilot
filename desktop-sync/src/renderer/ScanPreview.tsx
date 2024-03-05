@@ -43,15 +43,16 @@ export function ScanPreview({
     }
   }, [scan, supabase, thumb]);
 
+  const image = sortImages(scan.electric_cyl_images)[0];
+
   return (
     <div>
       {scannerId !== null &&
-      scannerId == scan.scanner_id &&
-      scansDir !== null ? (
+      scannerId === scan.scanner_id &&
+      scansDir !== null &&
+      image.status !== "UPLOADED" ? (
         <img
-          src={`file://${scansDir}/${
-            sortImages(scan.electric_cyl_images)[0].path
-          }`}
+          src={`file://${scansDir}/${image.path}`}
           className={thumb ? "h-20" : "w-[600px] rounded-md"}
         />
       ) : imageUrl === null ? (

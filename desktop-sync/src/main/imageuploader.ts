@@ -68,8 +68,12 @@ export class ImageUploader {
       pngCompression,
     });
 
-    if (error) {
-      return { created: false, error };
+    if (error as unknown as { statusCode: string }) {
+      if ("statusCode" in error && error.statusCode === "409") {
+        console.log(`Image already exists: ${dst}`);
+      } else {
+        return { created: false, error };
+      }
     }
 
     // update image metadata in electric
