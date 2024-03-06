@@ -59,7 +59,7 @@ export function CameraSettings() {
         <div>
           <div className="mb-4">
             <div className="block text-xs font-bold text-gray-700 text-left">
-              Seconds per Rotation
+              Scan duration (s)
             </div>
             <input
               className="w-40 h-8 px-2 border rounded-md text-xl"
@@ -75,7 +75,7 @@ export function CameraSettings() {
           </div>
           <div className="mb-4">
             <div className="block text-xs font-bold text-gray-700 text-left">
-              Number of Frames
+              Number of frames
             </div>
             <input
               className="w-40 h-8 px-2 border rounded-md text-xl"
@@ -91,7 +91,7 @@ export function CameraSettings() {
           </div>
           <div className="mb-4">
             <div className="block text-xs font-bold text-gray-700 text-left">
-              Exposure Time (us)
+              Exposure time (us)
             </div>
             <input
               className="w-40 h-8 px-2 border rounded-md text-xl"

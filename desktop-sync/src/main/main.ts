@@ -205,6 +205,13 @@ createElectricStore(
     scanner.onScanComplete = (scan: Scan) => {
       electricStore.addScan(scan);
     };
+    ipcMain.handle("scanner:save-current-scan", async (event, args) => {
+      const scan = scanner.getCurrentScan();
+      electricStore.addScan(scan);
+    });
+    ipcMain.handle("scanner:delete-current-scan", async (event, args) => {
+      scanner.deleteCurrentScan();
+    });
     electricStore.scansUpdated = () => {
       mainWindow?.webContents.send("electric:scans-updated");
     };

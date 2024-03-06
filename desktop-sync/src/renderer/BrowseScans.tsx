@@ -42,7 +42,7 @@ export function BrowseScans() {
   }, []);
 
   return (
-    <div>
+    <div className="flex-grow min-h-0">
       <UploadControls />
       <table className="rounded-md mb-8">
         <thead>

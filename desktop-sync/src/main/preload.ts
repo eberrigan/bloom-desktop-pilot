@@ -58,6 +58,8 @@ const electronHandler = {
       seconds_per_rot: number;
       num_frames: number;
     }) => ipcRenderer.invoke("scanner:set-settings", [settings]),
+    saveCurrentScan: () => ipcRenderer.invoke("scanner:save-current-scan"),
+    deleteCurrentScan: () => ipcRenderer.invoke("scanner:delete-current-scan"),
   },
   scanStore: {
     getScans: () =>

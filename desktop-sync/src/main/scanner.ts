@@ -193,6 +193,20 @@ class Scanner {
     }
     this.onScanUpdate();
   };
+
+  getCurrentScan = () => {
+    if (this.scanMetadata === null) {
+      throw new Error("scanMetadata is null");
+    }
+    return makeScan(this.scanMetadata, this.images);
+  };
+
+  deleteCurrentScan = () => {
+    this.scanMetadata = null;
+    this.scanProgress = null;
+    this.images = [];
+    this.onScanUpdate();
+  };
 }
 
 function defaultCameraSettings(): CameraSettings {

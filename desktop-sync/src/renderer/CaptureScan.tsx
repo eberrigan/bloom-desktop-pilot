@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { PersonChooser } from "./PersonChooser";
 import { PlantQrCodeTextBox } from "./PlantQrCodeTextBox";
+import { parse } from "node:path";
 
 const setScannerPlantQrCode = window.electron.scanner.setPlantQrCode;
 const getScannerPlantQrCode = window.electron.scanner.getPlantQrCode;
@@ -11,6 +12,27 @@ const ipcRenderer = window.electron.ipcRenderer;
 const getScanData = window.electron.scanner.getScanData;
 const getScannerSettings = window.electron.scanner.getScannerSettings;
 const getScansDir = window.electron.scanner.getScansDir;
+
+const experiments = [
+  {
+    name: "Arabidopsis Root Absorbance",
+    id: "abcdefg",
+    plants: 10,
+    species: "Arabidopsis",
+  },
+  {
+    name: "Soy Diversity Screen",
+    id: "hijklmn",
+    plants: 20,
+    species: "Soybean",
+  },
+  {
+    name: "Canola Root Depth Screen",
+    id: "opqrstu",
+    plants: 30,
+    species: "Canola",
+  },
+];
 
 export function CaptureScan() {
   const [nImages, setNImages] = useState<number>(0);
@@ -24,6 +46,9 @@ export function CaptureScan() {
   const [scansDir, setScansDir] = useState<string | null>(null);
 
   const [phenotyperId, setPhenotyperId] = useState<string | null>(null);
+  const [experimentName, setExperimentName] = useState<string | null>(null);
+  const [waveNumber, setWaveNumber] = useState<number | null>(null);
+  const [plantAgeDays, setPlantAgeDays] = useState<number | null>(null);
   const [plantQrCode, setPlantQrCode] = useState<string | null>(null);
 
   const pullScanData = useCallback(async () => {
@@ -127,23 +152,101 @@ export function CaptureScan() {
             </div>
           </div>
         }
-        {phenotyperId === null ? null : (
+        {
           <div className="mb-2 text-left">
-            <div className="block text-xs font-bold text-gray-700 text-left">
+            <div className="block text-xs font-bold text-gray-700 text-left mt-1">
+              Experiment
+            </div>
+            <input
+              type="text"
+              className={
+                "p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none" +
+                (experimentName === null || experimentName === ""
+                  ? " border border-gray-300"
+                  : // ? " border border-red-500"
+                    " border border-gray-300 ")
+              }
+              value={experimentName || ""}
+              onChange={(e) => setExperimentName(e.target.value)}
+            />
+            {/* <div className="mt-1">
+              <select
+                className="p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+                value={experimentName || ""}
+                onChange={(e) => setExperimentName(e.target.value)}
+              >
+                <option value="" disabled>
+                  Select an experiment
+                </option>
+                {experiments.map((experiment) => (
+                  <option key={experiment.id} value={experiment.name}>
+                    {experiment.name}
+                  </option>
+                ))}
+              </select>
+            </div> */}
+          </div>
+        }
+        {
+          <div className="mb-2 text-left">
+            <div className="block text-xs font-bold text-gray-700 text-left mt-1">
+              Wave Number
+            </div>
+            <div className="mt-1">
+              <input
+                type="number"
+                className="p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+                value={waveNumber}
+                onChange={(e) => setWaveNumber(parseInt(e.target.value))}
+              />
+            </div>
+          </div>
+        }
+        {
+          <div className="mb-2 text-left">
+            <div className="block text-xs font-bold text-gray-700 text-left mt-1">
+              Plant Age (Days)
+            </div>
+            <div className="mt-1">
+              <input
+                type="number"
+                className={
+                  "p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" +
+                  (plantAgeDays === null
+                    ? " border border-gray-300"
+                    : // ? " border border-red-500"
+                      " border border-gray-300 ")
+                }
+                value={plantAgeDays}
+                onChange={(e) => setPlantAgeDays(parseInt(e.target.value))}
+              />
+            </div>
+          </div>
+        }
+        {
+          <div className="mb-2 text-left">
+            <div className="block text-xs font-bold text-gray-700 text-left mt-1">
               Plant QR Code
             </div>
             <div className="mt-1">
-              <PlantQrCodeTextBox
-                qrCode={plantQrCode}
-                plantQrCodeChanged={(qrCode) => {
+              <input
+                type="text"
+                className={
+                  "p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" +
+                  (plantQrCode === null || plantQrCode === ""
+                    ? " border border-red-500"
+                    : " border border-gray-300 ")
+                }
+                value={plantQrCode || ""}
+                onChange={(e) => {
+                  const qrCode = e.target.value;
                   setPlantQrCode(qrCode);
                   setScannerPlantQrCode(qrCode);
-                  console.log("hi");
                 }}
               />
             </div>
           </div>
-        )}
+        }
       </div>
       {phenotyperId === null ? null : (
         <div className="ml-8 border-l px-8">

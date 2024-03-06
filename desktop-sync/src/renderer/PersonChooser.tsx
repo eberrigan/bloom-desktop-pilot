@@ -96,7 +96,12 @@ export function PersonChooser({
             <select
               value={selectedPhenotyperId || ""}
               onChange={onChange}
-              className="rounded-md border border-gray-300 px-2 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+              className={
+                "rounded-md px-2 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" +
+                (selectedPhenotyperId === null
+                  ? " border border-red-500"
+                  : " border border-gray-300 ")
+              }
             >
               <option value="">Choose a person</option>
               {phenotyperOptions.map((person) => (

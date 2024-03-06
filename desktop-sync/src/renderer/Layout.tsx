@@ -94,7 +94,7 @@ export function Layout() {
   }, []);
 
   return (
-    <main className="min-h-screen flex flex-col bg-stone-100">
+    <div className="h-screen w-screen flex flex-col min-h-0 min-w-0 bg-stone-100">
       <div className="absolute left-12 top-8 align-middle">
         <img src={logo} className="h-12 inline" />
       </div>
@@ -112,10 +112,10 @@ export function Layout() {
           </div>
         </div>
       </div>
-      <div className="mt-20 flex flex-col">
-        <div className="flex flex-row">
+      <div className="mt-20 flex flex-col min-h-0 min-w-0">
+        <div className="flex flex-row min-h-0 min-w-0">
           <div className="ml-12 pr-6 mt-6 w-40 select-none">
-            <ul>
+            <ul className="w-40 pr-6">
               {links.map((link) => (
                 <li className="mb-2" key={link.to}>
                   <NavLink
@@ -134,11 +134,11 @@ export function Layout() {
               ))}
             </ul>
           </div>
-          <div className="mt-6 ml-6 flex-grow">
+          <div className="mt-6 ml-6 min-h-0 min-w-0 flex-grow flex flex-col overflow-scroll">
             <Outlet />
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

@@ -80,6 +80,15 @@ export type Electric_cyl_scans = {
    * @zod.custom.use(z.number().or(z.nan()))
    */
   seconds_per_rot: number | null
+  experiment_name: string | null
+  /**
+   * @zod.number.int().gte(-2147483648).lte(2147483647)
+   */
+  wave_number: number | null
+  /**
+   * @zod.number.int().gte(-2147483648).lte(2147483647)
+   */
+  plant_age_days: number | null
 }
 
 /**
@@ -2078,6 +2087,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast: number | null
     gamma: number | null
     seconds_per_rot: number | null
+    wave_number: number | null
+    plant_age_days: number | null
   }
 
   export type Electric_cyl_scansSumAggregateOutputType = {
@@ -2088,6 +2099,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast: number | null
     gamma: number | null
     seconds_per_rot: number | null
+    wave_number: number | null
+    plant_age_days: number | null
   }
 
   export type Electric_cyl_scansMinAggregateOutputType = {
@@ -2104,6 +2117,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast: number | null
     gamma: number | null
     seconds_per_rot: number | null
+    experiment_name: string | null
+    wave_number: number | null
+    plant_age_days: number | null
   }
 
   export type Electric_cyl_scansMaxAggregateOutputType = {
@@ -2120,6 +2136,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast: number | null
     gamma: number | null
     seconds_per_rot: number | null
+    experiment_name: string | null
+    wave_number: number | null
+    plant_age_days: number | null
   }
 
   export type Electric_cyl_scansCountAggregateOutputType = {
@@ -2136,6 +2155,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast: number
     gamma: number
     seconds_per_rot: number
+    experiment_name: number
+    wave_number: number
+    plant_age_days: number
     _all: number
   }
 
@@ -2148,6 +2170,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: true
     gamma?: true
     seconds_per_rot?: true
+    wave_number?: true
+    plant_age_days?: true
   }
 
   export type Electric_cyl_scansSumAggregateInputType = {
@@ -2158,6 +2182,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: true
     gamma?: true
     seconds_per_rot?: true
+    wave_number?: true
+    plant_age_days?: true
   }
 
   export type Electric_cyl_scansMinAggregateInputType = {
@@ -2174,6 +2200,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: true
     gamma?: true
     seconds_per_rot?: true
+    experiment_name?: true
+    wave_number?: true
+    plant_age_days?: true
   }
 
   export type Electric_cyl_scansMaxAggregateInputType = {
@@ -2190,6 +2219,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: true
     gamma?: true
     seconds_per_rot?: true
+    experiment_name?: true
+    wave_number?: true
+    plant_age_days?: true
   }
 
   export type Electric_cyl_scansCountAggregateInputType = {
@@ -2206,6 +2238,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: true
     gamma?: true
     seconds_per_rot?: true
+    experiment_name?: true
+    wave_number?: true
+    plant_age_days?: true
     _all?: true
   }
 
@@ -2315,6 +2350,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast: number | null
     gamma: number | null
     seconds_per_rot: number | null
+    experiment_name: string | null
+    wave_number: number | null
+    plant_age_days: number | null
     _count: Electric_cyl_scansCountAggregateOutputType | null
     _avg: Electric_cyl_scansAvgAggregateOutputType | null
     _sum: Electric_cyl_scansSumAggregateOutputType | null
@@ -2350,6 +2388,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: boolean
     gamma?: boolean
     seconds_per_rot?: boolean
+    experiment_name?: boolean
+    wave_number?: boolean
+    plant_age_days?: boolean
     electric_cyl_images?: boolean | Electric_cyl_scans$electric_cyl_imagesArgs
     electric_phenotypers?: boolean | Electric_cyl_scans$electric_phenotypersArgs
     _count?: boolean | Electric_cyl_scansCountOutputTypeArgs
@@ -4260,7 +4301,10 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     brightness: 'brightness',
     contrast: 'contrast',
     gamma: 'gamma',
-    seconds_per_rot: 'seconds_per_rot'
+    seconds_per_rot: 'seconds_per_rot',
+    experiment_name: 'experiment_name',
+    wave_number: 'wave_number',
+    plant_age_days: 'plant_age_days'
   };
 
   export type Electric_cyl_scansScalarFieldEnum = (typeof Electric_cyl_scansScalarFieldEnum)[keyof typeof Electric_cyl_scansScalarFieldEnum]
@@ -4447,6 +4491,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
     gamma?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
     seconds_per_rot?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
+    experiment_name?: StringNullableFilter<"Electric_cyl_scans"> | string | null
+    wave_number?: IntNullableFilter<"Electric_cyl_scans"> | number | null
+    plant_age_days?: IntNullableFilter<"Electric_cyl_scans"> | number | null
     electric_cyl_images?: Electric_cyl_imagesListRelationFilter
     electric_phenotypers?: XOR<Electric_phenotypersNullableRelationFilter, Electric_phenotypersWhereInput> | null
   }
@@ -4465,6 +4512,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: SortOrderInput | SortOrder
     gamma?: SortOrderInput | SortOrder
     seconds_per_rot?: SortOrderInput | SortOrder
+    experiment_name?: SortOrderInput | SortOrder
+    wave_number?: SortOrderInput | SortOrder
+    plant_age_days?: SortOrderInput | SortOrder
     electric_cyl_images?: Electric_cyl_imagesOrderByRelationAggregateInput
     electric_phenotypers?: Electric_phenotypersOrderByWithRelationInput
   }
@@ -4486,6 +4536,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
     gamma?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
     seconds_per_rot?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
+    experiment_name?: StringNullableFilter<"Electric_cyl_scans"> | string | null
+    wave_number?: IntNullableFilter<"Electric_cyl_scans"> | number | null
+    plant_age_days?: IntNullableFilter<"Electric_cyl_scans"> | number | null
     electric_cyl_images?: Electric_cyl_imagesListRelationFilter
     electric_phenotypers?: XOR<Electric_phenotypersNullableRelationFilter, Electric_phenotypersWhereInput> | null
   }, "id">
@@ -4504,6 +4557,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: SortOrderInput | SortOrder
     gamma?: SortOrderInput | SortOrder
     seconds_per_rot?: SortOrderInput | SortOrder
+    experiment_name?: SortOrderInput | SortOrder
+    wave_number?: SortOrderInput | SortOrder
+    plant_age_days?: SortOrderInput | SortOrder
     _count?: Electric_cyl_scansCountOrderByAggregateInput
     _avg?: Electric_cyl_scansAvgOrderByAggregateInput
     _max?: Electric_cyl_scansMaxOrderByAggregateInput
@@ -4528,6 +4584,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: FloatNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
     gamma?: FloatNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
     seconds_per_rot?: FloatNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
+    experiment_name?: StringNullableWithAggregatesFilter<"Electric_cyl_scans"> | string | null
+    wave_number?: IntNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
+    plant_age_days?: IntNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
   }
 
   export type Electric_phenotypersWhereInput = {
@@ -4657,6 +4716,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: number | null
     gamma?: number | null
     seconds_per_rot?: number | null
+    experiment_name?: string | null
+    wave_number?: number | null
+    plant_age_days?: number | null
     electric_cyl_images?: Electric_cyl_imagesCreateNestedManyWithoutElectric_cyl_scansInput
     electric_phenotypers?: Electric_phenotypersCreateNestedOneWithoutElectric_cyl_scansInput
   }
@@ -4675,6 +4737,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: number | null
     gamma?: number | null
     seconds_per_rot?: number | null
+    experiment_name?: string | null
+    wave_number?: number | null
+    plant_age_days?: number | null
     electric_cyl_images?: Electric_cyl_imagesUncheckedCreateNestedManyWithoutElectric_cyl_scansInput
   }
 
@@ -4691,6 +4756,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
     seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
+    experiment_name?: NullableStringFieldUpdateOperationsInput | string | null
+    wave_number?: NullableIntFieldUpdateOperationsInput | number | null
+    plant_age_days?: NullableIntFieldUpdateOperationsInput | number | null
     electric_cyl_images?: Electric_cyl_imagesUpdateManyWithoutElectric_cyl_scansNestedInput
     electric_phenotypers?: Electric_phenotypersUpdateOneWithoutElectric_cyl_scansNestedInput
   }
@@ -4709,6 +4777,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
     seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
+    experiment_name?: NullableStringFieldUpdateOperationsInput | string | null
+    wave_number?: NullableIntFieldUpdateOperationsInput | number | null
+    plant_age_days?: NullableIntFieldUpdateOperationsInput | number | null
     electric_cyl_images?: Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_scansNestedInput
   }
 
@@ -4726,6 +4797,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: number | null
     gamma?: number | null
     seconds_per_rot?: number | null
+    experiment_name?: string | null
+    wave_number?: number | null
+    plant_age_days?: number | null
   }
 
   export type Electric_cyl_scansUpdateManyMutationInput = {
@@ -4741,6 +4815,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
     seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
+    experiment_name?: NullableStringFieldUpdateOperationsInput | string | null
+    wave_number?: NullableIntFieldUpdateOperationsInput | number | null
+    plant_age_days?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type Electric_cyl_scansUncheckedUpdateManyInput = {
@@ -4757,6 +4834,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
     seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
+    experiment_name?: NullableStringFieldUpdateOperationsInput | string | null
+    wave_number?: NullableIntFieldUpdateOperationsInput | number | null
+    plant_age_days?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type Electric_phenotypersCreateInput = {
@@ -5018,6 +5098,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: SortOrder
     gamma?: SortOrder
     seconds_per_rot?: SortOrder
+    experiment_name?: SortOrder
+    wave_number?: SortOrder
+    plant_age_days?: SortOrder
   }
 
   export type Electric_cyl_scansAvgOrderByAggregateInput = {
@@ -5028,6 +5111,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: SortOrder
     gamma?: SortOrder
     seconds_per_rot?: SortOrder
+    wave_number?: SortOrder
+    plant_age_days?: SortOrder
   }
 
   export type Electric_cyl_scansMaxOrderByAggregateInput = {
@@ -5044,6 +5129,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: SortOrder
     gamma?: SortOrder
     seconds_per_rot?: SortOrder
+    experiment_name?: SortOrder
+    wave_number?: SortOrder
+    plant_age_days?: SortOrder
   }
 
   export type Electric_cyl_scansMinOrderByAggregateInput = {
@@ -5060,6 +5148,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: SortOrder
     gamma?: SortOrder
     seconds_per_rot?: SortOrder
+    experiment_name?: SortOrder
+    wave_number?: SortOrder
+    plant_age_days?: SortOrder
   }
 
   export type Electric_cyl_scansSumOrderByAggregateInput = {
@@ -5070,6 +5161,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: SortOrder
     gamma?: SortOrder
     seconds_per_rot?: SortOrder
+    wave_number?: SortOrder
+    plant_age_days?: SortOrder
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -5472,6 +5565,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: number | null
     gamma?: number | null
     seconds_per_rot?: number | null
+    experiment_name?: string | null
+    wave_number?: number | null
+    plant_age_days?: number | null
     electric_phenotypers?: Electric_phenotypersCreateNestedOneWithoutElectric_cyl_scansInput
   }
 
@@ -5489,6 +5585,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: number | null
     gamma?: number | null
     seconds_per_rot?: number | null
+    experiment_name?: string | null
+    wave_number?: number | null
+    plant_age_days?: number | null
   }
 
   export type Electric_cyl_scansCreateOrConnectWithoutElectric_cyl_imagesInput = {
@@ -5520,6 +5619,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
     seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
+    experiment_name?: NullableStringFieldUpdateOperationsInput | string | null
+    wave_number?: NullableIntFieldUpdateOperationsInput | number | null
+    plant_age_days?: NullableIntFieldUpdateOperationsInput | number | null
     electric_phenotypers?: Electric_phenotypersUpdateOneWithoutElectric_cyl_scansNestedInput
   }
 
@@ -5537,6 +5639,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
     seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
+    experiment_name?: NullableStringFieldUpdateOperationsInput | string | null
+    wave_number?: NullableIntFieldUpdateOperationsInput | number | null
+    plant_age_days?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type Electric_cyl_imagesCreateWithoutElectric_cyl_scansInput = {
@@ -5649,6 +5754,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: number | null
     gamma?: number | null
     seconds_per_rot?: number | null
+    experiment_name?: string | null
+    wave_number?: number | null
+    plant_age_days?: number | null
     electric_cyl_images?: Electric_cyl_imagesCreateNestedManyWithoutElectric_cyl_scansInput
   }
 
@@ -5665,6 +5773,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: number | null
     gamma?: number | null
     seconds_per_rot?: number | null
+    experiment_name?: string | null
+    wave_number?: number | null
+    plant_age_days?: number | null
     electric_cyl_images?: Electric_cyl_imagesUncheckedCreateNestedManyWithoutElectric_cyl_scansInput
   }
 
@@ -5711,6 +5822,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
     gamma?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
     seconds_per_rot?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
+    experiment_name?: StringNullableFilter<"Electric_cyl_scans"> | string | null
+    wave_number?: IntNullableFilter<"Electric_cyl_scans"> | number | null
+    plant_age_days?: IntNullableFilter<"Electric_cyl_scans"> | number | null
   }
 
   export type Electric_cyl_imagesCreateManyElectric_cyl_scansInput = {
@@ -5762,6 +5876,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: number | null
     gamma?: number | null
     seconds_per_rot?: number | null
+    experiment_name?: string | null
+    wave_number?: number | null
+    plant_age_days?: number | null
   }
 
   export type Electric_cyl_scansUpdateWithoutElectric_phenotypersInput = {
@@ -5777,6 +5894,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
     seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
+    experiment_name?: NullableStringFieldUpdateOperationsInput | string | null
+    wave_number?: NullableIntFieldUpdateOperationsInput | number | null
+    plant_age_days?: NullableIntFieldUpdateOperationsInput | number | null
     electric_cyl_images?: Electric_cyl_imagesUpdateManyWithoutElectric_cyl_scansNestedInput
   }
 
@@ -5793,6 +5913,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
     seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
+    experiment_name?: NullableStringFieldUpdateOperationsInput | string | null
+    wave_number?: NullableIntFieldUpdateOperationsInput | number | null
+    plant_age_days?: NullableIntFieldUpdateOperationsInput | number | null
     electric_cyl_images?: Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_scansNestedInput
   }
 
@@ -5809,6 +5932,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     contrast?: NullableFloatFieldUpdateOperationsInput | number | null
     gamma?: NullableFloatFieldUpdateOperationsInput | number | null
     seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
+    experiment_name?: NullableStringFieldUpdateOperationsInput | string | null
+    wave_number?: NullableIntFieldUpdateOperationsInput | number | null
+    plant_age_days?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
 
