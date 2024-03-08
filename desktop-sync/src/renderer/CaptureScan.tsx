@@ -13,6 +13,9 @@ const getScanData = window.electron.scanner.getScanData;
 const getScannerSettings = window.electron.scanner.getScannerSettings;
 const getScansDir = window.electron.scanner.getScansDir;
 
+const saveCurrentScan = window.electron.scanner.saveCurrentScan;
+const deleteCurrentScan = window.electron.scanner.deleteCurrentScan;
+
 const experiments = [
   {
     name: "Arabidopsis Root Absorbance",
@@ -50,14 +53,16 @@ export function CaptureScan() {
   const [waveNumber, setWaveNumber] = useState<number | null>(null);
   const [plantAgeDays, setPlantAgeDays] = useState<number | null>(null);
   const [plantQrCode, setPlantQrCode] = useState<string | null>(null);
+  const [scanMetadata, setScanMetadata] = useState<ScanMetadata | null>(null);
 
   const pullScanData = useCallback(async () => {
     const scanData = (await getScanData()) as {
-      metadata: ScanMetadata;
+      metadata: ScanMetadata | null;
       progress: ScanProgress;
       scanImages: ScanImages;
     };
     console.log("scanData: " + JSON.stringify(scanData));
+    setScanMetadata(scanData.metadata);
     setImages(scanData.scanImages);
     setIsScanning(scanData.progress.status === "capturing");
     setIsSaving(scanData.progress.status === "saving");
@@ -253,40 +258,68 @@ export function CaptureScan() {
           {
             <div className="">
               <div className="text-center" style={{ width: "500px" }}>
-                <button
-                  className={
-                    "rounded-md border border-gray-300 px-4 py-2 bg-white text-sm font-medium " +
-                    (plantQrCode === null || plantQrCode === ""
-                      ? "text-gray-400"
-                      : "text-gray-700 hover:bg-gray-50")
-                  }
-                  onClick={(e) => startScan()}
-                  disabled={
-                    plantQrCode === null ||
-                    plantQrCode === "" ||
-                    isScanning ||
-                    isSaving
-                  }
-                >
-                  Start Scan
-                </button>
+                {scanMetadata === null ? (
+                  <button
+                    className={
+                      "rounded-md border border-gray-300 px-4 py-2 bg-white text-sm font-medium " +
+                      (plantQrCode === null || plantQrCode === ""
+                        ? "text-gray-400"
+                        : "text-gray-700 hover:bg-gray-50")
+                    }
+                    onClick={(e) => startScan()}
+                    disabled={
+                      plantQrCode === null ||
+                      plantQrCode === "" ||
+                      isScanning ||
+                      isSaving
+                    }
+                  >
+                    Start Scan
+                  </button>
+                ) : !(isScanning || isSaving) ? (
+                  <div>
+                    {/* button for saving current scan */}
+                    <button
+                      className={
+                        "rounded-md border border-gray-300 px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mr-2"
+                      }
+                      onClick={(e) => {
+                        saveCurrentScan();
+                        deleteCurrentScan();
+                      }}
+                    >
+                      Save
+                    </button>
+                    {/* button for deleting current scan */}
+                    <button
+                      className={
+                        "rounded-md border border-gray-300 px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+                      }
+                      onClick={(e) => deleteCurrentScan()}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                ) : null}
               </div>
             </div>
           }
-          {isScanning ? (
-            <div className="">
+          <div className="text-center">
+            {isScanning ? (
               <div className="">
-                📷 Scanning... {numCaptured} / {nImages}
+                <div className="">
+                  📷 Scanning... {numCaptured} / {nImages}
+                </div>
               </div>
-            </div>
-          ) : null}
-          {isSaving ? (
-            <div className="">
-              <div className="" style={{ width: "500px" }}>
-                💾 Saving... {numSaved} / {nImages}
+            ) : null}
+            {isSaving ? (
+              <div className="">
+                <div className="" style={{ width: "500px" }}>
+                  💾 Saving... {numSaved} / {nImages}
+                </div>
               </div>
-            </div>
-          ) : null}
+            ) : null}
+          </div>
           <div className="m-4">
             <div className="">
               {images.length > 0 && scansDir !== null ? (

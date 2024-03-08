@@ -10,8 +10,6 @@ import { createScanner } from "./scanner";
 
 // import { createScanStore } from "./scanstore";
 
-import auth from "./auth";
-
 import { createElectricStore } from "./electricstore";
 import { createImageUploader } from "./imageuploader";
 import { Electric_cyl_scans, Electric_cyl_images } from "../generated/client";
@@ -202,9 +200,9 @@ createElectricStore(
     console.log("electricStore created, setting up IPC handlers");
     ipcMain.handle("electric:get-phenotypers", electricStore.getPhenotypers);
     ipcMain.handle("electric:get-scans", electricStore.getScans);
-    scanner.onScanComplete = (scan: Scan) => {
-      electricStore.addScan(scan);
-    };
+    // scanner.onScanComplete = (scan: Scan) => {
+    //   electricStore.addScan(scan);
+    // };
     ipcMain.handle("scanner:save-current-scan", async (event, args) => {
       const scan = scanner.getCurrentScan();
       electricStore.addScan(scan);

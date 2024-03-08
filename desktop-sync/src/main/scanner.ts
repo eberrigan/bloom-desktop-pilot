@@ -203,7 +203,7 @@ class Scanner {
 
   deleteCurrentScan = () => {
     this.scanMetadata = null;
-    this.scanProgress = null;
+    this.scanProgress = defaultProgress();
     this.images = [];
     this.onScanUpdate();
   };
