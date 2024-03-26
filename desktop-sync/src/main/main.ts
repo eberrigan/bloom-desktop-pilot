@@ -30,8 +30,8 @@ let mainWindow: BrowserWindow | null = null;
 const createWindow = (): void => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1024,
-    height: 728,
+    width: 1200,
+    height: 800,
     webPreferences: {
       webSecurity: false, // TODO: remove this
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,

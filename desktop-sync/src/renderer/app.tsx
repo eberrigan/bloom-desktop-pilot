@@ -7,6 +7,7 @@ import { Layout } from "./Layout";
 import { BrowseScans } from "./BrowseScans";
 import { ViewScan } from "./ViewScan";
 import { CameraSettings } from "./CameraSettings";
+import { Export } from "./Export";
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
           <Route path="browse-scans" element={<BrowseScans />} />
           <Route path="browse-scans/:scanId" element={<ViewScan />} />
           <Route path="camera-settings" element={<CameraSettings />} />
+          <Route path="export" element={<Export />} />
         </Route>
       </Routes>
     </Router>

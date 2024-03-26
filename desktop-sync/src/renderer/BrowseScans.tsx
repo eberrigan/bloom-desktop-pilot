@@ -48,7 +48,7 @@ export function BrowseScans() {
         <thead>
           <tr>
             <th className="text-xs text-left px-2 pb-4 align-bottom">
-              Plant QR Code
+              Plant ID
             </th>
             <th className="text-xs text-left px-2 pb-4 align-bottom">Date</th>
             <th className="text-xs text-left px-2 pb-4 align-bottom">
@@ -59,10 +59,12 @@ export function BrowseScans() {
               Exposure
             </th>
             <th className="text-xs text-left px-2 pb-4 align-bottom">Gain</th>
-            <th className="text-xs text-left px-2 pb-4 align-bottom">
+            <th className="text-xs text-left px-2 pb-4 align-bottom text-center">
               Preview
             </th>
-            <th className="text-xs text-left px-2 pb-4 align-bottom">Status</th>
+            <th className="text-xs text-left px-2 pb-4 align-bottom">
+              Upload status
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -129,7 +131,7 @@ function UploadControls() {
       <div>
         <button
           onClick={upload}
-          className="bg-stone-400 text-white px-4 py-2 rounded-md"
+          className="bg-lime-700 text-white px-4 py-2 rounded-md opacity-80 hover:opacity-100"
           disabled={uploading}
         >
           {uploading ? "Uploading..." : "Upload"}
@@ -168,29 +170,30 @@ function ProgressBar({ value, max }: { value: number; max: number }) {
   return (
     <div>
       {value == 0 ? (
-        <div className="text-amber-700 text-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="inline w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15Z"
-            />
-            {/* <path strokeLinecap="round" strokeLinejoin="round" d="M4 4l18 18" /> */}
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M10 11v4.5 M13 11v4.5"
-            />
-          </svg>
-        </div>
-      ) : value < max ? (
+        <div className="text-xs">Not uploaded</div>
+      ) : // <div className="text-amber-700 text-center">
+      //   <svg
+      //     xmlns="http://www.w3.org/2000/svg"
+      //     fill="none"
+      //     viewBox="0 0 24 24"
+      //     strokeWidth={1.5}
+      //     stroke="currentColor"
+      //     className="inline w-6 h-6"
+      //   >
+      //     <path
+      //       strokeLinecap="round"
+      //       strokeLinejoin="round"
+      //       d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15Z"
+      //     />
+      //     {/* <path strokeLinecap="round" strokeLinejoin="round" d="M4 4l18 18" /> */}
+      //     <path
+      //       strokeLinecap="round"
+      //       strokeLinejoin="round"
+      //       d="M10 11v4.5 M13 11v4.5"
+      //     />
+      //   </svg>
+      // </div>
+      value < max ? (
         <div className="flex flex-col">
           <div className="text-lime-700 text-center">
             <svg
