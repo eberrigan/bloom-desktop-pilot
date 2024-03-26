@@ -1,3 +1,5 @@
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
 import json
 import sys
 import os
@@ -30,6 +32,29 @@ class CameraSettings:
         self.contrast = contrast
         self.seconds_per_rot = seconds_per_rot
         
+
+async def save_image_async(executor, output_path, idx, array):
+    loop = asyncio.get_running_loop()
+    # Offload the blocking operation to the executor
+    # output_path = pathlib.Path(output_dir) / f'{idx + 1}.png'
+    await loop.run_in_executor(executor, iio.imwrite, str(output_path), array)
+
+
+async def parallel_imwrite(images, output_path):
+
+    image_paths = [f'{idx + 1}.png' for idx in range(len(frames))]
+    output_paths = [pathlib.Path(output_path) / image_path for image_path in image_paths]
+
+    # Create a ThreadPoolExecutor
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        # Schedule all the save operations to run asynchronously
+        tasks = [save_image_async(executor, output_paths[idx], idx, array) for idx, array in enumerate(images)]
+        # Wait for all scheduled tasks to complete
+        await asyncio.gather(*tasks)
+
+    for image_path in image_paths:
+        print("IMAGE_PATH " + str(image_path), flush=True)
+        time.sleep(0.01)
 
 def grab_frames(camera_settings):
 
@@ -229,9 +254,5 @@ if __name__ == '__main__':
     os.makedirs(output_path, exist_ok=True)
 
     frames = grab_frames(camera_settings)
-    for (i, frame) in enumerate(frames):
-        image_num = i + 1
-        image_file = f'{image_num:03d}.png'
-        image_path = output_path / image_file
-        iio.imwrite(str(image_path), frame)
-        print("IMAGE_PATH " + str(image_file), flush=True)
+
+    asyncio.run(parallel_imwrite(frames, output_path))
