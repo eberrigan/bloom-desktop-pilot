@@ -1,6 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "../types/database.types";
-import { useEffect, useState } from "react";
+import { WheelEventHandler, useCallback, useEffect, useState } from "react";
 import { ScansWithPhenotypers } from "../types/electric.types";
 import { Electric_cyl_images, Electric_cyl_scans } from "../generated/client";
 import { Link } from "react-router-dom";
@@ -137,12 +137,17 @@ function ScanImage({
     image.status !== "UPLOADED" ? (
       <img
         src={`file://${scansDir}/${image.path}`}
-        className={thumb ? "h-30" : "w-[600px] rounded-md"}
+        className={thumb ? "h-30" : "w-[800px] rounded-md"}
       />
     ) : imageUrl === null ? (
       <LoadingImage />
     ) : (
-      <img src={imageUrl} className={thumb ? "h-30" : "w-[800px] rounded-md"} />
+      <ZoomableImage src={imageUrl} alt={image.path} thumb={thumb} />
+      // <img
+      //   draggable={false}
+      //   src={imageUrl}
+      //   className={thumb ? "h-30" : "w-[800px] rounded-md"}
+      // />
     );
   return link ? (
     <Link to={link}>{imageElement}</Link>
@@ -189,3 +194,90 @@ function sortImages(images: Electric_cyl_images[]) {
     return a.frame_number > b.frame_number ? 1 : -1;
   });
 }
+
+const ZoomableImage = ({
+  src,
+  alt,
+  thumb,
+}: {
+  src: string;
+  alt: string;
+  thumb: boolean;
+}) => {
+  const [scale, setScale] = useState(1);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [dragging, setDragging] = useState(false);
+  const [startDragPosition, setStartDragPosition] = useState({ x: 0, y: 0 });
+
+  const zoomIn = () => {
+    setScale((prevScale) => Math.min(prevScale + 0.2, 3));
+  };
+
+  const zoomOut = () => {
+    setScale((prevScale) => Math.max(prevScale - 0.2, 1));
+  };
+
+  const startDrag: React.MouseEventHandler = (e) => {
+    setDragging(true);
+    setStartDragPosition({
+      x: e.clientX - position.x,
+      y: e.clientY - position.y,
+    });
+  };
+
+  const onDrag: React.MouseEventHandler = (e) => {
+    if (dragging) {
+      setPosition({
+        x: e.clientX - startDragPosition.x,
+        y: e.clientY - startDragPosition.y,
+      });
+    }
+  };
+
+  const endDrag = () => {
+    setDragging(false);
+  };
+
+  const resetPosition = () => {
+    setPosition({ x: 0, y: 0 });
+  };
+
+  return (
+    <div
+      style={{ overflow: "hidden", cursor: "grab", position: "relative" }}
+      // onWheel={handleWheel}
+      onMouseDown={startDrag}
+      onMouseMove={onDrag}
+      onMouseUp={endDrag}
+      onMouseLeave={endDrag}
+    >
+      <img
+        src={src}
+        alt={alt}
+        draggable={false}
+        style={{
+          transform: `translate(${position.x}px, ${position.y}px) scale(${scale})`,
+          transition: "transform 0.2s",
+          // transformOrigin: "top left",
+        }}
+        className={thumb ? "h-30" : "w-[800px] rounded-md cursor-grab"}
+      />
+      {thumb ? null : (
+        <div className="absolute top-2 right-2 flex flex-col">
+          <button
+            onClick={zoomIn}
+            className="rounded-md border border-gray-300 w-8 h-8 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 mb-1"
+          >
+            +
+          </button>
+          <button
+            onClick={zoomOut}
+            className="rounded-md border border-gray-300 w-8 h-8 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200"
+          >
+            -
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
