@@ -143,7 +143,7 @@ export function CaptureScan() {
   }, [numSaved]);
 
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row pb-48">
       <div className="flex flex-col">
         {
           <div className="mb-2 text-left">
@@ -198,15 +198,15 @@ export function CaptureScan() {
           <div className="mb-2 text-left">
             <div className="block text-xs font-bold text-gray-700 text-left mt-1">
               Wave Number
-              <FieldInfo info="Name of the experiment. Optional field." />
             </div>
             <div className="mt-1">
               <input
                 type="number"
-                className="p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+                className="p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none"
                 value={waveNumber}
                 onChange={(e) => setWaveNumber(parseInt(e.target.value))}
               />
+              <FieldInfo info="Some experiments involve several waves of plants grown at different times. Optional field." />
             </div>
           </div>
         }
@@ -214,13 +214,12 @@ export function CaptureScan() {
           <div className="mb-2 text-left">
             <div className="block text-xs font-bold text-gray-700 text-left mt-1">
               Plant Age (Days)
-              <FieldInfo info="Number of days after germination or planting for the plants that are being scanned. Required field." />
             </div>
             <div className="mt-1">
               <input
                 type="number"
                 className={
-                  "p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" +
+                  "p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none" +
                   (plantAgeDays === null
                     ? " border border-gray-300"
                     : // ? " border border-red-500"
@@ -229,6 +228,7 @@ export function CaptureScan() {
                 value={plantAgeDays}
                 onChange={(e) => setPlantAgeDays(parseInt(e.target.value))}
               />
+              <FieldInfo info="Number of days after germination that the plants are being scanned. Required field." />
             </div>
           </div>
         }
@@ -236,13 +236,12 @@ export function CaptureScan() {
           <div className="mb-2 text-left">
             <div className="block text-xs font-bold text-gray-700 text-left mt-1">
               Plant ID
-              <FieldInfo info="Identifier for the plant (QR code or other identifier). Required field." />
             </div>
             <div className="mt-1">
               <input
                 type="text"
                 className={
-                  "p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" +
+                  "p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none" +
                   (plantQrCode === null || plantQrCode === ""
                     ? " border border-red-500"
                     : " border border-gray-300 ")
@@ -254,6 +253,7 @@ export function CaptureScan() {
                   setScannerPlantQrCode(qrCode);
                 }}
               />
+              <FieldInfo info="Identifier for the plant (QR code or other identifier). Required field." />
             </div>
           </div>
         }
@@ -419,18 +419,18 @@ export function Scan({ images }: { images: string[] }) {
 }
 
 function FieldInfo({ info }: { info: string }) {
-  const [showInfo, setShowInfo] = useState<boolean>(false);
-
   return (
-    <div className="-mt-1 ml-2 inline">
+    <div className="-mt-1 ml-2 inline-block group relative">
+      <div className="absolute bg-white border border-gray-300 p-2 rounded-md text-xs w-48 mt-1 font-normal hidden group-hover:block z-10 left-8">
+        {info}
+      </div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="w-6 h-6 inline cursor-pointer"
-        onClick={(e) => setShowInfo(!showInfo)}
+        className="w-6 h-6 inline-block z-0"
       >
         <path
           strokeLinecap="round"
@@ -438,12 +438,6 @@ function FieldInfo({ info }: { info: string }) {
           d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
         />
       </svg>
-
-      {showInfo ? (
-        <div className="absolute bg-white border border-gray-300 p-2 rounded-md text-xs w-48 mt-1">
-          {info}
-        </div>
-      ) : null}
     </div>
   );
 }
