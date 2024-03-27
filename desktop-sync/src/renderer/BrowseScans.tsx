@@ -91,7 +91,12 @@ export function BrowseScans() {
                 <td className="px-2 py-2">{scan.exposure_time}</td>
                 <td className="px-2 py-2">{scan.gain}</td>
                 <td>
-                  <ScanPreview scan={scan} supabase={supabase} thumb={true} />
+                  <ScanPreview
+                    scan={scan}
+                    supabase={supabase}
+                    thumb={true}
+                    link={`/browse-scans/${scan.id}`}
+                  />
                 </td>
                 <td className="px-2 py-2">
                   <ProgressBar

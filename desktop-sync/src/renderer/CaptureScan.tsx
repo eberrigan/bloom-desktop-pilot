@@ -149,12 +149,12 @@ export function CaptureScan() {
           <div className="mb-2 text-left">
             <div className="block text-xs font-bold text-gray-700 text-left">
               Phenotyper
-              <FieldInfo info="The person operating the scanner. Required field." />
             </div>
-            <div className="mt-1">
+            <div className="mt-1 flex flex-row items-center">
               <PersonChooser
                 phenotyperIdChanged={(id: string) => setPhenotyperId(id)}
               />
+              <FieldInfo info="The person operating the scanner. Required field." />
             </div>
           </div>
         }
@@ -162,12 +162,11 @@ export function CaptureScan() {
           <div className="mb-2 text-left">
             <div className="block text-xs font-bold text-gray-700 text-left mt-1">
               Experiment
-              <FieldInfo info="Name of the experiment. Required field." />
             </div>
             <input
               type="text"
               className={
-                "p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none" +
+                "p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none w-[200px]" +
                 (experimentName === null || experimentName === ""
                   ? " border border-gray-300"
                   : // ? " border border-red-500"
@@ -176,6 +175,7 @@ export function CaptureScan() {
               value={experimentName || ""}
               onChange={(e) => setExperimentName(e.target.value)}
             />
+            <FieldInfo info="Name of the experiment. Required field." />
             {/* <div className="mt-1">
               <select
                 className="p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
@@ -429,15 +429,16 @@ function FieldInfo({ info }: { info: string }) {
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="w-4 h-4 inline cursor-pointer"
+        className="w-6 h-6 inline cursor-pointer"
         onClick={(e) => setShowInfo(!showInfo)}
       >
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
-          d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
+          d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
         />
       </svg>
+
       {showInfo ? (
         <div className="absolute bg-white border border-gray-300 p-2 rounded-md text-xs w-48 mt-1">
           {info}

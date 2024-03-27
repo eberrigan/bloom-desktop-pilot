@@ -97,7 +97,7 @@ export function PersonChooser({
               value={selectedPhenotyperId || ""}
               onChange={onChange}
               className={
-                "rounded-md px-2 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" +
+                "rounded-md px-2 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none w-[200px]" +
                 (selectedPhenotyperId === null
                   ? " border border-red-500"
                   : " border border-gray-300 ")
