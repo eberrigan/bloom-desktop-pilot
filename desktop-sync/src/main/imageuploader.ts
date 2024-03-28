@@ -6,6 +6,7 @@ import { createClient } from "@supabase/supabase-js";
 import sharp from "sharp";
 // import { LocalStorage } from './local-storage';
 import type { SupabaseClient } from "@supabase/supabase-js";
+import type { StorageError } from "@supabase/storage-js";
 
 import { Database } from "../types/database.types";
 import { Electric_cyl_images, Electric_cyl_scans } from "../generated/client";
@@ -68,8 +69,11 @@ export class ImageUploader {
       pngCompression,
     });
 
-    if (error as unknown as { statusCode: string }) {
-      if ("statusCode" in error && error.statusCode === "409") {
+    const castError: StorageError & { statusCode?: string } =
+      error as StorageError & { statusCode?: string };
+
+    if (castError) {
+      if ("statusCode" in castError && castError.statusCode === "409") {
         console.log(`Image already exists: ${dst}`);
       } else {
         return { created: false, error };
