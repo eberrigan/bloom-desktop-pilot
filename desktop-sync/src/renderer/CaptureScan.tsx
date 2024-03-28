@@ -56,6 +56,13 @@ export function CaptureScan() {
   const [plantQrCode, setPlantQrCode] = useState<string | null>(null);
   const [scanMetadata, setScanMetadata] = useState<ScanMetadata | null>(null);
 
+  const scanDisabled =
+    phenotyperId === null ||
+    plantQrCode === null ||
+    plantQrCode === "" ||
+    isScanning ||
+    isSaving;
+
   const pullScanData = useCallback(async () => {
     const scanData = (await getScanData()) as {
       metadata: ScanMetadata | null;
@@ -144,41 +151,41 @@ export function CaptureScan() {
   }, [numSaved]);
 
   return (
-    <div className="min-h-0 min-w-0 flex flex-col flex-grow">
+    <div className="min-h-0 min-w-0 flex flex-col flex-grow pr-8 pb-8">
       <div className="flex flex-row pb-8">
-        <div className="flex flex-col">
-          {
-            <div className="mb-2 text-left">
-              <div className="block text-xs font-bold text-gray-700 text-left">
-                Phenotyper
+        <div>
+          <div className="block text-xs font-bold text-gray-700 text-left mb-1">
+            Metadata
+          </div>
+          <div className="border rounded-md flex flex-col p-4">
+            {
+              <div className="mb-2 text-left">
+                <div className="block text-xs font-bold text-gray-700 text-left">
+                  Phenotyper
+                </div>
+                <div className="mt-1 flex flex-row items-center">
+                  <PersonChooser
+                    phenotyperIdChanged={(id: string) => setPhenotyperId(id)}
+                  />
+                  <FieldInfo info="The person operating the scanner. Required field." />
+                </div>
               </div>
-              <div className="mt-1 flex flex-row items-center">
-                <PersonChooser
-                  phenotyperIdChanged={(id: string) => setPhenotyperId(id)}
+            }
+            {
+              <div className="mb-2 text-left">
+                <div className="block text-xs font-bold text-gray-700 text-left mt-1">
+                  Experiment
+                </div>
+                <input
+                  type="text"
+                  className={
+                    "p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none w-[200px] border border-gray-300"
+                  }
+                  value={experimentName || ""}
+                  onChange={(e) => setExperimentName(e.target.value)}
                 />
-                <FieldInfo info="The person operating the scanner. Required field." />
-              </div>
-            </div>
-          }
-          {
-            <div className="mb-2 text-left">
-              <div className="block text-xs font-bold text-gray-700 text-left mt-1">
-                Experiment
-              </div>
-              <input
-                type="text"
-                className={
-                  "p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none w-[200px]" +
-                  (experimentName === null || experimentName === ""
-                    ? " border border-gray-300"
-                    : // ? " border border-red-500"
-                      " border border-gray-300 ")
-                }
-                value={experimentName || ""}
-                onChange={(e) => setExperimentName(e.target.value)}
-              />
-              <FieldInfo info="Name of the experiment. Required field." />
-              {/* <div className="mt-1">
+                <FieldInfo info="Name of the experiment. Required field." />
+                {/* <div className="mt-1">
               <select
                 className="p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
                 value={experimentName || ""}
@@ -194,208 +201,200 @@ export function CaptureScan() {
                 ))}
               </select>
             </div> */}
-            </div>
-          }
-          {
-            <div className="mb-2 text-left">
-              <div className="block text-xs font-bold text-gray-700 text-left mt-1">
-                Wave Number
               </div>
-              <div className="mt-1">
-                <input
-                  type="number"
-                  className="p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none"
-                  value={waveNumber}
-                  onChange={(e) => setWaveNumber(parseInt(e.target.value))}
-                />
-                <FieldInfo info="Some experiments involve several waves of plants grown at different times. Optional field." />
-              </div>
-            </div>
-          }
-          {
-            <div className="mb-2 text-left">
-              <div className="block text-xs font-bold text-gray-700 text-left mt-1">
-                Plant Age (Days)
-              </div>
-              <div className="mt-1">
-                <input
-                  type="number"
-                  className={
-                    "p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none" +
-                    (plantAgeDays === null
-                      ? " border border-gray-300"
-                      : // ? " border border-red-500"
-                        " border border-gray-300 ")
-                  }
-                  value={plantAgeDays}
-                  onChange={(e) => setPlantAgeDays(parseInt(e.target.value))}
-                />
-                <FieldInfo info="Number of days after germination that the plants are being scanned. Required field." />
-              </div>
-            </div>
-          }
-          {
-            <div className="mb-2 text-left">
-              <div className="block text-xs font-bold text-gray-700 text-left mt-1">
-                Plant ID
-              </div>
-              <div className="mt-1">
-                <input
-                  type="text"
-                  className={
-                    "p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none" +
-                    (plantQrCode === null || plantQrCode === ""
-                      ? " border border-red-500"
-                      : " border border-gray-300 ")
-                  }
-                  value={plantQrCode || ""}
-                  onChange={(e) => {
-                    const qrCode = e.target.value;
-                    setPlantQrCode(qrCode);
-                    setScannerPlantQrCode(qrCode);
-                  }}
-                />
-                <FieldInfo info="Identifier for the plant (QR code or other identifier). Required field." />
-              </div>
-            </div>
-          }
-        </div>
-        {phenotyperId === null ? null : (
-          <div className="ml-8 border-l px-8">
+            }
             {
-              <div className="">
-                <div className="text-center" style={{ width: "500px" }}>
-                  {scanMetadata === null ? (
-                    <button
-                      className={
-                        "rounded-md border border-gray-300 px-4 py-2 bg-white text-sm font-medium " +
-                        (plantQrCode === null || plantQrCode === ""
-                          ? "text-gray-400"
-                          : "text-gray-700 hover:bg-gray-50")
-                      }
-                      onClick={(e) => startScan()}
-                      disabled={
-                        plantQrCode === null ||
-                        plantQrCode === "" ||
-                        isScanning ||
-                        isSaving
-                      }
-                    >
-                      Start Scan
-                    </button>
-                  ) : !(isScanning || isSaving) ? (
-                    <div>
-                      {/* button for saving current scan */}
-                      <button
-                        className={
-                          "rounded-md border border-gray-300 px-4 py-2 text-sm font-medium mr-2 text-green-700 bg-green-100 hover:bg-green-200"
-                        }
-                        onClick={(e) => {
-                          saveCurrentScan();
-                          deleteCurrentScan();
-                        }}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="w-5 h-5 -mt-1 mr-1 inline"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                          />
-                        </svg>
-                        Save
-                      </button>
-                      {/* button for deleting current scan */}
-                      <button
-                        className={
-                          "rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-red-700 bg-red-100 hover:bg-red-200"
-                        }
-                        onClick={(e) => deleteCurrentScan()}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="w-5 h-5 -mt-1 mr-1 inline"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                          />
-                        </svg>
-                        Delete
-                      </button>
-                    </div>
-                  ) : null}
+              <div className="mb-2 text-left">
+                <div className="block text-xs font-bold text-gray-700 text-left mt-1">
+                  Wave Number
+                </div>
+                <div className="mt-1">
+                  <input
+                    type="number"
+                    className="p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none"
+                    value={waveNumber}
+                    onChange={(e) => setWaveNumber(parseInt(e.target.value))}
+                  />
+                  <FieldInfo info="Some experiments involve several waves of plants grown at different times. Optional field." />
                 </div>
               </div>
             }
-            <div className="text-center">
-              {isScanning ? (
-                <div className="">
-                  <div className="">
-                    📷 Scanning... {numCaptured} / {nImages}
-                  </div>
+            {
+              <div className="mb-2 text-left">
+                <div className="block text-xs font-bold text-gray-700 text-left mt-1">
+                  Plant Age (Days)
                 </div>
-              ) : null}
-              {isSaving ? (
-                <div className="">
-                  <div className="" style={{ width: "500px" }}>
-                    💾 Saving... {numSaved} / {nImages}
-                  </div>
-                </div>
-              ) : null}
-            </div>
-            <div className="m-4">
-              <div className="">
-                {images.length > 0 && scansDir !== null ? (
-                  <img
-                    src={`file://${scansDir}/${images[selectedImage].replaceAll(
-                      "\\",
-                      "/"
-                    )}`}
-                    style={{ width: "500px" }}
-                    className="rounded-md"
+                <div className="mt-1">
+                  <input
+                    type="number"
+                    className={
+                      "p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none border border-gray-300"
+                    }
+                    value={plantAgeDays}
+                    onChange={(e) => setPlantAgeDays(parseInt(e.target.value))}
                   />
-                ) : (
-                  <div style={{ width: "500px", height: "250px" }}></div>
-                )}
+                  <FieldInfo info="Number of days after germination that the plants are being scanned. Required field." />
+                </div>
               </div>
-            </div>
-            <div className="">
-              <div className="text-center w-[500px]">
-                {images.length > 0 ? (
-                  <>
-                    <input
-                      type="range"
-                      min="0"
-                      max={images.length - 1}
-                      value={selectedImage}
-                      onChange={handleSliderChange}
-                      className="w-[200px] cursor-ew-resize"
-                    />
-                    <div className="mt-2">
-                      <span className="px-4">
-                        {selectedImage + 1} / {images.length}
-                      </span>
-                    </div>
-                  </>
-                ) : null}
+            }
+            {
+              <div className="mb-2 text-left">
+                <div className="block text-xs font-bold text-gray-700 text-left mt-1">
+                  Plant ID
+                </div>
+                <div className="mt-1">
+                  <input
+                    type="text"
+                    className={
+                      "p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none border border-gray-300"
+                    }
+                    value={plantQrCode || ""}
+                    onChange={(e) => {
+                      const qrCode = e.target.value;
+                      setPlantQrCode(qrCode);
+                      setScannerPlantQrCode(qrCode);
+                    }}
+                  />
+                  <FieldInfo info="Identifier for the plant (QR code or other identifier). Required field." />
+                </div>
               </div>
-            </div>
+            }
           </div>
-        )}
+        </div>
+        <div className="ml-4 flex flex-col flex-grow">
+          <div className="block text-xs font-bold text-gray-700 text-left mb-1">
+            Scan
+          </div>
+          <div className="border rounded-md flex-grow flex flex-col p-4 text-center items-center">
+            {scanMetadata === null ? (
+              <div className="flex-grow flex flex-col">
+                <div className="flex-grow text-center flex flex-col">
+                  <div className="my-auto">
+                    <button
+                      className={
+                        "rounded-md border border-gray-300 px-4 py-2 bg-white text-xl font-medium " +
+                        (scanDisabled
+                          ? "text-gray-400"
+                          : "text-gray-700 hover:bg-gray-50")
+                      }
+                      onClick={(e) => {
+                        startScan();
+                      }}
+                      disabled={scanDisabled}
+                    >
+                      Start scan
+                    </button>
+                    <FieldInfo info="Available after metadata is entered." />
+                  </div>
+                </div>
+              </div>
+            ) : !(isScanning || isSaving) ? (
+              <div className="flex-grow flex flex-col">
+                <div className="flex-grow flex flex-col">
+                  <div>
+                    {/* button for saving current scan */}
+                    <button
+                      className={
+                        "rounded-md border border-gray-300 px-4 py-2 text-sm font-medium mr-2 text-green-700 bg-green-100 hover:bg-green-200"
+                      }
+                      onClick={(e) => {
+                        saveCurrentScan();
+                        deleteCurrentScan();
+                      }}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-5 h-5 -mt-1 mr-1 inline"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                        />
+                      </svg>
+                      Save
+                    </button>
+                    {/* button for deleting current scan */}
+                    <button
+                      className={
+                        "rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-red-700 bg-red-100 hover:bg-red-200"
+                      }
+                      onClick={(e) => deleteCurrentScan()}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-5 h-5 -mt-1 mr-1 inline"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                        />
+                      </svg>
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+            {isScanning || isSaving ? (
+              <div className="">
+                <div className="">
+                  📷 Scanning... {numCaptured} / {nImages}
+                </div>
+              </div>
+            ) : null}
+            {/* {isSaving ? (
+              <div className="">
+                <div className="">
+                  💾 Saving... {numSaved} / {nImages}
+                </div>
+              </div>
+            ) : null} */}
+            {images.length > 0 && scansDir !== null ? (
+              <div className="m-4">
+                <img
+                  src={`file://${scansDir}/${images[selectedImage].replaceAll(
+                    "\\",
+                    "/"
+                  )}`}
+                  className="rounded-md"
+                />
+              </div>
+            ) : // <div style={{ width: "500px", height: "250px" }}></div>
+            null}
+            {images.length > 0 ? (
+              <div className="text-center">
+                <input
+                  type="range"
+                  min="0"
+                  max={images.length - 1}
+                  value={selectedImage}
+                  onChange={handleSliderChange}
+                  className="w-[200px] cursor-ew-resize"
+                />
+                {/* <div className="mt-2">
+                  <span className="px-4">
+                    {selectedImage + 1} / {images.length}
+                  </span>
+                </div> */}
+              </div>
+            ) : null}
+          </div>
+        </div>
       </div>
-      <div className="min-h-0 min-w-0 overflow-scroll flex-grow">
+      <div className="block text-xs font-bold text-gray-700 text-left mb-1">
+        Recent scans
+      </div>
+      <div className="border rounded-md p-4 flex flex-col min-h-0 min-w-0 overflow-scroll flex-grow">
         <BrowseScans showUploadButton={false} />
       </div>
     </div>

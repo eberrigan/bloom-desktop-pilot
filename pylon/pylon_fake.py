@@ -7,8 +7,7 @@ import sys
 import time
 import pathlib
 
-import imageio as iio
-
+import imageio.v2 as iio
 
 sample_scan = '/Users/djbutler/dev/bloom-desktop-pilot/test/sample_scan'
 
