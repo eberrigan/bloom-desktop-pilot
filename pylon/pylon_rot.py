@@ -6,7 +6,7 @@ import os
 import pathlib
 from time import time, sleep
 
-import imageio as iio
+import imageio.v2 as iio
 import nidaqmx
 import numpy as np
 from pypylon import pylon

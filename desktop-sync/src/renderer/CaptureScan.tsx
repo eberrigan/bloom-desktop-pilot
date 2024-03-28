@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { PersonChooser } from "./PersonChooser";
 import { PlantQrCodeTextBox } from "./PlantQrCodeTextBox";
 import { parse } from "node:path";
+import { BrowseScans } from "./BrowseScans";
 
 const setScannerPlantQrCode = window.electron.scanner.setPlantQrCode;
 const getScannerPlantQrCode = window.electron.scanner.getPlantQrCode;
@@ -54,6 +55,13 @@ export function CaptureScan() {
   const [plantAgeDays, setPlantAgeDays] = useState<number | null>(null);
   const [plantQrCode, setPlantQrCode] = useState<string | null>(null);
   const [scanMetadata, setScanMetadata] = useState<ScanMetadata | null>(null);
+
+  const scanDisabled =
+    phenotyperId === null ||
+    plantQrCode === null ||
+    plantQrCode === "" ||
+    isScanning ||
+    isSaving;
 
   const pullScanData = useCallback(async () => {
     const scanData = (await getScanData()) as {
@@ -143,40 +151,41 @@ export function CaptureScan() {
   }, [numSaved]);
 
   return (
-    <div className="flex flex-row">
-      <div className="flex flex-col">
-        {
-          <div className="mb-2 text-left">
-            <div className="block text-xs font-bold text-gray-700 text-left">
-              Phenotyper
-              <FieldInfo info="The person operating the scanner. Required field." />
-            </div>
-            <div className="mt-1">
-              <PersonChooser
-                phenotyperIdChanged={(id: string) => setPhenotyperId(id)}
-              />
-            </div>
+    <div className="min-h-0 min-w-0 flex flex-col flex-grow pr-8 pb-8">
+      <div className="flex flex-row pb-8">
+        <div>
+          <div className="block text-xs font-bold text-gray-700 text-left mb-1">
+            Metadata
           </div>
-        }
-        {
-          <div className="mb-2 text-left">
-            <div className="block text-xs font-bold text-gray-700 text-left mt-1">
-              Experiment
-              <FieldInfo info="Name of the experiment. Required field." />
-            </div>
-            <input
-              type="text"
-              className={
-                "p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none" +
-                (experimentName === null || experimentName === ""
-                  ? " border border-gray-300"
-                  : // ? " border border-red-500"
-                    " border border-gray-300 ")
-              }
-              value={experimentName || ""}
-              onChange={(e) => setExperimentName(e.target.value)}
-            />
-            {/* <div className="mt-1">
+          <div className="border rounded-md flex flex-col p-4">
+            {
+              <div className="mb-2 text-left">
+                <div className="block text-xs font-bold text-gray-700 text-left">
+                  Phenotyper
+                </div>
+                <div className="mt-1 flex flex-row items-center">
+                  <PersonChooser
+                    phenotyperIdChanged={(id: string) => setPhenotyperId(id)}
+                  />
+                  <FieldInfo info="The person operating the scanner. Required field." />
+                </div>
+              </div>
+            }
+            {
+              <div className="mb-2 text-left">
+                <div className="block text-xs font-bold text-gray-700 text-left mt-1">
+                  Experiment
+                </div>
+                <input
+                  type="text"
+                  className={
+                    "p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none w-[200px] border border-gray-300"
+                  }
+                  value={experimentName || ""}
+                  onChange={(e) => setExperimentName(e.target.value)}
+                />
+                <FieldInfo info="Name of the experiment. Required field." />
+                {/* <div className="mt-1">
               <select
                 className="p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
                 value={experimentName || ""}
@@ -192,96 +201,96 @@ export function CaptureScan() {
                 ))}
               </select>
             </div> */}
-          </div>
-        }
-        {
-          <div className="mb-2 text-left">
-            <div className="block text-xs font-bold text-gray-700 text-left mt-1">
-              Wave Number
-              <FieldInfo info="Name of the experiment. Optional field." />
-            </div>
-            <div className="mt-1">
-              <input
-                type="number"
-                className="p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
-                value={waveNumber}
-                onChange={(e) => setWaveNumber(parseInt(e.target.value))}
-              />
-            </div>
-          </div>
-        }
-        {
-          <div className="mb-2 text-left">
-            <div className="block text-xs font-bold text-gray-700 text-left mt-1">
-              Plant Age (Days)
-              <FieldInfo info="Number of days after germination or planting for the plants that are being scanned. Required field." />
-            </div>
-            <div className="mt-1">
-              <input
-                type="number"
-                className={
-                  "p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" +
-                  (plantAgeDays === null
-                    ? " border border-gray-300"
-                    : // ? " border border-red-500"
-                      " border border-gray-300 ")
-                }
-                value={plantAgeDays}
-                onChange={(e) => setPlantAgeDays(parseInt(e.target.value))}
-              />
-            </div>
-          </div>
-        }
-        {
-          <div className="mb-2 text-left">
-            <div className="block text-xs font-bold text-gray-700 text-left mt-1">
-              Plant ID
-              <FieldInfo info="Identifier for the plant (QR code or other identifier). Required field." />
-            </div>
-            <div className="mt-1">
-              <input
-                type="text"
-                className={
-                  "p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" +
-                  (plantQrCode === null || plantQrCode === ""
-                    ? " border border-red-500"
-                    : " border border-gray-300 ")
-                }
-                value={plantQrCode || ""}
-                onChange={(e) => {
-                  const qrCode = e.target.value;
-                  setPlantQrCode(qrCode);
-                  setScannerPlantQrCode(qrCode);
-                }}
-              />
-            </div>
-          </div>
-        }
-      </div>
-      {phenotyperId === null ? null : (
-        <div className="ml-8 border-l px-8">
-          {
-            <div className="">
-              <div className="text-center" style={{ width: "500px" }}>
-                {scanMetadata === null ? (
-                  <button
+              </div>
+            }
+            {
+              <div className="mb-2 text-left">
+                <div className="block text-xs font-bold text-gray-700 text-left mt-1">
+                  Wave Number
+                </div>
+                <div className="mt-1">
+                  <input
+                    type="number"
+                    className="p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none"
+                    value={waveNumber}
+                    onChange={(e) => setWaveNumber(parseInt(e.target.value))}
+                  />
+                  <FieldInfo info="Some experiments involve several waves of plants grown at different times. Optional field." />
+                </div>
+              </div>
+            }
+            {
+              <div className="mb-2 text-left">
+                <div className="block text-xs font-bold text-gray-700 text-left mt-1">
+                  Plant Age (Days)
+                </div>
+                <div className="mt-1">
+                  <input
+                    type="number"
                     className={
-                      "rounded-md border border-gray-300 px-4 py-2 bg-white text-sm font-medium " +
-                      (plantQrCode === null || plantQrCode === ""
-                        ? "text-gray-400"
-                        : "text-gray-700 hover:bg-gray-50")
+                      "p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none border border-gray-300"
                     }
-                    onClick={(e) => startScan()}
-                    disabled={
-                      plantQrCode === null ||
-                      plantQrCode === "" ||
-                      isScanning ||
-                      isSaving
+                    value={plantAgeDays}
+                    onChange={(e) => setPlantAgeDays(parseInt(e.target.value))}
+                  />
+                  <FieldInfo info="Number of days after germination that the plants are being scanned. Required field." />
+                </div>
+              </div>
+            }
+            {
+              <div className="mb-2 text-left">
+                <div className="block text-xs font-bold text-gray-700 text-left mt-1">
+                  Plant ID
+                </div>
+                <div className="mt-1">
+                  <input
+                    type="text"
+                    className={
+                      "p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none border border-gray-300"
                     }
-                  >
-                    Start Scan
-                  </button>
-                ) : !(isScanning || isSaving) ? (
+                    value={plantQrCode || ""}
+                    onChange={(e) => {
+                      const qrCode = e.target.value;
+                      setPlantQrCode(qrCode);
+                      setScannerPlantQrCode(qrCode);
+                    }}
+                  />
+                  <FieldInfo info="Identifier for the plant (QR code or other identifier). Required field." />
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+        <div className="ml-4 flex flex-col flex-grow">
+          <div className="block text-xs font-bold text-gray-700 text-left mb-1">
+            Scan
+          </div>
+          <div className="border rounded-md flex-grow flex flex-col p-4 text-center items-center">
+            {scanMetadata === null ? (
+              <div className="flex-grow flex flex-col">
+                <div className="flex-grow text-center flex flex-col">
+                  <div className="my-auto">
+                    <button
+                      className={
+                        "rounded-md border border-gray-300 px-4 py-2 bg-white text-xl font-medium " +
+                        (scanDisabled
+                          ? "text-gray-400"
+                          : "text-gray-700 hover:bg-gray-50")
+                      }
+                      onClick={(e) => {
+                        startScan();
+                      }}
+                      disabled={scanDisabled}
+                    >
+                      Start scan
+                    </button>
+                    <FieldInfo info="Available after metadata is entered." />
+                  </div>
+                </div>
+              </div>
+            ) : !(isScanning || isSaving) ? (
+              <div className="flex-grow flex flex-col">
+                <div className="flex-grow flex flex-col">
                   <div>
                     {/* button for saving current scan */}
                     <button
@@ -333,65 +342,61 @@ export function CaptureScan() {
                       Delete
                     </button>
                   </div>
-                ) : null}
+                </div>
               </div>
-            </div>
-          }
-          <div className="text-center">
-            {isScanning ? (
+            ) : null}
+            {isScanning || isSaving ? (
               <div className="">
                 <div className="">
                   📷 Scanning... {numCaptured} / {nImages}
                 </div>
               </div>
             ) : null}
-            {isSaving ? (
+            {/* {isSaving ? (
               <div className="">
-                <div className="" style={{ width: "500px" }}>
+                <div className="">
                   💾 Saving... {numSaved} / {nImages}
                 </div>
               </div>
-            ) : null}
-          </div>
-          <div className="m-4">
-            <div className="">
-              {images.length > 0 && scansDir !== null ? (
+            ) : null} */}
+            {images.length > 0 && scansDir !== null ? (
+              <div className="m-4">
                 <img
                   src={`file://${scansDir}/${images[selectedImage].replaceAll(
                     "\\",
                     "/"
                   )}`}
-                  style={{ width: "500px" }}
                   className="rounded-md"
                 />
-              ) : (
-                <div style={{ width: "500px", height: "250px" }}></div>
-              )}
-            </div>
-          </div>
-          <div className="">
-            <div className="text-center w-[500px]">
-              {images.length > 0 ? (
-                <>
-                  <input
-                    type="range"
-                    min="0"
-                    max={images.length - 1}
-                    value={selectedImage}
-                    onChange={handleSliderChange}
-                    className="w-[200px] cursor-ew-resize"
-                  />
-                  <div className="mt-2">
-                    <span className="px-4">
-                      {selectedImage + 1} / {images.length}
-                    </span>
-                  </div>
-                </>
-              ) : null}
-            </div>
+              </div>
+            ) : // <div style={{ width: "500px", height: "250px" }}></div>
+            null}
+            {images.length > 0 ? (
+              <div className="text-center">
+                <input
+                  type="range"
+                  min="0"
+                  max={images.length - 1}
+                  value={selectedImage}
+                  onChange={handleSliderChange}
+                  className="w-[200px] cursor-ew-resize"
+                />
+                {/* <div className="mt-2">
+                  <span className="px-4">
+                    {selectedImage + 1} / {images.length}
+                  </span>
+                </div> */}
+              </div>
+            ) : null}
           </div>
         </div>
-      )}
+      </div>
+      <div className="block text-xs font-bold text-gray-700 text-left mb-1">
+        Recent scans
+      </div>
+      <div className="border rounded-md p-4 flex flex-col min-h-0 min-w-0 overflow-scroll flex-grow">
+        <BrowseScans showUploadButton={false} />
+      </div>
     </div>
   );
 }
@@ -419,30 +424,25 @@ export function Scan({ images }: { images: string[] }) {
 }
 
 function FieldInfo({ info }: { info: string }) {
-  const [showInfo, setShowInfo] = useState<boolean>(false);
-
   return (
-    <div className="-mt-1 ml-2 inline">
+    <div className="-mt-1 ml-2 inline-block group relative">
+      <div className="absolute bg-white border border-gray-300 p-2 rounded-md text-xs w-48 mt-1 font-normal hidden group-hover:block z-10 left-8">
+        {info}
+      </div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="w-4 h-4 inline cursor-pointer"
-        onClick={(e) => setShowInfo(!showInfo)}
+        className="w-6 h-6 inline-block z-0"
       >
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
-          d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
+          d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
         />
       </svg>
-      {showInfo ? (
-        <div className="absolute bg-white border border-gray-300 p-2 rounded-md text-xs w-48 mt-1">
-          {info}
-        </div>
-      ) : null}
     </div>
   );
 }

@@ -199,6 +199,9 @@ createElectricStore(
   .then((electricStore) => {
     console.log("electricStore created, setting up IPC handlers");
     ipcMain.handle("electric:get-phenotypers", electricStore.getPhenotypers);
+    ipcMain.handle("electric:create-phenotyper", async (event, args) => {
+      return electricStore.createPhenotyper(args[0], args[1]);
+    });
     ipcMain.handle("electric:get-scans", electricStore.getScans);
     // scanner.onScanComplete = (scan: Scan) => {
     //   electricStore.addScan(scan);

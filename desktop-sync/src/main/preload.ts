@@ -79,6 +79,8 @@ const electronHandler = {
   },
   electric: {
     getPhenotypers: () => ipcRenderer.invoke("electric:get-phenotypers"),
+    createPhenotyper: (name: string, email: string) =>
+      ipcRenderer.invoke("electric:create-phenotyper", [name, email]),
     getStatus: () => ipcRenderer.invoke("electric:get-status"),
     uploadImages: () => ipcRenderer.invoke("electric:upload-images"),
   },

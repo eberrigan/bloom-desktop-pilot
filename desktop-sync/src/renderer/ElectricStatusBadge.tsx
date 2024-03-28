@@ -73,10 +73,10 @@ export function ElectricStatusBadge() {
               d="m4.5 12.75 6 6 9-13.5"
             />
           </svg>
-          Data retrieved
+          Syncing
         </div>
       ) : (
-        <div className="text-sm">Not synced</div>
+        <div className="text-sm">Not syncing</div>
       )}
     </div>
   );

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 // import { Electric_cyl_scans } from "../generated/client/prismaClient";
 import {
   Electric_cyl_scans,
@@ -28,6 +28,12 @@ export function ViewScan() {
     null
   );
 
+  let navigate = useNavigate();
+
+  function goBack() {
+    navigate(-1); // Equivalent to history.goBack()
+  }
+
   useEffect(() => {
     getSupabaseClient().then((client) => {
       setSupabase(client);
@@ -41,11 +47,22 @@ export function ViewScan() {
 
   return (
     <div>
-      <Link to="/browse-scans" className="text-lime-700 hover:underline">
-        &larr; All scans
-      </Link>
+      <div
+        onClick={goBack}
+        className="cursor-pointer text-lime-700 hover:underline inline-block"
+      >
+        &larr; Back
+      </div>
       {scan ? (
         <div>
+          <div className="py-2">
+            <ScanPreview
+              scan={scan}
+              supabase={supabase}
+              thumb={false}
+              link={null}
+            />
+          </div>
           <div className="text-xs mt-2 font-bold">Plant QR Code</div>
           <div>{scan?.plant_qr_code}</div>
           <div className="text-xs mt-2 font-bold">Date</div>
@@ -62,11 +79,7 @@ export function ViewScan() {
             {scan?.brightness}, {scan?.gain}
           </div>
           <div className="text-xs mt-2 font-bold">Scan ID</div>
-          <div>{scanId}</div>
-          <div className="text-xs mt-2 font-bold">Preview</div>
-          <div className="mb-8">
-            <ScanPreview scan={scan} supabase={supabase} thumb={false} />
-          </div>
+          <div className="mb-8">{scanId}</div>
         </div>
       ) : (
         <span>Loading scan...</span>

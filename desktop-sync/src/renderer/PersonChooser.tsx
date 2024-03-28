@@ -97,10 +97,7 @@ export function PersonChooser({
               value={selectedPhenotyperId || ""}
               onChange={onChange}
               className={
-                "rounded-md px-2 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" +
-                (selectedPhenotyperId === null
-                  ? " border border-red-500"
-                  : " border border-gray-300 ")
+                "rounded-md px-2 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none w-[200px] border border-gray-300"
               }
             >
               <option value="">Choose a person</option>
@@ -110,7 +107,7 @@ export function PersonChooser({
                 </option>
               ))}
             </select>
-            {selectedPhenotyperId !== null ? (
+            {/* {selectedPhenotyperId !== null ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -126,7 +123,7 @@ export function PersonChooser({
                   d="M6 18 18 6M6 6l12 12"
                 />
               </svg>
-            ) : null}
+            ) : null} */}
           </div>
         )}
       </div>

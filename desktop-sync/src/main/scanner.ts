@@ -70,19 +70,21 @@ class Scanner {
 
     grab_frames.stdout.on("data", (data) => {
       console.log("JS received data from python");
-      const str = data.toString();
-      console.log(str);
-      if (str.slice(0, 14) === "TRIGGER_CAMERA") {
-        console.log("data matches TRIGGER_CAMERA");
-        options.onCaptureImage();
-        this.imageCaptured();
-      }
-      if (str.slice(0, 10) === "IMAGE_PATH") {
-        console.log("data matches IMAGE_PATH");
-        const imagePath = str.slice(11).trim();
-        const imagePartialPath = path.join(this.scanPartialPath, imagePath);
-        options.onImageSaved(imagePartialPath);
-        this.imageSaved(imagePartialPath);
+      const longStr = data.toString();
+      console.log(longStr);
+      for (const str of longStr.split("\n")) {
+        if (str.slice(0, 14) === "TRIGGER_CAMERA") {
+          console.log("data matches TRIGGER_CAMERA");
+          options.onCaptureImage();
+          this.imageCaptured();
+        }
+        if (str.slice(0, 10) === "IMAGE_PATH") {
+          console.log("data matches IMAGE_PATH");
+          const imagePath = str.slice(11).trim();
+          const imagePartialPath = path.join(this.scanPartialPath, imagePath);
+          options.onImageSaved(imagePartialPath);
+          this.imageSaved(imagePartialPath);
+        }
       }
     });
 

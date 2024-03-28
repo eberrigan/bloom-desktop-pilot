@@ -16,7 +16,11 @@ const getScans = window.electron.scanStore.getScans;
 const uploadImages = window.electron.electric.uploadImages;
 // const getScansWithEmail = window.electron.scanStore.getScansWithEmail;
 
-export function BrowseScans() {
+export function BrowseScans({
+  showUploadButton = true,
+}: {
+  showUploadButton?: boolean;
+}) {
   const [scans, setScans] = useState<ScansWithPhenotypers[]>([]);
   const [selectedScan, setSelectedScan] = useState<number | null>(null);
   const [supabase, setSupabase] = useState<SupabaseClient<Database> | null>(
@@ -42,8 +46,8 @@ export function BrowseScans() {
   }, []);
 
   return (
-    <div className="flex-grow min-h-0">
-      <UploadControls />
+    <div className="min-h-0 min-w-0 overflow-scroll flex-grow">
+      {showUploadButton && <UploadControls />}
       <table className="rounded-md mb-8">
         <thead>
           <tr>
@@ -91,7 +95,12 @@ export function BrowseScans() {
                 <td className="px-2 py-2">{scan.exposure_time}</td>
                 <td className="px-2 py-2">{scan.gain}</td>
                 <td>
-                  <ScanPreview scan={scan} supabase={supabase} thumb={true} />
+                  <ScanPreview
+                    scan={scan}
+                    supabase={supabase}
+                    thumb={true}
+                    link={`/browse-scans/${scan.id}`}
+                  />
                 </td>
                 <td className="px-2 py-2">
                   <ProgressBar
