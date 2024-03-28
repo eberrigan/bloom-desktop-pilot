@@ -244,12 +244,12 @@ const ZoomableImage = ({
 
   return (
     <div
-      style={{ overflow: "hidden", cursor: "grab", position: "relative" }}
+      style={{ overflow: "hidden", position: "relative" }}
       // onWheel={handleWheel}
-      onMouseDown={startDrag}
-      onMouseMove={onDrag}
-      onMouseUp={endDrag}
-      onMouseLeave={endDrag}
+      onMouseDown={thumb ? null : startDrag}
+      onMouseMove={thumb ? null : onDrag}
+      onMouseUp={thumb ? null : endDrag}
+      onMouseLeave={thumb ? null : endDrag}
     >
       <img
         src={src}
@@ -257,7 +257,7 @@ const ZoomableImage = ({
         draggable={false}
         style={{
           transform: `translate(${position.x}px, ${position.y}px) scale(${scale})`,
-          transition: "transform 0.2s",
+          // transition: "transform 0.2s",
           // transformOrigin: "top left",
         }}
         className={thumb ? "h-30" : "w-[800px] rounded-md cursor-grab"}
