@@ -54,7 +54,7 @@ async def parallel_imwrite(images, output_path):
 
     for image_path in image_paths:
         print("IMAGE_PATH " + str(image_path), flush=True)
-        time.sleep(0.01)
+        sleep(0.01)
 
 def grab_frames(camera_settings):
 
