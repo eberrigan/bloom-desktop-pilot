@@ -47,7 +47,7 @@ export function ScanPreview({
     }
   }, [scan, supabase, thumb, imageIndex]);
 
-  const image = sortImages(scan.electric_cyl_images)[0];
+  const image = sortImages(scan.electric_cyl_images)[imageIndex];
 
   return (
     <div className="group relative align-middle inline-block">
@@ -135,11 +135,16 @@ function ScanImage({
     scannerId === scan.scanner_id &&
     scansDir !== null &&
     image.status !== "UPLOADED" ? (
-      <img
+      <ZoomableImage
         src={`file://${scansDir}/${image.path}`}
-        className={thumb ? "h-30" : "w-[800px] rounded-md"}
+        alt={image.path}
+        thumb={thumb}
       />
-    ) : imageUrl === null ? (
+    ) : // <img
+    //   src={`file://${scansDir}/${image.path}`}
+    //   className={thumb ? "h-30" : "w-[800px] rounded-md"}
+    // />
+    imageUrl === null ? (
       <LoadingImage />
     ) : (
       <ZoomableImage src={imageUrl} alt={image.path} thumb={thumb} />
@@ -260,7 +265,7 @@ const ZoomableImage = ({
           // transition: "transform 0.2s",
           // transformOrigin: "top left",
         }}
-        className={thumb ? "h-30" : "w-[800px] rounded-md cursor-grab"}
+        className={thumb ? "h-28" : "w-[800px] rounded-md cursor-grab"}
       />
       {thumb ? null : (
         <div className="absolute top-2 right-2 flex flex-col">

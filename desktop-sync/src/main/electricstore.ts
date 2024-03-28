@@ -139,6 +139,20 @@ export class ElectricStore {
     return this.electric.db.electric_phenotypers.findMany();
   };
 
+  createPhenotyper = async (name: string, email: string) => {
+    if (this.electric === null) {
+      return { error: "Electric client is null" };
+    }
+    try {
+      await this.electric.db.electric_phenotypers.create({
+        data: { id: uuidv4(), name, email },
+      });
+      return { error: null };
+    } catch (err) {
+      return { error: err };
+    }
+  };
+
   getImagesToUpload = async (scannerId: string) => {
     if (this.electric === null) {
       return [];
