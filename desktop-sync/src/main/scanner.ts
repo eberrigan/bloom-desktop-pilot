@@ -4,11 +4,12 @@ import { spawn } from "node:child_process";
 
 import { Electric_cyl_scans } from "../generated/client";
 
-const numFrames = 72;
-
 class Scanner {
   private scanId: string | null = null;
   private phenotyperId: string | null = null;
+  private experimentId: string | null = null;
+  private waveNumber: number | null = null;
+  private plantAgeDays: number | null = null;
   private scanPath: string | null = null;
   private scanPartialPath: string | null = null;
   private plantQrCode: string | null = null;
@@ -125,6 +126,31 @@ class Scanner {
     this.plantQrCode = plantQrCode;
   };
 
+  getExperimentId = () => {
+    return this.experimentId;
+  };
+
+  setExperimentId = (experimentId: string | null) => {
+    this.experimentId = experimentId;
+  };
+
+  getWaveNumber = () => {
+    return this.waveNumber;
+  };
+
+  setWaveNumber = (waveNumber: number | null) => {
+    this.waveNumber = waveNumber;
+  };
+
+  getPlantAgeDays = () => {
+    return this.plantAgeDays;
+  };
+
+  setPlantAgeDays = (plantAgeDays: number | null) => {
+    console.log(`setting plant age days: ${plantAgeDays}`);
+    this.plantAgeDays = plantAgeDays;
+  };
+
   getScanData = () => {
     return {
       metadata: this.scanMetadata,
@@ -154,6 +180,9 @@ class Scanner {
     const metadata = {
       id: this.scanId,
       phenotyper_id: this.phenotyperId,
+      cyl_experiment_id: this.experimentId,
+      wave_number: this.waveNumber,
+      plant_age_days: this.plantAgeDays,
       scanner_id: this.scanner_id,
       plant_qr_code: this.plantQrCode,
       path: this.scanPartialPath,
@@ -219,7 +248,7 @@ function defaultCameraSettings(): CameraSettings {
     brightness: 0,
     contrast: 0,
     gamma: 1,
-    seconds_per_rot: 10,
+    seconds_per_rot: 6,
   };
 }
 

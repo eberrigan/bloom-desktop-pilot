@@ -45,6 +45,15 @@ const electronHandler = {
     getPlantQrCode: () => ipcRenderer.invoke("scanner:get-plant-qr-code"),
     setPlantQrCode: (plantQrCode: string | null) =>
       ipcRenderer.invoke("scanner:set-plant-qr-code", [plantQrCode]),
+    getExperimentId: () => ipcRenderer.invoke("scanner:get-experiment-id"),
+    setExperimentId: (experimentId: string | null) =>
+      ipcRenderer.send("scanner:set-experiment-id", [experimentId]),
+    getWaveNumber: () => ipcRenderer.invoke("scanner:get-wave-number"),
+    setWaveNumber: (waveNumber: number | null) =>
+      ipcRenderer.send("scanner:set-wave-number", [waveNumber]),
+    getPlantAgeDays: () => ipcRenderer.invoke("scanner:get-plant-age-days"),
+    setPlantAgeDays: (plantAgeDays: number | null) =>
+      ipcRenderer.send("scanner:set-plant-age-days", [plantAgeDays]),
     startScan: () => ipcRenderer.send("scanner:start-scan"),
     getScanData: () => ipcRenderer.invoke("scanner:get-scan-data"),
     getScansDir: () => ipcRenderer.invoke("scanner:get-scans-dir"),
@@ -81,6 +90,9 @@ const electronHandler = {
     getPhenotypers: () => ipcRenderer.invoke("electric:get-phenotypers"),
     createPhenotyper: (name: string, email: string) =>
       ipcRenderer.invoke("electric:create-phenotyper", [name, email]),
+    getExperiments: () => ipcRenderer.invoke("electric:get-experiments"),
+    createExperiment: (name: string, species: string) =>
+      ipcRenderer.invoke("electric:create-experiment", [name, species]),
     getStatus: () => ipcRenderer.invoke("electric:get-status"),
     uploadImages: () => ipcRenderer.invoke("electric:upload-images"),
   },
