@@ -11,7 +11,7 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "backend:start": "cd ./electric && docker compose up",
+    "backend:start": "cd ./electric && docker compose up -d",
     "backend:stop": "cd ./electric && docker compose stop",
     "backend:restart": "cd ./electric && docker compose restart",
     "backend:up": "cd ./electric && docker compose up -d",
