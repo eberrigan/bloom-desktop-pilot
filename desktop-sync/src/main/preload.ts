@@ -85,6 +85,8 @@ const electronHandler = {
           electric_cyl_images: Electric_cyl_images[];
         }
       >,
+    deleteScan: (scanId: string) =>
+      ipcRenderer.invoke("scan-store:delete-scan", [scanId]),
   },
   electric: {
     getPhenotypers: () => ipcRenderer.invoke("electric:get-phenotypers"),

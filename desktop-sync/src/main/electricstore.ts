@@ -325,6 +325,16 @@ export class ElectricStore {
     });
   };
 
+  deleteScan = async (scanId: string) => {
+    if (this.electric === null) {
+      return;
+    }
+    await this.electric.db.electric_cyl_scans.update({
+      data: { deleted: true },
+      where: { id: scanId },
+    });
+  };
+
   getStatus = () => {
     return {
       acquiringJWT: this.acquiringJWT,

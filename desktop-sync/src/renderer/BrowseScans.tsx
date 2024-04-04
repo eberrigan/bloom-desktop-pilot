@@ -13,6 +13,7 @@ import { getSupabaseClient } from "./util";
 
 const ipcRenderer = window.electron.ipcRenderer;
 const getScans = window.electron.scanStore.getScans;
+const deleteScan = window.electron.scanStore.deleteScan;
 const uploadImages = window.electron.electric.uploadImages;
 // const getScansWithEmail = window.electron.scanStore.getScansWithEmail;
 
@@ -81,6 +82,7 @@ export function BrowseScans({
         <tbody>
           {scans
             .sort((a, b) => a.capture_date.getTime() - b.capture_date.getTime())
+            .filter((scan) => !scan.deleted)
             .filter((scan) => {
               if (showTodayOnly) {
                 // Only show scans from today
@@ -136,7 +138,7 @@ export function BrowseScans({
                     <button
                       onClick={() => {
                         console.log(`Deleting scan ${scan.id}`);
-                        // ipcRenderer.send("electric:delete-scan", scan.id);
+                        deleteScan(scan.id);
                       }}
                       className="text-red-700 hover:underline"
                     >

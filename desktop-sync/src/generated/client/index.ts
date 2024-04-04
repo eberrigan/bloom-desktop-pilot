@@ -52,6 +52,7 @@ export const Electric_cyl_scansScalarFieldEnumSchema = z.enum([
   "wave_number",
   "plant_age_days",
   "cyl_experiment_id",
+  "deleted",
 ]);
 
 export const Electric_phenotypersScalarFieldEnumSchema = z.enum([
@@ -126,6 +127,7 @@ export const Electric_cyl_scansSchema = z.object({
   wave_number: z.number().int().gte(-2147483648).lte(2147483647).nullable(),
   plant_age_days: z.number().int().gte(-2147483648).lte(2147483647).nullable(),
   cyl_experiment_id: z.string().uuid().nullable(),
+  deleted: z.boolean().nullable(),
 });
 
 export type Electric_cyl_scans = z.infer<typeof Electric_cyl_scansSchema>;
@@ -319,6 +321,7 @@ export const Electric_cyl_scansSelectSchema: z.ZodType<Prisma.Electric_cyl_scans
       wave_number: z.boolean().optional(),
       plant_age_days: z.boolean().optional(),
       cyl_experiment_id: z.boolean().optional(),
+      deleted: z.boolean().optional(),
       electric_cyl_images: z
         .union([
           z.boolean(),
@@ -787,6 +790,10 @@ export const Electric_cyl_scansWhereInputSchema: z.ZodType<Prisma.Electric_cyl_s
         .union([z.lazy(() => UuidNullableFilterSchema), z.string()])
         .optional()
         .nullable(),
+      deleted: z
+        .union([z.lazy(() => BoolNullableFilterSchema), z.boolean()])
+        .optional()
+        .nullable(),
       electric_cyl_images: z
         .lazy(() => Electric_cyl_imagesListRelationFilterSchema)
         .optional(),
@@ -827,6 +834,7 @@ export const Electric_cyl_scansOrderByWithRelationInputSchema: z.ZodType<Prisma.
       wave_number: z.lazy(() => SortOrderSchema).optional(),
       plant_age_days: z.lazy(() => SortOrderSchema).optional(),
       cyl_experiment_id: z.lazy(() => SortOrderSchema).optional(),
+      deleted: z.lazy(() => SortOrderSchema).optional(),
       electric_cyl_images: z
         .lazy(() => Electric_cyl_imagesOrderByRelationAggregateInputSchema)
         .optional(),
@@ -866,6 +874,7 @@ export const Electric_cyl_scansOrderByWithAggregationInputSchema: z.ZodType<Pris
       wave_number: z.lazy(() => SortOrderSchema).optional(),
       plant_age_days: z.lazy(() => SortOrderSchema).optional(),
       cyl_experiment_id: z.lazy(() => SortOrderSchema).optional(),
+      deleted: z.lazy(() => SortOrderSchema).optional(),
       _count: z
         .lazy(() => Electric_cyl_scansCountOrderByAggregateInputSchema)
         .optional(),
@@ -1019,6 +1028,13 @@ export const Electric_cyl_scansScalarWhereWithAggregatesInputSchema: z.ZodType<P
         .union([
           z.lazy(() => UuidNullableWithAggregatesFilterSchema),
           z.string(),
+        ])
+        .optional()
+        .nullable(),
+      deleted: z
+        .union([
+          z.lazy(() => BoolNullableWithAggregatesFilterSchema),
+          z.boolean(),
         ])
         .optional()
         .nullable(),
@@ -1610,6 +1626,7 @@ export const Electric_cyl_scansCreateInputSchema: z.ZodType<Prisma.Electric_cyl_
         .lte(2147483647)
         .optional()
         .nullable(),
+      deleted: z.boolean().optional().nullable(),
       electric_cyl_images: z
         .lazy(
           () =>
@@ -1675,6 +1692,7 @@ export const Electric_cyl_scansUncheckedCreateInputSchema: z.ZodType<Prisma.Elec
         .optional()
         .nullable(),
       cyl_experiment_id: z.string().uuid().optional().nullable(),
+      deleted: z.boolean().optional().nullable(),
       electric_cyl_images: z
         .lazy(
           () =>
@@ -1788,6 +1806,13 @@ export const Electric_cyl_scansUpdateInputSchema: z.ZodType<Prisma.Electric_cyl_
         .union([
           z.number().int().gte(-2147483648).lte(2147483647),
           z.lazy(() => NullableIntFieldUpdateOperationsInputSchema),
+        ])
+        .optional()
+        .nullable(),
+      deleted: z
+        .union([
+          z.boolean(),
+          z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema),
         ])
         .optional()
         .nullable(),
@@ -1933,6 +1958,13 @@ export const Electric_cyl_scansUncheckedUpdateInputSchema: z.ZodType<Prisma.Elec
         ])
         .optional()
         .nullable(),
+      deleted: z
+        .union([
+          z.boolean(),
+          z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema),
+        ])
+        .optional()
+        .nullable(),
       electric_cyl_images: z
         .lazy(
           () =>
@@ -1986,6 +2018,7 @@ export const Electric_cyl_scansCreateManyInputSchema: z.ZodType<Prisma.Electric_
         .optional()
         .nullable(),
       cyl_experiment_id: z.string().uuid().optional().nullable(),
+      deleted: z.boolean().optional().nullable(),
     })
     .strict();
 
@@ -2093,6 +2126,13 @@ export const Electric_cyl_scansUpdateManyMutationInputSchema: z.ZodType<Prisma.E
         .union([
           z.number().int().gte(-2147483648).lte(2147483647),
           z.lazy(() => NullableIntFieldUpdateOperationsInputSchema),
+        ])
+        .optional()
+        .nullable(),
+      deleted: z
+        .union([
+          z.boolean(),
+          z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema),
         ])
         .optional()
         .nullable(),
@@ -2217,6 +2257,13 @@ export const Electric_cyl_scansUncheckedUpdateManyInputSchema: z.ZodType<Prisma.
         .union([
           z.string().uuid(),
           z.lazy(() => NullableStringFieldUpdateOperationsInputSchema),
+        ])
+        .optional()
+        .nullable(),
+      deleted: z
+        .union([
+          z.boolean(),
+          z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema),
         ])
         .optional()
         .nullable(),
@@ -2734,6 +2781,16 @@ export const FloatNullableFilterSchema: z.ZodType<Prisma.FloatNullableFilter> =
     })
     .strict();
 
+export const BoolNullableFilterSchema: z.ZodType<Prisma.BoolNullableFilter> = z
+  .object({
+    equals: z.boolean().optional().nullable(),
+    not: z
+      .union([z.boolean(), z.lazy(() => NestedBoolNullableFilterSchema)])
+      .optional()
+      .nullable(),
+  })
+  .strict();
+
 export const Electric_cyl_imagesListRelationFilterSchema: z.ZodType<Prisma.Electric_cyl_imagesListRelationFilter> =
   z
     .object({
@@ -2798,6 +2855,7 @@ export const Electric_cyl_scansCountOrderByAggregateInputSchema: z.ZodType<Prism
       wave_number: z.lazy(() => SortOrderSchema).optional(),
       plant_age_days: z.lazy(() => SortOrderSchema).optional(),
       cyl_experiment_id: z.lazy(() => SortOrderSchema).optional(),
+      deleted: z.lazy(() => SortOrderSchema).optional(),
     })
     .strict();
 
@@ -2836,6 +2894,7 @@ export const Electric_cyl_scansMaxOrderByAggregateInputSchema: z.ZodType<Prisma.
       wave_number: z.lazy(() => SortOrderSchema).optional(),
       plant_age_days: z.lazy(() => SortOrderSchema).optional(),
       cyl_experiment_id: z.lazy(() => SortOrderSchema).optional(),
+      deleted: z.lazy(() => SortOrderSchema).optional(),
     })
     .strict();
 
@@ -2859,6 +2918,7 @@ export const Electric_cyl_scansMinOrderByAggregateInputSchema: z.ZodType<Prisma.
       wave_number: z.lazy(() => SortOrderSchema).optional(),
       plant_age_days: z.lazy(() => SortOrderSchema).optional(),
       cyl_experiment_id: z.lazy(() => SortOrderSchema).optional(),
+      deleted: z.lazy(() => SortOrderSchema).optional(),
     })
     .strict();
 
@@ -2922,6 +2982,23 @@ export const FloatNullableWithAggregatesFilterSchema: z.ZodType<Prisma.FloatNull
       _sum: z.lazy(() => NestedFloatNullableFilterSchema).optional(),
       _min: z.lazy(() => NestedFloatNullableFilterSchema).optional(),
       _max: z.lazy(() => NestedFloatNullableFilterSchema).optional(),
+    })
+    .strict();
+
+export const BoolNullableWithAggregatesFilterSchema: z.ZodType<Prisma.BoolNullableWithAggregatesFilter> =
+  z
+    .object({
+      equals: z.boolean().optional().nullable(),
+      not: z
+        .union([
+          z.boolean(),
+          z.lazy(() => NestedBoolNullableWithAggregatesFilterSchema),
+        ])
+        .optional()
+        .nullable(),
+      _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+      _min: z.lazy(() => NestedBoolNullableFilterSchema).optional(),
+      _max: z.lazy(() => NestedBoolNullableFilterSchema).optional(),
     })
     .strict();
 
@@ -3581,6 +3658,13 @@ export const NullableFloatFieldUpdateOperationsInputSchema: z.ZodType<Prisma.Nul
       decrement: z.number().optional(),
       multiply: z.number().optional(),
       divide: z.number().optional(),
+    })
+    .strict();
+
+export const NullableBoolFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableBoolFieldUpdateOperationsInput> =
+  z
+    .object({
+      set: z.boolean().optional().nullable(),
     })
     .strict();
 
@@ -4522,6 +4606,17 @@ export const NestedDateTimeNullableFilterSchema: z.ZodType<Prisma.NestedDateTime
     })
     .strict();
 
+export const NestedBoolNullableFilterSchema: z.ZodType<Prisma.NestedBoolNullableFilter> =
+  z
+    .object({
+      equals: z.boolean().optional().nullable(),
+      not: z
+        .union([z.boolean(), z.lazy(() => NestedBoolNullableFilterSchema)])
+        .optional()
+        .nullable(),
+    })
+    .strict();
+
 export const NestedDateTimeNullableWithAggregatesFilterSchema: z.ZodType<Prisma.NestedDateTimeNullableWithAggregatesFilter> =
   z
     .object({
@@ -4570,6 +4665,23 @@ export const NestedFloatNullableWithAggregatesFilterSchema: z.ZodType<Prisma.Nes
     })
     .strict();
 
+export const NestedBoolNullableWithAggregatesFilterSchema: z.ZodType<Prisma.NestedBoolNullableWithAggregatesFilter> =
+  z
+    .object({
+      equals: z.boolean().optional().nullable(),
+      not: z
+        .union([
+          z.boolean(),
+          z.lazy(() => NestedBoolNullableWithAggregatesFilterSchema),
+        ])
+        .optional()
+        .nullable(),
+      _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+      _min: z.lazy(() => NestedBoolNullableFilterSchema).optional(),
+      _max: z.lazy(() => NestedBoolNullableFilterSchema).optional(),
+    })
+    .strict();
+
 export const Electric_cyl_scansCreateWithoutElectric_cyl_experimentsInputSchema: z.ZodType<Prisma.Electric_cyl_scansCreateWithoutElectric_cyl_experimentsInput> =
   z
     .object({
@@ -4588,6 +4700,7 @@ export const Electric_cyl_scansCreateWithoutElectric_cyl_experimentsInputSchema:
       experiment_name: z.string().optional().nullable(),
       wave_number: z.number().optional().nullable(),
       plant_age_days: z.number().optional().nullable(),
+      deleted: z.boolean().optional().nullable(),
       electric_cyl_images: z
         .lazy(
           () =>
@@ -4622,6 +4735,7 @@ export const Electric_cyl_scansUncheckedCreateWithoutElectric_cyl_experimentsInp
       experiment_name: z.string().optional().nullable(),
       wave_number: z.number().optional().nullable(),
       plant_age_days: z.number().optional().nullable(),
+      deleted: z.boolean().optional().nullable(),
       electric_cyl_images: z
         .lazy(
           () =>
@@ -4802,6 +4916,10 @@ export const Electric_cyl_scansScalarWhereInputSchema: z.ZodType<Prisma.Electric
         .union([z.lazy(() => UuidNullableFilterSchema), z.string()])
         .optional()
         .nullable(),
+      deleted: z
+        .union([z.lazy(() => BoolNullableFilterSchema), z.boolean()])
+        .optional()
+        .nullable(),
     })
     .strict();
 
@@ -4823,6 +4941,7 @@ export const Electric_cyl_scansCreateWithoutElectric_cyl_imagesInputSchema: z.Zo
       experiment_name: z.string().optional().nullable(),
       wave_number: z.number().optional().nullable(),
       plant_age_days: z.number().optional().nullable(),
+      deleted: z.boolean().optional().nullable(),
       electric_cyl_experiments: z
         .lazy(
           () =>
@@ -4858,6 +4977,7 @@ export const Electric_cyl_scansUncheckedCreateWithoutElectric_cyl_imagesInputSch
       wave_number: z.number().optional().nullable(),
       plant_age_days: z.number().optional().nullable(),
       cyl_experiment_id: z.string().optional().nullable(),
+      deleted: z.boolean().optional().nullable(),
     })
     .strict();
 
@@ -5008,6 +5128,13 @@ export const Electric_cyl_scansUpdateWithoutElectric_cyl_imagesInputSchema: z.Zo
         ])
         .optional()
         .nullable(),
+      deleted: z
+        .union([
+          z.boolean(),
+          z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema),
+        ])
+        .optional()
+        .nullable(),
       electric_cyl_experiments: z
         .lazy(
           () =>
@@ -5141,6 +5268,13 @@ export const Electric_cyl_scansUncheckedUpdateWithoutElectric_cyl_imagesInputSch
         .union([
           z.string(),
           z.lazy(() => NullableStringFieldUpdateOperationsInputSchema),
+        ])
+        .optional()
+        .nullable(),
+      deleted: z
+        .union([
+          z.boolean(),
+          z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema),
         ])
         .optional()
         .nullable(),
@@ -5538,6 +5672,7 @@ export const Electric_cyl_scansCreateWithoutElectric_phenotypersInputSchema: z.Z
       experiment_name: z.string().optional().nullable(),
       wave_number: z.number().optional().nullable(),
       plant_age_days: z.number().optional().nullable(),
+      deleted: z.boolean().optional().nullable(),
       electric_cyl_images: z
         .lazy(
           () =>
@@ -5572,6 +5707,7 @@ export const Electric_cyl_scansUncheckedCreateWithoutElectric_phenotypersInputSc
       wave_number: z.number().optional().nullable(),
       plant_age_days: z.number().optional().nullable(),
       cyl_experiment_id: z.string().optional().nullable(),
+      deleted: z.boolean().optional().nullable(),
       electric_cyl_images: z
         .lazy(
           () =>
@@ -5705,6 +5841,7 @@ export const Electric_cyl_scansCreateManyElectric_cyl_experimentsInputSchema: z.
         .lte(2147483647)
         .optional()
         .nullable(),
+      deleted: z.boolean().optional().nullable(),
     })
     .strict();
 
@@ -5812,6 +5949,13 @@ export const Electric_cyl_scansUpdateWithoutElectric_cyl_experimentsInputSchema:
         .union([
           z.number(),
           z.lazy(() => NullableIntFieldUpdateOperationsInputSchema),
+        ])
+        .optional()
+        .nullable(),
+      deleted: z
+        .union([
+          z.boolean(),
+          z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema),
         ])
         .optional()
         .nullable(),
@@ -5944,6 +6088,13 @@ export const Electric_cyl_scansUncheckedUpdateWithoutElectric_cyl_experimentsInp
         ])
         .optional()
         .nullable(),
+      deleted: z
+        .union([
+          z.boolean(),
+          z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema),
+        ])
+        .optional()
+        .nullable(),
       electric_cyl_images: z
         .lazy(
           () =>
@@ -6064,6 +6215,13 @@ export const Electric_cyl_scansUncheckedUpdateManyWithoutElectric_cyl_scansInput
         .union([
           z.number().int().gte(-2147483648).lte(2147483647),
           z.lazy(() => NullableIntFieldUpdateOperationsInputSchema),
+        ])
+        .optional()
+        .nullable(),
+      deleted: z
+        .union([
+          z.boolean(),
+          z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema),
         ])
         .optional()
         .nullable(),
@@ -6272,6 +6430,7 @@ export const Electric_cyl_scansCreateManyElectric_phenotypersInputSchema: z.ZodT
         .optional()
         .nullable(),
       cyl_experiment_id: z.string().uuid().optional().nullable(),
+      deleted: z.boolean().optional().nullable(),
     })
     .strict();
 
@@ -6379,6 +6538,13 @@ export const Electric_cyl_scansUpdateWithoutElectric_phenotypersInputSchema: z.Z
         .union([
           z.number(),
           z.lazy(() => NullableIntFieldUpdateOperationsInputSchema),
+        ])
+        .optional()
+        .nullable(),
+      deleted: z
+        .union([
+          z.boolean(),
+          z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema),
         ])
         .optional()
         .nullable(),
@@ -6508,6 +6674,13 @@ export const Electric_cyl_scansUncheckedUpdateWithoutElectric_phenotypersInputSc
         .union([
           z.string(),
           z.lazy(() => NullableStringFieldUpdateOperationsInputSchema),
+        ])
+        .optional()
+        .nullable(),
+      deleted: z
+        .union([
+          z.boolean(),
+          z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema),
         ])
         .optional()
         .nullable(),
@@ -7400,6 +7573,7 @@ export const tableSchemas = {
       ["wave_number", "INT4"],
       ["plant_age_days", "INT4"],
       ["cyl_experiment_id", "UUID"],
+      ["deleted", "BOOL"],
     ]),
     relations: [
       new Relation(

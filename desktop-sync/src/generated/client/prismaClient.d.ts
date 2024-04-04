@@ -106,6 +106,7 @@ export type Electric_cyl_scans = {
    * @zod.string.uuid()
    */
   cyl_experiment_id: string | null
+  deleted: boolean | null
 }
 
 /**
@@ -3200,6 +3201,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number: number | null
     plant_age_days: number | null
     cyl_experiment_id: string | null
+    deleted: boolean | null
   }
 
   export type Electric_cyl_scansMaxAggregateOutputType = {
@@ -3220,6 +3222,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number: number | null
     plant_age_days: number | null
     cyl_experiment_id: string | null
+    deleted: boolean | null
   }
 
   export type Electric_cyl_scansCountAggregateOutputType = {
@@ -3240,6 +3243,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number: number
     plant_age_days: number
     cyl_experiment_id: number
+    deleted: number
     _all: number
   }
 
@@ -3286,6 +3290,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: true
     plant_age_days?: true
     cyl_experiment_id?: true
+    deleted?: true
   }
 
   export type Electric_cyl_scansMaxAggregateInputType = {
@@ -3306,6 +3311,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: true
     plant_age_days?: true
     cyl_experiment_id?: true
+    deleted?: true
   }
 
   export type Electric_cyl_scansCountAggregateInputType = {
@@ -3326,6 +3332,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: true
     plant_age_days?: true
     cyl_experiment_id?: true
+    deleted?: true
     _all?: true
   }
 
@@ -3439,6 +3446,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number: number | null
     plant_age_days: number | null
     cyl_experiment_id: string | null
+    deleted: boolean | null
     _count: Electric_cyl_scansCountAggregateOutputType | null
     _avg: Electric_cyl_scansAvgAggregateOutputType | null
     _sum: Electric_cyl_scansSumAggregateOutputType | null
@@ -3478,6 +3486,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: boolean
     plant_age_days?: boolean
     cyl_experiment_id?: boolean
+    deleted?: boolean
     electric_cyl_images?: boolean | Electric_cyl_scans$electric_cyl_imagesArgs
     electric_cyl_experiments?: boolean | Electric_cyl_scans$electric_cyl_experimentsArgs
     electric_phenotypers?: boolean | Electric_cyl_scans$electric_phenotypersArgs
@@ -5425,7 +5434,8 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     experiment_name: 'experiment_name',
     wave_number: 'wave_number',
     plant_age_days: 'plant_age_days',
-    cyl_experiment_id: 'cyl_experiment_id'
+    cyl_experiment_id: 'cyl_experiment_id',
+    deleted: 'deleted'
   };
 
   export type Electric_cyl_scansScalarFieldEnum = (typeof Electric_cyl_scansScalarFieldEnum)[keyof typeof Electric_cyl_scansScalarFieldEnum]
@@ -5522,6 +5532,13 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
    * Reference to a field of type 'Float[]'
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
   /**
    * Deep Input Types
@@ -5661,6 +5678,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: IntNullableFilter<"Electric_cyl_scans"> | number | null
     plant_age_days?: IntNullableFilter<"Electric_cyl_scans"> | number | null
     cyl_experiment_id?: UuidNullableFilter<"Electric_cyl_scans"> | string | null
+    deleted?: BoolNullableFilter<"Electric_cyl_scans"> | boolean | null
     electric_cyl_images?: Electric_cyl_imagesListRelationFilter
     electric_cyl_experiments?: XOR<Electric_cyl_experimentsNullableRelationFilter, Electric_cyl_experimentsWhereInput> | null
     electric_phenotypers?: XOR<Electric_phenotypersNullableRelationFilter, Electric_phenotypersWhereInput> | null
@@ -5684,6 +5702,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: SortOrderInput | SortOrder
     plant_age_days?: SortOrderInput | SortOrder
     cyl_experiment_id?: SortOrderInput | SortOrder
+    deleted?: SortOrderInput | SortOrder
     electric_cyl_images?: Electric_cyl_imagesOrderByRelationAggregateInput
     electric_cyl_experiments?: Electric_cyl_experimentsOrderByWithRelationInput
     electric_phenotypers?: Electric_phenotypersOrderByWithRelationInput
@@ -5710,6 +5729,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: IntNullableFilter<"Electric_cyl_scans"> | number | null
     plant_age_days?: IntNullableFilter<"Electric_cyl_scans"> | number | null
     cyl_experiment_id?: UuidNullableFilter<"Electric_cyl_scans"> | string | null
+    deleted?: BoolNullableFilter<"Electric_cyl_scans"> | boolean | null
     electric_cyl_images?: Electric_cyl_imagesListRelationFilter
     electric_cyl_experiments?: XOR<Electric_cyl_experimentsNullableRelationFilter, Electric_cyl_experimentsWhereInput> | null
     electric_phenotypers?: XOR<Electric_phenotypersNullableRelationFilter, Electric_phenotypersWhereInput> | null
@@ -5733,6 +5753,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: SortOrderInput | SortOrder
     plant_age_days?: SortOrderInput | SortOrder
     cyl_experiment_id?: SortOrderInput | SortOrder
+    deleted?: SortOrderInput | SortOrder
     _count?: Electric_cyl_scansCountOrderByAggregateInput
     _avg?: Electric_cyl_scansAvgOrderByAggregateInput
     _max?: Electric_cyl_scansMaxOrderByAggregateInput
@@ -5761,6 +5782,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: IntNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
     plant_age_days?: IntNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
     cyl_experiment_id?: UuidNullableWithAggregatesFilter<"Electric_cyl_scans"> | string | null
+    deleted?: BoolNullableWithAggregatesFilter<"Electric_cyl_scans"> | boolean | null
   }
 
   export type Electric_phenotypersWhereInput = {
@@ -5939,6 +5961,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     experiment_name?: string | null
     wave_number?: number | null
     plant_age_days?: number | null
+    deleted?: boolean | null
     electric_cyl_images?: Electric_cyl_imagesCreateNestedManyWithoutElectric_cyl_scansInput
     electric_cyl_experiments?: Electric_cyl_experimentsCreateNestedOneWithoutElectric_cyl_scansInput
     electric_phenotypers?: Electric_phenotypersCreateNestedOneWithoutElectric_cyl_scansInput
@@ -5962,6 +5985,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: number | null
     plant_age_days?: number | null
     cyl_experiment_id?: string | null
+    deleted?: boolean | null
     electric_cyl_images?: Electric_cyl_imagesUncheckedCreateNestedManyWithoutElectric_cyl_scansInput
   }
 
@@ -5981,6 +6005,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     experiment_name?: NullableStringFieldUpdateOperationsInput | string | null
     wave_number?: NullableIntFieldUpdateOperationsInput | number | null
     plant_age_days?: NullableIntFieldUpdateOperationsInput | number | null
+    deleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     electric_cyl_images?: Electric_cyl_imagesUpdateManyWithoutElectric_cyl_scansNestedInput
     electric_cyl_experiments?: Electric_cyl_experimentsUpdateOneWithoutElectric_cyl_scansNestedInput
     electric_phenotypers?: Electric_phenotypersUpdateOneWithoutElectric_cyl_scansNestedInput
@@ -6004,6 +6029,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: NullableIntFieldUpdateOperationsInput | number | null
     plant_age_days?: NullableIntFieldUpdateOperationsInput | number | null
     cyl_experiment_id?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     electric_cyl_images?: Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_scansNestedInput
   }
 
@@ -6025,6 +6051,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: number | null
     plant_age_days?: number | null
     cyl_experiment_id?: string | null
+    deleted?: boolean | null
   }
 
   export type Electric_cyl_scansUpdateManyMutationInput = {
@@ -6043,6 +6070,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     experiment_name?: NullableStringFieldUpdateOperationsInput | string | null
     wave_number?: NullableIntFieldUpdateOperationsInput | number | null
     plant_age_days?: NullableIntFieldUpdateOperationsInput | number | null
+    deleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type Electric_cyl_scansUncheckedUpdateManyInput = {
@@ -6063,6 +6091,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: NullableIntFieldUpdateOperationsInput | number | null
     plant_age_days?: NullableIntFieldUpdateOperationsInput | number | null
     cyl_experiment_id?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type Electric_phenotypersCreateInput = {
@@ -6356,6 +6385,11 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type BoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
   export type Electric_cyl_imagesListRelationFilter = {
     every?: Electric_cyl_imagesWhereInput
     some?: Electric_cyl_imagesWhereInput
@@ -6394,6 +6428,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: SortOrder
     plant_age_days?: SortOrder
     cyl_experiment_id?: SortOrder
+    deleted?: SortOrder
   }
 
   export type Electric_cyl_scansAvgOrderByAggregateInput = {
@@ -6426,6 +6461,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: SortOrder
     plant_age_days?: SortOrder
     cyl_experiment_id?: SortOrder
+    deleted?: SortOrder
   }
 
   export type Electric_cyl_scansMinOrderByAggregateInput = {
@@ -6446,6 +6482,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: SortOrder
     plant_age_days?: SortOrder
     cyl_experiment_id?: SortOrder
+    deleted?: SortOrder
   }
 
   export type Electric_cyl_scansSumOrderByAggregateInput = {
@@ -6488,6 +6525,14 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     _sum?: NestedFloatNullableFilter<$PrismaModel>
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
   }
 
   export type Electric_phenotypersCountOrderByAggregateInput = {
@@ -6618,6 +6663,10 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type NullableBoolFieldUpdateOperationsInput = {
+    set?: boolean | null
   }
 
   export type Electric_cyl_imagesUpdateManyWithoutElectric_cyl_scansNestedInput = {
@@ -6882,6 +6931,11 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type NestedBoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Enumerable<Date> | Enumerable<string> | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -6912,6 +6966,14 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
+  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
   export type Electric_cyl_scansCreateWithoutElectric_cyl_experimentsInput = {
     id: string
     scanner_id?: string | null
@@ -6928,6 +6990,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     experiment_name?: string | null
     wave_number?: number | null
     plant_age_days?: number | null
+    deleted?: boolean | null
     electric_cyl_images?: Electric_cyl_imagesCreateNestedManyWithoutElectric_cyl_scansInput
     electric_phenotypers?: Electric_phenotypersCreateNestedOneWithoutElectric_cyl_scansInput
   }
@@ -6949,6 +7012,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     experiment_name?: string | null
     wave_number?: number | null
     plant_age_days?: number | null
+    deleted?: boolean | null
     electric_cyl_images?: Electric_cyl_imagesUncheckedCreateNestedManyWithoutElectric_cyl_scansInput
   }
 
@@ -6999,6 +7063,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: IntNullableFilter<"Electric_cyl_scans"> | number | null
     plant_age_days?: IntNullableFilter<"Electric_cyl_scans"> | number | null
     cyl_experiment_id?: UuidNullableFilter<"Electric_cyl_scans"> | string | null
+    deleted?: BoolNullableFilter<"Electric_cyl_scans"> | boolean | null
   }
 
   export type Electric_cyl_scansCreateWithoutElectric_cyl_imagesInput = {
@@ -7017,6 +7082,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     experiment_name?: string | null
     wave_number?: number | null
     plant_age_days?: number | null
+    deleted?: boolean | null
     electric_cyl_experiments?: Electric_cyl_experimentsCreateNestedOneWithoutElectric_cyl_scansInput
     electric_phenotypers?: Electric_phenotypersCreateNestedOneWithoutElectric_cyl_scansInput
   }
@@ -7039,6 +7105,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: number | null
     plant_age_days?: number | null
     cyl_experiment_id?: string | null
+    deleted?: boolean | null
   }
 
   export type Electric_cyl_scansCreateOrConnectWithoutElectric_cyl_imagesInput = {
@@ -7073,6 +7140,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     experiment_name?: NullableStringFieldUpdateOperationsInput | string | null
     wave_number?: NullableIntFieldUpdateOperationsInput | number | null
     plant_age_days?: NullableIntFieldUpdateOperationsInput | number | null
+    deleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     electric_cyl_experiments?: Electric_cyl_experimentsUpdateOneWithoutElectric_cyl_scansNestedInput
     electric_phenotypers?: Electric_phenotypersUpdateOneWithoutElectric_cyl_scansNestedInput
   }
@@ -7095,6 +7163,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: NullableIntFieldUpdateOperationsInput | number | null
     plant_age_days?: NullableIntFieldUpdateOperationsInput | number | null
     cyl_experiment_id?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type Electric_cyl_imagesCreateWithoutElectric_cyl_scansInput = {
@@ -7250,6 +7319,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     experiment_name?: string | null
     wave_number?: number | null
     plant_age_days?: number | null
+    deleted?: boolean | null
     electric_cyl_images?: Electric_cyl_imagesCreateNestedManyWithoutElectric_cyl_scansInput
     electric_cyl_experiments?: Electric_cyl_experimentsCreateNestedOneWithoutElectric_cyl_scansInput
   }
@@ -7271,6 +7341,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: number | null
     plant_age_days?: number | null
     cyl_experiment_id?: string | null
+    deleted?: boolean | null
     electric_cyl_images?: Electric_cyl_imagesUncheckedCreateNestedManyWithoutElectric_cyl_scansInput
   }
 
@@ -7317,6 +7388,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     experiment_name?: string | null
     wave_number?: number | null
     plant_age_days?: number | null
+    deleted?: boolean | null
   }
 
   export type Electric_cyl_scansUpdateWithoutElectric_cyl_experimentsInput = {
@@ -7335,6 +7407,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     experiment_name?: NullableStringFieldUpdateOperationsInput | string | null
     wave_number?: NullableIntFieldUpdateOperationsInput | number | null
     plant_age_days?: NullableIntFieldUpdateOperationsInput | number | null
+    deleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     electric_cyl_images?: Electric_cyl_imagesUpdateManyWithoutElectric_cyl_scansNestedInput
     electric_phenotypers?: Electric_phenotypersUpdateOneWithoutElectric_cyl_scansNestedInput
   }
@@ -7356,6 +7429,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     experiment_name?: NullableStringFieldUpdateOperationsInput | string | null
     wave_number?: NullableIntFieldUpdateOperationsInput | number | null
     plant_age_days?: NullableIntFieldUpdateOperationsInput | number | null
+    deleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     electric_cyl_images?: Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_scansNestedInput
   }
 
@@ -7376,6 +7450,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     experiment_name?: NullableStringFieldUpdateOperationsInput | string | null
     wave_number?: NullableIntFieldUpdateOperationsInput | number | null
     plant_age_days?: NullableIntFieldUpdateOperationsInput | number | null
+    deleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type Electric_cyl_imagesCreateManyElectric_cyl_scansInput = {
@@ -7431,6 +7506,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: number | null
     plant_age_days?: number | null
     cyl_experiment_id?: string | null
+    deleted?: boolean | null
   }
 
   export type Electric_cyl_scansUpdateWithoutElectric_phenotypersInput = {
@@ -7449,6 +7525,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     experiment_name?: NullableStringFieldUpdateOperationsInput | string | null
     wave_number?: NullableIntFieldUpdateOperationsInput | number | null
     plant_age_days?: NullableIntFieldUpdateOperationsInput | number | null
+    deleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     electric_cyl_images?: Electric_cyl_imagesUpdateManyWithoutElectric_cyl_scansNestedInput
     electric_cyl_experiments?: Electric_cyl_experimentsUpdateOneWithoutElectric_cyl_scansNestedInput
   }
@@ -7470,6 +7547,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: NullableIntFieldUpdateOperationsInput | number | null
     plant_age_days?: NullableIntFieldUpdateOperationsInput | number | null
     cyl_experiment_id?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
     electric_cyl_images?: Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_scansNestedInput
   }
 
@@ -7490,6 +7568,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     wave_number?: NullableIntFieldUpdateOperationsInput | number | null
     plant_age_days?: NullableIntFieldUpdateOperationsInput | number | null
     cyl_experiment_id?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
 

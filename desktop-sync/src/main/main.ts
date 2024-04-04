@@ -236,6 +236,9 @@ createElectricStore(
     ipcMain.handle("scan-store:get-scan", async (event, args) => {
       return electricStore.getScan(args[0]);
     });
+    ipcMain.handle("scan-store:delete-scan", async (event, args) => {
+      electricStore.deleteScan(args[0]);
+    });
 
     async function uploadImages() {
       const images = (await electricStore.getImagesToUpload(
