@@ -9,6 +9,9 @@ type ScannerConfig = {
 type ScanMetadata = Readonly<{
   id: string;
   phenotyper_id: string;
+  cyl_experiment_id: string;
+  wave_number: number;
+  plant_age_days: number;
   scanner_id: string;
   plant_qr_code: string;
   path: string;
@@ -51,6 +54,12 @@ type Phenotyper = {
   id: string;
   name: string;
   email: string;
+};
+
+type Experiment = {
+  id: string;
+  name: string;
+  species: string;
 };
 
 interface PhenotyperRetriever {

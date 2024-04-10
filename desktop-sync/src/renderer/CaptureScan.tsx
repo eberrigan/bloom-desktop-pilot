@@ -5,9 +5,12 @@ import { PersonChooser } from "./PersonChooser";
 import { PlantQrCodeTextBox } from "./PlantQrCodeTextBox";
 import { parse } from "node:path";
 import { BrowseScans } from "./BrowseScans";
+import { ExperimentChooser } from "./ExperimentChooser";
 
 const setScannerPlantQrCode = window.electron.scanner.setPlantQrCode;
 const getScannerPlantQrCode = window.electron.scanner.getPlantQrCode;
+
+const scanner = window.electron.scanner;
 
 const ipcRenderer = window.electron.ipcRenderer;
 const getScanData = window.electron.scanner.getScanData;
@@ -17,26 +20,7 @@ const getScansDir = window.electron.scanner.getScansDir;
 const saveCurrentScan = window.electron.scanner.saveCurrentScan;
 const deleteCurrentScan = window.electron.scanner.deleteCurrentScan;
 
-const experiments = [
-  {
-    name: "Arabidopsis Root Absorbance",
-    id: "abcdefg",
-    plants: 10,
-    species: "Arabidopsis",
-  },
-  {
-    name: "Soy Diversity Screen",
-    id: "hijklmn",
-    plants: 20,
-    species: "Soybean",
-  },
-  {
-    name: "Canola Root Depth Screen",
-    id: "opqrstu",
-    plants: 30,
-    species: "Canola",
-  },
-];
+const getScannerId = window.electron.scanner.getScannerId;
 
 export function CaptureScan() {
   const [nImages, setNImages] = useState<number>(0);
@@ -50,18 +34,22 @@ export function CaptureScan() {
   const [scansDir, setScansDir] = useState<string | null>(null);
 
   const [phenotyperId, setPhenotyperId] = useState<string | null>(null);
-  const [experimentName, setExperimentName] = useState<string | null>(null);
-  const [waveNumber, setWaveNumber] = useState<number | null>(null);
-  const [plantAgeDays, setPlantAgeDays] = useState<number | null>(null);
+  const [experimentId, setExperimentId] = useState<string | null>(null);
+  const [waveNumber, setWaveNumber] = useState<number | null>(NaN);
+  const [plantAgeDays, setPlantAgeDays] = useState<number | null>(NaN);
   const [plantQrCode, setPlantQrCode] = useState<string | null>(null);
   const [scanMetadata, setScanMetadata] = useState<ScanMetadata | null>(null);
 
-  const scanDisabled =
-    phenotyperId === null ||
-    plantQrCode === null ||
-    plantQrCode === "" ||
-    isScanning ||
-    isSaving;
+  const [scannerId, setScannerId] = useState<string | null>(null);
+
+  const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
+
+  const successfullySaved = () => {
+    setShowSuccessMessage(true);
+    setTimeout(() => {
+      setShowSuccessMessage(false);
+    }, 3000);
+  };
 
   const pullScanData = useCallback(async () => {
     const scanData = (await getScanData()) as {
@@ -81,6 +69,12 @@ export function CaptureScan() {
   useEffect(() => {
     getScansDir().then((dir) => {
       setScansDir(dir);
+    });
+  }, []);
+
+  useEffect(() => {
+    getScannerId().then((id) => {
+      setScannerId(id);
     });
   }, []);
 
@@ -125,30 +119,35 @@ export function CaptureScan() {
     setSelectedImage(parseInt(e.target.value, 10));
   };
 
-  const nextImage = () => {
-    if (images.length === 0) {
-      return;
-    }
-    const nextIndex = mod(selectedImage + 1, images.length);
-    setSelectedImage(nextIndex);
-  };
-
-  const prevImage = () => {
-    if (images.length === 0) {
-      return;
-    }
-    const nextIndex = mod(selectedImage - 1, images.length);
-    setSelectedImage(nextIndex);
-  };
-
   useEffect(() => {
-    if (numSaved === nImages) {
-      setScannerPlantQrCode("");
-      setPlantQrCode("");
+    if (numSaved === nImages && numSaved > 0) {
       setIsScanning(false);
       setIsSaving(false);
     }
   }, [numSaved]);
+
+  useEffect(() => {
+    scanner.getWaveNumber().then((waveNumber) => {
+      setWaveNumber(waveNumber);
+    });
+  }, []);
+
+  useEffect(() => {
+    scanner.getPlantAgeDays().then((plantAgeDays) => {
+      setPlantAgeDays(plantAgeDays);
+    });
+  }, []);
+
+  const scanDisabled =
+    phenotyperId === null ||
+    plantQrCode === null ||
+    plantQrCode === "" ||
+    experimentId === null ||
+    experimentId === "" ||
+    Number.isNaN(plantAgeDays) ||
+    Number.isNaN(waveNumber) ||
+    isScanning ||
+    isSaving;
 
   return (
     <div className="min-h-0 min-w-0 flex flex-col flex-grow pr-8 pb-8">
@@ -176,15 +175,22 @@ export function CaptureScan() {
                 <div className="block text-xs font-bold text-gray-700 text-left mt-1">
                   Experiment
                 </div>
-                <input
+                <div className="mt-1 flex flex-row items-center">
+                  <ExperimentChooser
+                    experimentIdChanged={(id: string) => {
+                      setExperimentId(id);
+                    }}
+                  />
+                  <FieldInfo info="Name of the experiment. Required field." />
+                </div>
+                {/* <input
                   type="text"
                   className={
                     "p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none w-[200px] border border-gray-300"
                   }
                   value={experimentName || ""}
                   onChange={(e) => setExperimentName(e.target.value)}
-                />
-                <FieldInfo info="Name of the experiment. Required field." />
+                /> */}
                 {/* <div className="mt-1">
               <select
                 className="p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
@@ -213,7 +219,11 @@ export function CaptureScan() {
                     type="number"
                     className="p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none"
                     value={waveNumber}
-                    onChange={(e) => setWaveNumber(parseInt(e.target.value))}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value);
+                      setWaveNumber(value);
+                      scanner.setWaveNumber(value);
+                    }}
                   />
                   <FieldInfo info="Some experiments involve several waves of plants grown at different times. Optional field." />
                 </div>
@@ -227,11 +237,16 @@ export function CaptureScan() {
                 <div className="mt-1">
                   <input
                     type="number"
+                    min={0}
                     className={
                       "p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none border border-gray-300"
                     }
                     value={plantAgeDays}
-                    onChange={(e) => setPlantAgeDays(parseInt(e.target.value))}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value);
+                      setPlantAgeDays(value);
+                      scanner.setPlantAgeDays(value);
+                    }}
                   />
                   <FieldInfo info="Number of days after germination that the plants are being scanned. Required field." />
                 </div>
@@ -265,10 +280,15 @@ export function CaptureScan() {
           <div className="block text-xs font-bold text-gray-700 text-left mb-1">
             Scan
           </div>
-          <div className="border rounded-md flex-grow flex flex-col p-4 text-center items-center">
+          <div className="border rounded-md flex-grow flex flex-col p-4 text-center items-center relative">
+            {showSuccessMessage ? (
+              <div className="absolute top-0 mx-auto mt-2 bg-amber-100 border border-amber-300 p-2 rounded-md text-amber-700 table">
+                Successfully&nbsp;saved&nbsp;scan.
+              </div>
+            ) : null}
             {scanMetadata === null ? (
               <div className="flex-grow flex flex-col">
-                <div className="flex-grow text-center flex flex-col">
+                <div className="flex-grow text-center flex flex-col ">
                   <div className="my-auto">
                     <button
                       className={
@@ -298,8 +318,10 @@ export function CaptureScan() {
                         "rounded-md border border-gray-300 px-4 py-2 text-sm font-medium mr-2 text-green-700 bg-green-100 hover:bg-green-200"
                       }
                       onClick={(e) => {
-                        saveCurrentScan();
-                        deleteCurrentScan();
+                        saveCurrentScan().then(() => {
+                          successfullySaved();
+                          deleteCurrentScan();
+                        });
                       }}
                     >
                       <svg
@@ -360,13 +382,16 @@ export function CaptureScan() {
               </div>
             ) : null} */}
             {images.length > 0 && scansDir !== null ? (
-              <div className="m-4">
+              <div className="m-4 relative">
+                <div className="absolute top-1 right-1 z-10 rounded-md border border-gray-300 px-4 py-2 bg-white text-sm font-medium text-gray-700 select-none">
+                  {scanMetadata.plant_qr_code}
+                </div>
                 <img
                   src={`file://${scansDir}/${images[selectedImage].replaceAll(
                     "\\",
                     "/"
                   )}`}
-                  className="rounded-md"
+                  className="rounded-md z-0"
                 />
               </div>
             ) : // <div style={{ width: "500px", height: "250px" }}></div>
@@ -391,12 +416,16 @@ export function CaptureScan() {
           </div>
         </div>
       </div>
-      <div className="block text-xs font-bold text-gray-700 text-left mb-1">
-        Recent scans
-      </div>
-      <div className="border rounded-md p-4 flex flex-col min-h-0 min-w-0 overflow-scroll flex-grow">
-        <BrowseScans showUploadButton={false} />
-      </div>
+      {scannerId && (
+        <div className="block text-xs font-bold text-gray-700 text-left mb-1">
+          Recent scans
+        </div>
+      )}
+      {scannerId && (
+        <div className="border rounded-md p-4 flex flex-col min-h-0 min-w-0 overflow-scroll flex-grow">
+          <BrowseScans showUploadButton={false} showTodayOnly={true} />
+        </div>
+      )}
     </div>
   );
 }

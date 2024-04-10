@@ -111,10 +111,23 @@ export class ElectricStore {
     console.log("syncing electric_cyl_scans...");
     // sync the tables
     const scans = await this.electric.db.electric_cyl_scans.sync({
-      include: { electric_phenotypers: true, electric_cyl_images: true },
+      include: {
+        electric_phenotypers: true,
+        electric_cyl_images: true,
+        electric_cyl_experiments: true,
+      },
     });
     await scans.synced;
     console.log("synced electric_cyl_scans");
+
+    console.log("syncing electric_cyl_experiments...");
+    const experiments = await this.electric.db.electric_cyl_experiments.sync({
+      include: {
+        electric_cyl_scans: { include: { electric_phenotypers: true } },
+      },
+    });
+    await experiments.synced;
+    console.log("synced electric_cyl_experiments");
 
     console.log("syncing electric_phenotypers...");
     const phenotypers = await this.electric.db.electric_phenotypers.sync();
@@ -124,7 +137,12 @@ export class ElectricStore {
     console.log("syncing electric_cyl_images...");
     const images = await this.electric.db.electric_cyl_images.sync({
       include: {
-        electric_cyl_scans: { include: { electric_phenotypers: true } },
+        electric_cyl_scans: {
+          include: {
+            electric_phenotypers: true,
+            electric_cyl_experiments: true,
+          },
+        },
       },
     });
     await images.synced;
@@ -146,6 +164,27 @@ export class ElectricStore {
     try {
       await this.electric.db.electric_phenotypers.create({
         data: { id: uuidv4(), name, email },
+      });
+      return { error: null };
+    } catch (err) {
+      return { error: err };
+    }
+  };
+
+  getExperiments = async () => {
+    if (this.electric === null) {
+      return [];
+    }
+    return this.electric.db.electric_cyl_experiments.findMany();
+  };
+
+  createExperiment = async (name: string, species: string) => {
+    if (this.electric === null) {
+      return { error: "Electric client is null" };
+    }
+    try {
+      await this.electric.db.electric_cyl_experiments.create({
+        data: { id: uuidv4(), name, species },
       });
       return { error: null };
     } catch (err) {
@@ -248,6 +287,7 @@ export class ElectricStore {
     const scans = parseCaptureDate(scan.metadata) as {
       id: string;
       phenotyper_id: string;
+      cyl_experiment_id: string;
       scanner_id: string;
       plant_qr_code: string;
       path: string;
@@ -260,6 +300,11 @@ export class ElectricStore {
       gamma: number;
       seconds_per_rot: number;
     };
+
+    console.log(
+      "Adding scan to electric_cyl_scans: ",
+      JSON.stringify(scan.metadata)
+    );
 
     const images = scan.images.map((path, index) => {
       return {
@@ -277,6 +322,16 @@ export class ElectricStore {
         ...scans,
         electric_cyl_images: { create: images },
       },
+    });
+  };
+
+  deleteScan = async (scanId: string) => {
+    if (this.electric === null) {
+      return;
+    }
+    await this.electric.db.electric_cyl_scans.update({
+      data: { deleted: true },
+      where: { id: scanId },
     });
   };
 

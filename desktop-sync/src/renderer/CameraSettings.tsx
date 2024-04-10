@@ -64,6 +64,8 @@ export function CameraSettings() {
             <input
               className="w-40 h-8 px-2 border rounded-md text-xl"
               type="number"
+              max={10}
+              min={4}
               value={newSettings?.seconds_per_rot}
               onChange={(e) =>
                 handleSetSettings((settings) => ({

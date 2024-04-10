@@ -88,6 +88,7 @@ const config = yaml.load(fs.readFileSync(config_yaml, "utf8")) as {
   capture_scan_py: string;
   scans_dir: string;
   scanner_id: string;
+  electric_service_url: string;
   electric_jwt: string;
   local_db_path: string;
   camera_ip_address: string;
@@ -113,6 +114,18 @@ ipcMain.on("scanner:set-phenotyper-id", async (event, args) => {
 ipcMain.handle("scanner:get-plant-qr-code", scanner.getPlantQrCode);
 ipcMain.handle("scanner:set-plant-qr-code", async (event, args) => {
   scanner.setPlantQrCode(args[0]);
+});
+ipcMain.handle("scanner:get-experiment-id", scanner.getExperimentId);
+ipcMain.on("scanner:set-experiment-id", async (event, args) => {
+  scanner.setExperimentId(args[0]);
+});
+ipcMain.handle("scanner:get-wave-number", scanner.getWaveNumber);
+ipcMain.on("scanner:set-wave-number", async (event, args) => {
+  scanner.setWaveNumber(args[0]);
+});
+ipcMain.handle("scanner:get-plant-age-days", scanner.getPlantAgeDays);
+ipcMain.on("scanner:set-plant-age-days", async (event, args) => {
+  scanner.setPlantAgeDays(args[0]);
 });
 ipcMain.handle("scanner:get-scan-data", scanner.getScanData);
 scanner.onScanUpdate = () => {
@@ -186,10 +199,8 @@ const acquireToken = async () => {
 };
 
 createElectricStore(
-  "http://api.bloom-staging.salkhpi.org:5133",
+  config.electric_service_url,
   config.local_db_path,
-  // "http://localhost:5133",
-  // "/Users/djbutler/.bloom/bloom.db",
   acquireToken,
   // getSupabaseJWT,
   () => {
@@ -201,6 +212,10 @@ createElectricStore(
     ipcMain.handle("electric:get-phenotypers", electricStore.getPhenotypers);
     ipcMain.handle("electric:create-phenotyper", async (event, args) => {
       return electricStore.createPhenotyper(args[0], args[1]);
+    });
+    ipcMain.handle("electric:get-experiments", electricStore.getExperiments);
+    ipcMain.handle("electric:create-experiment", async (event, args) => {
+      return electricStore.createExperiment(args[0], args[1]);
     });
     ipcMain.handle("electric:get-scans", electricStore.getScans);
     // scanner.onScanComplete = (scan: Scan) => {
@@ -220,6 +235,9 @@ createElectricStore(
     ipcMain.handle("scan-store:get-scans", electricStore.getScans);
     ipcMain.handle("scan-store:get-scan", async (event, args) => {
       return electricStore.getScan(args[0]);
+    });
+    ipcMain.handle("scan-store:delete-scan", async (event, args) => {
+      electricStore.deleteScan(args[0]);
     });
 
     async function uploadImages() {
