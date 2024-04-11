@@ -39,7 +39,7 @@ export function Phenotypers() {
   return (
     <div>
       <div className="text-xs font-bold">Phenotypers</div>
-      <ul className="h-32 overflow-scroll border rounded-md p-2 w-96 mb-8">
+      <ul className="h-32 overflow-scroll border rounded-md p-2 w-96 mb-8 text-sm">
         {phenotypers &&
           phenotypers.map((phenotyper) => (
             <li key={phenotyper.id}>

@@ -48,7 +48,7 @@ export function Experiments() {
   return (
     <div className="text-lg">
       <div className="text-xs font-bold">Experiments</div>
-      <ul className="h-32 overflow-scroll border rounded-md p-2 w-96 mb-8">
+      <ul className="h-32 overflow-scroll border rounded-md p-2 w-96 mb-8 text-sm">
         {experiments &&
           experiments.map((experiment) => (
             <li key={experiment.id}>

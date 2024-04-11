@@ -178,6 +178,17 @@ export class ElectricStore {
     return this.electric.db.electric_cyl_experiments.findMany();
   };
 
+  getExperimentsWithScans = async () => {
+    if (this.electric === null) {
+      return [];
+    }
+    return this.electric.db.electric_cyl_experiments.findMany({
+      include: {
+        electric_cyl_scans: { include: { electric_phenotypers: true } },
+      },
+    });
+  };
+
   createExperiment = async (name: string, species: string) => {
     if (this.electric === null) {
       return { error: "Electric client is null" };
@@ -330,7 +341,7 @@ export class ElectricStore {
       return;
     }
     await this.electric.db.electric_cyl_scans.update({
-      data: { deleted: true },
+      data: { deleted: 1 },
       where: { id: scanId },
     });
   };

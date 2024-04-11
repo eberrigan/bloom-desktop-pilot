@@ -47,6 +47,7 @@ class Scanner {
     // get the date in the format YYYY-MM-DD in the local timezone
     this.scanPartialPath = path.join(
       getLocalDateInYYYYMMDD(this.captureDate),
+      this.plantQrCode,
       this.scanId
     );
     this.scanPath = path.join(this.scans_dir, this.scanPartialPath);
