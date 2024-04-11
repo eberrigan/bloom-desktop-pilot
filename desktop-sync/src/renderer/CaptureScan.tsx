@@ -265,7 +265,10 @@ export function CaptureScan() {
                     }
                     value={plantQrCode || ""}
                     onChange={(e) => {
-                      const qrCode = e.target.value;
+                      const qrCode = e.target.value.replace(
+                        /[^a-zA-Z0-9\+\-\_]/g,
+                        ""
+                      );
                       setPlantQrCode(qrCode);
                       setScannerPlantQrCode(qrCode);
                     }}

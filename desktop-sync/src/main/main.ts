@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, dialog, ipcMain } from "electron";
 
 import path from "path";
 import { resolveHtmlPath } from "./util";
@@ -97,6 +97,43 @@ const config = yaml.load(fs.readFileSync(config_yaml, "utf8")) as {
   bloom_api_url: string;
   bloom_anon_key: string;
 };
+
+ipcMain.handle("fs:pick-dir", async (event, args) => {
+  return await dialog
+    .showOpenDialog(mainWindow!, {
+      properties: ["openDirectory", "createDirectory"],
+    })
+    .then((result) => {
+      if (!result.canceled) {
+        return result.filePaths[0];
+      } else {
+        return null;
+      }
+    });
+});
+
+ipcMain.handle("fs:copy-scans", async (event, args) => {
+  const scanPaths = args.slice(0, args.length - 1) as string[];
+  const targetDir = args[args.length - 1] as string;
+  await Promise.all(
+    scanPaths.map(async (scanPath) => {
+      // copy scanPath (itself a dir) to targetDir
+      const targetPath = path.join(targetDir, scanPath);
+      await fs.promises.mkdir(targetPath, { recursive: true });
+      // copy all files in scanPath to targetPath
+      const scanFullPath = path.join(config.scans_dir, scanPath);
+      const files = await fs.promises.readdir(scanFullPath);
+      await Promise.all(
+        files.map(async (file) => {
+          await fs.promises.copyFile(
+            path.join(scanFullPath, file),
+            path.join(targetPath, file)
+          );
+        })
+      );
+    })
+  );
+});
 
 ipcMain.handle("bloom:get-credentials", (event, args) => ({
   email: config.bloom_scanner_username,
@@ -214,6 +251,10 @@ createElectricStore(
       return electricStore.createPhenotyper(args[0], args[1]);
     });
     ipcMain.handle("electric:get-experiments", electricStore.getExperiments);
+    ipcMain.handle(
+      "electric:get-experiments-with-scans",
+      electricStore.getExperimentsWithScans
+    );
     ipcMain.handle("electric:create-experiment", async (event, args) => {
       return electricStore.createExperiment(args[0], args[1]);
     });

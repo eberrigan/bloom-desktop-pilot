@@ -5,6 +5,7 @@ import {
   Electric_cyl_scans,
   Electric_phenotypers,
   Electric_cyl_images,
+  Electric_cyl_experiments,
 } from "../generated/client";
 
 export type Channels =
@@ -37,6 +38,11 @@ const electronHandler = {
   // bloom: {
   //   getPeople: () => ipcRenderer.invoke("bloom:get-people"),
   // },
+  fs: {
+    pickDir: () => ipcRenderer.invoke("fs:pick-dir"),
+    copyScans: (scanPaths: string[], dir: string) =>
+      ipcRenderer.invoke("fs:copy-scans", scanPaths.concat([dir])),
+  },
   scanner: {
     getScannerId: () => ipcRenderer.invoke("scanner:get-scanner-id"),
     getPhenotyperId: () => ipcRenderer.invoke("scanner:get-phenotyper-id"),
@@ -97,6 +103,8 @@ const electronHandler = {
       ipcRenderer.invoke("electric:create-experiment", [name, species]),
     getStatus: () => ipcRenderer.invoke("electric:get-status"),
     uploadImages: () => ipcRenderer.invoke("electric:upload-images"),
+    getExperimentsWithScans: () =>
+      ipcRenderer.invoke("electric:get-experiments-with-scans"),
   },
   bloom: {
     getCredentials: () =>
