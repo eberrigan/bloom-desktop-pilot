@@ -12,6 +12,7 @@ export type Channels =
   | "ipc-example"
   | "scanner:start-scan"
   | "scanner:scan-update"
+  | "scanner:scan-error"
   | "main:idle"
   | "image-captured"
   | "image-saved"
