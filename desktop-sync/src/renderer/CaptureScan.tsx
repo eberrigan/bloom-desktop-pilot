@@ -43,12 +43,20 @@ export function CaptureScan() {
   const [scannerId, setScannerId] = useState<string | null>(null);
 
   const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
+  const [showDeletedMessage, setShowDeletedMessage] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const successfullySaved = () => {
     setShowSuccessMessage(true);
     setTimeout(() => {
       setShowSuccessMessage(false);
+    }, 3000);
+  };
+
+  const successfullyDeleted = () => {
+    setShowDeletedMessage(true);
+    setTimeout(() => {
+      setShowDeletedMessage(false);
     }, 3000);
   };
 
@@ -300,6 +308,11 @@ export function CaptureScan() {
                 Successfully&nbsp;saved&nbsp;scan.
               </div>
             ) : null}
+            {showDeletedMessage ? (
+              <div className="absolute top-0 mx-auto mt-2 bg-amber-100 border border-amber-300 p-2 rounded-md text-amber-700 table">
+                Successfully&nbsp;deleted&nbsp;scan.
+              </div>
+            ) : null}
             {errorMessage ? (
               <div className="absolute top-0 mx-auto mt-2 bg-red-100 border border-red-300 p-2 rounded-md text-red-700 table">
                 {errorMessage}
@@ -442,7 +455,11 @@ export function CaptureScan() {
       )}
       {scannerId && (
         <div className="border rounded-md p-4 flex flex-col min-h-0 min-w-0 overflow-scroll flex-grow">
-          <BrowseScans showUploadButton={false} showTodayOnly={true} />
+          <BrowseScans
+            showUploadButton={false}
+            showTodayOnly={true}
+            onDeleted={successfullyDeleted}
+          />
         </div>
       )}
     </div>
