@@ -20,9 +20,11 @@ const uploadImages = window.electron.electric.uploadImages;
 export function BrowseScans({
   showUploadButton = true,
   showTodayOnly = false,
+  onDeleted = () => {},
 }: {
   showUploadButton?: boolean;
   showTodayOnly?: boolean;
+  onDeleted?: () => void;
 }) {
   const [scans, setScans] = useState<ScansWithPhenotypers[]>([]);
   const [selectedScan, setSelectedScan] = useState<number | null>(null);
@@ -139,6 +141,7 @@ export function BrowseScans({
                       onClick={() => {
                         console.log(`Deleting scan ${scan.id}`);
                         deleteScan(scan.id);
+                        onDeleted();
                       }}
                       className="text-red-700 hover:underline"
                     >

@@ -26,6 +26,7 @@ class Scanner {
 
   public onScanUpdate: () => void = () => {};
   public onScanComplete: (scan: Scan) => void = () => {};
+  public onScanError: (message: string) => void = (message: string) => {};
 
   constructor(config: ScannerConfig, onScanUpdate: () => void = () => {}) {
     this.onScanUpdate = onScanUpdate;
@@ -92,6 +93,9 @@ class Scanner {
 
     grab_frames.stderr.on("data", (data) => {
       console.error(`stderr: ${data}`);
+      this.deleteCurrentScan();
+      this.onScanError("Error capturing scan. Close other camera software.");
+      // this.onScanError(data.toString());
     });
   };
 

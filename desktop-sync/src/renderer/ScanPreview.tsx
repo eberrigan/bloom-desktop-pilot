@@ -130,11 +130,10 @@ function ScanImage({
   link?: string;
   thumb?: boolean;
 }) {
+  const sameScanner = scannerId !== null && scannerId === scan.scanner_id;
+  const uploaded = image.status === "UPLOADED";
   const imageElement =
-    scannerId !== null &&
-    scannerId === scan.scanner_id &&
-    scansDir !== null &&
-    image.status !== "UPLOADED" ? (
+    sameScanner && scansDir !== null && !uploaded ? (
       <ZoomableImage
         src={`file://${scansDir}/${image.path}`}
         alt={image.path}
@@ -146,13 +145,15 @@ function ScanImage({
     // />
     imageUrl === null ? (
       <LoadingImage />
-    ) : (
+    ) : uploaded ? (
       <ZoomableImage src={imageUrl} alt={image.path} thumb={thumb} />
+    ) : (
       // <img
       //   draggable={false}
       //   src={imageUrl}
       //   className={thumb ? "h-30" : "w-[800px] rounded-md"}
       // />
+      <div>Not available.</div>
     );
   return link ? (
     <Link to={link}>{imageElement}</Link>

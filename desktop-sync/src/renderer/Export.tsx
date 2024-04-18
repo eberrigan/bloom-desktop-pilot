@@ -36,6 +36,15 @@ export function Export() {
   const [targetDir, setTargetDir] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
 
+  const [showExportedMessage, setShowExportedMessage] = useState(false);
+
+  const successfullyExported = () => {
+    setShowExportedMessage(true);
+    setTimeout(() => {
+      setShowExportedMessage(false);
+    }, 3000);
+  };
+
   useEffect(() => {
     electric
       .getExperimentsWithScans()
@@ -164,6 +173,7 @@ export function Export() {
           const paths = selectedScans.map((scan: any) => scan.path);
           fs.copyScans(paths, targetDir).then(() => {
             setExporting(false);
+            successfullyExported();
           });
         }}
       >
@@ -175,6 +185,11 @@ export function Export() {
             "..."
           : "Export " + numSelected + " scan" + (numSelected === 1 ? "" : "s")}
       </button>
+      {showExportedMessage && (
+        <div className="absolute top-0 mx-auto mt-2 bg-amber-100 border border-amber-300 p-2 rounded-md text-amber-700 table">
+          Successfully&nbsp;exported&nbsp;scans.
+        </div>
+      )}
     </div>
   );
 }

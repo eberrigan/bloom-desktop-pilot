@@ -168,6 +168,9 @@ ipcMain.handle("scanner:get-scan-data", scanner.getScanData);
 scanner.onScanUpdate = () => {
   mainWindow?.webContents.send("scanner:scan-update");
 };
+scanner.onScanError = (error: string) => {
+  mainWindow?.webContents.send("scanner:scan-error", error);
+};
 ipcMain.handle("scanner:get-settings", scanner.getCameraSettings);
 ipcMain.handle("scanner:set-settings", async (event, args) => {
   scanner.setCameraSettings(args[0]);
