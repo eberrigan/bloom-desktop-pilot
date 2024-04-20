@@ -241,6 +241,7 @@ const acquireToken = async () => {
 createElectricStore(
   config.electric_service_url,
   config.local_db_path,
+  config.scans_dir,
   acquireToken,
   // getSupabaseJWT,
   () => {

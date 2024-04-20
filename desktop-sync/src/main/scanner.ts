@@ -1,6 +1,7 @@
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import { spawn } from "node:child_process";
+import fs from "fs";
 
 import { Electric_cyl_scans } from "../generated/client";
 
@@ -37,7 +38,7 @@ class Scanner {
     this.cameraIpAddress = config.camera_ip_address;
   }
 
-  startScan = (options: {
+  startScan = async (options: {
     onCaptureImage: () => void;
     onImageSaved: (imagePath: string) => void;
   }) => {
@@ -54,6 +55,7 @@ class Scanner {
     this.scanPath = path.join(this.scans_dir, this.scanPartialPath);
 
     this.captureMetadata();
+    await writeMetadata(this.scanMetadata, this.scanPath);
     this.resetProgress();
 
     console.log(
@@ -238,11 +240,35 @@ class Scanner {
   };
 
   deleteCurrentScan = () => {
+    // add "deleted" field to metadata.json
+    if (this.scanMetadata === null) {
+      throw new Error("scanMetadata is null");
+    }
+    // add "deleted" field to this.scanMetadata
+    const metadata = Object.assign({}, this.scanMetadata, { deleted: true });
+    writeMetadata(metadata, this.scanPath);
     this.scanMetadata = null;
     this.scanProgress = defaultProgress();
     this.images = [];
     this.onScanUpdate();
   };
+}
+
+async function writeMetadata(metadata: ScanMetadata, scanPath: string) {
+  // create path if it doesn't exist
+  if (!fs.existsSync(scanPath)) {
+    fs.mkdirSync(scanPath, { recursive: true });
+  }
+  const metadataPath = path.join(scanPath, "metadata.json");
+  const metadataJson = JSON.stringify(metadata, null, 2);
+  console.log(`Writing metadata to ${metadataPath}`);
+  console.log(metadataJson);
+
+  await fs.writeFile(metadataPath, metadataJson, (err) => {
+    if (err) {
+      console.error(err);
+    }
+  });
 }
 
 function defaultCameraSettings(): CameraSettings {
