@@ -18,6 +18,7 @@ const getScannerSettings = window.electron.scanner.getScannerSettings;
 const getScansDir = window.electron.scanner.getScansDir;
 
 const saveCurrentScan = window.electron.scanner.saveCurrentScan;
+const resetScanner = window.electron.scanner.resetScanner;
 const deleteCurrentScan = window.electron.scanner.deleteCurrentScan;
 
 const getScannerId = window.electron.scanner.getScannerId;
@@ -352,7 +353,7 @@ export function CaptureScan() {
                       onClick={(e) => {
                         saveCurrentScan().then(() => {
                           successfullySaved();
-                          deleteCurrentScan();
+                          resetScanner();
                         });
                       }}
                     >
@@ -458,6 +459,7 @@ export function CaptureScan() {
           <BrowseScans
             showUploadButton={false}
             showTodayOnly={true}
+            showOnlyScanner={scannerId || ""}
             onDeleted={successfullyDeleted}
           />
         </div>

@@ -76,6 +76,7 @@ const electronHandler = {
     }) => ipcRenderer.invoke("scanner:set-settings", [settings]),
     saveCurrentScan: () => ipcRenderer.invoke("scanner:save-current-scan"),
     deleteCurrentScan: () => ipcRenderer.invoke("scanner:delete-current-scan"),
+    resetScanner: () => ipcRenderer.invoke("scanner:reset-scanner"),
   },
   scanStore: {
     getScans: () =>

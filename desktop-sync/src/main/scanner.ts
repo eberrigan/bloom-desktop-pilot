@@ -239,6 +239,13 @@ class Scanner {
     return makeScan(this.scanMetadata, this.images);
   };
 
+  resetScanner = () => {
+    this.scanMetadata = null;
+    this.scanProgress = defaultProgress();
+    this.images = [];
+    this.onScanUpdate();
+  };
+
   deleteCurrentScan = () => {
     // add "deleted" field to metadata.json
     if (this.scanMetadata === null) {
@@ -247,10 +254,7 @@ class Scanner {
     // add "deleted" field to this.scanMetadata
     const metadata = Object.assign({}, this.scanMetadata, { deleted: true });
     writeMetadata(metadata, this.scanPath);
-    this.scanMetadata = null;
-    this.scanProgress = defaultProgress();
-    this.images = [];
-    this.onScanUpdate();
+    this.resetScanner();
   };
 }
 
@@ -279,7 +283,7 @@ function defaultCameraSettings(): CameraSettings {
     brightness: 0,
     contrast: 0,
     gamma: 1,
-    seconds_per_rot: 6,
+    seconds_per_rot: 10,
   };
 }
 
