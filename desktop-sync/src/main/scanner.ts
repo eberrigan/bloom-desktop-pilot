@@ -315,4 +315,4 @@ function createScanner(config: ScannerConfig) {
   return scanner;
 }
 
-export { createScanner };
+export { createScanner, defaultCameraSettings };

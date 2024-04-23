@@ -6,6 +6,7 @@ import { PlantQrCodeTextBox } from "./PlantQrCodeTextBox";
 import { parse } from "node:path";
 import { BrowseScans } from "./BrowseScans";
 import { ExperimentChooser } from "./ExperimentChooser";
+import { Streamer } from "./Streamer";
 
 const setScannerPlantQrCode = window.electron.scanner.setPlantQrCode;
 const getScannerPlantQrCode = window.electron.scanner.getPlantQrCode;
@@ -322,7 +323,8 @@ export function CaptureScan() {
             {scanMetadata === null ? (
               <div className="flex-grow flex flex-col">
                 <div className="flex-grow text-center flex flex-col ">
-                  <div className="my-auto">
+                  <Streamer />
+                  <div className="my-auto mt-4">
                     <button
                       className={
                         "rounded-md border border-gray-300 px-4 py-2 bg-white text-xl font-medium " +

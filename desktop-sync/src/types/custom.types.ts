@@ -1,6 +1,7 @@
 type ScannerConfig = {
   python: string;
   capture_scan_py: string;
+  stream_scans_py?: string;
   scans_dir: string;
   scanner_id: string;
   camera_ip_address: string;

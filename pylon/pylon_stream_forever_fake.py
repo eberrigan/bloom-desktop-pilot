@@ -21,7 +21,10 @@ def stream_frames(camera_settings):
     n = camera_settings["num_frames"]
     src_frames = glob.glob(os.path.join(sample_scan, "*.png"))
     src_frames.sort(key=lambda x: int(os.path.basename(x).split(".")[0]))
-    for src_frame in src_frames[:n]:
+    i = 0
+    while True:
+        src_frame = src_frames[i % len(src_frames)]
+        i += 1
         # time the function call
         start = time.time()
         img = iio.imread(src_frame)
