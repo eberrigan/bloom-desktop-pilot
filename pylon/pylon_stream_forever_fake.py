@@ -23,6 +23,7 @@ def stream_frames(camera_settings):
     src_frames.sort(key=lambda x: int(os.path.basename(x).split(".")[0]))
     i = 0
     while True:
+        time.sleep(0.2)
         src_frame = src_frames[i % len(src_frames)]
         i += 1
         # time the function call
