@@ -170,6 +170,8 @@ export function CaptureScan() {
     isScanning ||
     isSaving;
 
+  const streamingDisabled = isScanning || isSaving;
+
   return (
     <div className="min-h-0 min-w-0 flex flex-col flex-grow pr-8 pb-8">
       <div className="flex flex-row pb-8">
@@ -323,7 +325,7 @@ export function CaptureScan() {
             {scanMetadata === null ? (
               <div className="flex-grow flex flex-col">
                 <div className="flex-grow text-center flex flex-col ">
-                  <Streamer />
+                  {!streamingDisabled && <Streamer />}
                   <div className="my-auto mt-4">
                     <button
                       className={
