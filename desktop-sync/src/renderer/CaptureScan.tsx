@@ -30,6 +30,7 @@ export function CaptureScan() {
   const [images, setImages] = useState<string[]>([]);
   const [isScanning, setIsScanning] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [isStreaming, setIsStreaming] = useState<boolean>(false);
   const [numCaptured, setNumCaptured] = useState<number>(0);
   const [numSaved, setNumSaved] = useState<number>(0);
   const [selectedImage, setSelectedImage] = useState<number>(0);
@@ -117,18 +118,28 @@ export function CaptureScan() {
   }, []);
 
   useEffect(() => {
+    return ipcRenderer.on("streamer:streaming-stopped", () => {
+      console.log("streaming stopped");
+      setIsStreaming(false);
+      const name = uuidv4();
+      ipcRenderer.sendMessage("scanner:start-scan", [name]);
+    });
+  }, []);
+
+  useEffect(() => {
     return ipcRenderer.on("scanner:scan-update", pullScanData);
   }, []);
 
   const startScan = useCallback(() => {
     if (!isScanning) {
-      const name = uuidv4();
       setImages([]);
       setNumCaptured(0);
       setIsSaving(false);
       setIsScanning(true);
       setSelectedImage(0);
-      ipcRenderer.sendMessage("scanner:start-scan", [name]);
+      // don't send this until we receive the "streamer:streaming-stopped" event
+      // const name = uuidv4();
+      // ipcRenderer.sendMessage("scanner:start-scan", [name]);
     }
   }, [isScanning]);
 
@@ -168,7 +179,8 @@ export function CaptureScan() {
     Number.isNaN(plantAgeDays) ||
     Number.isNaN(waveNumber) ||
     isScanning ||
-    isSaving;
+    isSaving ||
+    isStreaming;
 
   const streamingDisabled = isScanning || isSaving;
 

@@ -198,6 +198,10 @@ streamer.onCaptureImage = (base64img: string) => {
   );
   mainWindow?.webContents.send("streamer:image-captured", base64img);
 };
+streamer.onStreamingStopped = () => {
+  console.log("onStreamingStopped() called");
+  mainWindow?.webContents.send("streamer:streaming-stopped");
+};
 ipcMain.handle("streamer:start-streaming", streamer.startStreaming);
 ipcMain.handle("streamer:stop-streaming", streamer.stopStreaming);
 

@@ -14,6 +14,7 @@ export type Channels =
   | "scanner:scan-update"
   | "scanner:scan-error"
   | "streamer:image-captured"
+  | "streamer:streaming-stopped"
   | "main:idle"
   | "image-captured"
   | "image-saved"
