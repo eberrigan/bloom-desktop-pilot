@@ -145,12 +145,8 @@ def img_to_base64(img):
 
 if __name__ == "__main__":
 
-    assert len(sys.argv) == 3
+    assert len(sys.argv) == 2
 
-    output_path = sys.argv[1]
-    camera_settings = json.loads(sys.argv[2])
-
-    output_path = pathlib.Path(output_path)
-    os.makedirs(output_path, exist_ok=True)
+    camera_settings = json.loads(sys.argv[1])
 
     grab_frames(camera_settings)
