@@ -6,12 +6,15 @@ import { Electric_cyl_images, Electric_cyl_scans } from "../generated/client";
 import { ElectricConfig, ElectrifyOptions } from "electric-sql";
 import { v4 as uuidv4 } from "uuid";
 import { sleepAsync, uuid } from "electric-sql/util";
+import fs from "fs";
+import path from "path";
 
 export class ElectricStore {
   public scansUpdated: () => void;
 
   private acquireJWT: () => Promise<string | null>;
   private localDB: string;
+  private scansDir: string;
   private electric_service_url: string;
   private statusChanged: () => void;
   private finishedSyncing: boolean = false;
@@ -344,6 +347,18 @@ export class ElectricStore {
       data: { deleted: 1 },
       where: { id: scanId },
     });
+    const scan = await this.electric.db.electric_cyl_scans.findUnique({
+      where: { id: scanId },
+      include: { electric_phenotypers: true, electric_cyl_images: true },
+    });
+    const metadata_path = path.join(this.scansDir, scan.path, "metadata.json");
+    const metadata = JSON.parse(
+      fs.readFileSync(metadata_path, {
+        encoding: "utf-8",
+      })
+    );
+    metadata.deleted = true;
+    fs.writeFileSync(metadata_path, JSON.stringify(metadata, null, 2));
   };
 
   getStatus = () => {
@@ -365,11 +380,13 @@ export class ElectricStore {
   constructor(
     electric_service_url: string,
     localDB: string,
+    scansDir: string,
     acquireJWT: () => Promise<string | null>,
     statusChanged: () => void
   ) {
     this.electric_service_url = electric_service_url; // "http://localhost:5133"
     this.localDB = localDB; // path to sqlite3 db file
+    this.scansDir = scansDir; // path to scans directory
     this.acquireJWT = acquireJWT;
     this.statusChanged = statusChanged;
   }
@@ -378,6 +395,7 @@ export class ElectricStore {
 export async function createElectricStore(
   service_url: string,
   db_path: string,
+  scans_dir: string,
   acquireJWT: () => Promise<string | null>,
   statusChanged: () => void
 ) {
@@ -385,6 +403,7 @@ export async function createElectricStore(
   const store = new ElectricStore(
     service_url,
     db_path,
+    scans_dir,
     acquireJWT,
     statusChanged
   );

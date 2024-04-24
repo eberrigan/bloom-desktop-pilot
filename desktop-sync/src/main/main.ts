@@ -7,6 +7,7 @@ import * as os from "node:os";
 import * as fs from "node:fs";
 import * as yaml from "js-yaml";
 import { createScanner } from "./scanner";
+import { createStreamer } from "./streamer";
 
 // import { createScanStore } from "./scanstore";
 
@@ -86,6 +87,7 @@ const config_yaml = path.join(homedir, ".bloom", "desktop-config.yaml");
 const config = yaml.load(fs.readFileSync(config_yaml, "utf8")) as {
   python: string;
   capture_scan_py: string;
+  stream_scans_py: string;
   scans_dir: string;
   scanner_id: string;
   electric_service_url: string;
@@ -188,6 +190,22 @@ ipcMain.on("scanner:start-scan", (event, args) => {
   });
 });
 
+const streamer = createStreamer(config);
+streamer.onCaptureImage = (base64img: string) => {
+  console.log(
+    "onCaptureImage() called with base64img.length: ",
+    base64img.length
+  );
+  mainWindow?.webContents.send("streamer:image-captured", base64img);
+};
+ipcMain.handle("streamer:start-streaming", streamer.startStreaming);
+ipcMain.handle("streamer:stop-streaming", streamer.stopStreaming);
+
+// ipcMain.handle("streamer:get-settings", streamer.getCameraSettings);
+// ipcMain.handle("streamer:set-settings", async (event, args) => {
+//   streamer.setCameraSettings(args[0]);
+// });
+
 // Create a ScanStore object
 // createScanStore().then((scanStore) => {
 //   scanner.onScanComplete = (scan: Scan) => {
@@ -241,6 +259,7 @@ const acquireToken = async () => {
 createElectricStore(
   config.electric_service_url,
   config.local_db_path,
+  config.scans_dir,
   acquireToken,
   // getSupabaseJWT,
   () => {
@@ -271,6 +290,9 @@ createElectricStore(
     });
     ipcMain.handle("scanner:delete-current-scan", async (event, args) => {
       scanner.deleteCurrentScan();
+    });
+    ipcMain.handle("scanner:reset-scanner", async (event, args) => {
+      scanner.resetScanner();
     });
     electricStore.scansUpdated = () => {
       mainWindow?.webContents.send("electric:scans-updated");

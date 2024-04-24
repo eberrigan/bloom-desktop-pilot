@@ -20,10 +20,12 @@ const uploadImages = window.electron.electric.uploadImages;
 export function BrowseScans({
   showUploadButton = true,
   showTodayOnly = false,
+  showOnlyScanner = null,
   onDeleted = () => {},
 }: {
   showUploadButton?: boolean;
   showTodayOnly?: boolean;
+  showOnlyScanner?: string | null;
   onDeleted?: () => void;
 }) {
   const [scans, setScans] = useState<ScansWithPhenotypers[]>([]);
@@ -85,6 +87,12 @@ export function BrowseScans({
           {scans
             .sort((a, b) => a.capture_date.getTime() - b.capture_date.getTime())
             .filter((scan) => !scan.deleted)
+            .filter((scan) => {
+              if (showOnlyScanner) {
+                return scan.scanner_id === showOnlyScanner;
+              }
+              return true;
+            })
             .filter((scan) => {
               if (showTodayOnly) {
                 // Only show scans from today

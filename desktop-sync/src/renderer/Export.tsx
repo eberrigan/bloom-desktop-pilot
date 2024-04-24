@@ -8,6 +8,7 @@ import { date } from "zod";
 
 const electric = window.electron.electric;
 const fs = window.electron.fs;
+const getScannerId = window.electron.scanner.getScannerId;
 
 type ScansWithPhenotypers = Electric_cyl_scans & {
   electric_phenotypers: Electric_phenotypers;
@@ -37,6 +38,7 @@ export function Export() {
   const [exporting, setExporting] = useState(false);
 
   const [showExportedMessage, setShowExportedMessage] = useState(false);
+  const [scannerId, setScannerId] = useState<string | null>(null);
 
   const successfullyExported = () => {
     setShowExportedMessage(true);
@@ -44,6 +46,12 @@ export function Export() {
       setShowExportedMessage(false);
     }, 3000);
   };
+
+  useEffect(() => {
+    getScannerId().then((id) => {
+      setScannerId(id);
+    });
+  }, []);
 
   useEffect(() => {
     electric
@@ -58,15 +66,15 @@ export function Export() {
   }, []);
 
   useEffect(() => {
-    if (!experiments) {
+    if (!experiments || !scannerId) {
       return;
     }
     const newSelectedMap: any = {};
     const newScans: any = {};
     experiments.forEach((experiment) => {
-      const dates = getDates(experiment);
+      const dates = getDates(experiment, scannerId);
       dates.forEach((date: number) => {
-        const scans = getScansForDate(experiment, date);
+        const scans = getScansForDate(experiment, date, scannerId);
         const key = getKey(experiment, date);
         newSelectedMap[key] = false;
         newScans[key] = scans;
@@ -121,12 +129,12 @@ export function Export() {
         Experiments
       </div>
       <div className="border rounded-md flex flex-col p-4">
-        {experiments && (
+        {experiments && scannerId && (
           <div>
             {experiments.map((experiment, i) => (
               <div key={experiment.id} className={i !== 0 ? " mt-4" : ""}>
                 <div className="">{experiment.name}</div>
-                {getDates(experiment).map((date: number) => (
+                {getDates(experiment, scannerId).map((date: number) => (
                   <div className="pl-4 flex items-center mt-2" key={date}>
                     <div>
                       {selectedExpDates && (
@@ -144,7 +152,10 @@ export function Export() {
                     </div>
                     <div className="ml-2">
                       {formatDate(new Date(date))}&nbsp;(
-                      {dateLabel(getScansForDate(experiment, date).length)})
+                      {dateLabel(
+                        getScansForDate(experiment, date, scannerId).length
+                      )}
+                      )
                     </div>
                   </div>
                 ))}
@@ -194,9 +205,10 @@ export function Export() {
   );
 }
 
-function getScansForDate(experiment: any, date: number) {
+function getScansForDate(experiment: any, date: number, scannerId: string) {
   return experiment.electric_cyl_scans
     .filter((scan: any) => !scan.deleted)
+    .filter((scan: any) => scan.scanner_id === scannerId)
     .filter((scan: any) => {
       const d = new Date(scan.capture_date);
       d.setHours(0, 0, 0, 0);
@@ -208,13 +220,14 @@ function dateLabel(count: number) {
   return count === 1 ? "1 scan" : `${count} scans`;
 }
 
-function getDates(experiment: any) {
+function getDates(experiment: any, scannerId: string) {
   if (!experiment.electric_cyl_scans) {
     return [];
   }
   const s = new Set(
     experiment.electric_cyl_scans
       .filter((scan: any) => !scan.deleted)
+      .filter((scan: any) => scan.scanner_id === scannerId)
       .map((scan: any) => {
         // ignore the time part of the date
         const d = new Date(scan.capture_date);

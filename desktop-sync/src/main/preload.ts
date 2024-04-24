@@ -13,6 +13,7 @@ export type Channels =
   | "scanner:start-scan"
   | "scanner:scan-update"
   | "scanner:scan-error"
+  | "streamer:image-captured"
   | "main:idle"
   | "image-captured"
   | "image-saved"
@@ -76,6 +77,19 @@ const electronHandler = {
     }) => ipcRenderer.invoke("scanner:set-settings", [settings]),
     saveCurrentScan: () => ipcRenderer.invoke("scanner:save-current-scan"),
     deleteCurrentScan: () => ipcRenderer.invoke("scanner:delete-current-scan"),
+    resetScanner: () => ipcRenderer.invoke("scanner:reset-scanner"),
+  },
+  streamer: {
+    startStreaming: () => ipcRenderer.invoke("streamer:start-streaming"),
+    stopStreaming: () => ipcRenderer.invoke("streamer:stop-streaming"),
+    getCameraSettings: () => ipcRenderer.invoke("streamer:get-camera-settings"),
+    setCameraSettings: (settings: {
+      exposure_time: number;
+      gain: number;
+      brightness: number;
+      contrast: number;
+      gamma: number;
+    }) => ipcRenderer.invoke("streamer:set-camera-settings", [settings]),
   },
   scanStore: {
     getScans: () =>
