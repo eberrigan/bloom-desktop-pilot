@@ -122,7 +122,9 @@ export function CaptureScan() {
       console.log("streaming stopped");
       setIsStreaming(false);
       const name = uuidv4();
-      ipcRenderer.sendMessage("scanner:start-scan", [name]);
+      setTimeout(() => {
+        ipcRenderer.sendMessage("scanner:start-scan", [name]);
+      }, 3000);
     });
   }, []);
 
