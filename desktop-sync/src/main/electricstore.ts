@@ -5,9 +5,10 @@ import { ElectricClient, ClientTables } from "electric-sql/client/model";
 import { Electric_cyl_images, Electric_cyl_scans } from "../generated/client";
 import { ElectricConfig, ElectrifyOptions } from "electric-sql";
 import { v4 as uuidv4 } from "uuid";
-import { sleepAsync, uuid } from "electric-sql/util";
+import { sleepAsync } from "electric-sql/util";
 import fs from "fs";
 import path from "path";
+import { NOTFOUND } from "dns";
 
 export class ElectricStore {
   public scansUpdated: () => void;
@@ -70,9 +71,9 @@ export class ElectricStore {
       const electric_config: ElectricConfig = {
         url: this.electric_service_url,
         timeout: 20000,
-        auth: {
-          token: this.jwt || "dummy-jwt",
-        },
+        // auth: {
+        //   token: this.jwt || "dummy-jwt",
+        // },
       };
       this.connectingToElectric = true;
       this.statusChanged();
@@ -80,7 +81,7 @@ export class ElectricStore {
         this.electric = await electrify(this.conn, schema, electric_config);
         // sleep for 3 seconds to allow the electric client to sync
         await sleepAsync(3000);
-        // this.electric.connect(this.jwt || "dummy-jwt");
+        this.electric.connect(this.jwt || "dummy-jwt");
         console.log("Connected to the electric service");
         this.electric.notifier.subscribeToConnectivityStateChanges(() => {
           this.connectingToElectric = this.electric.isConnected;
@@ -123,33 +124,33 @@ export class ElectricStore {
     await scans.synced;
     console.log("synced electric_cyl_scans");
 
-    console.log("syncing electric_cyl_experiments...");
-    const experiments = await this.electric.db.electric_cyl_experiments.sync({
-      include: {
-        electric_cyl_scans: { include: { electric_phenotypers: true } },
-      },
-    });
-    await experiments.synced;
-    console.log("synced electric_cyl_experiments");
+    // console.log("syncing electric_cyl_experiments...");
+    // const experiments = await this.electric.db.electric_cyl_experiments.sync({
+    //   include: {
+    //     electric_cyl_scans: { include: { electric_phenotypers: true } },
+    //   },
+    // });
+    // await experiments.synced;
+    // console.log("synced electric_cyl_experiments");
 
-    console.log("syncing electric_phenotypers...");
-    const phenotypers = await this.electric.db.electric_phenotypers.sync();
-    await phenotypers.synced;
-    console.log("synced electric_phenotypers");
+    // console.log("syncing electric_phenotypers...");
+    // const phenotypers = await this.electric.db.electric_phenotypers.sync();
+    // await phenotypers.synced;
+    // console.log("synced electric_phenotypers");
 
-    console.log("syncing electric_cyl_images...");
-    const images = await this.electric.db.electric_cyl_images.sync({
-      include: {
-        electric_cyl_scans: {
-          include: {
-            electric_phenotypers: true,
-            electric_cyl_experiments: true,
-          },
-        },
-      },
-    });
-    await images.synced;
-    console.log("synced electric_cyl_images");
+    // console.log("syncing electric_cyl_images...");
+    // const images = await this.electric.db.electric_cyl_images.sync({
+    //   include: {
+    //     electric_cyl_scans: {
+    //       include: {
+    //         electric_phenotypers: true,
+    //         electric_cyl_experiments: true,
+    //       },
+    //     },
+    //   },
+    // });
+    // await images.synced;
+    // console.log("synced electric_cyl_images");
   };
 
   getPhenotypers = async () => {
@@ -212,34 +213,33 @@ export class ElectricStore {
     }
     return this.electric.db.electric_cyl_images
       .findMany({
-        where: { status: { not: "UPLOADED" } },
+        where: { status: { not: "UPLOADED" }, scan_id: { not: null } },
         include: { electric_cyl_scans: true },
       })
       .then((images) => {
         const sorted_images = images.slice();
         sorted_images.sort((a, b) => {
-          // check for undefined capture_date
-          if (!("electric_cyl_scans" in a && "electric_cyl_scans" in b)) {
-            return 0;
-          }
-          if (
-            a.electric_cyl_scans.capture_date <
-            b.electric_cyl_scans.capture_date
-          ) {
-            return -1;
-          }
-          if (
-            a.electric_cyl_scans.capture_date >
-            b.electric_cyl_scans.capture_date
-          ) {
-            return 1;
+          if ("electric_cyl_scans" in a && "electric_cyl_scans" in b) {
+            if (
+              (a.electric_cyl_scans as Electric_cyl_scans).capture_date <
+              (b.electric_cyl_scans as Electric_cyl_scans).capture_date
+            ) {
+              return -1;
+            }
+            if (
+              (a.electric_cyl_scans as Electric_cyl_scans).capture_date >
+              (b.electric_cyl_scans as Electric_cyl_scans).capture_date
+            ) {
+              return 1;
+            }
           }
           return 0;
         });
         const filtered_images = sorted_images.filter(
           (image) =>
             "electric_cyl_scans" in image &&
-            image.electric_cyl_scans.scanner_id === scannerId
+            (image.electric_cyl_scans as Electric_cyl_scans).scanner_id ===
+              scannerId
         );
         return filtered_images;
       });

@@ -7419,22 +7419,34 @@ interface Electric_cyl_experimentsGetPayload extends HKT {
     | null
     | undefined
     | Prisma.Electric_cyl_experimentsArgs;
-  readonly type: Prisma.Electric_cyl_experimentsGetPayload<this["_A"]>;
+  readonly type: Omit<
+    Prisma.Electric_cyl_experimentsGetPayload<this["_A"]>,
+    "Please either choose `select` or `include`"
+  >;
 }
 
 interface Electric_cyl_imagesGetPayload extends HKT {
   readonly _A?: boolean | null | undefined | Prisma.Electric_cyl_imagesArgs;
-  readonly type: Prisma.Electric_cyl_imagesGetPayload<this["_A"]>;
+  readonly type: Omit<
+    Prisma.Electric_cyl_imagesGetPayload<this["_A"]>,
+    "Please either choose `select` or `include`"
+  >;
 }
 
 interface Electric_cyl_scansGetPayload extends HKT {
   readonly _A?: boolean | null | undefined | Prisma.Electric_cyl_scansArgs;
-  readonly type: Prisma.Electric_cyl_scansGetPayload<this["_A"]>;
+  readonly type: Omit<
+    Prisma.Electric_cyl_scansGetPayload<this["_A"]>,
+    "Please either choose `select` or `include`"
+  >;
 }
 
 interface Electric_phenotypersGetPayload extends HKT {
   readonly _A?: boolean | null | undefined | Prisma.Electric_phenotypersArgs;
-  readonly type: Prisma.Electric_phenotypersGetPayload<this["_A"]>;
+  readonly type: Omit<
+    Prisma.Electric_phenotypersGetPayload<this["_A"]>,
+    "Please either choose `select` or `include`"
+  >;
 }
 
 export const tableSchemas = {
@@ -7469,7 +7481,7 @@ export const tableSchemas = {
     deleteSchema: Electric_cyl_experimentsDeleteArgsSchema,
     deleteManySchema: Electric_cyl_experimentsDeleteManyArgsSchema,
   } as TableSchema<
-    z.infer<typeof Electric_cyl_experimentsCreateInputSchema>,
+    z.infer<typeof Electric_cyl_experimentsUncheckedCreateInputSchema>,
     Prisma.Electric_cyl_experimentsCreateArgs["data"],
     Prisma.Electric_cyl_experimentsUpdateArgs["data"],
     Prisma.Electric_cyl_experimentsFindFirstArgs["select"],
@@ -7513,7 +7525,7 @@ export const tableSchemas = {
     deleteSchema: Electric_cyl_imagesDeleteArgsSchema,
     deleteManySchema: Electric_cyl_imagesDeleteManyArgsSchema,
   } as TableSchema<
-    z.infer<typeof Electric_cyl_imagesCreateInputSchema>,
+    z.infer<typeof Electric_cyl_imagesUncheckedCreateInputSchema>,
     Prisma.Electric_cyl_imagesCreateArgs["data"],
     Prisma.Electric_cyl_imagesUpdateArgs["data"],
     Prisma.Electric_cyl_imagesFindFirstArgs["select"],
@@ -7584,7 +7596,7 @@ export const tableSchemas = {
     deleteSchema: Electric_cyl_scansDeleteArgsSchema,
     deleteManySchema: Electric_cyl_scansDeleteManyArgsSchema,
   } as TableSchema<
-    z.infer<typeof Electric_cyl_scansCreateInputSchema>,
+    z.infer<typeof Electric_cyl_scansUncheckedCreateInputSchema>,
     Prisma.Electric_cyl_scansCreateArgs["data"],
     Prisma.Electric_cyl_scansUpdateArgs["data"],
     Prisma.Electric_cyl_scansFindFirstArgs["select"],
@@ -7624,7 +7636,7 @@ export const tableSchemas = {
     deleteSchema: Electric_phenotypersDeleteArgsSchema,
     deleteManySchema: Electric_phenotypersDeleteManyArgsSchema,
   } as TableSchema<
-    z.infer<typeof Electric_phenotypersCreateInputSchema>,
+    z.infer<typeof Electric_phenotypersUncheckedCreateInputSchema>,
     Prisma.Electric_phenotypersCreateArgs["data"],
     Prisma.Electric_phenotypersUpdateArgs["data"],
     Prisma.Electric_phenotypersFindFirstArgs["select"],

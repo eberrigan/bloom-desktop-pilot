@@ -324,7 +324,7 @@ export namespace Prisma {
 
   /**
    * Prisma Client JS version: 4.8.1
-   * Query Engine version: 23fdc5965b1e05fc54e5f26ed3de66776b93de64
+   * Query Engine version: d6e67a83f971b175a593ccc12e15c4a757f93ffe
    */
   export type PrismaVersion = {
     client: string
@@ -944,7 +944,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   }
 
   export type Electric_cyl_experimentsCountOutputTypeSelect = {
-    electric_cyl_scans?: boolean | Electric_cyl_experimentsCountOutputTypeCountElectric_cyl_scansArgs
+    electric_cyl_scans?: boolean
   }
 
   export type Electric_cyl_experimentsCountOutputTypeGetPayload<S extends boolean | null | undefined | Electric_cyl_experimentsCountOutputTypeArgs> =
@@ -977,14 +977,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   }
 
 
-  /**
-   * Electric_cyl_experimentsCountOutputType without action
-   */
-  export type Electric_cyl_experimentsCountOutputTypeCountElectric_cyl_scansArgs = {
-    where?: Electric_cyl_scansWhereInput
-  }
-
-
 
   /**
    * Count Type Electric_cyl_scansCountOutputType
@@ -996,7 +988,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   }
 
   export type Electric_cyl_scansCountOutputTypeSelect = {
-    electric_cyl_images?: boolean | Electric_cyl_scansCountOutputTypeCountElectric_cyl_imagesArgs
+    electric_cyl_images?: boolean
   }
 
   export type Electric_cyl_scansCountOutputTypeGetPayload<S extends boolean | null | undefined | Electric_cyl_scansCountOutputTypeArgs> =
@@ -1029,14 +1021,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   }
 
 
-  /**
-   * Electric_cyl_scansCountOutputType without action
-   */
-  export type Electric_cyl_scansCountOutputTypeCountElectric_cyl_imagesArgs = {
-    where?: Electric_cyl_imagesWhereInput
-  }
-
-
 
   /**
    * Count Type Electric_phenotypersCountOutputType
@@ -1048,7 +1032,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   }
 
   export type Electric_phenotypersCountOutputTypeSelect = {
-    electric_cyl_scans?: boolean | Electric_phenotypersCountOutputTypeCountElectric_cyl_scansArgs
+    electric_cyl_scans?: boolean
   }
 
   export type Electric_phenotypersCountOutputTypeGetPayload<S extends boolean | null | undefined | Electric_phenotypersCountOutputTypeArgs> =
@@ -1078,14 +1062,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
      * 
     **/
     select?: Electric_phenotypersCountOutputTypeSelect | null
-  }
-
-
-  /**
-   * Electric_phenotypersCountOutputType without action
-   */
-  export type Electric_phenotypersCountOutputTypeCountElectric_cyl_scansArgs = {
-    where?: Electric_cyl_scansWhereInput
   }
 
 
@@ -2314,12 +2290,12 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     url?: boolean
     status?: boolean
     supabase_object_path?: boolean
-    electric_cyl_scans?: boolean | Electric_cyl_images$electric_cyl_scansArgs
+    electric_cyl_scans?: boolean | Electric_cyl_scansArgs
   }
 
 
   export type Electric_cyl_imagesInclude = {
-    electric_cyl_scans?: boolean | Electric_cyl_images$electric_cyl_scansArgs
+    electric_cyl_scans?: boolean | Electric_cyl_scansArgs
   } 
 
   export type Electric_cyl_imagesGetPayload<S extends boolean | null | undefined | Electric_cyl_imagesArgs> =
@@ -2708,7 +2684,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
     readonly [Symbol.toStringTag]: 'PrismaClientPromise';
 
-    electric_cyl_scans<T extends Electric_cyl_images$electric_cyl_scansArgs= {}>(args?: Subset<T, Electric_cyl_images$electric_cyl_scansArgs>): Prisma__Electric_cyl_scansClient<Electric_cyl_scansGetPayload<T> | Null>;
+    electric_cyl_scans<T extends Electric_cyl_scansArgs= {}>(args?: Subset<T, Electric_cyl_scansArgs>): Prisma__Electric_cyl_scansClient<Electric_cyl_scansGetPayload<T> | Null>;
 
     private get _document();
     /**
@@ -3114,24 +3090,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
 
   /**
-   * Electric_cyl_images.electric_cyl_scans
-   */
-  export type Electric_cyl_images$electric_cyl_scansArgs = {
-    /**
-     * Select specific fields to fetch from the Electric_cyl_scans
-     * 
-    **/
-    select?: Electric_cyl_scansSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     * 
-    **/
-    include?: Electric_cyl_scansInclude | null
-    where?: Electric_cyl_scansWhereInput
-  }
-
-
-  /**
    * Electric_cyl_images without action
    */
   export type Electric_cyl_imagesArgs = {
@@ -3495,16 +3453,16 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     cyl_experiment_id?: boolean
     deleted?: boolean
     electric_cyl_images?: boolean | Electric_cyl_scans$electric_cyl_imagesArgs
-    electric_cyl_experiments?: boolean | Electric_cyl_scans$electric_cyl_experimentsArgs
-    electric_phenotypers?: boolean | Electric_cyl_scans$electric_phenotypersArgs
+    electric_cyl_experiments?: boolean | Electric_cyl_experimentsArgs
+    electric_phenotypers?: boolean | Electric_phenotypersArgs
     _count?: boolean | Electric_cyl_scansCountOutputTypeArgs
   }
 
 
   export type Electric_cyl_scansInclude = {
     electric_cyl_images?: boolean | Electric_cyl_scans$electric_cyl_imagesArgs
-    electric_cyl_experiments?: boolean | Electric_cyl_scans$electric_cyl_experimentsArgs
-    electric_phenotypers?: boolean | Electric_cyl_scans$electric_phenotypersArgs
+    electric_cyl_experiments?: boolean | Electric_cyl_experimentsArgs
+    electric_phenotypers?: boolean | Electric_phenotypersArgs
     _count?: boolean | Electric_cyl_scansCountOutputTypeArgs
   } 
 
@@ -3902,9 +3860,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
     electric_cyl_images<T extends Electric_cyl_scans$electric_cyl_imagesArgs= {}>(args?: Subset<T, Electric_cyl_scans$electric_cyl_imagesArgs>): PrismaPromise<Array<Electric_cyl_imagesGetPayload<T>>| Null>;
 
-    electric_cyl_experiments<T extends Electric_cyl_scans$electric_cyl_experimentsArgs= {}>(args?: Subset<T, Electric_cyl_scans$electric_cyl_experimentsArgs>): Prisma__Electric_cyl_experimentsClient<Electric_cyl_experimentsGetPayload<T> | Null>;
+    electric_cyl_experiments<T extends Electric_cyl_experimentsArgs= {}>(args?: Subset<T, Electric_cyl_experimentsArgs>): Prisma__Electric_cyl_experimentsClient<Electric_cyl_experimentsGetPayload<T> | Null>;
 
-    electric_phenotypers<T extends Electric_cyl_scans$electric_phenotypersArgs= {}>(args?: Subset<T, Electric_cyl_scans$electric_phenotypersArgs>): Prisma__Electric_phenotypersClient<Electric_phenotypersGetPayload<T> | Null>;
+    electric_phenotypers<T extends Electric_phenotypersArgs= {}>(args?: Subset<T, Electric_phenotypersArgs>): Prisma__Electric_phenotypersClient<Electric_phenotypersGetPayload<T> | Null>;
 
     private get _document();
     /**
@@ -4329,42 +4287,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     take?: number
     skip?: number
     distinct?: Enumerable<Electric_cyl_imagesScalarFieldEnum>
-  }
-
-
-  /**
-   * Electric_cyl_scans.electric_cyl_experiments
-   */
-  export type Electric_cyl_scans$electric_cyl_experimentsArgs = {
-    /**
-     * Select specific fields to fetch from the Electric_cyl_experiments
-     * 
-    **/
-    select?: Electric_cyl_experimentsSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     * 
-    **/
-    include?: Electric_cyl_experimentsInclude | null
-    where?: Electric_cyl_experimentsWhereInput
-  }
-
-
-  /**
-   * Electric_cyl_scans.electric_phenotypers
-   */
-  export type Electric_cyl_scans$electric_phenotypersArgs = {
-    /**
-     * Select specific fields to fetch from the Electric_phenotypers
-     * 
-    **/
-    select?: Electric_phenotypersSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     * 
-    **/
-    include?: Electric_phenotypersInclude | null
-    where?: Electric_phenotypersWhereInput
   }
 
 
@@ -5392,16 +5314,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   // Based on
   // https://github.com/microsoft/TypeScript/issues/3192#issuecomment-261720275
 
-  export const TransactionIsolationLevel: {
-    ReadUncommitted: 'ReadUncommitted',
-    ReadCommitted: 'ReadCommitted',
-    RepeatableRead: 'RepeatableRead',
-    Serializable: 'Serializable'
-  };
-
-  export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
-
-
   export const Electric_cyl_experimentsScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -5457,14 +5369,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type Electric_phenotypersScalarFieldEnum = (typeof Electric_phenotypersScalarFieldEnum)[keyof typeof Electric_phenotypersScalarFieldEnum]
 
 
-  export const SortOrder: {
-    asc: 'asc',
-    desc: 'desc'
-  };
-
-  export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
-
-
   export const QueryMode: {
     default: 'default',
     insensitive: 'insensitive'
@@ -5473,73 +5377,24 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
-  export const NullsOrder: {
-    first: 'first',
-    last: 'last'
+  export const SortOrder: {
+    asc: 'asc',
+    desc: 'desc'
   };
 
-  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+  export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
-  /**
-   * Field references 
-   */
+  export const TransactionIsolationLevel: {
+    ReadUncommitted: 'ReadUncommitted',
+    ReadCommitted: 'ReadCommitted',
+    RepeatableRead: 'RepeatableRead',
+    Serializable: 'Serializable'
+  };
+
+  export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-  /**
-   * Reference to a field of type 'String'
-   */
-  export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
-    
-
-
-  /**
-   * Reference to a field of type 'String[]'
-   */
-  export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'DateTime'
-   */
-  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
-    
-
-
-  /**
-   * Reference to a field of type 'DateTime[]'
-   */
-  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Float'
-   */
-  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-  /**
-   * Reference to a field of type 'Float[]'
-   */
-  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
-    
   /**
    * Deep Input Types
    */
@@ -5549,33 +5404,27 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     AND?: Enumerable<Electric_cyl_experimentsWhereInput>
     OR?: Enumerable<Electric_cyl_experimentsWhereInput>
     NOT?: Enumerable<Electric_cyl_experimentsWhereInput>
-    id?: UuidFilter<"Electric_cyl_experiments"> | string
-    name?: StringFilter<"Electric_cyl_experiments"> | string
-    species?: StringNullableFilter<"Electric_cyl_experiments"> | string | null
+    id?: UuidFilter | string
+    name?: StringFilter | string
+    species?: StringNullableFilter | string | null
     electric_cyl_scans?: Electric_cyl_scansListRelationFilter
   }
 
   export type Electric_cyl_experimentsOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
-    species?: SortOrderInput | SortOrder
+    species?: SortOrder
     electric_cyl_scans?: Electric_cyl_scansOrderByRelationAggregateInput
   }
 
-  export type Electric_cyl_experimentsWhereUniqueInput = Prisma.AtLeast<{
+  export type Electric_cyl_experimentsWhereUniqueInput = {
     id?: string
-    AND?: Enumerable<Electric_cyl_experimentsWhereInput>
-    OR?: Enumerable<Electric_cyl_experimentsWhereInput>
-    NOT?: Enumerable<Electric_cyl_experimentsWhereInput>
-    name?: StringFilter<"Electric_cyl_experiments"> | string
-    species?: StringNullableFilter<"Electric_cyl_experiments"> | string | null
-    electric_cyl_scans?: Electric_cyl_scansListRelationFilter
-  }, "id">
+  }
 
   export type Electric_cyl_experimentsOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
-    species?: SortOrderInput | SortOrder
+    species?: SortOrder
     _count?: Electric_cyl_experimentsCountOrderByAggregateInput
     _max?: Electric_cyl_experimentsMaxOrderByAggregateInput
     _min?: Electric_cyl_experimentsMinOrderByAggregateInput
@@ -5585,58 +5434,48 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     AND?: Enumerable<Electric_cyl_experimentsScalarWhereWithAggregatesInput>
     OR?: Enumerable<Electric_cyl_experimentsScalarWhereWithAggregatesInput>
     NOT?: Enumerable<Electric_cyl_experimentsScalarWhereWithAggregatesInput>
-    id?: UuidWithAggregatesFilter<"Electric_cyl_experiments"> | string
-    name?: StringWithAggregatesFilter<"Electric_cyl_experiments"> | string
-    species?: StringNullableWithAggregatesFilter<"Electric_cyl_experiments"> | string | null
+    id?: UuidWithAggregatesFilter | string
+    name?: StringWithAggregatesFilter | string
+    species?: StringNullableWithAggregatesFilter | string | null
   }
 
   export type Electric_cyl_imagesWhereInput = {
     AND?: Enumerable<Electric_cyl_imagesWhereInput>
     OR?: Enumerable<Electric_cyl_imagesWhereInput>
     NOT?: Enumerable<Electric_cyl_imagesWhereInput>
-    id?: UuidFilter<"Electric_cyl_images"> | string
-    scan_id?: UuidNullableFilter<"Electric_cyl_images"> | string | null
-    frame_number?: IntNullableFilter<"Electric_cyl_images"> | number | null
-    path?: StringNullableFilter<"Electric_cyl_images"> | string | null
-    url?: StringNullableFilter<"Electric_cyl_images"> | string | null
-    status?: StringNullableFilter<"Electric_cyl_images"> | string | null
-    supabase_object_path?: StringNullableFilter<"Electric_cyl_images"> | string | null
-    electric_cyl_scans?: XOR<Electric_cyl_scansNullableRelationFilter, Electric_cyl_scansWhereInput> | null
+    id?: UuidFilter | string
+    scan_id?: UuidNullableFilter | string | null
+    frame_number?: IntNullableFilter | number | null
+    path?: StringNullableFilter | string | null
+    url?: StringNullableFilter | string | null
+    status?: StringNullableFilter | string | null
+    supabase_object_path?: StringNullableFilter | string | null
+    electric_cyl_scans?: XOR<Electric_cyl_scansRelationFilter, Electric_cyl_scansWhereInput> | null
   }
 
   export type Electric_cyl_imagesOrderByWithRelationInput = {
     id?: SortOrder
-    scan_id?: SortOrderInput | SortOrder
-    frame_number?: SortOrderInput | SortOrder
-    path?: SortOrderInput | SortOrder
-    url?: SortOrderInput | SortOrder
-    status?: SortOrderInput | SortOrder
-    supabase_object_path?: SortOrderInput | SortOrder
+    scan_id?: SortOrder
+    frame_number?: SortOrder
+    path?: SortOrder
+    url?: SortOrder
+    status?: SortOrder
+    supabase_object_path?: SortOrder
     electric_cyl_scans?: Electric_cyl_scansOrderByWithRelationInput
   }
 
-  export type Electric_cyl_imagesWhereUniqueInput = Prisma.AtLeast<{
+  export type Electric_cyl_imagesWhereUniqueInput = {
     id?: string
-    AND?: Enumerable<Electric_cyl_imagesWhereInput>
-    OR?: Enumerable<Electric_cyl_imagesWhereInput>
-    NOT?: Enumerable<Electric_cyl_imagesWhereInput>
-    scan_id?: UuidNullableFilter<"Electric_cyl_images"> | string | null
-    frame_number?: IntNullableFilter<"Electric_cyl_images"> | number | null
-    path?: StringNullableFilter<"Electric_cyl_images"> | string | null
-    url?: StringNullableFilter<"Electric_cyl_images"> | string | null
-    status?: StringNullableFilter<"Electric_cyl_images"> | string | null
-    supabase_object_path?: StringNullableFilter<"Electric_cyl_images"> | string | null
-    electric_cyl_scans?: XOR<Electric_cyl_scansNullableRelationFilter, Electric_cyl_scansWhereInput> | null
-  }, "id">
+  }
 
   export type Electric_cyl_imagesOrderByWithAggregationInput = {
     id?: SortOrder
-    scan_id?: SortOrderInput | SortOrder
-    frame_number?: SortOrderInput | SortOrder
-    path?: SortOrderInput | SortOrder
-    url?: SortOrderInput | SortOrder
-    status?: SortOrderInput | SortOrder
-    supabase_object_path?: SortOrderInput | SortOrder
+    scan_id?: SortOrder
+    frame_number?: SortOrder
+    path?: SortOrder
+    url?: SortOrder
+    status?: SortOrder
+    supabase_object_path?: SortOrder
     _count?: Electric_cyl_imagesCountOrderByAggregateInput
     _avg?: Electric_cyl_imagesAvgOrderByAggregateInput
     _max?: Electric_cyl_imagesMaxOrderByAggregateInput
@@ -5648,112 +5487,89 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     AND?: Enumerable<Electric_cyl_imagesScalarWhereWithAggregatesInput>
     OR?: Enumerable<Electric_cyl_imagesScalarWhereWithAggregatesInput>
     NOT?: Enumerable<Electric_cyl_imagesScalarWhereWithAggregatesInput>
-    id?: UuidWithAggregatesFilter<"Electric_cyl_images"> | string
-    scan_id?: UuidNullableWithAggregatesFilter<"Electric_cyl_images"> | string | null
-    frame_number?: IntNullableWithAggregatesFilter<"Electric_cyl_images"> | number | null
-    path?: StringNullableWithAggregatesFilter<"Electric_cyl_images"> | string | null
-    url?: StringNullableWithAggregatesFilter<"Electric_cyl_images"> | string | null
-    status?: StringNullableWithAggregatesFilter<"Electric_cyl_images"> | string | null
-    supabase_object_path?: StringNullableWithAggregatesFilter<"Electric_cyl_images"> | string | null
+    id?: UuidWithAggregatesFilter | string
+    scan_id?: UuidNullableWithAggregatesFilter | string | null
+    frame_number?: IntNullableWithAggregatesFilter | number | null
+    path?: StringNullableWithAggregatesFilter | string | null
+    url?: StringNullableWithAggregatesFilter | string | null
+    status?: StringNullableWithAggregatesFilter | string | null
+    supabase_object_path?: StringNullableWithAggregatesFilter | string | null
   }
 
   export type Electric_cyl_scansWhereInput = {
     AND?: Enumerable<Electric_cyl_scansWhereInput>
     OR?: Enumerable<Electric_cyl_scansWhereInput>
     NOT?: Enumerable<Electric_cyl_scansWhereInput>
-    id?: UuidFilter<"Electric_cyl_scans"> | string
-    phenotyper_id?: UuidNullableFilter<"Electric_cyl_scans"> | string | null
-    scanner_id?: StringNullableFilter<"Electric_cyl_scans"> | string | null
-    plant_qr_code?: StringNullableFilter<"Electric_cyl_scans"> | string | null
-    path?: StringNullableFilter<"Electric_cyl_scans"> | string | null
-    capture_date?: DateTimeNullableFilter<"Electric_cyl_scans"> | Date | string | null
-    num_frames?: IntNullableFilter<"Electric_cyl_scans"> | number | null
-    exposure_time?: IntNullableFilter<"Electric_cyl_scans"> | number | null
-    gain?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
-    brightness?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
-    contrast?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
-    gamma?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
-    seconds_per_rot?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
-    experiment_name?: StringNullableFilter<"Electric_cyl_scans"> | string | null
-    wave_number?: IntNullableFilter<"Electric_cyl_scans"> | number | null
-    plant_age_days?: IntNullableFilter<"Electric_cyl_scans"> | number | null
-    cyl_experiment_id?: UuidNullableFilter<"Electric_cyl_scans"> | string | null
-    deleted?: IntNullableFilter<"Electric_cyl_scans"> | number | null
+    id?: UuidFilter | string
+    phenotyper_id?: UuidNullableFilter | string | null
+    scanner_id?: StringNullableFilter | string | null
+    plant_qr_code?: StringNullableFilter | string | null
+    path?: StringNullableFilter | string | null
+    capture_date?: DateTimeNullableFilter | Date | string | null
+    num_frames?: IntNullableFilter | number | null
+    exposure_time?: IntNullableFilter | number | null
+    gain?: FloatNullableFilter | number | null
+    brightness?: FloatNullableFilter | number | null
+    contrast?: FloatNullableFilter | number | null
+    gamma?: FloatNullableFilter | number | null
+    seconds_per_rot?: FloatNullableFilter | number | null
+    experiment_name?: StringNullableFilter | string | null
+    wave_number?: IntNullableFilter | number | null
+    plant_age_days?: IntNullableFilter | number | null
+    cyl_experiment_id?: UuidNullableFilter | string | null
+    deleted?: IntNullableFilter | number | null
     electric_cyl_images?: Electric_cyl_imagesListRelationFilter
-    electric_cyl_experiments?: XOR<Electric_cyl_experimentsNullableRelationFilter, Electric_cyl_experimentsWhereInput> | null
-    electric_phenotypers?: XOR<Electric_phenotypersNullableRelationFilter, Electric_phenotypersWhereInput> | null
+    electric_cyl_experiments?: XOR<Electric_cyl_experimentsRelationFilter, Electric_cyl_experimentsWhereInput> | null
+    electric_phenotypers?: XOR<Electric_phenotypersRelationFilter, Electric_phenotypersWhereInput> | null
   }
 
   export type Electric_cyl_scansOrderByWithRelationInput = {
     id?: SortOrder
-    phenotyper_id?: SortOrderInput | SortOrder
-    scanner_id?: SortOrderInput | SortOrder
-    plant_qr_code?: SortOrderInput | SortOrder
-    path?: SortOrderInput | SortOrder
-    capture_date?: SortOrderInput | SortOrder
-    num_frames?: SortOrderInput | SortOrder
-    exposure_time?: SortOrderInput | SortOrder
-    gain?: SortOrderInput | SortOrder
-    brightness?: SortOrderInput | SortOrder
-    contrast?: SortOrderInput | SortOrder
-    gamma?: SortOrderInput | SortOrder
-    seconds_per_rot?: SortOrderInput | SortOrder
-    experiment_name?: SortOrderInput | SortOrder
-    wave_number?: SortOrderInput | SortOrder
-    plant_age_days?: SortOrderInput | SortOrder
-    cyl_experiment_id?: SortOrderInput | SortOrder
-    deleted?: SortOrderInput | SortOrder
+    phenotyper_id?: SortOrder
+    scanner_id?: SortOrder
+    plant_qr_code?: SortOrder
+    path?: SortOrder
+    capture_date?: SortOrder
+    num_frames?: SortOrder
+    exposure_time?: SortOrder
+    gain?: SortOrder
+    brightness?: SortOrder
+    contrast?: SortOrder
+    gamma?: SortOrder
+    seconds_per_rot?: SortOrder
+    experiment_name?: SortOrder
+    wave_number?: SortOrder
+    plant_age_days?: SortOrder
+    cyl_experiment_id?: SortOrder
+    deleted?: SortOrder
     electric_cyl_images?: Electric_cyl_imagesOrderByRelationAggregateInput
     electric_cyl_experiments?: Electric_cyl_experimentsOrderByWithRelationInput
     electric_phenotypers?: Electric_phenotypersOrderByWithRelationInput
   }
 
-  export type Electric_cyl_scansWhereUniqueInput = Prisma.AtLeast<{
+  export type Electric_cyl_scansWhereUniqueInput = {
     id?: string
-    AND?: Enumerable<Electric_cyl_scansWhereInput>
-    OR?: Enumerable<Electric_cyl_scansWhereInput>
-    NOT?: Enumerable<Electric_cyl_scansWhereInput>
-    phenotyper_id?: UuidNullableFilter<"Electric_cyl_scans"> | string | null
-    scanner_id?: StringNullableFilter<"Electric_cyl_scans"> | string | null
-    plant_qr_code?: StringNullableFilter<"Electric_cyl_scans"> | string | null
-    path?: StringNullableFilter<"Electric_cyl_scans"> | string | null
-    capture_date?: DateTimeNullableFilter<"Electric_cyl_scans"> | Date | string | null
-    num_frames?: IntNullableFilter<"Electric_cyl_scans"> | number | null
-    exposure_time?: IntNullableFilter<"Electric_cyl_scans"> | number | null
-    gain?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
-    brightness?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
-    contrast?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
-    gamma?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
-    seconds_per_rot?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
-    experiment_name?: StringNullableFilter<"Electric_cyl_scans"> | string | null
-    wave_number?: IntNullableFilter<"Electric_cyl_scans"> | number | null
-    plant_age_days?: IntNullableFilter<"Electric_cyl_scans"> | number | null
-    cyl_experiment_id?: UuidNullableFilter<"Electric_cyl_scans"> | string | null
-    deleted?: IntNullableFilter<"Electric_cyl_scans"> | number | null
-    electric_cyl_images?: Electric_cyl_imagesListRelationFilter
-    electric_cyl_experiments?: XOR<Electric_cyl_experimentsNullableRelationFilter, Electric_cyl_experimentsWhereInput> | null
-    electric_phenotypers?: XOR<Electric_phenotypersNullableRelationFilter, Electric_phenotypersWhereInput> | null
-  }, "id">
+  }
 
   export type Electric_cyl_scansOrderByWithAggregationInput = {
     id?: SortOrder
-    phenotyper_id?: SortOrderInput | SortOrder
-    scanner_id?: SortOrderInput | SortOrder
-    plant_qr_code?: SortOrderInput | SortOrder
-    path?: SortOrderInput | SortOrder
-    capture_date?: SortOrderInput | SortOrder
-    num_frames?: SortOrderInput | SortOrder
-    exposure_time?: SortOrderInput | SortOrder
-    gain?: SortOrderInput | SortOrder
-    brightness?: SortOrderInput | SortOrder
-    contrast?: SortOrderInput | SortOrder
-    gamma?: SortOrderInput | SortOrder
-    seconds_per_rot?: SortOrderInput | SortOrder
-    experiment_name?: SortOrderInput | SortOrder
-    wave_number?: SortOrderInput | SortOrder
-    plant_age_days?: SortOrderInput | SortOrder
-    cyl_experiment_id?: SortOrderInput | SortOrder
-    deleted?: SortOrderInput | SortOrder
+    phenotyper_id?: SortOrder
+    scanner_id?: SortOrder
+    plant_qr_code?: SortOrder
+    path?: SortOrder
+    capture_date?: SortOrder
+    num_frames?: SortOrder
+    exposure_time?: SortOrder
+    gain?: SortOrder
+    brightness?: SortOrder
+    contrast?: SortOrder
+    gamma?: SortOrder
+    seconds_per_rot?: SortOrder
+    experiment_name?: SortOrder
+    wave_number?: SortOrder
+    plant_age_days?: SortOrder
+    cyl_experiment_id?: SortOrder
+    deleted?: SortOrder
     _count?: Electric_cyl_scansCountOrderByAggregateInput
     _avg?: Electric_cyl_scansAvgOrderByAggregateInput
     _max?: Electric_cyl_scansMaxOrderByAggregateInput
@@ -5765,57 +5581,51 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     AND?: Enumerable<Electric_cyl_scansScalarWhereWithAggregatesInput>
     OR?: Enumerable<Electric_cyl_scansScalarWhereWithAggregatesInput>
     NOT?: Enumerable<Electric_cyl_scansScalarWhereWithAggregatesInput>
-    id?: UuidWithAggregatesFilter<"Electric_cyl_scans"> | string
-    phenotyper_id?: UuidNullableWithAggregatesFilter<"Electric_cyl_scans"> | string | null
-    scanner_id?: StringNullableWithAggregatesFilter<"Electric_cyl_scans"> | string | null
-    plant_qr_code?: StringNullableWithAggregatesFilter<"Electric_cyl_scans"> | string | null
-    path?: StringNullableWithAggregatesFilter<"Electric_cyl_scans"> | string | null
-    capture_date?: DateTimeNullableWithAggregatesFilter<"Electric_cyl_scans"> | Date | string | null
-    num_frames?: IntNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
-    exposure_time?: IntNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
-    gain?: FloatNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
-    brightness?: FloatNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
-    contrast?: FloatNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
-    gamma?: FloatNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
-    seconds_per_rot?: FloatNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
-    experiment_name?: StringNullableWithAggregatesFilter<"Electric_cyl_scans"> | string | null
-    wave_number?: IntNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
-    plant_age_days?: IntNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
-    cyl_experiment_id?: UuidNullableWithAggregatesFilter<"Electric_cyl_scans"> | string | null
-    deleted?: IntNullableWithAggregatesFilter<"Electric_cyl_scans"> | number | null
+    id?: UuidWithAggregatesFilter | string
+    phenotyper_id?: UuidNullableWithAggregatesFilter | string | null
+    scanner_id?: StringNullableWithAggregatesFilter | string | null
+    plant_qr_code?: StringNullableWithAggregatesFilter | string | null
+    path?: StringNullableWithAggregatesFilter | string | null
+    capture_date?: DateTimeNullableWithAggregatesFilter | Date | string | null
+    num_frames?: IntNullableWithAggregatesFilter | number | null
+    exposure_time?: IntNullableWithAggregatesFilter | number | null
+    gain?: FloatNullableWithAggregatesFilter | number | null
+    brightness?: FloatNullableWithAggregatesFilter | number | null
+    contrast?: FloatNullableWithAggregatesFilter | number | null
+    gamma?: FloatNullableWithAggregatesFilter | number | null
+    seconds_per_rot?: FloatNullableWithAggregatesFilter | number | null
+    experiment_name?: StringNullableWithAggregatesFilter | string | null
+    wave_number?: IntNullableWithAggregatesFilter | number | null
+    plant_age_days?: IntNullableWithAggregatesFilter | number | null
+    cyl_experiment_id?: UuidNullableWithAggregatesFilter | string | null
+    deleted?: IntNullableWithAggregatesFilter | number | null
   }
 
   export type Electric_phenotypersWhereInput = {
     AND?: Enumerable<Electric_phenotypersWhereInput>
     OR?: Enumerable<Electric_phenotypersWhereInput>
     NOT?: Enumerable<Electric_phenotypersWhereInput>
-    id?: UuidFilter<"Electric_phenotypers"> | string
-    name?: StringNullableFilter<"Electric_phenotypers"> | string | null
-    email?: StringNullableFilter<"Electric_phenotypers"> | string | null
+    id?: UuidFilter | string
+    name?: StringNullableFilter | string | null
+    email?: StringNullableFilter | string | null
     electric_cyl_scans?: Electric_cyl_scansListRelationFilter
   }
 
   export type Electric_phenotypersOrderByWithRelationInput = {
     id?: SortOrder
-    name?: SortOrderInput | SortOrder
-    email?: SortOrderInput | SortOrder
+    name?: SortOrder
+    email?: SortOrder
     electric_cyl_scans?: Electric_cyl_scansOrderByRelationAggregateInput
   }
 
-  export type Electric_phenotypersWhereUniqueInput = Prisma.AtLeast<{
+  export type Electric_phenotypersWhereUniqueInput = {
     id?: string
-    AND?: Enumerable<Electric_phenotypersWhereInput>
-    OR?: Enumerable<Electric_phenotypersWhereInput>
-    NOT?: Enumerable<Electric_phenotypersWhereInput>
-    name?: StringNullableFilter<"Electric_phenotypers"> | string | null
-    email?: StringNullableFilter<"Electric_phenotypers"> | string | null
-    electric_cyl_scans?: Electric_cyl_scansListRelationFilter
-  }, "id">
+  }
 
   export type Electric_phenotypersOrderByWithAggregationInput = {
     id?: SortOrder
-    name?: SortOrderInput | SortOrder
-    email?: SortOrderInput | SortOrder
+    name?: SortOrder
+    email?: SortOrder
     _count?: Electric_phenotypersCountOrderByAggregateInput
     _max?: Electric_phenotypersMaxOrderByAggregateInput
     _min?: Electric_phenotypersMinOrderByAggregateInput
@@ -5825,9 +5635,9 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     AND?: Enumerable<Electric_phenotypersScalarWhereWithAggregatesInput>
     OR?: Enumerable<Electric_phenotypersScalarWhereWithAggregatesInput>
     NOT?: Enumerable<Electric_phenotypersScalarWhereWithAggregatesInput>
-    id?: UuidWithAggregatesFilter<"Electric_phenotypers"> | string
-    name?: StringNullableWithAggregatesFilter<"Electric_phenotypers"> | string | null
-    email?: StringNullableWithAggregatesFilter<"Electric_phenotypers"> | string | null
+    id?: UuidWithAggregatesFilter | string
+    name?: StringNullableWithAggregatesFilter | string | null
+    email?: StringNullableWithAggregatesFilter | string | null
   }
 
   export type Electric_cyl_experimentsCreateInput = {
@@ -6140,57 +5950,52 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     email?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type UuidFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
-    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
+  export type UuidFilter = {
+    equals?: string
+    in?: Enumerable<string>
+    notIn?: Enumerable<string>
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
     mode?: QueryMode
-    not?: NestedUuidFilter<$PrismaModel> | string
+    not?: NestedUuidFilter | string
   }
 
-  export type StringFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
-    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
+  export type StringFilter = {
+    equals?: string
+    in?: Enumerable<string>
+    notIn?: Enumerable<string>
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
     mode?: QueryMode
-    not?: NestedStringFilter<$PrismaModel> | string
+    not?: NestedStringFilter | string
   }
 
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
+  export type StringNullableFilter = {
+    equals?: string | null
+    in?: Enumerable<string> | null
+    notIn?: Enumerable<string> | null
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
     mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+    not?: NestedStringNullableFilter | string | null
   }
 
   export type Electric_cyl_scansListRelationFilter = {
     every?: Electric_cyl_scansWhereInput
     some?: Electric_cyl_scansWhereInput
     none?: Electric_cyl_scansWhereInput
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
   }
 
   export type Electric_cyl_scansOrderByRelationAggregateInput = {
@@ -6215,81 +6020,81 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     species?: SortOrder
   }
 
-  export type UuidWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
-    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
+  export type UuidWithAggregatesFilter = {
+    equals?: string
+    in?: Enumerable<string>
+    notIn?: Enumerable<string>
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
     mode?: QueryMode
-    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
+    not?: NestedUuidWithAggregatesFilter | string
+    _count?: NestedIntFilter
+    _min?: NestedStringFilter
+    _max?: NestedStringFilter
   }
 
-  export type StringWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
-    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
+  export type StringWithAggregatesFilter = {
+    equals?: string
+    in?: Enumerable<string>
+    notIn?: Enumerable<string>
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
     mode?: QueryMode
-    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
+    not?: NestedStringWithAggregatesFilter | string
+    _count?: NestedIntFilter
+    _min?: NestedStringFilter
+    _max?: NestedStringFilter
   }
 
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
+  export type StringNullableWithAggregatesFilter = {
+    equals?: string | null
+    in?: Enumerable<string> | null
+    notIn?: Enumerable<string> | null
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
     mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter | string | null
+    _count?: NestedIntNullableFilter
+    _min?: NestedStringNullableFilter
+    _max?: NestedStringNullableFilter
   }
 
-  export type UuidNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
+  export type UuidNullableFilter = {
+    equals?: string | null
+    in?: Enumerable<string> | null
+    notIn?: Enumerable<string> | null
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
     mode?: QueryMode
-    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
+    not?: NestedUuidNullableFilter | string | null
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: Enumerable<number> | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: Enumerable<number> | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  export type IntNullableFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntNullableFilter | number | null
   }
 
-  export type Electric_cyl_scansNullableRelationFilter = {
+  export type Electric_cyl_scansRelationFilter = {
     is?: Electric_cyl_scansWhereInput | null
     isNot?: Electric_cyl_scansWhereInput | null
   }
@@ -6332,57 +6137,57 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     frame_number?: SortOrder
   }
 
-  export type UuidNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
+  export type UuidNullableWithAggregatesFilter = {
+    equals?: string | null
+    in?: Enumerable<string> | null
+    notIn?: Enumerable<string> | null
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
     mode?: QueryMode
-    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
+    not?: NestedUuidNullableWithAggregatesFilter | string | null
+    _count?: NestedIntNullableFilter
+    _min?: NestedStringNullableFilter
+    _max?: NestedStringNullableFilter
   }
 
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: Enumerable<number> | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: Enumerable<number> | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
+  export type IntNullableWithAggregatesFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntNullableWithAggregatesFilter | number | null
+    _count?: NestedIntNullableFilter
+    _avg?: NestedFloatNullableFilter
+    _sum?: NestedIntNullableFilter
+    _min?: NestedIntNullableFilter
+    _max?: NestedIntNullableFilter
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Enumerable<Date> | Enumerable<string> | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Enumerable<Date> | Enumerable<string> | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  export type DateTimeNullableFilter = {
+    equals?: Date | string | null
+    in?: Enumerable<Date> | Enumerable<string> | null
+    notIn?: Enumerable<Date> | Enumerable<string> | null
+    lt?: Date | string
+    lte?: Date | string
+    gt?: Date | string
+    gte?: Date | string
+    not?: NestedDateTimeNullableFilter | Date | string | null
   }
 
-  export type FloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: Enumerable<number> | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: Enumerable<number> | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  export type FloatNullableFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedFloatNullableFilter | number | null
   }
 
   export type Electric_cyl_imagesListRelationFilter = {
@@ -6391,12 +6196,12 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     none?: Electric_cyl_imagesWhereInput
   }
 
-  export type Electric_cyl_experimentsNullableRelationFilter = {
+  export type Electric_cyl_experimentsRelationFilter = {
     is?: Electric_cyl_experimentsWhereInput | null
     isNot?: Electric_cyl_experimentsWhereInput | null
   }
 
-  export type Electric_phenotypersNullableRelationFilter = {
+  export type Electric_phenotypersRelationFilter = {
     is?: Electric_phenotypersWhereInput | null
     isNot?: Electric_phenotypersWhereInput | null
   }
@@ -6494,34 +6299,34 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     deleted?: SortOrder
   }
 
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Enumerable<Date> | Enumerable<string> | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Enumerable<Date> | Enumerable<string> | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  export type DateTimeNullableWithAggregatesFilter = {
+    equals?: Date | string | null
+    in?: Enumerable<Date> | Enumerable<string> | null
+    notIn?: Enumerable<Date> | Enumerable<string> | null
+    lt?: Date | string
+    lte?: Date | string
+    gt?: Date | string
+    gte?: Date | string
+    not?: NestedDateTimeNullableWithAggregatesFilter | Date | string | null
+    _count?: NestedIntNullableFilter
+    _min?: NestedDateTimeNullableFilter
+    _max?: NestedDateTimeNullableFilter
   }
 
-  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: Enumerable<number> | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: Enumerable<number> | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedFloatNullableFilter<$PrismaModel>
-    _min?: NestedFloatNullableFilter<$PrismaModel>
-    _max?: NestedFloatNullableFilter<$PrismaModel>
+  export type FloatNullableWithAggregatesFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedFloatNullableWithAggregatesFilter | number | null
+    _count?: NestedIntNullableFilter
+    _avg?: NestedFloatNullableFilter
+    _sum?: NestedFloatNullableFilter
+    _min?: NestedFloatNullableFilter
+    _max?: NestedFloatNullableFilter
   }
 
   export type Electric_phenotypersCountOrderByAggregateInput = {
@@ -6610,10 +6415,10 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     create?: XOR<Electric_cyl_scansCreateWithoutElectric_cyl_imagesInput, Electric_cyl_scansUncheckedCreateWithoutElectric_cyl_imagesInput>
     connectOrCreate?: Electric_cyl_scansCreateOrConnectWithoutElectric_cyl_imagesInput
     upsert?: Electric_cyl_scansUpsertWithoutElectric_cyl_imagesInput
-    disconnect?: Electric_cyl_scansWhereInput | boolean
-    delete?: Electric_cyl_scansWhereInput | boolean
+    disconnect?: boolean
+    delete?: boolean
     connect?: Electric_cyl_scansWhereUniqueInput
-    update?: XOR<XOR<Electric_cyl_scansUpdateToOneWithWhereWithoutElectric_cyl_imagesInput, Electric_cyl_scansUpdateWithoutElectric_cyl_imagesInput>, Electric_cyl_scansUncheckedUpdateWithoutElectric_cyl_imagesInput>
+    update?: XOR<Electric_cyl_scansUpdateWithoutElectric_cyl_imagesInput, Electric_cyl_scansUncheckedUpdateWithoutElectric_cyl_imagesInput>
   }
 
   export type Electric_cyl_imagesCreateNestedManyWithoutElectric_cyl_scansInput = {
@@ -6672,20 +6477,20 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     create?: XOR<Electric_cyl_experimentsCreateWithoutElectric_cyl_scansInput, Electric_cyl_experimentsUncheckedCreateWithoutElectric_cyl_scansInput>
     connectOrCreate?: Electric_cyl_experimentsCreateOrConnectWithoutElectric_cyl_scansInput
     upsert?: Electric_cyl_experimentsUpsertWithoutElectric_cyl_scansInput
-    disconnect?: Electric_cyl_experimentsWhereInput | boolean
-    delete?: Electric_cyl_experimentsWhereInput | boolean
+    disconnect?: boolean
+    delete?: boolean
     connect?: Electric_cyl_experimentsWhereUniqueInput
-    update?: XOR<XOR<Electric_cyl_experimentsUpdateToOneWithWhereWithoutElectric_cyl_scansInput, Electric_cyl_experimentsUpdateWithoutElectric_cyl_scansInput>, Electric_cyl_experimentsUncheckedUpdateWithoutElectric_cyl_scansInput>
+    update?: XOR<Electric_cyl_experimentsUpdateWithoutElectric_cyl_scansInput, Electric_cyl_experimentsUncheckedUpdateWithoutElectric_cyl_scansInput>
   }
 
   export type Electric_phenotypersUpdateOneWithoutElectric_cyl_scansNestedInput = {
     create?: XOR<Electric_phenotypersCreateWithoutElectric_cyl_scansInput, Electric_phenotypersUncheckedCreateWithoutElectric_cyl_scansInput>
     connectOrCreate?: Electric_phenotypersCreateOrConnectWithoutElectric_cyl_scansInput
     upsert?: Electric_phenotypersUpsertWithoutElectric_cyl_scansInput
-    disconnect?: Electric_phenotypersWhereInput | boolean
-    delete?: Electric_phenotypersWhereInput | boolean
+    disconnect?: boolean
+    delete?: boolean
     connect?: Electric_phenotypersWhereUniqueInput
-    update?: XOR<XOR<Electric_phenotypersUpdateToOneWithWhereWithoutElectric_cyl_scansInput, Electric_phenotypersUpdateWithoutElectric_cyl_scansInput>, Electric_phenotypersUncheckedUpdateWithoutElectric_cyl_scansInput>
+    update?: XOR<Electric_phenotypersUpdateWithoutElectric_cyl_scansInput, Electric_phenotypersUncheckedUpdateWithoutElectric_cyl_scansInput>
   }
 
   export type Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_scansNestedInput = {
@@ -6744,206 +6549,206 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     deleteMany?: Enumerable<Electric_cyl_scansScalarWhereInput>
   }
 
-  export type NestedUuidFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
-    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedUuidFilter<$PrismaModel> | string
+  export type NestedUuidFilter = {
+    equals?: string
+    in?: Enumerable<string>
+    notIn?: Enumerable<string>
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    not?: NestedUuidFilter | string
   }
 
-  export type NestedStringFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
-    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringFilter<$PrismaModel> | string
+  export type NestedStringFilter = {
+    equals?: string
+    in?: Enumerable<string>
+    notIn?: Enumerable<string>
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
+    not?: NestedStringFilter | string
   }
 
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  export type NestedStringNullableFilter = {
+    equals?: string | null
+    in?: Enumerable<string> | null
+    notIn?: Enumerable<string> | null
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
+    not?: NestedStringNullableFilter | string | null
   }
 
-  export type NestedUuidWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
-    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
+  export type NestedUuidWithAggregatesFilter = {
+    equals?: string
+    in?: Enumerable<string>
+    notIn?: Enumerable<string>
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    not?: NestedUuidWithAggregatesFilter | string
+    _count?: NestedIntFilter
+    _min?: NestedStringFilter
+    _max?: NestedStringFilter
   }
 
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: Enumerable<number> | ListIntFieldRefInput<$PrismaModel>
-    notIn?: Enumerable<number> | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
+  export type NestedIntFilter = {
+    equals?: number
+    in?: Enumerable<number>
+    notIn?: Enumerable<number>
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntFilter | number
   }
 
-  export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
-    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
+  export type NestedStringWithAggregatesFilter = {
+    equals?: string
+    in?: Enumerable<string>
+    notIn?: Enumerable<string>
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
+    not?: NestedStringWithAggregatesFilter | string
+    _count?: NestedIntFilter
+    _min?: NestedStringFilter
+    _max?: NestedStringFilter
   }
 
-  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
+  export type NestedStringNullableWithAggregatesFilter = {
+    equals?: string | null
+    in?: Enumerable<string> | null
+    notIn?: Enumerable<string> | null
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
+    not?: NestedStringNullableWithAggregatesFilter | string | null
+    _count?: NestedIntNullableFilter
+    _min?: NestedStringNullableFilter
+    _max?: NestedStringNullableFilter
   }
 
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: Enumerable<number> | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: Enumerable<number> | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  export type NestedIntNullableFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntNullableFilter | number | null
   }
 
-  export type NestedUuidNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
+  export type NestedUuidNullableFilter = {
+    equals?: string | null
+    in?: Enumerable<string> | null
+    notIn?: Enumerable<string> | null
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    not?: NestedUuidNullableFilter | string | null
   }
 
-  export type NestedUuidNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: Enumerable<string> | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
+  export type NestedUuidNullableWithAggregatesFilter = {
+    equals?: string | null
+    in?: Enumerable<string> | null
+    notIn?: Enumerable<string> | null
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    not?: NestedUuidNullableWithAggregatesFilter | string | null
+    _count?: NestedIntNullableFilter
+    _min?: NestedStringNullableFilter
+    _max?: NestedStringNullableFilter
   }
 
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: Enumerable<number> | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: Enumerable<number> | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
+  export type NestedIntNullableWithAggregatesFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntNullableWithAggregatesFilter | number | null
+    _count?: NestedIntNullableFilter
+    _avg?: NestedFloatNullableFilter
+    _sum?: NestedIntNullableFilter
+    _min?: NestedIntNullableFilter
+    _max?: NestedIntNullableFilter
   }
 
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: Enumerable<number> | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: Enumerable<number> | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  export type NestedFloatNullableFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedFloatNullableFilter | number | null
   }
 
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Enumerable<Date> | Enumerable<string> | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Enumerable<Date> | Enumerable<string> | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  export type NestedDateTimeNullableFilter = {
+    equals?: Date | string | null
+    in?: Enumerable<Date> | Enumerable<string> | null
+    notIn?: Enumerable<Date> | Enumerable<string> | null
+    lt?: Date | string
+    lte?: Date | string
+    gt?: Date | string
+    gte?: Date | string
+    not?: NestedDateTimeNullableFilter | Date | string | null
   }
 
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Enumerable<Date> | Enumerable<string> | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Enumerable<Date> | Enumerable<string> | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  export type NestedDateTimeNullableWithAggregatesFilter = {
+    equals?: Date | string | null
+    in?: Enumerable<Date> | Enumerable<string> | null
+    notIn?: Enumerable<Date> | Enumerable<string> | null
+    lt?: Date | string
+    lte?: Date | string
+    gt?: Date | string
+    gte?: Date | string
+    not?: NestedDateTimeNullableWithAggregatesFilter | Date | string | null
+    _count?: NestedIntNullableFilter
+    _min?: NestedDateTimeNullableFilter
+    _max?: NestedDateTimeNullableFilter
   }
 
-  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: Enumerable<number> | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: Enumerable<number> | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedFloatNullableFilter<$PrismaModel>
-    _min?: NestedFloatNullableFilter<$PrismaModel>
-    _max?: NestedFloatNullableFilter<$PrismaModel>
+  export type NestedFloatNullableWithAggregatesFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedFloatNullableWithAggregatesFilter | number | null
+    _count?: NestedIntNullableFilter
+    _avg?: NestedFloatNullableFilter
+    _sum?: NestedFloatNullableFilter
+    _min?: NestedFloatNullableFilter
+    _max?: NestedFloatNullableFilter
   }
 
   export type Electric_cyl_scansCreateWithoutElectric_cyl_experimentsInput = {
@@ -7011,31 +6816,31 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type Electric_cyl_scansUpdateManyWithWhereWithoutElectric_cyl_experimentsInput = {
     where: Electric_cyl_scansScalarWhereInput
-    data: XOR<Electric_cyl_scansUpdateManyMutationInput, Electric_cyl_scansUncheckedUpdateManyWithoutElectric_cyl_experimentsInput>
+    data: XOR<Electric_cyl_scansUpdateManyMutationInput, Electric_cyl_scansUncheckedUpdateManyWithoutElectric_cyl_scansInput>
   }
 
   export type Electric_cyl_scansScalarWhereInput = {
     AND?: Enumerable<Electric_cyl_scansScalarWhereInput>
     OR?: Enumerable<Electric_cyl_scansScalarWhereInput>
     NOT?: Enumerable<Electric_cyl_scansScalarWhereInput>
-    id?: UuidFilter<"Electric_cyl_scans"> | string
-    phenotyper_id?: UuidNullableFilter<"Electric_cyl_scans"> | string | null
-    scanner_id?: StringNullableFilter<"Electric_cyl_scans"> | string | null
-    plant_qr_code?: StringNullableFilter<"Electric_cyl_scans"> | string | null
-    path?: StringNullableFilter<"Electric_cyl_scans"> | string | null
-    capture_date?: DateTimeNullableFilter<"Electric_cyl_scans"> | Date | string | null
-    num_frames?: IntNullableFilter<"Electric_cyl_scans"> | number | null
-    exposure_time?: IntNullableFilter<"Electric_cyl_scans"> | number | null
-    gain?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
-    brightness?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
-    contrast?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
-    gamma?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
-    seconds_per_rot?: FloatNullableFilter<"Electric_cyl_scans"> | number | null
-    experiment_name?: StringNullableFilter<"Electric_cyl_scans"> | string | null
-    wave_number?: IntNullableFilter<"Electric_cyl_scans"> | number | null
-    plant_age_days?: IntNullableFilter<"Electric_cyl_scans"> | number | null
-    cyl_experiment_id?: UuidNullableFilter<"Electric_cyl_scans"> | string | null
-    deleted?: IntNullableFilter<"Electric_cyl_scans"> | number | null
+    id?: UuidFilter | string
+    phenotyper_id?: UuidNullableFilter | string | null
+    scanner_id?: StringNullableFilter | string | null
+    plant_qr_code?: StringNullableFilter | string | null
+    path?: StringNullableFilter | string | null
+    capture_date?: DateTimeNullableFilter | Date | string | null
+    num_frames?: IntNullableFilter | number | null
+    exposure_time?: IntNullableFilter | number | null
+    gain?: FloatNullableFilter | number | null
+    brightness?: FloatNullableFilter | number | null
+    contrast?: FloatNullableFilter | number | null
+    gamma?: FloatNullableFilter | number | null
+    seconds_per_rot?: FloatNullableFilter | number | null
+    experiment_name?: StringNullableFilter | string | null
+    wave_number?: IntNullableFilter | number | null
+    plant_age_days?: IntNullableFilter | number | null
+    cyl_experiment_id?: UuidNullableFilter | string | null
+    deleted?: IntNullableFilter | number | null
   }
 
   export type Electric_cyl_scansCreateWithoutElectric_cyl_imagesInput = {
@@ -7088,12 +6893,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type Electric_cyl_scansUpsertWithoutElectric_cyl_imagesInput = {
     update: XOR<Electric_cyl_scansUpdateWithoutElectric_cyl_imagesInput, Electric_cyl_scansUncheckedUpdateWithoutElectric_cyl_imagesInput>
     create: XOR<Electric_cyl_scansCreateWithoutElectric_cyl_imagesInput, Electric_cyl_scansUncheckedCreateWithoutElectric_cyl_imagesInput>
-    where?: Electric_cyl_scansWhereInput
-  }
-
-  export type Electric_cyl_scansUpdateToOneWithWhereWithoutElectric_cyl_imagesInput = {
-    where?: Electric_cyl_scansWhereInput
-    data: XOR<Electric_cyl_scansUpdateWithoutElectric_cyl_imagesInput, Electric_cyl_scansUncheckedUpdateWithoutElectric_cyl_imagesInput>
   }
 
   export type Electric_cyl_scansUpdateWithoutElectric_cyl_imagesInput = {
@@ -7213,31 +7012,25 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type Electric_cyl_imagesUpdateManyWithWhereWithoutElectric_cyl_scansInput = {
     where: Electric_cyl_imagesScalarWhereInput
-    data: XOR<Electric_cyl_imagesUpdateManyMutationInput, Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_scansInput>
+    data: XOR<Electric_cyl_imagesUpdateManyMutationInput, Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_imagesInput>
   }
 
   export type Electric_cyl_imagesScalarWhereInput = {
     AND?: Enumerable<Electric_cyl_imagesScalarWhereInput>
     OR?: Enumerable<Electric_cyl_imagesScalarWhereInput>
     NOT?: Enumerable<Electric_cyl_imagesScalarWhereInput>
-    id?: UuidFilter<"Electric_cyl_images"> | string
-    scan_id?: UuidNullableFilter<"Electric_cyl_images"> | string | null
-    frame_number?: IntNullableFilter<"Electric_cyl_images"> | number | null
-    path?: StringNullableFilter<"Electric_cyl_images"> | string | null
-    url?: StringNullableFilter<"Electric_cyl_images"> | string | null
-    status?: StringNullableFilter<"Electric_cyl_images"> | string | null
-    supabase_object_path?: StringNullableFilter<"Electric_cyl_images"> | string | null
+    id?: UuidFilter | string
+    scan_id?: UuidNullableFilter | string | null
+    frame_number?: IntNullableFilter | number | null
+    path?: StringNullableFilter | string | null
+    url?: StringNullableFilter | string | null
+    status?: StringNullableFilter | string | null
+    supabase_object_path?: StringNullableFilter | string | null
   }
 
   export type Electric_cyl_experimentsUpsertWithoutElectric_cyl_scansInput = {
     update: XOR<Electric_cyl_experimentsUpdateWithoutElectric_cyl_scansInput, Electric_cyl_experimentsUncheckedUpdateWithoutElectric_cyl_scansInput>
     create: XOR<Electric_cyl_experimentsCreateWithoutElectric_cyl_scansInput, Electric_cyl_experimentsUncheckedCreateWithoutElectric_cyl_scansInput>
-    where?: Electric_cyl_experimentsWhereInput
-  }
-
-  export type Electric_cyl_experimentsUpdateToOneWithWhereWithoutElectric_cyl_scansInput = {
-    where?: Electric_cyl_experimentsWhereInput
-    data: XOR<Electric_cyl_experimentsUpdateWithoutElectric_cyl_scansInput, Electric_cyl_experimentsUncheckedUpdateWithoutElectric_cyl_scansInput>
   }
 
   export type Electric_cyl_experimentsUpdateWithoutElectric_cyl_scansInput = {
@@ -7255,12 +7048,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
   export type Electric_phenotypersUpsertWithoutElectric_cyl_scansInput = {
     update: XOR<Electric_phenotypersUpdateWithoutElectric_cyl_scansInput, Electric_phenotypersUncheckedUpdateWithoutElectric_cyl_scansInput>
     create: XOR<Electric_phenotypersCreateWithoutElectric_cyl_scansInput, Electric_phenotypersUncheckedCreateWithoutElectric_cyl_scansInput>
-    where?: Electric_phenotypersWhereInput
-  }
-
-  export type Electric_phenotypersUpdateToOneWithWhereWithoutElectric_cyl_scansInput = {
-    where?: Electric_phenotypersWhereInput
-    data: XOR<Electric_phenotypersUpdateWithoutElectric_cyl_scansInput, Electric_phenotypersUncheckedUpdateWithoutElectric_cyl_scansInput>
   }
 
   export type Electric_phenotypersUpdateWithoutElectric_cyl_scansInput = {
@@ -7340,7 +7127,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
 
   export type Electric_cyl_scansUpdateManyWithWhereWithoutElectric_phenotypersInput = {
     where: Electric_cyl_scansScalarWhereInput
-    data: XOR<Electric_cyl_scansUpdateManyMutationInput, Electric_cyl_scansUncheckedUpdateManyWithoutElectric_phenotypersInput>
+    data: XOR<Electric_cyl_scansUpdateManyMutationInput, Electric_cyl_scansUncheckedUpdateManyWithoutElectric_cyl_scansInput>
   }
 
   export type Electric_cyl_scansCreateManyElectric_cyl_experimentsInput = {
@@ -7405,7 +7192,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     electric_cyl_images?: Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_scansNestedInput
   }
 
-  export type Electric_cyl_scansUncheckedUpdateManyWithoutElectric_cyl_experimentsInput = {
+  export type Electric_cyl_scansUncheckedUpdateManyWithoutElectric_cyl_scansInput = {
     id?: StringFieldUpdateOperationsInput | string
     phenotyper_id?: NullableStringFieldUpdateOperationsInput | string | null
     scanner_id?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7452,7 +7239,7 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     supabase_object_path?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_scansInput = {
+  export type Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_imagesInput = {
     id?: StringFieldUpdateOperationsInput | string
     frame_number?: NullableIntFieldUpdateOperationsInput | number | null
     path?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7523,26 +7310,6 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
     electric_cyl_images?: Electric_cyl_imagesUncheckedUpdateManyWithoutElectric_cyl_scansNestedInput
   }
 
-  export type Electric_cyl_scansUncheckedUpdateManyWithoutElectric_phenotypersInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    scanner_id?: NullableStringFieldUpdateOperationsInput | string | null
-    plant_qr_code?: NullableStringFieldUpdateOperationsInput | string | null
-    path?: NullableStringFieldUpdateOperationsInput | string | null
-    capture_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    num_frames?: NullableIntFieldUpdateOperationsInput | number | null
-    exposure_time?: NullableIntFieldUpdateOperationsInput | number | null
-    gain?: NullableFloatFieldUpdateOperationsInput | number | null
-    brightness?: NullableFloatFieldUpdateOperationsInput | number | null
-    contrast?: NullableFloatFieldUpdateOperationsInput | number | null
-    gamma?: NullableFloatFieldUpdateOperationsInput | number | null
-    seconds_per_rot?: NullableFloatFieldUpdateOperationsInput | number | null
-    experiment_name?: NullableStringFieldUpdateOperationsInput | string | null
-    wave_number?: NullableIntFieldUpdateOperationsInput | number | null
-    plant_age_days?: NullableIntFieldUpdateOperationsInput | number | null
-    cyl_experiment_id?: NullableStringFieldUpdateOperationsInput | string | null
-    deleted?: NullableIntFieldUpdateOperationsInput | number | null
-  }
-
 
 
   /**
@@ -7558,3 +7325,5 @@ export type InputJsonValue = null | string | number | boolean | InputJsonObject 
    */
   export const dmmf: runtime.BaseDMMF
 }
+
+type Buffer = Omit<Uint8Array, 'set'>
