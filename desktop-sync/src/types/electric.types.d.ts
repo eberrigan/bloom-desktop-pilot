@@ -1,15 +1,10 @@
-import {
-  Electric_cyl_scans,
-  Electric_cyl_images,
-  Electric_phenotypers,
-} from "../generated/client";
+import { Scan, Phenotyper, Experiment, Image } from "@prisma/client";
 
-export type ScansWithPhenotypers = Electric_cyl_scans & {
-  electric_phenotypers: Electric_phenotypers;
-  electric_cyl_images: Electric_cyl_images[];
+export type ScanWithPhenotyper = Scan & {
+  phenotyper: Phenotyper;
+  images: Image[];
 };
 
-export type ExperimentWithScans = Electric_cyl_experiments & {
-  electric_cyl_scans: Electric_cyl_scans &
-    { electric_phenotypers: Electric_phenotypers }[];
+export type ExperimentWithScans = Experiment & {
+  scans: ScanWithPhenotyper[];
 };

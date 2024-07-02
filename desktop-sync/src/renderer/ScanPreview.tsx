@@ -1,26 +1,19 @@
-import { SupabaseClient } from "@supabase/supabase-js";
-import { Database } from "../types/database.types";
-import { WheelEventHandler, useCallback, useEffect, useState } from "react";
-import { ScansWithPhenotypers } from "../types/electric.types";
-import { Electric_cyl_images, Electric_cyl_scans } from "../generated/client";
+import { useEffect, useState } from "react";
+import { ScanWithPhenotyper } from "../types/electric.types";
 import { Link } from "react-router-dom";
+import { Image } from "@prisma/client";
 
-const getScannerId = window.electron.scanner.getScannerId;
 const getScansDir = window.electron.scanner.getScansDir;
 
 export function ScanPreview({
   scan,
-  supabase,
   thumb,
   link,
 }: {
-  scan: ScansWithPhenotypers;
-  supabase: SupabaseClient<Database>;
+  scan: ScanWithPhenotyper;
   thumb: boolean;
   link: string | undefined;
 }) {
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [scannerId, setScannerId] = useState<string | null>(null);
   const [scansDir, setScansDir] = useState<string | null>(null);
   const [imageIndex, setImageIndex] = useState<number>(0);
 
@@ -28,26 +21,7 @@ export function ScanPreview({
     getScansDir().then((dir) => setScansDir(dir));
   }, []);
 
-  useEffect(() => {
-    getScannerId().then((response: string) => setScannerId(response));
-  }, []);
-
-  useEffect(() => {
-    if (scan.electric_cyl_images.length > 0) {
-      const image = sortImages(scan.electric_cyl_images)[imageIndex];
-      if (supabase) {
-        getImageUrl({
-          supabase,
-          objectPath: image.supabase_object_path,
-          thumb: thumb,
-        }).then((url) => {
-          setImageUrl(url);
-        });
-      }
-    }
-  }, [scan, supabase, thumb, imageIndex]);
-
-  const image = sortImages(scan.electric_cyl_images)[imageIndex];
+  const image = sortImages(scan.images)[imageIndex];
 
   return (
     <div className="group relative align-middle inline-block">
@@ -55,9 +29,7 @@ export function ScanPreview({
         className="absolute hidden group-hover:block text-lime-300 z-10 left-2 top-1/2 transform -translate-y-1/2 opacity-80 hover:opacity-100"
         onClick={() => {
           setImageIndex(
-            (prev) =>
-              (prev - 1 + scan.electric_cyl_images.length) %
-              scan.electric_cyl_images.length
+            (prev) => (prev - 1 + scan.images.length) % scan.images.length
           );
         }}
       >
@@ -79,7 +51,7 @@ export function ScanPreview({
       <button
         className="absolute hidden group-hover:block text-lime-300 right-2 z-10 top-1/2 transform -translate-y-1/2 opacity-80 hover:opacity-100"
         onClick={() => {
-          setImageIndex((prev) => (prev + 1) % scan.electric_cyl_images.length);
+          setImageIndex((prev) => (prev + 1) % scan.images.length);
         }}
       >
         <svg
@@ -98,63 +70,32 @@ export function ScanPreview({
         </svg>
       </button>
       <div className="absolute hidden group-hover:block text-lime-300 z-10 bottom-2 left-1/2 transform -translate-x-1/2 opacity-80 select-none">
-        {imageIndex + 1} / {scan.electric_cyl_images.length}
+        {imageIndex + 1} / {scan.images.length}
       </div>
-      <ScanImage
-        image={image}
-        imageUrl={imageUrl}
-        scan={scan}
-        scannerId={scannerId}
-        scansDir={scansDir}
-        link={link}
-        thumb={thumb}
-      />
+      <ScanImage image={image} scansDir={scansDir} link={link} thumb={thumb} />
     </div>
   );
 }
 
 function ScanImage({
   image,
-  imageUrl,
-  scan,
-  scannerId,
   scansDir,
   link,
   thumb,
 }: {
-  image: Electric_cyl_images;
-  scan: Electric_cyl_scans;
-  scannerId: string | null;
+  image: Image;
   scansDir: string;
-  imageUrl: string;
   link?: string;
   thumb?: boolean;
 }) {
-  const sameScanner = scannerId !== null && scannerId === scan.scanner_id;
-  const uploaded = image.status === "UPLOADED";
-  const imageElement =
-    sameScanner && scansDir !== null && !uploaded ? (
-      <ZoomableImage
-        src={`file://${scansDir}/${image.path}`}
-        alt={image.path}
-        thumb={thumb}
-      />
-    ) : // <img
-    //   src={`file://${scansDir}/${image.path}`}
-    //   className={thumb ? "h-30" : "w-[800px] rounded-md"}
-    // />
-    imageUrl === null ? (
-      <LoadingImage />
-    ) : uploaded ? (
-      <ZoomableImage src={imageUrl} alt={image.path} thumb={thumb} />
-    ) : (
-      // <img
-      //   draggable={false}
-      //   src={imageUrl}
-      //   className={thumb ? "h-30" : "w-[800px] rounded-md"}
-      // />
-      <div>Not available.</div>
-    );
+  const imageElement = (
+    <ZoomableImage
+      src={`file://${scansDir}/${image.path}`}
+      alt={image.path}
+      thumb={thumb}
+    />
+  );
+
   return link ? (
     <Link to={link}>{imageElement}</Link>
   ) : (
@@ -168,33 +109,7 @@ function LoadingImage() {
   );
 }
 
-async function getImageUrl({
-  supabase,
-  objectPath,
-  thumb,
-}: {
-  supabase: SupabaseClient<Database>;
-  objectPath: string;
-  thumb: boolean;
-}) {
-  const { data, error } = await supabase.storage.from("images").createSignedUrl(
-    objectPath,
-    120,
-    thumb
-      ? {
-          transform: {
-            width: 300,
-            quality: 100,
-          },
-        }
-      : {}
-  );
-
-  const signedUrl = data?.signedUrl ?? "";
-  return signedUrl;
-}
-
-function sortImages(images: Electric_cyl_images[]) {
+function sortImages(images: Image[]) {
   const imagesCopy = images.slice();
   return imagesCopy.sort((a, b) => {
     return a.frame_number > b.frame_number ? 1 : -1;
@@ -251,7 +166,6 @@ const ZoomableImage = ({
   return (
     <div
       style={{ overflow: "hidden", position: "relative" }}
-      // onWheel={handleWheel}
       onMouseDown={thumb ? null : startDrag}
       onMouseMove={thumb ? null : onDrag}
       onMouseUp={thumb ? null : endDrag}
@@ -263,8 +177,6 @@ const ZoomableImage = ({
         draggable={false}
         style={{
           transform: `translate(${position.x}px, ${position.y}px) scale(${scale})`,
-          // transition: "transform 0.2s",
-          // transformOrigin: "top left",
         }}
         className={thumb ? "h-28" : "w-[800px] rounded-md cursor-grab"}
       />

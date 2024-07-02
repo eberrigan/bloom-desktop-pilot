@@ -1,29 +1,17 @@
+import { Scan } from "@prisma/client";
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  Electric_cyl_experiments,
-  Electric_cyl_scans,
-  Electric_phenotypers,
-} from "../generated/client";
 import { date } from "zod";
 
 const electric = window.electron.electric;
 const fs = window.electron.fs;
 const getScannerId = window.electron.scanner.getScannerId;
 
-type ScansWithPhenotypers = Electric_cyl_scans & {
-  electric_phenotypers: Electric_phenotypers;
+type ScanWithPhenotyper = Scan & {
+  phenotyper: Phenotyper;
 };
 
-type ExperimentWithScans = Electric_cyl_experiments & {
-  electric_cyl_scans: ScansWithPhenotypers[];
-};
-
-type ExperimentDateSelected = {
-  [key: string]: boolean;
-};
-
-type ExperimentDateScans = {
-  [key: string]: ScansWithPhenotypers[];
+type ExperimentWithScans = Experiment & {
+  scans: ScanWithPhenotyper[];
 };
 
 export function Export() {

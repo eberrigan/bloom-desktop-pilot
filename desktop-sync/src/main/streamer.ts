@@ -5,8 +5,6 @@ import fs from "fs";
 import { defaultCameraSettings } from "./scanner";
 import { createInterface } from "node:readline";
 
-import { Electric_cyl_scans } from "../generated/client";
-
 class Streamer {
   public onCaptureImage: (base64img: string) => void = (base64img) => {};
   public onStreamingStopped: () => void = () => {};

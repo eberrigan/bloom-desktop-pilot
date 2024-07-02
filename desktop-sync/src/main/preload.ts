@@ -1,12 +1,7 @@
 // Disable no-unused-vars, broken for spread args
 /* eslint no-unused-vars: off */
+import { Image, Phenotyper, Scan } from "@prisma/client";
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
-import {
-  Electric_cyl_scans,
-  Electric_phenotypers,
-  Electric_cyl_images,
-  Electric_cyl_experiments,
-} from "../generated/client";
 
 export type Channels =
   | "ipc-example"
@@ -95,16 +90,16 @@ const electronHandler = {
   scanStore: {
     getScans: () =>
       ipcRenderer.invoke("scan-store:get-scans") as Promise<
-        (Electric_cyl_scans & {
-          electric_phenotypers: Electric_phenotypers;
-          electric_cyl_images: Electric_cyl_images[];
+        (Scan & {
+          phenotyper: Phenotyper;
+          images: Image[];
         })[]
       >,
     getScan: (scanId: string) =>
       ipcRenderer.invoke("scan-store:get-scan", [scanId]) as Promise<
-        Electric_cyl_scans & {
-          electric_phenotypers: Electric_phenotypers;
-          electric_cyl_images: Electric_cyl_images[];
+        Scan & {
+          phenotyper: Phenotyper;
+          images: Image[];
         }
       >,
     deleteScan: (scanId: string) =>

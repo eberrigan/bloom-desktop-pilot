@@ -3,8 +3,6 @@ import { v4 as uuidv4 } from "uuid";
 import { spawn } from "node:child_process";
 import fs from "fs";
 
-import { Electric_cyl_scans } from "../generated/client";
-
 class Scanner {
   private scanId: string | null = null;
   private phenotyperId: string | null = null;
@@ -13,11 +11,11 @@ class Scanner {
   private plantAgeDays: number | null = null;
   private scanPath: string | null = null;
   private scanPartialPath: string | null = null;
-  private plantQrCode: string | null = null;
+  private plantId: string | null = null;
   private python: string;
   private capture_scan_py: string;
   private scans_dir: string;
-  private scanner_id: string;
+  private scanner_name: string;
   private scanMetadata: ScanMetadata | null = null;
   private scanProgress: ScanProgress | null = defaultProgress();
   private images: ScanImages = [];
@@ -34,7 +32,7 @@ class Scanner {
     this.python = config.python;
     this.capture_scan_py = config.capture_scan_py;
     this.scans_dir = config.scans_dir;
-    this.scanner_id = config.scanner_id;
+    this.scanner_name = config.scanner_name;
     this.cameraIpAddress = config.camera_ip_address;
   }
 
@@ -49,7 +47,7 @@ class Scanner {
     // get the date in the format YYYY-MM-DD in the local timezone
     this.scanPartialPath = path.join(
       getLocalDateInYYYYMMDD(this.captureDate),
-      this.plantQrCode,
+      this.plantId,
       this.scanId
     );
     this.scanPath = path.join(this.scans_dir, this.scanPartialPath);
@@ -110,7 +108,7 @@ class Scanner {
   };
 
   getScannerId = () => {
-    return this.scanner_id;
+    return this.scanner_name;
   };
 
   getScansDir = () => {
@@ -126,11 +124,11 @@ class Scanner {
   };
 
   getPlantQrCode = () => {
-    return this.plantQrCode;
+    return this.plantId;
   };
 
   setPlantQrCode = (plantQrCode: string | null) => {
-    this.plantQrCode = plantQrCode;
+    this.plantId = plantQrCode;
   };
 
   getExperimentId = () => {
@@ -178,7 +176,7 @@ class Scanner {
     if (this.scanPartialPath === null) {
       throw new Error("scanPartialPath is null");
     }
-    if (this.plantQrCode === null) {
+    if (this.plantId === null) {
       throw new Error("plantQrCode is null");
     }
     if (this.captureDate === null) {
@@ -187,11 +185,11 @@ class Scanner {
     const metadata = {
       id: this.scanId,
       phenotyper_id: this.phenotyperId,
-      cyl_experiment_id: this.experimentId,
+      experiment_id: this.experimentId,
       wave_number: this.waveNumber,
       plant_age_days: this.plantAgeDays,
-      scanner_id: this.scanner_id,
-      plant_qr_code: this.plantQrCode,
+      scanner_name: this.scanner_name,
+      plant_id: this.plantId,
       path: this.scanPartialPath,
       capture_date: this.captureDate.toISOString(),
       ...this.cameraSettings,

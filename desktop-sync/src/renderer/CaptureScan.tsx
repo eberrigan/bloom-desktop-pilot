@@ -435,7 +435,7 @@ export function CaptureScan() {
             {images.length > 0 && scansDir !== null ? (
               <div className="m-4 relative">
                 <div className="absolute top-1 right-1 z-10 rounded-md border border-gray-300 px-4 py-2 bg-white text-sm font-medium text-gray-700 select-none">
-                  {scanMetadata.plant_qr_code}
+                  {scanMetadata.plant_id}
                 </div>
                 <img
                   src={`file://${scansDir}/${images[selectedImage].replaceAll(

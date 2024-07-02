@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Phenotyper {
+  id    String @id @default(uuid())
+  name  String
+  email String @unique
+  scans Scan[]
+}
+
+model Experiment {
+  id      String @id @default(uuid())
+  name    String
+  species String
+  scans   Scan[]
+}
+
+model Scan {
+  id              String     @id @default(uuid())
+  experiment_id   String
+  phenotyper_id   String
+  scanner_name    String
+  plant_id        String
+  path            String
+  capture_date    DateTime
+  num_frames      Int
+  exposure_time   Int
+  gain            Float
+  brightness      Float
+  contrast        Float
+  gamma           Float
+  seconds_per_rot Float
+  wave_number     Int
+  plant_age_days  Int
+  deleted         Boolean    @default(false)
+  experiment      Experiment @relation(fields: [experiment_id], references: [id])
+  phenotyper      Phenotyper @relation(fields: [phenotyper_id], references: [id])
+  images          Image[]
+}
+
+model Image {
+  id           String @id @default(uuid())
+  scan_id      String
+  frame_number Int
+  path         String
+  status       String
+  scan         Scan   @relation(fields: [scan_id], references: [id])
+}

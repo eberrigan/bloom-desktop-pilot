@@ -1,15 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, Link, Outlet } from "react-router-dom";
-import {
-  Electric_cyl_scans,
-  Electric_phenotypers,
-  Electric_cyl_images,
-} from "../generated/client";
-import { Database } from "../types/database.types";
-import { ScansWithPhenotypers } from "../types/electric.types";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
+import { ScanWithPhenotyper } from "../types/electric.types";
 import { ScanPreview } from "./ScanPreview";
-import { getSupabaseClient } from "./util";
 
 const ipcRenderer = window.electron.ipcRenderer;
 const getScans = window.electron.scanStore.getScans;
@@ -28,14 +21,10 @@ export function BrowseScans({
   showOnlyScanner?: string | null;
   onDeleted?: () => void;
 }) {
-  const [scans, setScans] = useState<ScansWithPhenotypers[]>([]);
-  const [selectedScan, setSelectedScan] = useState<number | null>(null);
-  const [supabase, setSupabase] = useState<SupabaseClient<Database> | null>(
-    null
-  );
+  const [scans, setScans] = useState<ScanWithPhenotyper[]>([]);
 
   const fetchScans = useCallback(() => {
-    getScans().then((response: ScansWithPhenotypers[]) => setScans(response));
+    getScans().then((response: ScanWithPhenotyper[]) => setScans(response));
   }, []);
 
   useEffect(() => {
@@ -44,12 +33,6 @@ export function BrowseScans({
 
   useEffect(() => {
     return ipcRenderer.on("electric:scans-updated", fetchScans);
-  }, []);
-
-  useEffect(() => {
-    getSupabaseClient().then((client) => {
-      setSupabase(client);
-    });
   }, []);
 
   return (
@@ -89,7 +72,7 @@ export function BrowseScans({
             .filter((scan) => !scan.deleted)
             .filter((scan) => {
               if (showOnlyScanner) {
-                return scan.scanner_id === showOnlyScanner;
+                return scan.scanner_name === showOnlyScanner;
               }
               return true;
             })
@@ -114,21 +97,20 @@ export function BrowseScans({
                       to={`/browse-scans/${scan.id}`}
                       className="text-lime-700 hover:underline"
                     >
-                      {scan.plant_qr_code || "No plant QR code"}
+                      {scan.plant_id || "No plant QR code"}
                     </Link>
                   }
                 </td>
                 <td className="px-2 py-2">{formatDate(scan.capture_date)}</td>
                 <td className="px-2 py-2">
-                  <Phenotyper phenotyper={scan?.electric_phenotypers} />
+                  <Phenotyper phenotyper={scan?.phenotyper} />
                 </td>
-                <td className="px-2 py-2">{scan.scanner_id}</td>
+                <td className="px-2 py-2">{scan.scanner_name}</td>
                 <td className="px-2 py-2">{scan.exposure_time}</td>
                 <td className="px-2 py-2">{scan.gain}</td>
                 <td>
                   <ScanPreview
                     scan={scan}
-                    supabase={supabase}
                     thumb={true}
                     link={`/browse-scans/${scan.id}`}
                   />
@@ -136,11 +118,10 @@ export function BrowseScans({
                 <td className="px-2 py-2">
                   <ProgressBar
                     value={
-                      scan.electric_cyl_images.filter(
-                        (image) => image.status == "UPLOADED"
-                      ).length
+                      scan.images.filter((image) => image.status == "UPLOADED")
+                        .length
                     }
-                    max={scan.electric_cyl_images.length}
+                    max={scan.images.length}
                   />
                 </td>
                 {showTodayOnly && (
@@ -213,7 +194,7 @@ function UploadControls() {
   );
 }
 
-function Phenotyper({ phenotyper }: { phenotyper: Electric_phenotypers }) {
+function Phenotyper({ phenotyper }: { phenotyper: Phenotyper }) {
   return (
     <div>
       <span className="inline-block">{formatName(phenotyper.name)}</span>

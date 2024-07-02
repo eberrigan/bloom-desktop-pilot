@@ -9,21 +9,21 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { StorageError } from "@supabase/storage-js";
 
 import { Database } from "../types/database.types";
-import { Electric_cyl_images, Electric_cyl_scans } from "../generated/client";
-import { ElectricStore } from "./electricstore";
+import { Image, Scan } from "@prisma/client";
+import { PrismaStore } from "./prismastore";
 
-type ImagesWithScans = Electric_cyl_images & {
-  electric_cyl_scans: Electric_cyl_scans;
+type ImageWithScan = Image & {
+  scan: Scan;
 };
 
 export class ImageUploader {
   private supabase: SupabaseClient<Database> | null = null;
-  private electricStore: ElectricStore;
+  private prismaStore: PrismaStore;
   private scans_dir: string;
   // private localStorage: LocalStorage = new LocalStorage();
 
-  constructor(electricStore: ElectricStore, scans_dir: string) {
-    this.electricStore = electricStore;
+  constructor(prismaStore: PrismaStore, scans_dir: string) {
+    this.prismaStore = prismaStore;
     this.scans_dir = scans_dir;
   }
 
@@ -31,7 +31,7 @@ export class ImageUploader {
     this.supabase = await getSupabaseClient(); // this.localStorage);
   };
 
-  uploadImages = async (images: ImagesWithScans[]) => {
+  uploadImages = async (images: ImageWithScan[]) => {
     const nWorkers = 4;
     const pngCompression = 9;
     await concurrentMap(images, nWorkers, async (image, i) => {
@@ -50,7 +50,7 @@ export class ImageUploader {
   };
 
   uploadImage = async (
-    image: ImagesWithScans,
+    image: ImageWithScan,
     opts?: { pngCompression: number }
   ) => {
     const pngCompression = opts?.pngCompression || 9;
@@ -58,10 +58,10 @@ export class ImageUploader {
     const src = path.join(this.scans_dir, image.path);
 
     const dst = `bloom-desktop-cyl-scans/${
-      image.electric_cyl_scans.scanner_id
-    }/${image.electric_cyl_scans.capture_date.toISOString()}/scan_${
-      image.electric_cyl_scans.id
-    }/${image.electric_cyl_scans.plant_qr_code}/${image.frame_number}.png`;
+      image.scan.scanner_name
+    }/${image.scan.capture_date.toISOString()}/scan_${image.scan.id}/${
+      image.scan.plant_id
+    }/${image.frame_number}.png`;
 
     // upload image to supabase
     const bucket = "images";
@@ -81,11 +81,10 @@ export class ImageUploader {
     }
 
     // update image metadata in electric
-    const { error: dbError } = await this.electricStore.updateImageMetadata(
+    const { error: dbError } = await this.prismaStore.updateImageMetadata(
       image.id,
       {
         status: "UPLOADED",
-        supabase_object_path: dst,
       }
     );
     if (dbError) {
@@ -122,10 +121,10 @@ export class ImageUploader {
 }
 
 export async function createImageUploader(
-  electricStore: ElectricStore,
+  prismaStore: PrismaStore,
   scans_dir: string
 ) {
-  const bloom_uploader = new ImageUploader(electricStore, scans_dir);
+  const bloom_uploader = new ImageUploader(prismaStore, scans_dir);
   await bloom_uploader.init();
   return bloom_uploader;
 }
@@ -209,84 +208,3 @@ async function concurrentMap<T, U>(
 
   return result;
 }
-
-// export async function uploadImages(
-//   imagePaths: string[],
-//   metadata: CylImageMetadata[],
-//   uploader: FileUploader,
-//   store: DataStore,
-//   opts?: {
-//     nWorkers?: number;
-//     pngCompression?: number;
-//     before?: (index: number, m: CylImageMetadata) => void;
-//     result?: (
-//       index: number,
-//       m: CylImageMetadata,
-//       created: number | null,
-//       error: any
-//     ) => void;
-//   }
-// ) {
-//   const { before, result } = opts || {};
-//   const nWorkers = opts?.nWorkers || 4;
-//   const pngCompression = opts?.pngCompression || 9;
-//   await concurrentMap(metadata, nWorkers, async (m, i) => {
-//     if (before) {
-//       before(i, metadata[i]);
-//     }
-//     const { created, error } = await uploadImage(
-//       imagePaths[i],
-//       metadata[i],
-//       uploader,
-//       store,
-//       { pngCompression }
-//     );
-//     if (result) {
-//       result(i, metadata[i], created, error);
-//     }
-//   });
-// }
-
-// async function uploadImage(
-//   imagePath: string,
-//   metadata: CylImageMetadata,
-//   uploader: FileUploader,
-//   store: DataStore,
-//   opts?: { pngCompression?: number }
-// ) {
-//   const pngCompression = opts?.pngCompression || 9;
-//   // check that imagePath exists
-//   if (!fs.existsSync(imagePath)) {
-//     return { created: null, error: new Error("imagePath does not exist") };
-//   }
-//   const { created, error: dbError } = await store.insertImageMetadata(metadata);
-//   // if created, then attempt to upload image
-//   let uploadError;
-//   if (created !== null && dbError === null) {
-//     const bucket = "images";
-//     const dir = "cyl-images";
-//     const filename = `cyl-image_${created}_${uuid.v4()}.png`;
-//     let targetPath = path.join(dir, filename);
-//     ({ error: uploadError } = await uploader.uploadImage(
-//       imagePath,
-//       targetPath,
-//       bucket,
-//       { pngCompression }
-//     ));
-//     // if upload succeeds, set image.object_path and image.status = 'SUCCESS'
-//     if (uploadError === null) {
-//       const { error } = await store.updateImageMetadata(created, {
-//         object_path: targetPath,
-//         status: "SUCCESS",
-//       });
-//     } else {
-//       const { error } = await store.updateImageMetadata(created, {
-//         status: "ERROR",
-//       });
-//     }
-//   } else {
-//     uploadError = null;
-//   }
-
-//   return { created, error: dbError || uploadError };
-// }

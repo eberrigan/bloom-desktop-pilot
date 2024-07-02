@@ -11,7 +11,11 @@ import { rendererConfig } from "./webpack.renderer.config";
 
 const config: ForgeConfig = {
   packagerConfig: {
-    asar: true,
+    asar: {
+      // @ts-ignore
+      unpack: ["**/node_modules/sharp/**/*", "**/node_modules/@img/**/*"],
+    },
+    icon: "./src/assets/icon",
   },
   rebuildConfig: {},
   makers: [

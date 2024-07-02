@@ -3,18 +3,16 @@ type ScannerConfig = {
   capture_scan_py: string;
   stream_scans_py?: string;
   scans_dir: string;
-  scanner_id: string;
+  scanner_name: string;
   camera_ip_address: string;
 };
 
 type ScanMetadata = Readonly<{
   id: string;
+  experiment_id: string;
   phenotyper_id: string;
-  cyl_experiment_id: string;
-  wave_number: number;
-  plant_age_days: number;
-  scanner_id: string;
-  plant_qr_code: string;
+  scanner_name: string;
+  plant_id: string;
   path: string;
   capture_date: string;
   num_frames: number;
@@ -24,6 +22,8 @@ type ScanMetadata = Readonly<{
   contrast: number;
   gamma: number;
   seconds_per_rot: number;
+  wave_number: number;
+  plant_age_days: number;
 }>;
 
 type ScanStatus = "idle" | "capturing" | "saving" | "complete";

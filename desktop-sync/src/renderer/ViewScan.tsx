@@ -1,32 +1,18 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-// import { Electric_cyl_scans } from "../generated/client/prismaClient";
-import {
-  Electric_cyl_scans,
-  Electric_cyl_images,
-  Electric_phenotypers,
-} from "../generated/client";
-import { SupabaseClient } from "@supabase/supabase-js";
-import { Database } from "../types/database.types";
-import { getSupabaseClient } from "./util";
+import { useNavigate, useParams } from "react-router-dom";
+
 import { ScanPreview } from "./ScanPreview";
+import { Phenotyper, Scan } from "@prisma/client";
+import { ScanWithPhenotyper } from "../types/electric.types";
 
 const getScan = window.electron.scanStore.getScan;
 // const getScanWithEmail = window.electron.scanStore.getScanWithEmail;
-
-type ScansWithPhenotypers = Electric_cyl_scans & {
-  electric_phenotypers: Electric_phenotypers;
-  electric_cyl_images: Electric_cyl_images[];
-};
 
 export function ViewScan() {
   const params = useParams();
   const scanId = params.scanId;
 
-  const [scan, setScan] = useState<ScansWithPhenotypers | null>(null);
-  const [supabase, setSupabase] = useState<SupabaseClient<Database> | null>(
-    null
-  );
+  const [scan, setScan] = useState<ScanWithPhenotyper | null>(null);
 
   let navigate = useNavigate();
 
@@ -35,14 +21,8 @@ export function ViewScan() {
   }
 
   useEffect(() => {
-    getSupabaseClient().then((client) => {
-      setSupabase(client);
-    });
-  }, []);
-
-  useEffect(() => {
     if (!scanId) return;
-    getScan(scanId).then((response: ScansWithPhenotypers) => setScan(response));
+    getScan(scanId).then((response: ScanWithPhenotyper) => setScan(response));
   }, [scanId]);
 
   return (
@@ -56,21 +36,16 @@ export function ViewScan() {
       {scan ? (
         <div>
           <div className="py-2">
-            <ScanPreview
-              scan={scan}
-              supabase={supabase}
-              thumb={false}
-              link={null}
-            />
+            <ScanPreview scan={scan} thumb={false} link={null} />
           </div>
           <div className="text-xs mt-2 font-bold">Plant QR Code</div>
-          <div>{scan?.plant_qr_code}</div>
+          <div>{scan?.plant_id}</div>
           <div className="text-xs mt-2 font-bold">Date</div>
           <div>{scan && formatDate(scan?.capture_date)}</div>
           <div className="text-xs mt-2 font-bold">Phenotyper</div>
-          <Phenotyper phenotyper={scan?.electric_phenotypers} />
+          <Phenotyper phenotyper={scan?.phenotyper} />
           <div className="text-xs mt-2 font-bold">Scanner</div>
-          <div>{scan?.scanner_id}</div>
+          <div>{scan?.scanner_name}</div>
           <div className="text-xs mt-2 font-bold">
             Exposure, Gamma, Contrast, Brightness, Gain
           </div>
@@ -88,7 +63,7 @@ export function ViewScan() {
   );
 }
 
-function Phenotyper({ phenotyper }: { phenotyper: Electric_phenotypers }) {
+function Phenotyper({ phenotyper }: { phenotyper: Phenotyper }) {
   return (
     <div>
       {phenotyper.name} ({phenotyper.email})

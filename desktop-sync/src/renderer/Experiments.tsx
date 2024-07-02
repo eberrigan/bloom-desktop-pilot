@@ -1,5 +1,5 @@
+import { Experiment } from "@prisma/client";
 import React, { useCallback, useEffect, useState } from "react";
-import { Electric_cyl_experiments } from "../generated/client";
 
 // UI to control:
 // - gain
@@ -26,9 +26,7 @@ const species = [
 ];
 
 export function Experiments() {
-  const [experiments, setExperiments] = useState<
-    Electric_cyl_experiments[] | null
-  >(null);
+  const [experiments, setExperiments] = useState<Experiment[] | null>(null);
   const [newExperimentName, setNewExperimentName] = useState<string>("");
   const [newExperimentSpecies, setNewExperimentSpecies] = useState<string>(
     species[0]
@@ -37,7 +35,7 @@ export function Experiments() {
   useEffect(() => {
     getExperiments()
       .then((response) => {
-        const experiments = response as Electric_cyl_experiments[];
+        const experiments = response as Experiment[];
         setExperiments(experiments);
       })
       .catch((err) => {
@@ -86,7 +84,7 @@ export function Experiments() {
                 return getExperiments();
               })
               .then((response) => {
-                const experiments = response as Electric_cyl_experiments[];
+                const experiments = response as Experiment[];
                 setExperiments(experiments);
               })
               .catch((err) => {
