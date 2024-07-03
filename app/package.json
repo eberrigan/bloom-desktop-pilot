@@ -11,18 +11,10 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "backend:start": "cd ./electric && docker compose up -d",
-    "backend:stop": "cd ./electric && docker compose stop",
-    "backend:restart": "cd ./electric && docker compose restart",
-    "backend:up": "cd ./electric && docker compose up -d",
-    "backend:down": "cd ./electric && docker compose down -v --remove-orphans",
-    "client": "electric-sql",
-    "client:generate": "electric-sql generate --service http://localhost:5133 --proxy postgresql://prisma:proxy_password@localhost:65432/postgres",
-    "client:generate:debug": "electric-sql generate --service http://localhost:5133 --proxy postgresql://prisma:proxy_password@localhost:65432/postgres --debug",
+    "client:generate": "npx prisma generate",
     "client:watch": "npm run client:generate --watch",
-    "db:reset": "npx supabase@beta db reset --db-url postgresql://postgres:proxy_password@localhost:65432/postgres",
-    "db:migrate": "npx supabase@beta db push --db-url postgresql://postgres:proxy_password@localhost:65432/postgres",
-    "db:load-data": "node ./db/load-data.js"
+    "db:generate": "npx prisma migrate dev --create-only",
+    "db:deploy": "npx prisma migrate deploy"
   },
   "keywords": [],
   "author": {

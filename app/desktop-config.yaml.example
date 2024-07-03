@@ -1,0 +1,13 @@
+python: /Users/djbutler/anaconda3/envs/salk-tm/bin/python
+capture_scan_py: /Users/djbutler/dev/bloom-desktop-pilot/pylon/pylon_fake.py
+stream_scans_py: /Users/djbutler/dev/bloom-desktop-pilot/pylon/pylon_stream_forever_fake.py
+scans_dir: /tmp/bloom-data/cyth-2
+scanner_name: DanLaptop
+local_db_path: /Users/djbutler/.bloom/prisma.db
+camera_ip_address: 10.0.0.23
+
+bloom_scanner_username: <scanner>@salk.edu
+bloom_scanner_password: <password>
+
+bloom_api_url: <bloom_api_url>
+bloom_anon_key: <bloom_anon_key>
