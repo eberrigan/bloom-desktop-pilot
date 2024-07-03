@@ -1,1 +1,0 @@
-ALTER TABLE electric_cyl_scans ADD COLUMN deleted BOOLEAN;
