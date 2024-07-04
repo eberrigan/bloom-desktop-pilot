@@ -95,7 +95,7 @@ export class PrismaStore {
 
   updateImageMetadata = async (imageId: string, metadata: Partial<Image>) => {
     try {
-      this.prisma.image.update({
+      await this.prisma.image.update({
         data: metadata,
         where: { id: imageId },
       });
@@ -168,8 +168,8 @@ export class PrismaStore {
 
   getImagesToUpload = async () => {
     return this.prisma.image.findMany({
-      where: { status: { not: "UPLOADED" }, scan_id: { not: null } },
-      include: { scan: true },
+      where: { status: { not: "UPLOADED" } },
+      include: { scan: { include: { experiment: true } } },
       orderBy: { scan: { capture_date: "asc" } },
     });
   };

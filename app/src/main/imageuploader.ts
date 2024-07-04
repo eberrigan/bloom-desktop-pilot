@@ -3,6 +3,7 @@ import path from "path";
 import * as os from "os";
 import * as yaml from "js-yaml";
 import { createClient } from "@supabase/supabase-js";
+
 import sharp from "sharp";
 // import { LocalStorage } from './local-storage';
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -12,112 +13,184 @@ import { Database } from "../types/database.types";
 import { Image, Scan } from "@prisma/client";
 import { PrismaStore } from "./prismastore";
 
-type ImageWithScan = Image & {
-  scan: Scan;
+import { uploadImages, CylImageMetadata } from "@salk-hpi/bloom-fs";
+import { SupabaseStore, SupabaseUploader } from "@salk-hpi/bloom-js";
+
+type ImageWithScanWithExperiment = Image & {
+  scan: Scan & {
+    experiment: Experiment;
+  };
 };
 
 export class ImageUploader {
   private supabase: SupabaseClient<Database> | null = null;
   private prismaStore: PrismaStore;
+  private nWorkers: number;
+  private pngCompression: number;
   private scans_dir: string;
   // private localStorage: LocalStorage = new LocalStorage();
 
-  constructor(prismaStore: PrismaStore, scans_dir: string) {
+  constructor(
+    prismaStore: PrismaStore,
+    scans_dir: string,
+    nWorkers = 4,
+    pngCompression = 9
+  ) {
     this.prismaStore = prismaStore;
     this.scans_dir = scans_dir;
+    this.nWorkers = nWorkers;
+    this.pngCompression = pngCompression;
   }
 
   init = async () => {
     this.supabase = await getSupabaseClient(); // this.localStorage);
   };
 
-  uploadImages = async (images: ImageWithScan[]) => {
-    const nWorkers = 4;
-    const pngCompression = 9;
-    await concurrentMap(images, nWorkers, async (image, i) => {
-      const { created, error } = await this.uploadImage(image, {
-        pngCompression,
-      });
-      if (error) {
-        console.error(
-          `Error uploading image ${image.path}: ${JSON.stringify(error)}`
-        );
-      }
-      if (created) {
-        console.log(`Uploaded image ${image.path}`);
-      }
+  uploadImages = async (images: ImageWithScanWithExperiment[]) => {
+    // const client = await createSupabaseClient();
+    const uploader = new SupabaseUploader(this.supabase);
+    const store = new SupabaseStore(this.supabase);
+
+    const paths = images.map((image) => path.join(this.scans_dir, image.path));
+    console.log("Uploading images:", paths);
+    const metadata: CylImageMetadata[] = images.map((image) => {
+      return {
+        species: image.scan.experiment.species,
+        experiment: image.scan.experiment.name,
+        wave_number: image.scan.wave_number,
+        germ_day: 0,
+        germ_day_color: "none",
+        plant_age_days: image.scan.plant_age_days,
+        date_scanned: image.scan.capture_date.toISOString(),
+        device_name: image.scan.scanner_name,
+        plant_qr_code: image.scan.plant_id,
+        frame_number: image.frame_number,
+        accession_name: "Unknown",
+      };
+    });
+
+    console.log("Uploading images:", metadata);
+
+    await uploadImages(paths, metadata, uploader, store, {
+      nWorkers: this.nWorkers,
+      pngCompression: this.pngCompression,
+      before: (index, m) => {
+        console.log(`Uploading image ${index + 1}/${images.length}`);
+      },
+      result: async (index, m, created, error) => {
+        if (error) {
+          console.error(
+            `Error uploading image ${index + 1}: ${JSON.stringify(error)}`
+          );
+        }
+        if (created) {
+          console.log(`Uploaded image ${index + 1}`);
+          // update image metadata in prisma
+          console.log("Updating image " + images[index].id);
+          const { error: dbError } = await this.prismaStore.updateImageMetadata(
+            images[index].id,
+            {
+              status: "UPLOADED",
+            }
+          );
+          if (dbError) {
+            console.error(
+              `Error updating image metadata in prisma: ${JSON.stringify(
+                dbError
+              )}`
+            );
+          } else {
+            console.log(`Updated image metadata in prisma`);
+          }
+        }
+      },
     });
   };
 
-  uploadImage = async (
-    image: ImageWithScan,
-    opts?: { pngCompression: number }
-  ) => {
-    const pngCompression = opts?.pngCompression || 9;
+  // uploadImages = async (images: ImageWithScan[]) => {
+  //   const nWorkers = 4;
+  //   const pngCompression = 9;
+  //   await concurrentMap(images, nWorkers, async (image, i) => {
+  //     const { created, error } = await this.uploadImage(image, {
+  //       pngCompression,
+  //     });
+  //     if (error) {
+  //       console.error(
+  //         `Error uploading image ${image.path}: ${JSON.stringify(error)}`
+  //       );
+  //     }
+  //     if (created) {
+  //       console.log(`Uploaded image ${image.path}`);
+  //     }
+  //   });
+  // };
 
-    const src = path.join(this.scans_dir, image.path);
+  // uploadImage = async (
+  //   image: ImageWithScan,
+  //   opts?: { pngCompression: number }
+  // ) => {
+  //   const pngCompression = opts?.pngCompression || 9;
 
-    const dst = `bloom-desktop-cyl-scans/${
-      image.scan.scanner_name
-    }/${image.scan.capture_date.toISOString()}/scan_${image.scan.id}/${
-      image.scan.plant_id
-    }/${image.frame_number}.png`;
+  //   const src = path.join(this.scans_dir, image.path);
 
-    // upload image to supabase
-    const bucket = "images";
-    const { error } = await this.uploadImageFile(src, dst, bucket, {
-      pngCompression,
-    });
+  //   const dst = `bloom-desktop-cyl-scans/${
+  //     image.scan.scanner_name
+  //   }/${image.scan.capture_date.toISOString()}/scan_${image.scan.id}/${
+  //     image.scan.plant_id
+  //   }/${image.frame_number}.png`;
 
-    const castError: StorageError & { statusCode?: string } =
-      error as StorageError & { statusCode?: string };
+  //   // upload image to supabase
+  //   const bucket = "images";
+  //   const { error } = await this.uploadImageFile(src, dst, bucket, {
+  //     pngCompression,
+  //   });
 
-    if (castError) {
-      if ("statusCode" in castError && castError.statusCode === "409") {
-        console.log(`Image already exists: ${dst}`);
-      } else {
-        return { created: false, error };
-      }
-    }
+  //   if (error) {
+  //     if ("statusCode" in error && error.statusCode === "409") {
+  //       console.log(`Image already exists: ${dst}`);
+  //     } else {
+  //       return { created: false, error };
+  //     }
+  //   }
 
-    // update image metadata in electric
-    const { error: dbError } = await this.prismaStore.updateImageMetadata(
-      image.id,
-      {
-        status: "UPLOADED",
-      }
-    );
-    if (dbError) {
-      return { created: false, error: dbError };
-    }
-    return { created: true, error: null };
-  };
+  //   // update image metadata in prisma
+  //   const { error: dbError } = await this.prismaStore.updateImageMetadata(
+  //     image.id,
+  //     {
+  //       status: "UPLOADED",
+  //     }
+  //   );
+  //   if (dbError) {
+  //     return { created: false, error: dbError };
+  //   }
+  //   return { created: true, error: null };
+  // };
 
-  uploadImageFile = async (
-    src: string,
-    dst: string,
-    bucket: string,
-    opts?: { pngCompression: number }
-  ) => {
-    const pngCompression = opts?.pngCompression || 9;
-    const inputBuffer = await fs.promises.readFile(src);
+  // uploadImageFile = async (
+  //   src: string,
+  //   dst: string,
+  //   bucket: string,
+  //   opts?: { pngCompression: number }
+  // ) => {
+  //   const pngCompression = opts?.pngCompression || 9;
+  //   const inputBuffer = await fs.promises.readFile(src);
 
-    // Re-encode the image with high compression using sharp
-    const compressedBuffer = await sharp(inputBuffer)
-      .png({ compressionLevel: pngCompression })
-      .toBuffer();
+  //   // Re-encode the image with high compression using sharp
+  //   const compressedBuffer = await sharp(inputBuffer)
+  //     .png({ compressionLevel: pngCompression })
+  //     .toBuffer();
 
-    // const { fileTypeFromBuffer } = await import("file-type");
-    // const type = await fileTypeFromBuffer(data);
+  //   // const { fileTypeFromBuffer } = await import("file-type");
+  //   // const type = await fileTypeFromBuffer(data);
 
-    const type = { mime: "image/png" };
-    const storageOptions = { contentType: type?.mime };
-    const { error } = await this.supabase.storage
-      .from(bucket)
-      .upload(dst, compressedBuffer, storageOptions);
+  //   const type = { mime: "image/png" };
+  //   const storageOptions = { contentType: type?.mime };
+  //   const { error } = await this.supabase.storage
+  //     .from(bucket)
+  //     .upload(dst, compressedBuffer, storageOptions);
 
-    return { error };
-  };
+  //   return { error };
+  // };
 }
 
 export async function createImageUploader(

@@ -308,6 +308,10 @@ createPrismaStore(config.scans_dir, dbUpdated, "file:" + config.local_db_path)
 
     async function uploadImages() {
       const images = await store.getImagesToUpload();
+      console.log(
+        "getImagesToUpload() returned this many images: ",
+        images.length
+      );
       const imageUploader = await createImageUploader(store, config.scans_dir);
       await imageUploader.uploadImages(images);
     }
