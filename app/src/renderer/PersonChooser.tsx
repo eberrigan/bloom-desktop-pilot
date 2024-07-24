@@ -100,7 +100,7 @@ export function PersonChooser({
                 "rounded-md px-2 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none w-[200px] border border-gray-300"
               }
             >
-              <option value="">Choose a person</option>
+              <option value="">Choose a phenotyper</option>
               {phenotyperOptions.map((person) => (
                 <option key={person.id} value={person.id}>
                   {person.name}
