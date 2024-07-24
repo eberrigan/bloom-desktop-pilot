@@ -25,5 +25,9 @@ export function Streamer() {
     return ipcRenderer.on("streamer:image-captured", handleImage);
   }, [handleImage]);
 
-  return <>{base64img && <img src={base64img} alt="streamed image" />}</>;
+  return (
+    <div className="flex-grow">
+      {base64img && <img src={base64img} alt="streamed image" />}
+    </div>
+  );
 }

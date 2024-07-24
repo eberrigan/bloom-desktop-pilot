@@ -186,9 +186,7 @@ export function Layout() {
           </div>
           <div className="ml-4 flex flex-col">
             {/* <span className="text-xs font-bold">Electric</span> */}
-            <span>
-              <ElectricStatusBadge />
-            </span>
+            <span>{/* <ElectricStatusBadge /> */}</span>
           </div>
         </div>
       </div>

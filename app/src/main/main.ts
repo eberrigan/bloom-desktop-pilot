@@ -281,13 +281,13 @@ createPrismaStore(config.scans_dir, dbUpdated, "file:" + config.local_db_path)
       return store.createExperiment(args[0], args[1]);
     });
     ipcMain.handle("electric:get-scans", store.getScans);
-    // scanner.onScanComplete = (scan: Scan) => {
-    //   store.addScan(scan);
-    // };
-    ipcMain.handle("scanner:save-current-scan", async (event, args) => {
-      const scan = scanner.getCurrentScan();
+    scanner.onScanComplete = (scan: Scan) => {
       store.addScan(scan);
-    });
+    };
+    // ipcMain.handle("scanner:save-current-scan", async (event, args) => {
+    //   const scan = scanner.getCurrentScan();
+    //   store.addScan(scan);
+    // });
     ipcMain.handle("scanner:delete-current-scan", async (event, args) => {
       scanner.deleteCurrentScan();
     });
