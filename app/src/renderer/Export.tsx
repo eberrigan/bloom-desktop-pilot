@@ -18,9 +18,13 @@ export function Export() {
   const [experiments, setExperiments] = useState<ExperimentWithScans[] | null>(
     null
   );
-  const [selectedExpDates, setSelectedExpDates] = useState<any | null>(null);
+  const [selectedExpDates, setSelectedExpDates] = useState<{
+    [key: string]: boolean;
+  } | null>(null);
 
-  const [selectedExpScans, setSelectedExpScans] = useState<any | null>(null);
+  const [selectedExpScans, setSelectedExpScans] = useState<{
+    [key: string]: ScanWithPhenotyper[];
+  } | null>(null);
 
   const [targetDir, setTargetDir] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
@@ -45,8 +49,8 @@ export function Export() {
     electric
       .getExperimentsWithScans()
       .then((response) => {
-        const experiments = response as any[];
-        setExperiments(experiments);
+        const data = response as any[];
+        setExperiments(data);
       })
       .catch((err) => {
         console.error(err);
@@ -57,8 +61,8 @@ export function Export() {
     if (!experiments || !scannerId) {
       return;
     }
-    const newSelectedMap: any = {};
-    const newScans: any = {};
+    const newSelectedMap: { [key: string]: boolean } = {};
+    const newScans: { [key: string]: ScanWithPhenotyper[] } = {};
     experiments.forEach((experiment) => {
       const dates = getDates(experiment, scannerId);
       dates.forEach((date: number) => {
@@ -169,7 +173,9 @@ export function Export() {
             return;
           }
           setExporting(true);
-          const paths = selectedScans.map((scan: any) => scan.path);
+          const paths = selectedScans.map(
+            (scan: ScanWithPhenotyper) => scan.path
+          );
           fs.copyScans(paths, targetDir).then(() => {
             setExporting(false);
             successfullyExported();
@@ -193,11 +199,15 @@ export function Export() {
   );
 }
 
-function getScansForDate(experiment: any, date: number, scannerId: string) {
-  return experiment.electric_cyl_scans
-    .filter((scan: any) => !scan.deleted)
-    .filter((scan: any) => scan.scanner_id === scannerId)
-    .filter((scan: any) => {
+function getScansForDate(
+  experiment: ExperimentWithScans,
+  date: number,
+  scannerId: string
+) {
+  return experiment.scans
+    .filter((scan) => !scan.deleted)
+    .filter((scan) => scan.scanner_name === scannerId)
+    .filter((scan) => {
       const d = new Date(scan.capture_date);
       d.setHours(0, 0, 0, 0);
       return d.getTime() === date;
@@ -208,15 +218,15 @@ function dateLabel(count: number) {
   return count === 1 ? "1 scan" : `${count} scans`;
 }
 
-function getDates(experiment: any, scannerId: string) {
-  if (!experiment.electric_cyl_scans) {
+function getDates(experiment: ExperimentWithScans, scannerId: string) {
+  if (!experiment.scans) {
     return [];
   }
   const s = new Set(
-    experiment.electric_cyl_scans
-      .filter((scan: any) => !scan.deleted)
-      .filter((scan: any) => scan.scanner_id === scannerId)
-      .map((scan: any) => {
+    experiment.scans
+      .filter((scan) => !scan.deleted)
+      .filter((scan) => scan.scanner_name === scannerId)
+      .map((scan) => {
         // ignore the time part of the date
         const d = new Date(scan.capture_date);
         d.setHours(0, 0, 0, 0);
@@ -242,7 +252,7 @@ function formatDate(date: Date) {
   return new Intl.DateTimeFormat("en-US", options).format(date);
 }
 
-function getKey(experiment: any, date: number) {
+function getKey(experiment: ExperimentWithScans, date: number) {
   const formattedDate = formatDate(new Date(date)).replace(/ /g, "-");
   const key = `${experiment.id}-${formattedDate}`;
   return key;
