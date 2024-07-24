@@ -27,7 +27,9 @@ export function Streamer() {
 
   return (
     <div className="flex-grow">
-      {base64img && <img src={base64img} alt="streamed image" />}
+      {base64img && (
+        <img src={base64img} alt="streamed image" className="max-h-[300px]" />
+      )}
     </div>
   );
 }
