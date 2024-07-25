@@ -80,9 +80,23 @@ export class PrismaStore {
     }
   };
 
-  getScans = async () => {
-    return this.prisma.scan.findMany({
+  getScans = async (showTodayOnly: boolean = false) => {
+    const scans = await this.prisma.scan.findMany({
       include: { phenotyper: true, images: true },
+      orderBy: { capture_date: "desc" },
+      where: { deleted: false },
+    });
+    return scans.filter((scan) => {
+      if (showTodayOnly) {
+        // Only show scans from today
+        const today = new Date();
+        return (
+          scan.capture_date.getDate() === today.getDate() &&
+          scan.capture_date.getMonth() === today.getMonth() &&
+          scan.capture_date.getFullYear() === today.getFullYear()
+        );
+      }
+      return true;
     });
   };
 

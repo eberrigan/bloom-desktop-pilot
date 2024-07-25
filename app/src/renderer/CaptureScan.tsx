@@ -123,7 +123,9 @@ export function CaptureScan() {
       setIsStreaming(false);
       const name = uuidv4();
       setTimeout(() => {
-        ipcRenderer.sendMessage("scanner:start-scan", [name]);
+        if (!isScanning) {
+          ipcRenderer.sendMessage("scanner:start-scan", [name]);
+        }
       }, 3000);
     });
   }, []);
@@ -137,7 +139,7 @@ export function CaptureScan() {
       setImages([]);
       setNumCaptured(0);
       setIsSaving(false);
-      setIsScanning(true);
+      setIsScanning(true); // -> causes the Streamer not to be rendered, triggering a "streamer:streaming-stopped" event
       setSelectedImage(0);
       // don't send this until we receive the "streamer:streaming-stopped" event
       // const name = uuidv4();
@@ -336,11 +338,10 @@ export function CaptureScan() {
                 {errorMessage}
               </div>
             ) : null}
-            {scanMetadata === null ? (
+            {
               <div className="flex-grow flex flex-col">
                 <div className="flex-grow text-center flex flex-col ">
-                  {!streamingDisabled && <Streamer />}
-                  <div className="my-auto mt-4">
+                  <div className="my-auto mb-4">
                     <button
                       className={
                         "rounded-md border border-gray-300 px-4 py-2 bg-white text-xl font-medium " +
@@ -357,113 +358,21 @@ export function CaptureScan() {
                     </button>
                     <FieldInfo info="Available after metadata is entered." />
                   </div>
+                  {isScanning || isSaving ? (
+                    <div className="">
+                      <div className="">
+                        📷 Scanning... {numCaptured} / {nImages}
+                      </div>
+                    </div>
+                  ) : null}
+                  {!streamingDisabled ? (
+                    <Streamer />
+                  ) : (
+                    <div className="flex-grow"></div>
+                  )}
                 </div>
               </div>
-            ) : !(isScanning || isSaving) ? (
-              <div className="flex-grow flex flex-col">
-                <div className="flex-grow flex flex-col">
-                  <div>
-                    {/* button for saving current scan */}
-                    <button
-                      className={
-                        "rounded-md border border-gray-300 px-4 py-2 text-sm font-medium mr-2 text-green-700 bg-green-100 hover:bg-green-200"
-                      }
-                      onClick={(e) => {
-                        saveCurrentScan().then(() => {
-                          successfullySaved();
-                          resetScanner();
-                        });
-                      }}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-5 h-5 -mt-1 mr-1 inline"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                        />
-                      </svg>
-                      Save
-                    </button>
-                    {/* button for deleting current scan */}
-                    <button
-                      className={
-                        "rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-red-700 bg-red-100 hover:bg-red-200"
-                      }
-                      onClick={(e) => deleteCurrentScan()}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-5 h-5 -mt-1 mr-1 inline"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                        />
-                      </svg>
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ) : null}
-            {isScanning || isSaving ? (
-              <div className="">
-                <div className="">
-                  📷 Scanning... {numCaptured} / {nImages}
-                </div>
-              </div>
-            ) : null}
-            {/* {isSaving ? (
-              <div className="">
-                <div className="">
-                  💾 Saving... {numSaved} / {nImages}
-                </div>
-              </div>
-            ) : null} */}
-            {images.length > 0 && scansDir !== null ? (
-              <div className="m-4 relative">
-                <div className="absolute top-1 right-1 z-10 rounded-md border border-gray-300 px-4 py-2 bg-white text-sm font-medium text-gray-700 select-none">
-                  {scanMetadata.plant_id}
-                </div>
-                <img
-                  src={`file://${scansDir}/${images[selectedImage].replaceAll(
-                    "\\",
-                    "/"
-                  )}`}
-                  className="rounded-md z-0"
-                />
-              </div>
-            ) : // <div style={{ width: "500px", height: "250px" }}></div>
-            null}
-            {images.length > 0 ? (
-              <div className="text-center">
-                <input
-                  type="range"
-                  min="0"
-                  max={images.length - 1}
-                  value={selectedImage}
-                  onChange={handleSliderChange}
-                  className="w-[200px] cursor-ew-resize"
-                />
-                {/* <div className="mt-2">
-                  <span className="px-4">
-                    {selectedImage + 1} / {images.length}
-                  </span>
-                </div> */}
-              </div>
-            ) : null}
+            }
           </div>
         </div>
       </div>

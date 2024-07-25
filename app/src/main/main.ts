@@ -280,14 +280,14 @@ createPrismaStore(config.scans_dir, dbUpdated, "file:" + config.local_db_path)
     ipcMain.handle("electric:create-experiment", async (event, args) => {
       return store.createExperiment(args[0], args[1]);
     });
-    ipcMain.handle("electric:get-scans", store.getScans);
-    // scanner.onScanComplete = (scan: Scan) => {
-    //   store.addScan(scan);
-    // };
-    ipcMain.handle("scanner:save-current-scan", async (event, args) => {
-      const scan = scanner.getCurrentScan();
+    // ipcMain.handle("electric:get-scans", store.getScans);
+    scanner.onScanComplete = (scan: Scan) => {
       store.addScan(scan);
-    });
+    };
+    // ipcMain.handle("scanner:save-current-scan", async (event, args) => {
+    //   const scan = scanner.getCurrentScan();
+    //   store.addScan(scan);
+    // });
     ipcMain.handle("scanner:delete-current-scan", async (event, args) => {
       scanner.deleteCurrentScan();
     });
@@ -298,7 +298,9 @@ createPrismaStore(config.scans_dir, dbUpdated, "file:" + config.local_db_path)
       mainWindow?.webContents.send("electric:scans-updated");
     };
     ipcMain.handle("electric:get-status", store.getStatus);
-    ipcMain.handle("scan-store:get-scans", store.getScans);
+    ipcMain.handle("scan-store:get-scans", async (event, args) => {
+      return store.getScans(args[0]);
+    });
     ipcMain.handle("scan-store:get-scan", async (event, args) => {
       return store.getScan(args[0]);
     });
