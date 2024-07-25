@@ -22,9 +22,13 @@ export function BrowseScans({
   onDeleted?: () => void;
 }) {
   const [scans, setScans] = useState<ScanWithPhenotyper[]>([]);
+  const [pageNumber, setPageNumber] = useState(1);
+  const pageSize = 10;
 
   const fetchScans = useCallback(() => {
-    getScans().then((response: ScanWithPhenotyper[]) => setScans(response));
+    getScans(showTodayOnly).then((response: ScanWithPhenotyper[]) =>
+      setScans(response)
+    );
   }, []);
 
   useEffect(() => {
@@ -35,126 +39,154 @@ export function BrowseScans({
     return ipcRenderer.on("electric:scans-updated", fetchScans);
   }, []);
 
+  const numPages = Math.ceil(scans.length / pageSize);
+
   return (
-    <div className="min-h-0 min-w-0 overflow-scroll flex-grow">
+    <div className="min-h-0 min-w-0 flex-grow flex flex-col items-stretch relative">
       {showUploadButton && <UploadControls />}
-      <table className="rounded-md mb-8">
-        <thead>
-          <tr>
-            <th className="text-xs text-left px-2 pb-4 align-bottom">
-              Plant ID
-            </th>
-            <th className="text-xs text-left px-2 pb-4 align-bottom">Date</th>
-            <th className="text-xs text-left px-2 pb-4 align-bottom">
-              Phenotyper
-            </th>
-            <th className="text-xs text-left px-2 pb-4 align-bottom">Device</th>
-            <th className="text-xs text-left px-2 pb-4 align-bottom">
-              Exposure
-            </th>
-            <th className="text-xs text-left px-2 pb-4 align-bottom">Gain</th>
-            <th className="text-xs text-left px-2 pb-4 align-bottom text-center">
-              Preview
-            </th>
-            <th className="text-xs text-left px-2 pb-4 align-bottom">
-              Upload status
-            </th>
-            {showTodayOnly && (
-              <th className="text-xs text-left px-2 pb-4 align-bottom">
-                Delete
-              </th>
-            )}
-          </tr>
-        </thead>
-        <tbody>
-          {scans
-            .sort((a, b) => a.capture_date.getTime() - b.capture_date.getTime())
-            .filter((scan) => !scan.deleted)
-            .filter((scan) => {
-              if (showOnlyScanner) {
-                return scan.scanner_name === showOnlyScanner;
-              }
-              return true;
-            })
-            .filter((scan) => {
-              if (showTodayOnly) {
-                // Only show scans from today
-                const today = new Date();
-                return (
-                  scan.capture_date.getDate() === today.getDate() &&
-                  scan.capture_date.getMonth() === today.getMonth() &&
-                  scan.capture_date.getFullYear() === today.getFullYear()
+      <div className="bg-stone-100 border-b flex flex-row pb-1 text-sm">
+        <div className="pr-4">
+          <button
+            onClick={() => {
+              setPageNumber(Math.max(pageNumber - 1, 1));
+            }}
+          >
+            &larr;
+          </button>
+        </div>
+        <div className="pr-4">
+          <button
+            onClick={() => {
+              setPageNumber(Math.min(pageNumber + 1, numPages));
+            }}
+          >
+            &rarr;
+          </button>
+        </div>
+        <div className="pr-4">
+          Page{" "}
+          <input
+            type="text"
+            value={pageNumber}
+            size={3}
+            onChange={(e) => {
+              if (e.target.value === "") {
+                setPageNumber(1);
+              } else {
+                const parsedPageNumber = parseInt(e.target.value) || 1;
+                const clippedPageNumber = Math.max(
+                  1,
+                  Math.min(parsedPageNumber, numPages)
                 );
+                setPageNumber(clippedPageNumber);
               }
-              return true;
-            })
-            .reverse()
-            .map((scan) => (
-              <tr key={scan.id} className="odd:bg-stone-200">
-                <td className="px-2 py-2">
-                  {
-                    <Link
-                      to={`/browse-scans/${scan.id}`}
-                      className="text-lime-700 hover:underline"
-                    >
-                      {scan.plant_id || "No plant QR code"}
-                    </Link>
-                  }
-                </td>
-                <td className="px-2 py-2">{formatDate(scan.capture_date)}</td>
-                <td className="px-2 py-2">
-                  <Phenotyper phenotyper={scan?.phenotyper} />
-                </td>
-                <td className="px-2 py-2">{scan.scanner_name}</td>
-                <td className="px-2 py-2">{scan.exposure_time}</td>
-                <td className="px-2 py-2">{scan.gain}</td>
-                <td>
-                  <ScanPreview
-                    scan={scan}
-                    thumb={true}
-                    link={`/browse-scans/${scan.id}`}
-                  />
-                </td>
-                <td className="px-2 py-2">
-                  <ProgressBar
-                    value={
-                      scan.images.filter((image) => image.status == "UPLOADED")
-                        .length
-                    }
-                    max={scan.images.length}
-                  />
-                </td>
-                {showTodayOnly && (
-                  <td>
-                    <button
-                      onClick={() => {
-                        console.log(`Deleting scan ${scan.id}`);
-                        deleteScan(scan.id);
-                        onDeleted();
-                      }}
-                      className="text-red-700 hover:underline"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-6 h-6"
+            }}
+          />{" "}
+          of {numPages} ({scans.length} scans)
+        </div>
+      </div>
+      <div className="min-h-0 min-w-0 flex-grow overflow-scroll">
+        <table className="rounded-md mb-8">
+          <thead>
+            <tr>
+              <th className="text-xs text-left px-2 pb-4 align-bottom">
+                Plant ID
+              </th>
+              <th className="text-xs text-left px-2 pb-4 align-bottom">Date</th>
+              <th className="text-xs text-left px-2 pb-4 align-bottom">
+                Phenotyper
+              </th>
+              <th className="text-xs text-left px-2 pb-4 align-bottom">
+                Device
+              </th>
+              <th className="text-xs text-left px-2 pb-4 align-bottom">
+                Exposure
+              </th>
+              <th className="text-xs text-left px-2 pb-4 align-bottom">Gain</th>
+              <th className="text-xs text-left px-2 pb-4 align-bottom text-center">
+                Preview
+              </th>
+              <th className="text-xs text-left px-2 pb-4 align-bottom">
+                Upload status
+              </th>
+              {showTodayOnly && (
+                <th className="text-xs text-left px-2 pb-4 align-bottom">
+                  Delete
+                </th>
+              )}
+            </tr>
+          </thead>
+          <tbody>
+            {scans
+              .slice((pageNumber - 1) * pageSize, pageNumber * pageSize)
+              .map((scan) => (
+                <tr key={scan.id} className="odd:bg-stone-200">
+                  <td className="px-2 py-2">
+                    {
+                      <Link
+                        to={`/browse-scans/${scan.id}`}
+                        className="text-lime-700 hover:underline"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                        />
-                      </svg>
-                    </button>
+                        {scan.plant_id || "No plant QR code"}
+                      </Link>
+                    }
                   </td>
-                )}
-              </tr>
-            ))}
-        </tbody>
-      </table>
+                  <td className="px-2 py-2">{formatDate(scan.capture_date)}</td>
+                  <td className="px-2 py-2">
+                    <Phenotyper phenotyper={scan?.phenotyper} />
+                  </td>
+                  <td className="px-2 py-2">{scan.scanner_name}</td>
+                  <td className="px-2 py-2">{scan.exposure_time}</td>
+                  <td className="px-2 py-2">{scan.gain}</td>
+                  <td>
+                    <ScanPreview
+                      scan={scan}
+                      thumb={true}
+                      link={`/browse-scans/${scan.id}`}
+                    />
+                  </td>
+                  <td className="px-2 py-2">
+                    <ProgressBar
+                      value={
+                        scan.images.filter(
+                          (image) => image.status == "UPLOADED"
+                        ).length
+                      }
+                      max={scan.images.length}
+                    />
+                  </td>
+                  {showTodayOnly && (
+                    <td>
+                      <button
+                        onClick={() => {
+                          console.log(`Deleting scan ${scan.id}`);
+                          deleteScan(scan.id);
+                          onDeleted();
+                        }}
+                        className="text-red-700 hover:underline"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-6 h-6"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                          />
+                        </svg>
+                      </button>
+                    </td>
+                  )}
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

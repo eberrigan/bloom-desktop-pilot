@@ -88,8 +88,8 @@ const electronHandler = {
     }) => ipcRenderer.invoke("streamer:set-camera-settings", [settings]),
   },
   scanStore: {
-    getScans: () =>
-      ipcRenderer.invoke("scan-store:get-scans") as Promise<
+    getScans: (showTodayOnly: boolean) =>
+      ipcRenderer.invoke("scan-store:get-scans", [showTodayOnly]) as Promise<
         (Scan & {
           phenotyper: Phenotyper;
           images: Image[];
