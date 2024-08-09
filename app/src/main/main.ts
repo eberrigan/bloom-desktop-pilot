@@ -304,6 +304,12 @@ createPrismaStore(config.scans_dir, dbUpdated, "file:" + config.local_db_path)
     ipcMain.handle("scan-store:get-scan", async (event, args) => {
       return store.getScan(args[0]);
     });
+    ipcMain.handle(
+      "scan-store:get-most-recent-scan-date",
+      async (event, args) => {
+        return store.getMostRecentScanDate(args[0], args[1]);
+      }
+    );
     ipcMain.handle("scan-store:delete-scan", async (event, args) => {
       store.deleteScan(args[0]);
     });

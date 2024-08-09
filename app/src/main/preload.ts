@@ -102,6 +102,11 @@ const electronHandler = {
           images: Image[];
         }
       >,
+    getMostRecentScanDate: (experimentId: string, plantId: string) =>
+      ipcRenderer.invoke("scan-store:get-most-recent-scan-date", [
+        experimentId,
+        plantId,
+      ]) as Promise<Date | null>,
     deleteScan: (scanId: string) =>
       ipcRenderer.invoke("scan-store:delete-scan", [scanId]),
   },
