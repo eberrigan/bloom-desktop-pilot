@@ -160,8 +160,9 @@ export function BrowseScans({
                       <button
                         onClick={() => {
                           console.log(`Deleting scan ${scan.id}`);
-                          deleteScan(scan.id);
-                          onDeleted();
+                          deleteScan(scan.id).then(() => {
+                            onDeleted();
+                          });
                         }}
                         className="text-red-700 hover:underline"
                       >

@@ -107,6 +107,25 @@ export class PrismaStore {
     });
   };
 
+  getMostRecentScanDate = async (
+    experimentId: string,
+    plantId: string
+  ): Promise<Date | null> => {
+    const scans = await this.prisma.scan.findMany({
+      where: {
+        plant_id: plantId,
+        experiment_id: experimentId,
+        NOT: { deleted: true },
+      },
+      orderBy: { capture_date: "desc" },
+    });
+    if (scans.length === 0) {
+      return null;
+    } else {
+      return scans[0].capture_date;
+    }
+  };
+
   updateImageMetadata = async (imageId: string, metadata: Partial<Image>) => {
     try {
       await this.prisma.image.update({

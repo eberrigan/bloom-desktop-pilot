@@ -7,6 +7,7 @@ import { parse } from "node:path";
 import { BrowseScans } from "./BrowseScans";
 import { ExperimentChooser } from "./ExperimentChooser";
 import { Streamer } from "./Streamer";
+import { set } from "zod";
 
 const setScannerPlantQrCode = window.electron.scanner.setPlantQrCode;
 const getScannerPlantQrCode = window.electron.scanner.getPlantQrCode;
@@ -17,6 +18,8 @@ const ipcRenderer = window.electron.ipcRenderer;
 const getScanData = window.electron.scanner.getScanData;
 const getScannerSettings = window.electron.scanner.getScannerSettings;
 const getScansDir = window.electron.scanner.getScansDir;
+
+const getMostRecentScanDate = window.electron.scanStore.getMostRecentScanDate;
 
 const saveCurrentScan = window.electron.scanner.saveCurrentScan;
 const resetScanner = window.electron.scanner.resetScanner;
@@ -36,6 +39,10 @@ export function CaptureScan() {
   const [selectedImage, setSelectedImage] = useState<number>(0);
   const [scansDir, setScansDir] = useState<string | null>(null);
 
+  const [mostRecentScanDate, setMostRecentScanDate] = useState<
+    Date | null | undefined
+  >(undefined);
+
   const [phenotyperId, setPhenotyperId] = useState<string | null>(null);
   const [experimentId, setExperimentId] = useState<string | null>(null);
   const [waveNumber, setWaveNumber] = useState<number | null>(NaN);
@@ -49,14 +56,14 @@ export function CaptureScan() {
   const [showDeletedMessage, setShowDeletedMessage] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const successfullySaved = () => {
+  const successfullySaved = async () => {
     setShowSuccessMessage(true);
     setTimeout(() => {
       setShowSuccessMessage(false);
     }, 3000);
   };
 
-  const successfullyDeleted = () => {
+  const successfullyDeleted = async () => {
     setShowDeletedMessage(true);
     setTimeout(() => {
       setShowDeletedMessage(false);
@@ -174,6 +181,32 @@ export function CaptureScan() {
     });
   }, []);
 
+  useEffect(() => {
+    setMostRecentScanDate(undefined);
+    if (experimentId && plantQrCode) {
+      getMostRecentScanDate(experimentId, plantQrCode).then((date) => {
+        setMostRecentScanDate(date);
+      });
+    }
+  }, [experimentId, plantQrCode]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (experimentId && plantQrCode) {
+        getMostRecentScanDate(experimentId, plantQrCode).then((date) => {
+          setMostRecentScanDate(date);
+        });
+      }
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [experimentId, plantQrCode]);
+
+  const scannedToday = mostRecentScanDate
+    ? new Date().getDate() === mostRecentScanDate.getDate() &&
+      new Date().getMonth() === mostRecentScanDate.getMonth() &&
+      new Date().getFullYear() === mostRecentScanDate.getFullYear()
+    : false;
+
   const scanDisabled =
     phenotyperId === null ||
     plantQrCode === null ||
@@ -184,7 +217,9 @@ export function CaptureScan() {
     Number.isNaN(waveNumber) ||
     isScanning ||
     isSaving ||
-    isStreaming;
+    isStreaming ||
+    mostRecentScanDate === undefined ||
+    scannedToday;
 
   const streamingDisabled = isScanning || isSaving;
 
@@ -314,6 +349,27 @@ export function CaptureScan() {
                   />
                   <FieldInfo info="Identifier for the plant (QR code or other identifier). Required field." />
                 </div>
+                {mostRecentScanDate !== undefined && (
+                  <div className="block text-xs text-left mt-1">
+                    {mostRecentScanDate === null ? (
+                      <span className="text-lime-700">New plant</span>
+                    ) : scannedToday ? (
+                      <>
+                        <span className="text-amber-700">
+                          Already scanned today
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="">Last scanned:</span>
+                        &nbsp;
+                        <span className="text-lime-700">
+                          {formatDate(mostRecentScanDate)}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
             }
           </div>
@@ -439,4 +495,20 @@ function FieldInfo({ info }: { info: string }) {
       </svg>
     </div>
   );
+}
+
+function formatDate(date: Date) {
+  // Options to configure the output format
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    // hour: "2-digit",
+    // minute: "2-digit",
+    // second: "2-digit",
+    // hour12: true,
+  };
+
+  // Use Intl.DateTimeFormat to format the date according to the options
+  return new Intl.DateTimeFormat("en-US", options).format(date);
 }
