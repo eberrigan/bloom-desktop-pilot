@@ -291,15 +291,22 @@ export function CaptureScan() {
                 <div className="mt-1">
                   <input
                     type="number"
-                    className="p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none"
+                    className={
+                      "p-2 rounded-md border bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none" +
+                      (waveNumber === null
+                        ? " border-amber-300"
+                        : " border-gray-300")
+                    }
                     value={waveNumber}
                     onChange={(e) => {
-                      const value = parseInt(e.target.value);
+                      const value =
+                        e.target.value === "" ? null : parseInt(e.target.value);
                       setWaveNumber(value);
                       scanner.setWaveNumber(value);
                     }}
+                    min={0}
                   />
-                  <FieldInfo info="Some experiments involve several waves of plants grown at different times. Optional field." />
+                  <FieldInfo info="A group of plants grown at the same time. For experiments with only one such group, the Wave Number is 1. Required field." />
                 </div>
               </div>
             }
@@ -313,11 +320,15 @@ export function CaptureScan() {
                     type="number"
                     min={0}
                     className={
-                      "p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none border border-gray-300"
+                      "p-2 rounded-md border bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none" +
+                      (plantAgeDays === null
+                        ? " border-amber-300"
+                        : " border-gray-300")
                     }
                     value={plantAgeDays}
                     onChange={(e) => {
-                      const value = parseInt(e.target.value);
+                      const value =
+                        e.target.value === "" ? null : parseInt(e.target.value);
                       setPlantAgeDays(value);
                       scanner.setPlantAgeDays(value);
                     }}
@@ -335,14 +346,16 @@ export function CaptureScan() {
                   <input
                     type="text"
                     className={
-                      "p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none border border-gray-300"
+                      "p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none border" +
+                      (plantQrCode === null
+                        ? " border-amber-300"
+                        : " border-gray-300")
                     }
                     value={plantQrCode || ""}
                     onChange={(e) => {
-                      const qrCode = e.target.value.replace(
-                        /[^a-zA-Z0-9\+\-\_]/g,
-                        ""
-                      );
+                      const value =
+                        e.target.value === "" ? null : e.target.value;
+                      const qrCode = value.replace(/[^a-zA-Z0-9\+\-\_]/g, "");
                       setPlantQrCode(qrCode);
                       setScannerPlantQrCode(qrCode);
                     }}

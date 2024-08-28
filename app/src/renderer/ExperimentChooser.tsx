@@ -97,7 +97,10 @@ export function ExperimentChooser({
               value={selectedExperimentId || ""}
               onChange={onChange}
               className={
-                "rounded-md px-2 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none w-[200px] border border-gray-300"
+                "rounded-md px-2 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none w-[200px] border" +
+                (selectedExperimentId === null
+                  ? " border-amber-300"
+                  : " border-gray-300")
               }
             >
               <option value="">Choose an experiment</option>
