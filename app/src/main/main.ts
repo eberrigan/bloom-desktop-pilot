@@ -272,13 +272,17 @@ createPrismaStore(config.scans_dir, dbUpdated, "file:" + config.local_db_path)
     ipcMain.handle("electric:create-phenotyper", async (event, args) => {
       return store.createPhenotyper(args[0], args[1]);
     });
+    ipcMain.handle("electric:get-scientists", store.getScientists);
+    ipcMain.handle("electric:create-scientist", async (event, args) => {
+      return store.createScientist(args[0], args[1]);
+    });
     ipcMain.handle("electric:get-experiments", store.getExperiments);
     ipcMain.handle(
       "electric:get-experiments-with-scans",
       store.getExperimentsWithScans
     );
     ipcMain.handle("electric:create-experiment", async (event, args) => {
-      return store.createExperiment(args[0], args[1]);
+      return store.createExperiment(args[0], args[1], args[2]);
     });
     // ipcMain.handle("electric:get-scans", store.getScans);
     scanner.onScanComplete = (scan: Scan) => {

@@ -1,5 +1,6 @@
 import { Experiment } from "@prisma/client";
 import React, { useCallback, useEffect, useState } from "react";
+import { set } from "zod";
 
 // UI to control:
 // - gain
@@ -15,6 +16,7 @@ import React, { useCallback, useEffect, useState } from "react";
 
 const getExperiments = window.electron.electric.getExperiments;
 const createExperiment = window.electron.electric.createExperiment;
+const getScientists = window.electron.electric.getScientists;
 
 const species = [
   "Arabidopsis",
@@ -26,17 +28,34 @@ const species = [
 ];
 
 export function Experiments() {
-  const [experiments, setExperiments] = useState<Experiment[] | null>(null);
+  const [experiments, setExperiments] = useState<
+    ExperimentWithScientist[] | null
+  >(null);
+  const [scientists, setScientists] = useState<Scientist[]>([]);
   const [newExperimentName, setNewExperimentName] = useState<string>("");
   const [newExperimentSpecies, setNewExperimentSpecies] = useState<string>(
     species[0]
   );
+  const [newExperimentScientistId, setNewExperimentScientistId] =
+    useState<string>("");
 
   useEffect(() => {
     getExperiments()
       .then((response) => {
-        const experiments = response as Experiment[];
+        const experiments = response as ExperimentWithScientist[];
         setExperiments(experiments);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    getScientists()
+      .then((response) => {
+        const scientists = response as Scientist[];
+        setScientists(scientists);
+        setNewExperimentScientistId(scientists[0].id);
       })
       .catch((err) => {
         console.error(err);
@@ -50,7 +69,8 @@ export function Experiments() {
         {experiments &&
           experiments.map((experiment) => (
             <li key={experiment.id}>
-              {experiment.name} ({experiment.species})
+              {experiment.species} - {experiment.name} (
+              <i>{experiment.scientist?.name || "unknown"}</i>)
             </li>
           ))}
       </ul>
@@ -62,6 +82,7 @@ export function Experiments() {
           className="p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none w-[200px] border border-gray-300"
           onChange={(e) => setNewExperimentName(e.target.value)}
         />
+
         <div className="text-xs font-bold mt-2">Species</div>
         <select
           className="p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none w-[200px] border border-gray-300"
@@ -74,17 +95,39 @@ export function Experiments() {
             </option>
           ))}
         </select>
+
+        <div className="text-xs font-bold mt-2">Scientist</div>
+        <select
+          className="p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none w-[200px] border border-gray-300"
+          value={newExperimentScientistId}
+          onChange={(e) => setNewExperimentScientistId(e.target.value)}
+        >
+          {scientists.map((s) => (
+            <option key={s.id} value={s.id}>
+              {s.name}
+            </option>
+          ))}
+        </select>
+
         <button
           className={
             "block p-2 rounded-md bg-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 mt-4 focus:outline-none border border-gray-300"
           }
           onClick={() => {
-            createExperiment(newExperimentName, newExperimentSpecies)
-              .then(() => {
+            console.log(
+              `Creating experiment: ${newExperimentName}, ${newExperimentSpecies}, ${newExperimentScientistId}`
+            );
+            createExperiment(
+              newExperimentName,
+              newExperimentSpecies,
+              newExperimentScientistId
+            )
+              .then((result) => {
+                result.error && console.error(result.error);
                 return getExperiments();
               })
               .then((response) => {
-                const experiments = response as Experiment[];
+                const experiments = response as ExperimentWithScientist[];
                 setExperiments(experiments);
               })
               .catch((err) => {

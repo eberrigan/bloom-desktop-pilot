@@ -114,9 +114,16 @@ const electronHandler = {
     getPhenotypers: () => ipcRenderer.invoke("electric:get-phenotypers"),
     createPhenotyper: (name: string, email: string) =>
       ipcRenderer.invoke("electric:create-phenotyper", [name, email]),
+    getScientists: () => ipcRenderer.invoke("electric:get-scientists"),
+    createScientist: (name: string, email: string) =>
+      ipcRenderer.invoke("electric:create-scientist", [name, email]),
     getExperiments: () => ipcRenderer.invoke("electric:get-experiments"),
-    createExperiment: (name: string, species: string) =>
-      ipcRenderer.invoke("electric:create-experiment", [name, species]),
+    createExperiment: (name: string, species: string, scientist_id: string) =>
+      ipcRenderer.invoke("electric:create-experiment", [
+        name,
+        species,
+        scientist_id,
+      ]),
     getStatus: () => ipcRenderer.invoke("electric:get-status"),
     uploadImages: () => ipcRenderer.invoke("electric:upload-images"),
     getExperimentsWithScans: () =>

@@ -9,6 +9,7 @@ import { ViewScan } from "./ViewScan";
 import { CameraSettings } from "./CameraSettings";
 import { Export } from "./Export";
 import { Phenotypers } from "./Phenotypers";
+import { Scientists } from "./Scientists";
 import { Experiments } from "./Experiments";
 
 export default function App() {
@@ -23,6 +24,7 @@ export default function App() {
           <Route path="export" element={<Export />} />
           <Route path="experiments" element={<Experiments />} />
           <Route path="phenotypers" element={<Phenotypers />} />
+          <Route path="scientists" element={<Scientists />} />
         </Route>
       </Routes>
     </Router>
