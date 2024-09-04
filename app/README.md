@@ -12,3 +12,10 @@
 
 Run `npm run start`.
 
+## Modifying the database
+
+1. Edit `prisma/schema.prisma`
+2. Run `npm run db:generate` to generate migrations
+3. Run `npm run db:deploy` to apply migrations
+4. Run `npm run client:generate` to generate Typescript client for the new schema
+
