@@ -57,8 +57,25 @@ export class PrismaStore {
     }
   };
 
+  getScientists = async () => {
+    return this.prisma.scientist.findMany();
+  };
+
+  createScientist = async (name: string, email: string) => {
+    try {
+      await this.prisma.scientist.create({
+        data: { id: uuidv4(), name, email },
+      });
+      return { error: null };
+    } catch (err) {
+      return { error: err };
+    }
+  };
+
   getExperiments = async () => {
-    return this.prisma.experiment.findMany();
+    return this.prisma.experiment.findMany({
+      include: { scientist: true },
+    });
   };
 
   getExperimentsWithScans = async () => {
@@ -69,10 +86,15 @@ export class PrismaStore {
     });
   };
 
-  createExperiment = async (name: string, species: string) => {
+  createExperiment = async (
+    name: string,
+    species: string,
+    scientist_id: string
+  ) => {
+    console.log(`Creating experiment: ${name}, ${species}, ${scientist_id}`);
     try {
       await this.prisma.experiment.create({
-        data: { id: uuidv4(), name, species },
+        data: { id: uuidv4(), name, species, scientist_id },
       });
       return { error: null };
     } catch (err) {

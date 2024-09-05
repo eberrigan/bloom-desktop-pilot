@@ -57,10 +57,21 @@ type Phenotyper = {
   email: string;
 };
 
+type Scientist = {
+  id: string;
+  name: string;
+  email: string;
+};
+
+type ExperimentWithScientist = Experiment & {
+  scientist: Scientist;
+};
+
 type Experiment = {
   id: string;
   name: string;
   species: string;
+  scientist_id: string;
 };
 
 interface PhenotyperRetriever {

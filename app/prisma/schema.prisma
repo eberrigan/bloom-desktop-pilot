@@ -20,11 +20,20 @@ model Phenotyper {
   scans Scan[]
 }
 
+model Scientist {
+  id          String       @id @default(uuid())
+  name        String
+  email       String       @unique
+  experiments Experiment[]
+}
+
 model Experiment {
-  id      String @id @default(uuid())
-  name    String
-  species String
-  scans   Scan[]
+  id           String     @id @default(uuid())
+  name         String
+  species      String
+  scientist_id String?
+  scans        Scan[]
+  scientist    Scientist? @relation(fields: [scientist_id], references: [id])
 }
 
 model Scan {
