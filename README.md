@@ -28,3 +28,6 @@ To capture images from the camera, you'll need to install additional software fr
 
 **Pylon**
 - Install the latest version of Pylon from [Basler](https://www2.baslerweb.com/en/downloads/software-downloads/).
+
+## SQLite Database
+- The schema is defined at `app\prisma\schema.prisma`.
