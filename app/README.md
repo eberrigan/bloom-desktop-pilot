@@ -7,6 +7,7 @@
 3. Create `$HOME/.bloom/desktop-config.yaml` (see `desktop-config.yaml.example`).
 4. Edit `$HOME/.bloom/desktop-config.yaml` with the correct database file location and other values.
 5. Run `npm install`.
+    https://visualstudio.microsoft.com/ C++ build tools required 
 6. Run `npm run client:generate` to generate Typescript client for the new schema.
 7. Run `npm run db:deploy` to create the database.
 

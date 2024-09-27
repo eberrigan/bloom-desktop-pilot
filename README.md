@@ -8,7 +8,7 @@ This project is divided into three main parts: the Pylon camera interface, the N
 
 You'll need to install some Python and Node packages to run these three components.
 
-1. Create the `bloom-desktop` environment with python 3.8 and nodejs: `mamba create --name bloom-desktop python=3.8 nodejs`
+1. Create the `bloom-desktop` environment with python 3.8 and nodejs: `mamba create --name bloom-desktop python=3.8 nodejs pip`
 2. Activate the environment: `mamba activate bloom-desktop`
 3. Install pip requirements:
    `pip install -r requirements.txt`
