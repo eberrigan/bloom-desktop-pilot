@@ -19,7 +19,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 # Test images are in "test/sample_scan" directory from the root of the repo
 sample_scan = pathlib.Path(__file__).parent.parent / "test" / "sample_scan"
-logging.debug(f"sample_scan: {sample_scan}")
+logging.info(f"sample_scan: {sample_scan}")
 
 
 
