@@ -17,7 +17,6 @@ import imageio.v2 as iio
 
 logging.basicConfig(level=logging.DEBUG)
 
-# sample_scan = "/Users/djbutler/dev/bloom-desktop-pilot/test/sample_scan"
 # Test images are in "test/sample_scan" directory from the root of the repo
 sample_scan = pathlib.Path(__file__).parent.parent / "test" / "sample_scan"
 logging.debug(f"sample_scan: {sample_scan}")
