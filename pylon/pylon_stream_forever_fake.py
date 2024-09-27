@@ -15,7 +15,7 @@ from PIL import Image
 
 import imageio.v2 as iio
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 # Test images are in "test/sample_scan" directory from the root of the repo
 sample_scan = pathlib.Path(__file__).parent.parent / "test" / "sample_scan"
