@@ -40,3 +40,12 @@ If you already have a working installation, here is how you update the software.
 3. Run `npm install`.
 4. Run `npm run client:generate` to generate Typescript client for the new schema.
 5. Run `npm run db:deploy` to apply migrations.
+
+
+## Troubleshooting
+
+Command to run fake stream independently of the GUI:
+
+```bash
+python pylon\pylon_stream_forever_fake.py "{\"num_frames\": 72, \"exposure_time\": 10000, \"gain\": 100, \"brightness\": 0, \"contrast\": 0, \"gamma\": 1, \"seconds_per_rot\": 7}"
+```
