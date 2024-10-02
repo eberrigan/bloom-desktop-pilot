@@ -6,10 +6,15 @@ import os
 import sys
 import time
 import pathlib
+import logging
 
 import imageio.v2 as iio
 
-sample_scan = '/Users/djbutler/dev/bloom-desktop-pilot/test/sample_scan'
+logging.basicConfig(level=logging.INFO)
+
+# Test images are in "test/sample_scan" directory from the root of the repo
+sample_scan = pathlib.Path(__file__).parent.parent / "test" / "sample_scan"
+logging.info(f"sample_scan: {sample_scan}")
 
 
 async def save_image_async(executor, output_path, idx, array):
