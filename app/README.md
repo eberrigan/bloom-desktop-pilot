@@ -47,5 +47,5 @@ If you already have a working installation, here is how you update the software.
 Command to run fake stream independently of the GUI:
 
 ```bash
-python pylon\pylon_stream_forever_fake.py "{\"num_frames\": 72, \"exposure_time\": 10000, \"gain\": 100, \"brightness\": 0, \"contrast\": 0, \"gamma\": 1, \"seconds_per_rot\": 7}"
+python pylon\pylon_stream_forever_fake.py "{\"num_frames\": 72, \"exposure_time\": 10000, \"gain\": 100, \"brightness\": 0, \"contrast\": 0, \"gamma\": 1, \"seconds_per_rot\": 7, \"camera_ip_address\": \"10.0.0.23\"}"
 ```
