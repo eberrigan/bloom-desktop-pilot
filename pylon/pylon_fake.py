@@ -14,7 +14,6 @@ logging.basicConfig(level=logging.INFO)
 
 # Test images are in "test/sample_scan" directory from the root of the repo
 sample_scan = pathlib.Path(__file__).parent.parent / "test" / "sample_scan"
-logging.info(f"sample_scan: {sample_scan}")
 
 
 async def save_image_async(executor, output_path, idx, array):
