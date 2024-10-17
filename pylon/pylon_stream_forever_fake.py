@@ -32,7 +32,6 @@ def stream_frames(camera_settings):
         # time the function call
         start = time.time()
         img = iio.imread(src_frame)
-        logging.debug(f"Read {src_frame}.")
         end = time.time()
         # print(f"iio.imread took {end - start} seconds", file=sys.stderr)
         # time the function call
