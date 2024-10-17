@@ -14,7 +14,10 @@ from PIL import Image
 
 import imageio.v2 as iio
 
-sample_scan = "/Users/djbutler/dev/bloom-desktop-pilot/test/sample_scan"
+
+# Test images are in "test/sample_scan" directory from the root of the repo
+sample_scan = pathlib.Path(__file__).parent.parent / "test" / "sample_scan"
+
 
 
 def stream_frames(camera_settings):
@@ -41,11 +44,10 @@ def stream_frames(camera_settings):
 
 
 def img_to_base64(img):
-    buffer = BytesIO()
-    pil_img = Image.fromarray(img)
-    pil_img.save(buffer, format="PNG", compress_level=0)
-    # iio.imwrite(buffer, img, ".png")
-    base64_img = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    with BytesIO() as buffer:
+        with Image.fromarray(img) as pil_img:
+            pil_img.save(buffer, format="PNG", compress_level=0)
+        base64_img = base64.b64encode(buffer.getvalue()).decode("utf-8")
     return base64_img
 
 
