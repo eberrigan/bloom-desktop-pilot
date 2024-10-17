@@ -6,7 +6,6 @@ import os
 import sys
 import time
 import pathlib
-import logging
 
 import imageio.v2 as iio
 

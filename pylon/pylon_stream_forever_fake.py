@@ -6,7 +6,6 @@ import os
 import sys
 import time
 import pathlib
-import logging
 
 import base64
 from io import BytesIO
@@ -24,7 +23,6 @@ sample_scan = pathlib.Path(__file__).parent.parent / "test" / "sample_scan"
 def stream_frames(camera_settings):
     n = camera_settings["num_frames"]
     src_frames = glob.glob(os.path.join(sample_scan, "*.png"))
-    logging.debug(f"Found {len(src_frames)} frames.")
     src_frames.sort(key=lambda x: int(os.path.basename(x).split(".")[0]))
     i = 0
     while True:
