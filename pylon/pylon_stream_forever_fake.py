@@ -45,17 +45,10 @@ def stream_frames(camera_settings):
 
 
 def img_to_base64(img):
-    if img is None or img.size == 0:
-        logging.error("Invalid image encountered!")
-        return ""
-
     with BytesIO() as buffer:
         with Image.fromarray(img) as pil_img:
-            logging.debug(f"{pil_img} opened.")
             pil_img.save(buffer, format="PNG", compress_level=0)
-            logging.debug(f"{pil_img} saved to buffer.")
         base64_img = base64.b64encode(buffer.getvalue()).decode("utf-8")
-        logging.debug(f"base64_img: {base64_img[:100]}")
     return base64_img
 
 
