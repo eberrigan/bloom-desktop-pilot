@@ -11,6 +11,7 @@ import { Export } from "./Export";
 import { Phenotypers } from "./Phenotypers";
 import { Scientists } from "./Scientists";
 import { Experiments } from "./Experiments";
+import { Accessions } from "./Acessions";
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="experiments" element={<Experiments />} />
           <Route path="phenotypers" element={<Phenotypers />} />
           <Route path="scientists" element={<Scientists />} />
+          <Route path="accessions" element={<Accessions />} />
         </Route>
       </Routes>
     </Router>

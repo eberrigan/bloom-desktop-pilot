@@ -155,6 +155,9 @@ ipcMain.handle("scanner:get-plant-qr-code", scanner.getPlantQrCode);
 ipcMain.handle("scanner:set-plant-qr-code", async (event, args) => {
   scanner.setPlantQrCode(args[0]);
 });
+ipcMain.handle("scanner:set-accession-id", async (event, args) => {
+  scanner.setAccessionId(args[0]);
+});
 ipcMain.handle("scanner:get-experiment-id", scanner.getExperimentId);
 ipcMain.on("scanner:set-experiment-id", async (event, args) => {
   scanner.setExperimentId(args[0]);
@@ -276,13 +279,32 @@ createPrismaStore(config.scans_dir, dbUpdated, "file:" + config.local_db_path)
     ipcMain.handle("electric:create-scientist", async (event, args) => {
       return store.createScientist(args[0], args[1]);
     });
+    ipcMain.handle("electric:create-accession", async (event, [name]) => {
+      return await store.createAccessions(name);
+    });
+    ipcMain.handle("electric:create-plant-accession-map", async (_event, [accession_id, plant_barcode, accession_file_id]) => {
+      return await store.createPlantAccessionMap({ accession_id, plant_barcode, accession_file_id });
+    });
+    ipcMain.handle("electric:get-accession", async (event, id) => {
+      return await store.getAccessions(id);
+    });
+    ipcMain.handle("electric:get-accession-id", async (event, id, experiment_id) => {
+      return await store.getAccessionsID(id, experiment_id);
+    });
+    // ipcMain.handle("electric:get-accessionId", async (event, id) => {
+    //   return await store.getAccessionsID(plantQRcode);
+    // });
+    ipcMain.handle("electric:get-accession-files", async (event) => {
+      return await store.getAccessionFiles();
+    });
     ipcMain.handle("electric:get-experiments", store.getExperiments);
     ipcMain.handle(
       "electric:get-experiments-with-scans",
       store.getExperimentsWithScans
     );
     ipcMain.handle("electric:create-experiment", async (event, args) => {
-      return store.createExperiment(args[0], args[1], args[2]);
+      const [name, species, scientist_id, accession_id] = args;
+      return store.createExperiment(name, species, scientist_id, accession_id);
     });
     // ipcMain.handle("electric:get-scans", store.getScans);
     scanner.onScanComplete = (scan: Scan) => {

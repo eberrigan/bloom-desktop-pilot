@@ -33,7 +33,26 @@ model Experiment {
   species      String
   scientist_id String?
   scans        Scan[]
+  accession_id  String?
   scientist    Scientist? @relation(fields: [scientist_id], references: [id])
+  accession    Accessions? @relation("AccessionToExperiment", fields: [accession_id], references: [id])
+}
+
+model Accessions{
+  id  String       @id @default(uuid())
+  name String
+
+  experiments  Experiment[] @relation("AccessionToExperiment")
+  mappings PlantAccessionMappings[]
+}
+
+model PlantAccessionMappings {
+  id            String  @id @default(uuid())
+  accession_id  String
+  plant_barcode String
+  accession_file_id String
+
+  accession     Accessions @relation(fields: [accession_file_id], references: [id])
 }
 
 model Scan {
@@ -42,6 +61,7 @@ model Scan {
   phenotyper_id   String
   scanner_name    String
   plant_id        String
+  accession_id    String
   path            String
   capture_date    DateTime
   num_frames      Int

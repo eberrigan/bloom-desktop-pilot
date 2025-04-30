@@ -12,6 +12,7 @@ type ScanMetadataParsed = {
   phenotyper_id: string;
   scanner_name: string;
   plant_id: string;
+  accession_id:string;
   path: string;
   capture_date: Date;
   num_frames: number;
@@ -66,9 +67,118 @@ export class PrismaStore {
       await this.prisma.scientist.create({
         data: { id: uuidv4(), name, email },
       });
+
       return { error: null };
     } catch (err) {
       return { error: err };
+    }
+  };
+
+  createAccessions = async (name: string): Promise<{ error: any; file_id: string | null }> => {
+    try {
+      const newAccession = await this.prisma.accessions.create({
+        data: {
+          name,
+        },
+      });
+  
+      console.log("New accession created ID:", newAccession.id);
+      return { error: null, file_id: newAccession.id };
+    } catch (err) {
+      console.error("Error creating accession:", err);
+      return { error: err, file_id: null };
+    }
+  };
+
+  createPlantAccessionMap = async ({
+    accession_id,
+    plant_barcode,
+    accession_file_id,
+  }: {
+    accession_id: string;
+    plant_barcode: string;
+    accession_file_id: string;
+  }): Promise<{ error: any }> => {
+    try {
+      await this.prisma.plantAccessionMappings.create({
+        data: {
+          accession_id,
+          plant_barcode,
+          accession_file_id,
+        },
+      });
+  
+      return { error: null };
+    } catch (err) {
+      console.error("Error creating accession mapping:", err);
+      return { error: err };
+    }
+  };
+
+  getAccessions = async (id: string) => {
+    try {
+      const accession = await this.prisma.accessions.findUnique({
+        where: { id },
+      });
+  
+      if (!accession) {
+        return false; 
+      }
+  
+      return accession;
+    } catch (err) {
+      console.error("Error fetching accession:", err);
+      throw err;
+    }
+  };
+
+  getAccessionsID = async (plantQRcode: string, experiment_Id: string) => {
+    try {
+      // get the accesion file Id for the experiment
+      const experiment = await this.prisma.experiment.findUnique({
+        where: {
+          id: experiment_Id,
+        },
+        select: {
+          accession_id: true,
+        },
+      });
+  
+      if (!experiment || !experiment.accession_id) {
+        throw new Error("Experiment or accession ID not found.");
+      }
+  
+      // find PlantAccessionMappings
+      const mapping = await this.prisma.plantAccessionMappings.findFirst({
+        where: {
+          accession_file_id: experiment.accession_id,
+          plant_barcode: plantQRcode,
+        },
+      });
+  
+      if (!mapping) {
+        throw new Error("Mapping not found for given plant QR code.");
+      }
+
+      return mapping; 
+    } catch (err) {
+      console.error("Error in getAccessionsID:", err);
+      throw err;
+    }
+  }
+
+  getAccessionFiles = async (): Promise<{ id: string; name: string }[]> => {
+    try {
+      const accessionFiles = await this.prisma.accessions.findMany({
+        select: {
+          id: true,
+          name: true,
+        }
+      });  
+      return accessionFiles;
+    } catch (err) {
+      console.error("Error fetching accession files:", err);
+      return [];
     }
   };
 
@@ -89,12 +199,12 @@ export class PrismaStore {
   createExperiment = async (
     name: string,
     species: string,
-    scientist_id: string
+    scientist_id: string,
+    accession_id: string,
   ) => {
-    console.log(`Creating experiment: ${name}, ${species}, ${scientist_id}`);
     try {
       await this.prisma.experiment.create({
-        data: { id: uuidv4(), name, species, scientist_id },
+        data: { id: uuidv4(), name, species, scientist_id, accession_id },
       });
       return { error: null };
     } catch (err) {
@@ -291,3 +401,5 @@ function parseCaptureDate(scan_metadata: ScanMetadata) {
     capture_date: new Date(capture_date),
   } as ScanMetadataParsed;
 }
+
+
