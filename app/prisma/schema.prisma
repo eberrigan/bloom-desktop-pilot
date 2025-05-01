@@ -41,6 +41,7 @@ model Experiment {
 model Accessions{
   id  String       @id @default(uuid())
   name String
+  createdAt   DateTime     @default(now()) 
 
   experiments  Experiment[] @relation("AccessionToExperiment")
   mappings PlantAccessionMappings[]

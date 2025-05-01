@@ -194,7 +194,7 @@ export function Layout() {
   }, []);
 
   return (
-    <div className="h-screen w-screen flex flex-row min-h-0 min-w-0 bg-stone-100">
+    <div className="min-h-screen w-screen flex flex-row bg-stone-100">
       <div className="ml-12 pr-6 mt-6 w-52 select-none flex flex-col">
         <div className="mb-8 align-middle">
           <img src={logo} className="h-12 inline" />

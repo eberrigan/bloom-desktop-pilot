@@ -166,8 +166,8 @@ export function CaptureScan() {
   }, []);
 
   useEffect(() => {
-    let accession =  fetchAccessionId();
-
+    fetchAccessionId();
+    console.log("current QR code:"+plantQrCode);
   }, [plantQrCode])
 
   const fetchAccessionId = async () => {
@@ -181,10 +181,11 @@ export function CaptureScan() {
         setAccession(accessionMapping.accession_id);
         setAccessionId(accessionMapping.accession_id);
       } else {
+        setAccession(null);
         console.log("No accession mapping found for this QR code.");
       }
-
     } catch (err) {
+      setAccession(null);
       console.error("Error fetching accession:", err);
     }
   };
@@ -471,8 +472,7 @@ export function CaptureScan() {
                     onChange={(e) => {
                       const value =
                         e.target.value === "" ? null : e.target.value;
-                      const qrCode = value.replace(/[^a-zA-Z0-9\+\-\_]/g, "");
-                      console.log(qrCode);
+                      const qrCode = value ? value.replace(/[^a-zA-Z0-9\+\-\_]/g, "") : null;
                       setPlantQrCode(qrCode);
                       setScannerPlantQrCode(qrCode);
                     }}

@@ -9,6 +9,15 @@ const getAccessionFiles = window.electron.electric.getAccessionFiles;
 const createAccession = window.electron.electric.createAccession;
 const createPlantAccessionMap = window.electron.electric.createPlantAccessionMap;
 
+type AccessionWithExperiments = {
+    id: string;
+    name: string;
+    createdAt: string;
+    experiments: {
+        name: string;
+    }[];
+};
+
 function FieldInfo({ info }: { info: string }) {
     return (
         <div className="-mt-1 ml-2 inline-block group relative">
@@ -34,7 +43,7 @@ function FieldInfo({ info }: { info: string }) {
 }
 
 export function Accessions() {
-    const [accession_list, setAccessionList] = useState<{ id: string; name: string }[] | null>(null);
+    const [accession_list, setAccessionList] = useState<AccessionWithExperiments[] | null>(null);
     const fileTypes = ["XLSX", "XLS"];
     const [file_name, setFileName] = useState<string>('undefined');
     const [sheetNames, setSheetNames] = useState<string[]>([]);
@@ -48,21 +57,18 @@ export function Accessions() {
     const [hoveredColIndex, setHoveredColIndex] = useState<number | null>(null);
     const [isUploading, setUploading] = useState(false);
     const [message, setMessage] = useState<string>(null);
+    const [expandedAccessionIds, setExpandedAccessionIds] = useState<Set<string>>(new Set());
+
     const isDisabled = !selectedPlantId || !selectedGenotypeId;
     const tableRef = useRef(null);
 
     const fetchFiles = async () => {
         const files = await getAccessionFiles();
-        console.log(files);
-        console.log("LOADED FILES");
-        setAccessionList(files); 
+        setAccessionList(files);
     };
 
-    useEffect(() => {      
+    useEffect(() => {
         fetchFiles();
-        console.log("LITS OF ACCESSIONS");
-        console.log(accession_list);
-
     }, []);
 
     useEffect(() => {
@@ -73,7 +79,6 @@ export function Accessions() {
     }, [selectedPlantId, selectedGenotypeId]);
 
     const handleChange = (file: File | null): void => {
-        //TODO : handle file upload error
         if (!file) return;
 
         setFileName(file.name);
@@ -100,20 +105,14 @@ export function Accessions() {
         if (!selectedPlantId || !selectedGenotypeId) return;
         setUploading(true);
         setMessage("Uploading...");
-        console.log("RUN")
 
         try {
 
-            console.log("Creating file")
-            let res = await createAccession(file_name+"_"+sheetNames);
+            let res = await createAccession(file_name);
             if (!res.file_id) {
                 throw new Error("No file ID returned from createAccession.");
             }
             let file_id = res.file_id;
-            console.log("Created file", file_id);
-
-            console.log("uploading data")
-            console.log(data);
 
             for (const row of data) {
                 console.log("Uploading accession : ", row);
@@ -122,7 +121,7 @@ export function Accessions() {
 
                 if (plant_barcode && accession_id) {
                     try {
-                        await createPlantAccessionMap(accession_id, plant_barcode,file_id); 
+                        await createPlantAccessionMap(accession_id, plant_barcode, file_id);
                     } catch (err) {
                         console.error("Error uploading accession entry:", err);
                     }
@@ -133,9 +132,8 @@ export function Accessions() {
             console.error("Error uploading accession entry:", err);
             setMessage("Upload failed.");
         }
-        finally{
+        finally {
             fetchFiles();
-            console.log("Done uploading accession");
             setMessage("Done uploading!");
         }
 
@@ -167,13 +165,22 @@ export function Accessions() {
         setSelectGenotypeId(GenotypeId);
     }
 
+    const toggleExpand = (id: string) => {
+        setExpandedAccessionIds(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(id)) newSet.delete(id);
+            else newSet.add(id);
+            return newSet;
+        });
+    };
+
     return (
-        <div className="p-4">
+        <div className="p-4 min-h-screen bg-gray-100 ">
             {/* List of all the uploaded accession files */}
-            <div className="text-xs font-bold">Accession Files:</div> 
-            
+            <div className="text-xs font-bold">Accession Files:</div>
+
             {/* {accession_list} */}
-            <ul className="h-32 overflow-scroll border rounded-md p-2 w mb-8 text-sm">
+            {/* <ul className="h-32 overflow-scroll border rounded-md p-2 w mb-8 text-sm">
             {accession_list &&
                 accession_list.map((accession_file, index) => (
                 <li
@@ -183,7 +190,61 @@ export function Accessions() {
                     {accession_file.name} (ID: {accession_file.id})
                   </li>
                 ))}
+            </ul> */}
+
+            <ul className="max-h-64 overflow-scroll border rounded-md p-2 mb-8 text-sm">
+                {accession_list &&
+                    accession_list.map((accession) => (
+                        <li
+                            key={accession.id}
+                            className="bg-gray-100 p-2 rounded-md mb-2 shadow-sm cursor-pointer"
+                            onClick={() => toggleExpand(accession.id)}
+                        >
+                            <div className="flex justify-between items-center">
+                            <div className="flex items-center gap-2">
+                                <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className={`h-4 w-4 transition-transform duration-200 ${
+                                    expandedAccessionIds.has(accession.id) ? "rotate-180" : ""
+                                }`}
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M19 9l-7 7-7-7"
+                                />
+                                </svg>
+                                <span className="font-semibold">{accession.name}</span>
+                            </div>
+                            <span className="text-xs text-gray-500">
+                                {new Date(accession.createdAt).toLocaleDateString()}
+                            </span>
+                            </div>
+
+                            <div className="text-xs text-gray-600">ID: {accession.id}</div>
+
+                            {expandedAccessionIds.has(accession.id) && (
+                                <div className="mt-2 text-sm bg-white border rounded p-2">
+                                    <div className="font-semibold mb-1">Linked Experiments:</div>
+                                    {accession.experiments.length > 0 ? (
+                                        <ul className="list-disc list-inside">
+                                            {accession.experiments.map((exp, i) => (
+                                                <li key={i}>{exp.name}</li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <div className="italic text-gray-400">No experiments linked</div>
+                                    )}
+                                </div>
+                            )}
+                        </li>
+                    ))}
             </ul>
+
 
             {/* upload new accession file */}
             <div className="text-xs font-bold">Upload new Accession File</div>
@@ -348,7 +409,7 @@ export function Accessions() {
                 {/* Upload status message */}
                 {message && (
                     <div className="mt-2 ml-1 text-sm italic text-gray-600">
-                    {message}
+                        {message}
                     </div>
                 )}
             </div>

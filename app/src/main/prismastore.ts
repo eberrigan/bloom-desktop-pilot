@@ -167,14 +167,20 @@ export class PrismaStore {
     }
   }
 
-  getAccessionFiles = async (): Promise<{ id: string; name: string }[]> => {
+  getAccessionFiles = async (): Promise<any[]> => {
     try {
       const accessionFiles = await this.prisma.accessions.findMany({
         select: {
           id: true,
           name: true,
-        }
-      });  
+          createdAt: true,
+          experiments: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      });
       return accessionFiles;
     } catch (err) {
       console.error("Error fetching accession files:", err);
