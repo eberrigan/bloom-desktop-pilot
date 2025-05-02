@@ -168,10 +168,10 @@ export function CaptureScan() {
   useEffect(() => {
     fetchAccessionId();
     console.log("current QR code:"+plantQrCode);
-  }, [plantQrCode])
+  }, [plantQrCode, experimentId])
 
   const fetchAccessionId = async () => {
-    if (!plantQrCode) return; 
+    if (!plantQrCode || !experimentId) return;
     console.log("QR code set, trying to fetch accession ID...");
     try {
       console.log("Looking for....", plantQrCode, "...and...", experimentId);
@@ -516,7 +516,7 @@ export function CaptureScan() {
                       <span className="italic text-lime-700">No accession ID found.</span>
                     )}
                   </div>
-                  <FieldInfo info="This Accession ID is automatically taken from the file linked to this experiment. If you're unable to start the scan, please make sure the file you submitted earlier includes an Accession ID for the entered Plant QR code." />
+                  <FieldInfo info="This Accession ID is automatically taken from the file linked to this experiment.If you're unable to start the scan, please make sure the file you submitted earlier includes an Accession ID for the entered Plant QR code." />
                   </div>
               </div>
             }
