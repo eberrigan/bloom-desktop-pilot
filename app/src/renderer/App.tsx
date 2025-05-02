@@ -11,7 +11,7 @@ import { Export } from "./Export";
 import { Phenotypers } from "./Phenotypers";
 import { Scientists } from "./Scientists";
 import { Experiments } from "./Experiments";
-import { Accessions } from "./Acessions";
+import { Accessions } from "./Accessions";
 
 export default function App() {
   return (

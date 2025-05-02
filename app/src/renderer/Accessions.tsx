@@ -56,7 +56,7 @@ export function Accessions() {
     const genotypeIdIndex = columns.indexOf(selectedGenotypeId ?? "");
     const [hoveredColIndex, setHoveredColIndex] = useState<number | null>(null);
     const [isUploading, setUploading] = useState(false);
-    const [message, setMessage] = useState<string>(null);
+    const [message, setMessage] = useState<string | null>(null);
     const [expandedAccessionIds, setExpandedAccessionIds] = useState<Set<string>>(new Set());
 
     const isDisabled = !selectedPlantId || !selectedGenotypeId;
