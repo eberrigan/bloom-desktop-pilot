@@ -516,7 +516,7 @@ export function CaptureScan() {
                       <span className="italic text-lime-700">No accession ID found.</span>
                     )}
                   </div>
-                  <FieldInfo info="This accession ID is inferred from the accession file submitted for this experiment" />
+                  <FieldInfo info="This Accession ID is automatically taken from the file linked to this experiment. If you're unable to start the scan, please make sure the file you submitted earlier includes an Accession ID for the entered Plant QR code." />
                   </div>
               </div>
             }
