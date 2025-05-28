@@ -116,22 +116,36 @@ export class PrismaStore {
     }
   };
 
-  getAccessions = async (id: string) => {
+  // getAccessions = async (id: string) => {
+  //   try {
+  //     const accession = await this.prisma.accessions.findUnique({
+  //       where: { id },
+  //     });
+  
+  //     if (!accession) {
+  //       return false; 
+  //     }
+  
+  //     return accession;
+  //   } catch (err) {
+  //     console.error("Error fetching accession:", err);
+  //     throw err;
+  //   }
+  // };
+
+  getAccessions = async (id: string): Promise<Accessions | null> => {
     try {
       const accession = await this.prisma.accessions.findUnique({
         where: { id },
       });
-  
-      if (!accession) {
-        return false; 
-      }
-  
-      return accession;
+      return accession; 
     } catch (err) {
       console.error("Error fetching accession:", err);
       throw err;
     }
   };
+  
+
 
   getAccessionsID = async (plantQRcode: string, experiment_Id: string) => {
     try {
@@ -209,10 +223,6 @@ export class PrismaStore {
 
   updateAccessionFile = async (editingField:string, editingRowId:string, editingValue:string)=>{
     try {
-
-      console.log("Updating accession file with ID:", editingRowId);
-      console.log("Editing field:", editingField);
-      console.log("Editing value:", editingValue);
 
       const updated = await this.prisma.plantAccessionMappings.update({
         where: { id: editingRowId },

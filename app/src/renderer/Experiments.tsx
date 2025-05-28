@@ -160,7 +160,6 @@ export function Experiments() {
         </select>
 
         <div className="text-xs font-bold mt-2">Accession File</div>
-        <div className="text-xs font-bold mt-2">Accession File</div>
         <select
           className="p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none w-[200px] border border-gray-300"
           value={newExperimentAccession}

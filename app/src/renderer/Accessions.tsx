@@ -96,11 +96,6 @@ export function Accessions() {
         setEditingValue('');
     };
 
-    useEffect(() => {},
-    [editingField]
-    );
-      
-
     useEffect(() => {
         fetchFiles();
     }, []);
@@ -111,29 +106,6 @@ export function Accessions() {
             tableRef.current.scrollLeft = 0;
         }
     }, [selectedPlantId, selectedGenotypeId]);
-
-    // useEffect(()=>{
-    //     const ids = Array.from(expandedAccessionIds);
-    //     ids.forEach((id) => {
-    //         if (!accessionPreview[id]) {
-    //             getAccessionFileContent(id).then((preview) => {
-    //                 setAccessionPreview((prev) => ({ ...prev, [id]: preview }));
-    //             });
-    //         }
-    //     });
-    // })
-
-    // useEffect(() => {
-    //     const ids = Array.from(expandedAccessionIds);
-    //     ids.forEach((id) => {
-    //       if (!accessionPreview[id]) {
-    //         // Fetch only if not already fetched
-    //         fetchPreviewForAccession(id).then((preview) => {
-    //           setAccessionPreview((prev) => ({ ...prev, [id]: preview }));
-    //         });
-    //       }
-    //     });
-    //   }, [expandedAccessionIds]);
 
     const handleChange = (file: File | null): void => {
         if (!file) return;
