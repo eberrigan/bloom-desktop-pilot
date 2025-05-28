@@ -15,6 +15,7 @@ const getAccesionId = window.electron.electric.getAccessionId;
 const setAccessionId = window.electron.scanner.setAccessionId;
 const setScannerPlantQrCode = window.electron.scanner.setPlantQrCode;
 const getScannerPlantQrCode = window.electron.scanner.getPlantQrCode;
+const plantQRcodeList = window.electron.electric.getAccessionIdFiles;
 
 const scanner = window.electron.scanner;
 
@@ -61,6 +62,9 @@ export function CaptureScan() {
   const [showDeletedMessage, setShowDeletedMessage] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [assgnAccesson, setAccession] = useState<string | null>(null);
+
+  const [platQRcodes, setPlantQRCodes] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
 
   // Excel file preview vars
   const fileTypes = ["XLSX", "XLS"];
@@ -278,6 +282,21 @@ export function CaptureScan() {
   }, []);
 
   useEffect(() => {
+    console.log("Fetching plant QR codes for experiment ID: " + experimentId);
+    plantQRcodeList(experimentId)
+      .then((qrCodes) => {
+        const plantBarcodes = qrCodes.map((mapping: any) => mapping.plant_barcode);
+        // console.log("Got plant barcodes: ", plantBarcodes);
+        setPlantQRCodes(plantBarcodes);
+      })
+      .catch((err) => {
+        console.error("Error fetching plant QR codes: ", err);
+      });
+  
+  },[experimentId]);
+  
+
+  useEffect(() => {
     setMostRecentScanDate(undefined);
     if (experimentId && plantQrCode) {
       getMostRecentScanDate(experimentId, plantQrCode).then((date) => {
@@ -327,6 +346,24 @@ export function CaptureScan() {
 
   const streamingDisabled = isScanning || isSaving;
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value;
+    const cleaned = rawValue === "" ? null : rawValue.replace(/[^a-zA-Z0-9\+\-\_]/g, "");
+    setPlantQrCode(cleaned);
+    setScannerPlantQrCode(cleaned);
+  
+    // Filter suggestions
+    if (cleaned) {
+      const matches = platQRcodes.filter(code =>
+        code.toLowerCase().includes(cleaned.toLowerCase())
+      );
+      setSuggestions(matches.slice(0, 5));
+    } else {
+      setSuggestions([]);
+    }
+  };
+  
+
   return (
     <div className="min-h-0 min-w-0 flex flex-col flex-grow pr-8 pb-8">
       <div className="flex flex-row pb-8">
@@ -356,6 +393,7 @@ export function CaptureScan() {
                 <div className="mt-1 flex flex-row items-center">
                   <ExperimentChooser
                     experimentIdChanged={(id: string) => {
+                      console.log("Experiment ID changed to: " + id);
                       setExperimentId(id);
                     }}
                   />
@@ -459,7 +497,35 @@ export function CaptureScan() {
                 <div className="block text-xs font-bold text-gray-700 text-left mt-1">
                   Plant ID
                 </div>
-                <div className="mt-1">
+                <div className="relative w-[200px]">
+                <input
+                  type="text"
+                  className={
+                    "p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-full focus:outline-none border " +
+                    (plantQrCode === null ? "border-amber-300" : "border-gray-300")
+                  }
+                  value={plantQrCode || ""}
+                  onChange={handleInputChange}
+                />
+                {suggestions.length > 0 && (
+                  <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto">
+                    {suggestions.map((code, index) => (
+                      <li
+                        key={index}
+                        className="px-3 py-1 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => {
+                          setPlantQrCode(code);
+                          setScannerPlantQrCode(code);
+                          setSuggestions([]);
+                        }}
+                      >
+                        {code}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+                {/* <div className="mt-1">
                   <input
                     type="text"
                     className={
@@ -478,7 +544,7 @@ export function CaptureScan() {
                     }}
                   />
                   <FieldInfo info="Identifier for the plant (QR code or other identifier). Required field." />
-                </div>
+                </div> */}
                 {mostRecentScanDate !== undefined && (
                   <div className="block text-xs text-left mt-1">
                     {mostRecentScanDate === null ? (

@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import fs from "fs";
 import path from "path";
 import { Image, Prisma, PrismaClient } from "@prisma/client";
+import exp from "constants";
 // import { Phenotypers } from "src/renderer/Phenotypers";
 
 // define type
@@ -164,6 +165,64 @@ export class PrismaStore {
     } catch (err) {
       console.error("Error in getAccessionsID:", err);
       throw err;
+    }
+  }
+
+  getAccessionList = async(experimentId: string)=> {
+    try{
+      console.log("PLANTQRCODE");
+
+      const accessionsWithMappings = await this.prisma.accessions.findMany({
+        where: {
+          experiments: {
+            some: {
+              id: experimentId,
+            },
+          },
+        },
+        include: {
+          mappings: true,
+        },
+      });
+      const allMappings = accessionsWithMappings.flatMap(accession => accession.mappings);   
+      return allMappings;   
+    }
+    catch (err){
+      console.error("Error in getting accessions list:", err);
+      throw err;
+    }
+  }
+
+  getAccessionListwithFileID = async(accession_file_id: string)=> {
+    try {
+      const mappings = await this.prisma.plantAccessionMappings.findMany({
+        where: {
+          accession_file_id: accession_file_id, 
+        },
+      });
+      return mappings;
+    } catch (err) {
+      console.error("Error fetching accession files:", err);
+      return [];
+    }
+  }
+
+  updateAccessionFile = async (editingField:string, editingRowId:string, editingValue:string)=>{
+    try {
+
+      console.log("Updating accession file with ID:", editingRowId);
+      console.log("Editing field:", editingField);
+      console.log("Editing value:", editingValue);
+
+      const updated = await this.prisma.plantAccessionMappings.update({
+        where: { id: editingRowId },
+        data: { ["accession_id"]: editingValue },
+      });
+  
+      return { success: true, data: updated };
+    } catch (err) {
+      console.error("Error updating accession file:", err);
+      return { error: err };
     }
   }
 

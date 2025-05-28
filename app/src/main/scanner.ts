@@ -79,7 +79,7 @@ class Scanner {
       console.log(longStr);
       for (const str of longStr.split("\n")) {
         if (str.slice(0, 14) === "TRIGGER_CAMERA") {
-          console.log("data matches TRIGGER_CAMERA");
+          // console.log("data matches TRIGGER_CAMERA");
           options.onCaptureImage();
           this.imageCaptured();
         }
@@ -128,6 +128,10 @@ class Scanner {
   getPlantQrCode = () => {
     return this.plantId;
   };
+
+  getPlantQrCodeList = () => {
+    // return a list of plant IDs from the scans directory
+  }
 
   setPlantQrCode = (plantQrCode: string | null) => {
     this.plantId = plantQrCode;

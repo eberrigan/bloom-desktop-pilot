@@ -8,6 +8,8 @@ const getAccession = window.electron.electric.getAccession;
 const getAccessionFiles = window.electron.electric.getAccessionFiles;
 const createAccession = window.electron.electric.createAccession;
 const createPlantAccessionMap = window.electron.electric.createPlantAccessionMap;
+const getAccessionFileContent = window.electron.electric.getAccessionListWithFileId;
+const updateAccessionFile = window.electron.electric.updateAccessionFile;
 
 type AccessionWithExperiments = {
     id: string;
@@ -58,6 +60,12 @@ export function Accessions() {
     const [isUploading, setUploading] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
     const [expandedAccessionIds, setExpandedAccessionIds] = useState<Set<string>>(new Set());
+    const [accessionPreview, setAccessionPreview] = useState<Record<string, string | null>[]>([]);
+
+    const [editingRowId, setEditingRowId] = useState<string | null>(null);
+    const [editingField, setEditingField] = useState<'id'|null>(null);
+    const [editingValue, setEditingValue] = useState<string>('');
+
 
     const isDisabled = !selectedPlantId || !selectedGenotypeId;
     const tableRef = useRef(null);
@@ -66,6 +74,32 @@ export function Accessions() {
         const files = await getAccessionFiles();
         setAccessionList(files);
     };
+
+    const saveInlineEdit = async () => {
+        if (!editingRowId || !editingField) return;
+        console.log("Editing Field"+editingField);
+        console.log("Editing Value"+editingValue);
+        console.log("Editing Row"+editingRowId);
+
+        await updateAccessionFile(editingField,editingRowId, editingValue);
+
+        setAccessionPreview(prev =>
+          prev.map((row) =>
+            row.id === editingRowId
+              ? { ...row, [editingField]: editingValue }
+              : row
+          )
+        );
+      
+        setEditingRowId(null);
+        setEditingField(null);
+        setEditingValue('');
+    };
+
+    useEffect(() => {},
+    [editingField]
+    );
+      
 
     useEffect(() => {
         fetchFiles();
@@ -77,6 +111,29 @@ export function Accessions() {
             tableRef.current.scrollLeft = 0;
         }
     }, [selectedPlantId, selectedGenotypeId]);
+
+    // useEffect(()=>{
+    //     const ids = Array.from(expandedAccessionIds);
+    //     ids.forEach((id) => {
+    //         if (!accessionPreview[id]) {
+    //             getAccessionFileContent(id).then((preview) => {
+    //                 setAccessionPreview((prev) => ({ ...prev, [id]: preview }));
+    //             });
+    //         }
+    //     });
+    // })
+
+    // useEffect(() => {
+    //     const ids = Array.from(expandedAccessionIds);
+    //     ids.forEach((id) => {
+    //       if (!accessionPreview[id]) {
+    //         // Fetch only if not already fetched
+    //         fetchPreviewForAccession(id).then((preview) => {
+    //           setAccessionPreview((prev) => ({ ...prev, [id]: preview }));
+    //         });
+    //       }
+    //     });
+    //   }, [expandedAccessionIds]);
 
     const handleChange = (file: File | null): void => {
         if (!file) return;
@@ -166,6 +223,12 @@ export function Accessions() {
     }
 
     const toggleExpand = (id: string) => {
+        console.log(id);
+        
+        getAccessionFileContent(id).then((preview) => {
+            setAccessionPreview(preview);
+        });
+        
         setExpandedAccessionIds(prev => {
             const newSet = new Set(prev);
             if (newSet.has(id)) newSet.delete(id);
@@ -228,19 +291,78 @@ export function Accessions() {
                             <div className="text-xs text-gray-600">ID: {accession.id}</div>
 
                             {expandedAccessionIds.has(accession.id) && (
-                                <div className="mt-2 text-sm bg-white border rounded p-2">
+                                <div
+                                    className="mt-2 text-sm bg-white border rounded p-2"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
                                     <div className="font-semibold mb-1">Linked Experiments:</div>
+
                                     {accession.experiments.length > 0 ? (
-                                        <ul className="list-disc list-inside">
-                                            {accession.experiments.map((exp, i) => (
-                                                <li key={i}>{exp.name}</li>
-                                            ))}
-                                        </ul>
+                                    <ul className="list-disc list-inside">
+                                        {accession.experiments.map((exp, i) => (
+                                        <li key={i}>{exp.name}</li>
+                                        ))}
+                                    </ul>
                                     ) : (
-                                        <div className="italic text-gray-400">No experiments linked</div>
+                                    <div className="italic text-gray-400">No experiments linked</div>
                                     )}
+
+                                    <table className="mt-4 text-xs w-full border">
+                                    <thead className="bg-gray-100">
+                                    {accessionPreview.length > 0 && (
+                                    <tr>
+                                        {Object.keys(accessionPreview[0]).map((key) => (
+                                        <th key={key} className="p-2 text-left border-b capitalize">
+                                            {key.replace(/_/g, " ")}
+                                        </th>
+                                        ))}
+                                    </tr>
+                                    )}
+                                    </thead>
+                                    <tbody>
+                                        { accessionPreview && accessionPreview.map((row) => (
+                                        <tr key={row.id}>
+                                            {Object.entries(row).map(([key, value]) => {
+                                            const isEditable = key === "accession_id";
+                                            const isEditing = editingRowId === row.id && editingField === key;
+
+                                            return (
+                                                <td
+                                                key={key}
+                                                className="p-2 border text-xs cursor-pointer"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    if (isEditable) {
+                                                    setEditingRowId(row.id);
+                                                    setEditingField(key as 'id');
+                                                    setEditingValue(value as string);
+                                                    }
+                                                }}
+                                                >
+                                                {isEditing ? (
+                                                    <input
+                                                    className="border p-1 rounded w-full"
+                                                    value={editingValue}
+                                                    onChange={(e) => setEditingValue(e.target.value)}
+                                                    onBlur={saveInlineEdit}
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === 'Enter') saveInlineEdit();
+                                                        if (e.key === 'Escape') setEditingRowId(null);
+                                                    }}
+                                                    autoFocus
+                                                    />
+                                                ) : (
+                                                    value ?? 'N/A'
+                                                )}
+                                                </td>
+                                            );
+                                            })}
+                                        </tr>
+                                        ))}
+                                    </tbody>
+                                    </table>
                                 </div>
-                            )}
+                                )}
                         </li>
                     ))}
             </ul>

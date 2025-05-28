@@ -152,6 +152,7 @@ ipcMain.on("scanner:set-phenotyper-id", async (event, args) => {
   scanner.setPhenotyperId(args[0]);
 });
 ipcMain.handle("scanner:get-plant-qr-code", scanner.getPlantQrCode);
+ipcMain.handle("scanner:get-plant-qr-code-list", scanner.getPlantQrCodeList);
 ipcMain.handle("scanner:set-plant-qr-code", async (event, args) => {
   scanner.setPlantQrCode(args[0]);
 });
@@ -290,6 +291,24 @@ createPrismaStore(config.scans_dir, dbUpdated, "file:" + config.local_db_path)
     });
     ipcMain.handle("electric:get-accession-id", async (event, id, experiment_id) => {
       return await store.getAccessionsID(id, experiment_id);
+    });
+    ipcMain.handle("electric:get-accession-id-file", async (event, id, experiment_id) => {
+      return await store.getAccessionList(experiment_id);
+    });
+    ipcMain.handle("electric:get-accession-list-with-file-id", async (event, id, accession_file_id) => {
+      return await store.getAccessionListwithFileID(accession_file_id);
+    });
+    // ipcMain.handle("electric:update-accession-file", async (event, editing_field, editing_row_id, editing_value) => {
+    //   return await store.updateAccessionFile(editing_field, editing_row_id, editing_value);
+    // });
+    ipcMain.handle("electric:update-accession-file", async (event, editing_field, editing_row_id, editing_value) => {
+      console.log("Received update values:", {
+        editing_field,
+        editing_row_id,
+        editing_value
+      });
+    
+      return await store.updateAccessionFile(editing_field, editing_row_id, editing_value);
     });
     // ipcMain.handle("electric:get-accessionId", async (event, id) => {
     //   return await store.getAccessionsID(plantQRcode);

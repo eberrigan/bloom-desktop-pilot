@@ -62,7 +62,7 @@ model Scan {
   phenotyper_id   String
   scanner_name    String
   plant_id        String
-  accession_id    String
+  accession_id    String?
   path            String
   capture_date    DateTime
   num_frames      Int

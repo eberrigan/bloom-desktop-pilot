@@ -47,6 +47,7 @@ const electronHandler = {
     setPhenotyperId: (phenotyperId: string | null) =>
       ipcRenderer.send("scanner:set-phenotyper-id", [phenotyperId]),
     getPlantQrCode: () => ipcRenderer.invoke("scanner:get-plant-qr-code"),
+    getPlantQrCodeList: () => ipcRenderer.invoke("scanner:get-plant-qr-code-list"),
     setPlantQrCode: (plantQrCode: string | null) =>
       ipcRenderer.invoke("scanner:set-plant-qr-code", [plantQrCode]),
     setAccessionId: (accessionId : string | null) => 
@@ -129,6 +130,13 @@ const electronHandler = {
       ipcRenderer.invoke("electric:get-accession-id", plantQRcode, experiment_id),
     getAccessionFiles: () =>
       ipcRenderer.invoke("electric:get-accession-files"),
+    getAccessionIdFiles: (experiment_Id : string) =>
+      ipcRenderer.invoke("electric:get-accession-id-file",[experiment_Id]),
+    getAccessionListWithFileId: (accession_id:string) =>
+      ipcRenderer.invoke("electric:get-accession-list-with-file-id",[accession_id]),
+    updateAccessionFile: (editing_field:string, editing_row_id:string, editing_value:string) =>
+      ipcRenderer.invoke("electric:update-accession-file", editing_field, editing_row_id, editing_value),
+      // ipcRenderer.invoke("electric:update-accession-file",[editing_field, editing_row_id, editing_value]),
     getExperiments: () => ipcRenderer.invoke("electric:get-experiments"),
     createExperiment: (name: string, species: string, scientist_id: string, accession_id:string) =>
     {

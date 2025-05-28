@@ -48,7 +48,7 @@ export function Experiments() {
   const [waveNumber, setWaveNumber] = useState<number | null>(NaN);
   const [expandedExperimentId, setExpandedExperimentId] = useState<string | null>(null);
   const [accessionList, setAccessionList] = useState<Accessions[]>([]);
-  const [newExperimentAccession, setnewExprimentAccession] = useState<string | null>(null);
+  const [newExperimentAccession, setNewExperimentAccession] = useState<string | null>(null);
   // const [experimentWaves, setExperimentWaves] = useState<Record<string, WaveNumber[]>>({});
 
 
@@ -80,12 +80,12 @@ export function Experiments() {
     .then((response) => {
       const accessionFiles = response as Accessions[];
       setAccessionList(accessionFiles);
-      setnewExprimentAccession(accessionFiles[0].id);
+      setNewExperimentAccession(accessionFiles[0].id);
     })
     .catch((err) => {
       console.error(err);
     });
-  })
+  },[]);
 
   return (
     <div className="text-lg">
@@ -160,17 +160,36 @@ export function Experiments() {
         </select>
 
         <div className="text-xs font-bold mt-2">Accession File</div>
+        <div className="text-xs font-bold mt-2">Accession File</div>
         <select
           className="p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none w-[200px] border border-gray-300"
           value={newExperimentAccession}
-          onChange={(e) => setnewExprimentAccession(e.target.value)}
+          onChange={(e) => {
+            console.log("Selected accession ID:", e.target.value);
+            setNewExperimentAccession(e.target.value); // ✅ fixed
+          }}
         >
           {accessionList.map((a) => (
             <option key={a.id} value={a.id}>
-              {a.name}
+              {a.name} - {a.id}
             </option>
           ))}
         </select>
+        {/* <select
+          className="p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none w-[200px] border border-gray-300"
+          value={newExperimentAccession}
+          onChange={(e) => {
+            console.log("Selected accession ID:", e.target.value);
+            setNewExperimentAccession(e.target.value)
+
+        }
+        >
+          {accessionList.map((a) => (
+            <option key={a.id} value={a.id}>
+              {a.name} - {a.id}
+            </option>
+          ))}
+        </select> */}
         
         <div className="flex justify-center">
         <button
