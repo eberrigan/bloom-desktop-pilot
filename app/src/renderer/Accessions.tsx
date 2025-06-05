@@ -61,11 +61,16 @@ export function Accessions() {
     const [message, setMessage] = useState<string | null>(null);
     const [expandedAccessionIds, setExpandedAccessionIds] = useState<Set<string>>(new Set());
     const [accessionPreview, setAccessionPreview] = useState<Record<string, string | null>[]>([]);
+    const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+    const [loading, setLoading] = useState(false);
 
     const [editingRowId, setEditingRowId] = useState<string | null>(null);
     const [editingField, setEditingField] = useState<'id'|null>(null);
     const [editingValue, setEditingValue] = useState<string>('');
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const workbookRef = useRef<XLSX.WorkBook | null>(null);
 
+    const MAX_FILE_SIZE = 15.5 * 1024 * 1024;
 
     const isDisabled = !selectedPlantId || !selectedGenotypeId;
     const tableRef = useRef(null);
@@ -100,22 +105,36 @@ export function Accessions() {
         fetchFiles();
     }, []);
 
-    useEffect(() => {
-        if (selectedPlantId && selectedGenotypeId && tableRef.current) {
-            tableRef.current.scrollTop = 0;
-            tableRef.current.scrollLeft = 0;
-        }
-    }, [selectedPlantId, selectedGenotypeId]);
+    // useEffect(() => {
+    //     if (selectedPlantId && selectedGenotypeId && tableRef.current) {
+    //         tableRef.current.scrollTop = 0;
+    //         tableRef.current.scrollLeft = 0;
+    //     }
+    // }, [selectedPlantId, selectedGenotypeId]);
 
     const handleChange = (file: File | null): void => {
+        setErrorMessage(null);
+        setSheetNames([]);
+        setColumns([]);
+        setData([]);
+
         if (!file) return;
 
+        if (file.size >= MAX_FILE_SIZE) {
+            setErrorMessage("File size exceeds 15MB. Please re-upload as two smaller files and attach both to the experiment.");
+            return;
+        }
+
+        setLoading(true);
+        setUploadedFile(file); 
         setFileName(file.name);
         const reader = new FileReader();
         reader.onload = (e) => {
+            console.log("On Drag Drop File Change");
             const ab = e.target?.result as ArrayBuffer;
             const workbook = XLSX.read(ab, { type: "array" });
 
+            workbookRef.current = workbook;
             setSheetNames(workbook.SheetNames);
 
             const defaultSheet = workbook.SheetNames[0];
@@ -124,38 +143,63 @@ export function Accessions() {
 
             setSelectedSheet(defaultSheet);
             setColumns(jsonData[0] as string[]);
-            setData(jsonData.slice(1));
+            setData(jsonData.slice(1, 21)); 
+            setLoading(false);
         };
         reader.readAsArrayBuffer(file);
 
     };
 
     const handleUpload = async () => {
-        if (!selectedPlantId || !selectedGenotypeId) return;
+        if (!selectedPlantId || !selectedGenotypeId || !workbookRef.current || !selectedSheet) return;
         setUploading(true);
         setMessage("Uploading...");
 
         try {
-
             let res = await createAccession(file_name);
             if (!res.file_id) {
                 throw new Error("No file ID returned from createAccession.");
             }
             let file_id = res.file_id;
+            const sheet = workbookRef.current.Sheets[selectedSheet];
+            const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-            for (const row of data) {
-                console.log("Uploading accession : ", row);
-                const plant_barcode = row[columns.indexOf(selectedPlantId)];
-                const accession_id = row[columns.indexOf(selectedGenotypeId)];
+            const headers = rows[0] as string[];
+            const plantIdx = headers.indexOf(selectedPlantId);
+            const genotypeIdx = headers.indexOf(selectedGenotypeId);
+
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const plant_barcode = (row as any[])[plantIdx];
+                const accession_id = (row as any[])[genotypeIdx];
 
                 if (plant_barcode && accession_id) {
+                    console.log(`Uploading row ${i}: Plant Barcode: ${plant_barcode}, Accession ID: ${accession_id}`);
                     try {
-                        await createPlantAccessionMap(accession_id, plant_barcode, file_id);
+
+                    await createPlantAccessionMap(accession_id, plant_barcode, file_id);
                     } catch (err) {
-                        console.error("Error uploading accession entry:", err);
+                    console.error("Error uploading accession entry (row " + i + "):", err);
                     }
                 }
+                if (i % 100 === 0) {
+                    await new Promise((r) => setTimeout(r, 0));
+                }
             }
+
+            // for (const row of data) {
+            //     console.log("Uploading accession : ", row);
+            //     const plant_barcode = row[columns.indexOf(selectedPlantId)];
+            //     const accession_id = row[columns.indexOf(selectedGenotypeId)];
+
+            //     if (plant_barcode && accession_id) {
+            //         try {
+            //             await createPlantAccessionMap(accession_id, plant_barcode, file_id);
+            //         } catch (err) {
+            //             console.error("Error uploading accession entry:", err);
+            //         }
+            //     }
+            // }
             setMessage(" Done uploading!");
         } catch (err) {
             console.error("Error uploading accession entry:", err);
@@ -170,20 +214,24 @@ export function Accessions() {
 
     const handleSheetChange = async (sheetName: string) => {
         setSelectedSheet(sheetName);
-        const file = (document.querySelector('input[type="file"]') as HTMLInputElement)?.files?.[0];
-        if (!file) return;
-
+        setLoading(true);
         const reader = new FileReader();
         reader.onload = (event) => {
             const ab = event.target?.result as ArrayBuffer;
             const workbook = XLSX.read(ab, { type: "array" });
             const ws = workbook.Sheets[sheetName];
-            const jsonData = XLSX.utils.sheet_to_json(ws, { header: 1 });
+            const jsonData = XLSX.utils.sheet_to_json(ws, {
+            header: 1,
+            range: "A1:Z30" 
+            });
+            // const jsonData = XLSX.utils.sheet_to_json(ws, { header: 1 });
 
             setColumns(jsonData[0] as string[]);
             setData(jsonData.slice(1));
+            setLoading(false);
         };
-        reader.readAsArrayBuffer(file);
+        reader.readAsArrayBuffer(uploadedFile);
+        
     };
 
     const handlePlantId = async (plantId: string) => {
@@ -341,12 +389,12 @@ export function Accessions() {
 
 
             {/* upload new accession file */}
-            <div className="text-xs font-bold">Upload new Accession File</div>
+            <div className="text-xs font-bold">Upload New Accession File</div>
             <div className="border rounded text-lg p-2 w mb-8" >
 
                 <div className="block text-xs font-bold text-gray-700 text-left mt-1 p-1">
                     Plant ID ↔ Genotype ID Mapping
-                    <FieldInfo info="Upload an excel file containing Plant ID to Genotype ID mapping" />
+                    <FieldInfo info="Upload an Excel file mapping Plant ID to Genotype ID. Max size: 15MB. If exceeded, split and re-upload as two files." />
                 </div>
 
                 <div className="mt-1">
@@ -355,10 +403,16 @@ export function Accessions() {
                             handleChange={handleChange}
                             name="file"
                             types={fileTypes}
-                            label="Drag and drop your file here"
+                            label="Drag and drop your file here (Max: 15MB)"
                         />
                     </div>
                 </div>
+
+                {errorMessage && (
+                    <div className="mt-2 text-red-500 text-sm">
+                        {errorMessage}
+                    </div>
+                )}
 
             </div>
 
@@ -367,6 +421,16 @@ export function Accessions() {
                 <FieldInfo info="Preview uploaded file and assign the genotypeId and plantID(QRcode/barcode) coumns from you excel file" />
             </div>
             <div className="border rounded text-lg p-2 mb-8 mr-4" >
+                {loading && (
+                <div className="flex justify-center items-center py-4">
+                    <svg className="animate-spin h-5 w-5 text-gray-600" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    <span className="ml-2 text-sm text-gray-600">Loading file...</span>
+                </div>
+                )}
+
                 {sheetNames.length > 0 && (
                     <>
                         <h2 className="font-bold text-gray-700 text-xs">⚠️ Select the Plant ID and Genotype ID columns from your file.</h2>

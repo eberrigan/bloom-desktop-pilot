@@ -148,6 +148,12 @@ const electronHandler = {
         accession_id,
       ])
     },
+    attachAccessionToExperiment: (experiment_id: string, accession_id: string) =>
+      {
+        return ipcRenderer.invoke("electric:attach-accession-to-experiment", [
+        experiment_id,
+        accession_id,
+      ])},
     getStatus: () => ipcRenderer.invoke("electric:get-status"),
     uploadImages: () => ipcRenderer.invoke("electric:upload-images"),
     getExperimentsWithScans: () =>

@@ -101,6 +101,7 @@ export class PrismaStore {
     accession_file_id: string;
   }): Promise<{ error: any }> => {
     try {
+      console.log("Creating plant accession mapping:", { accession_id, plant_barcode, accession_file_id });
       await this.prisma.plantAccessionMappings.create({
         data: {
           accession_id,
@@ -280,6 +281,21 @@ export class PrismaStore {
     try {
       await this.prisma.experiment.create({
         data: { id: uuidv4(), name, species, scientist_id, accession_id },
+      });
+      return { error: null };
+    } catch (err) {
+      return { error: err };
+    }
+  };
+
+  attachAccessionToExperiment = async (
+    experiment_id: string,
+    accession_id: string
+  ) => {
+    try {
+      await this.prisma.experiment.update({
+        where: { id: experiment_id },
+        data: { accession_id },
       });
       return { error: null };
     } catch (err) {

@@ -33,7 +33,7 @@ model Experiment {
   species      String
   scientist_id String?
   scans        Scan[]
-  accession_id  String?
+  accession_id  String
   scientist    Scientist? @relation(fields: [scientist_id], references: [id])
   accession    Accessions? @relation("AccessionToExperiment", fields: [accession_id], references: [id])
 }

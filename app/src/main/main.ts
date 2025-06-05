@@ -13,6 +13,7 @@ import { createStreamer } from "./streamer";
 
 import { createPrismaStore } from "./prismastore";
 import { createImageUploader } from "./imageuploader";
+import exp from "node:constants";
 
 console.log("__dirname: " + __dirname);
 
@@ -324,6 +325,10 @@ createPrismaStore(config.scans_dir, dbUpdated, "file:" + config.local_db_path)
     ipcMain.handle("electric:create-experiment", async (event, args) => {
       const [name, species, scientist_id, accession_id] = args;
       return store.createExperiment(name, species, scientist_id, accession_id);
+    });
+    ipcMain.handle("electric:attach-accession-to-experiment", async (event, args) => {
+      const [experiment_id,accession_id] = args;
+      return store.attachAccessionToExperiment(experiment_id, accession_id);
     });
     // ipcMain.handle("electric:get-scans", store.getScans);
     scanner.onScanComplete = (scan: Scan) => {
