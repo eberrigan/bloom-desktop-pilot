@@ -82,9 +82,9 @@ export function Accessions() {
 
     const saveInlineEdit = async () => {
         if (!editingRowId || !editingField) return;
-        console.log("Editing Field"+editingField);
-        console.log("Editing Value"+editingValue);
-        console.log("Editing Row"+editingRowId);
+        // console.log("Editing Field"+editingField);
+        // console.log("Editing Value"+editingValue);
+        // console.log("Editing Row"+editingRowId);
 
         await updateAccessionFile(editingField,editingRowId, editingValue);
 
@@ -130,7 +130,7 @@ export function Accessions() {
         setFileName(file.name);
         const reader = new FileReader();
         reader.onload = (e) => {
-            console.log("On Drag Drop File Change");
+            // console.log("On Drag Drop File Change");
             const ab = e.target?.result as ArrayBuffer;
             const workbook = XLSX.read(ab, { type: "array" });
 
@@ -174,12 +174,12 @@ export function Accessions() {
                 const accession_id = (row as any[])[genotypeIdx];
 
                 if (plant_barcode && accession_id) {
-                    console.log(`Uploading row ${i}: Plant Barcode: ${plant_barcode}, Accession ID: ${accession_id}`);
+                    // console.log(`Uploading row ${i}: Plant Barcode: ${plant_barcode}, Accession ID: ${accession_id}`);
                     try {
 
                     await createPlantAccessionMap(accession_id, plant_barcode, file_id);
                     } catch (err) {
-                    console.error("Error uploading accession entry (row " + i + "):", err);
+                    // console.error("Error uploading accession entry (row " + i + "):", err);
                     }
                 }
                 if (i % 100 === 0) {
@@ -187,19 +187,6 @@ export function Accessions() {
                 }
             }
 
-            // for (const row of data) {
-            //     console.log("Uploading accession : ", row);
-            //     const plant_barcode = row[columns.indexOf(selectedPlantId)];
-            //     const accession_id = row[columns.indexOf(selectedGenotypeId)];
-
-            //     if (plant_barcode && accession_id) {
-            //         try {
-            //             await createPlantAccessionMap(accession_id, plant_barcode, file_id);
-            //         } catch (err) {
-            //             console.error("Error uploading accession entry:", err);
-            //         }
-            //     }
-            // }
             setMessage(" Done uploading!");
         } catch (err) {
             console.error("Error uploading accession entry:", err);
