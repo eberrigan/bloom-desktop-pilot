@@ -40,6 +40,8 @@ export function ViewScan() {
           </div>
           <div className="text-xs mt-2 font-bold">Plant QR Code</div>
           <div>{scan?.plant_id}</div>
+          <div className="text-xs mt-2 font-bold">Accession ID</div>
+          <div>{scan?.accession_id}</div>
           <div className="text-xs mt-2 font-bold">Date</div>
           <div>{scan && formatDate(scan?.capture_date)}</div>
           <div className="text-xs mt-2 font-bold">Phenotyper</div>

@@ -7,6 +7,7 @@
   "scripts": {
     "gen-types": "supabase gen types typescript --local > src/types/database.types.ts",
     "start": "electron-forge start",
+    "ts-start": "ts-node ./forge.config.ts && electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
@@ -48,7 +49,7 @@
     "style-loader": "^3.0.0",
     "tailwindcss": "^3.4.1",
     "ts-loader": "^9.2.2",
-    "ts-node": "^10.0.0",
+    "ts-node": "^10.9.2",
     "typescript": "~4.5.4"
   },
   "dependencies": {
@@ -69,6 +70,7 @@
     "prisma": "^5.16.1",
     "react": "^18.3.1",
     "react-dom": "^18.2.0",
+    "react-drag-drop-files": "^3.0.1",
     "react-router-dom": "^6.22.0",
     "sharp": "^0.33.2",
     "zod": "^3.22.4"

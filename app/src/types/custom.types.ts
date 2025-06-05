@@ -13,6 +13,7 @@ type ScanMetadata = Readonly<{
   phenotyper_id: string;
   scanner_name: string;
   plant_id: string;
+  accession_id:string;
   path: string;
   capture_date: string;
   num_frames: number;
@@ -62,6 +63,11 @@ type Scientist = {
   name: string;
   email: string;
 };
+
+type Accessions = {
+  id : string,
+  name : string
+}
 
 type ExperimentWithScientist = Experiment & {
   scientist: Scientist;

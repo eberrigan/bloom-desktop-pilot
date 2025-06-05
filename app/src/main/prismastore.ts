@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import fs from "fs";
 import path from "path";
 import { Image, Prisma, PrismaClient } from "@prisma/client";
+import exp from "constants";
 // import { Phenotypers } from "src/renderer/Phenotypers";
 
 // define type
@@ -12,6 +13,7 @@ type ScanMetadataParsed = {
   phenotyper_id: string;
   scanner_name: string;
   plant_id: string;
+  accession_id:string;
   path: string;
   capture_date: Date;
   num_frames: number;
@@ -66,9 +68,193 @@ export class PrismaStore {
       await this.prisma.scientist.create({
         data: { id: uuidv4(), name, email },
       });
+
       return { error: null };
     } catch (err) {
       return { error: err };
+    }
+  };
+
+  createAccessions = async (name: string): Promise<{ error: any; file_id: string | null }> => {
+    try {
+      const newAccession = await this.prisma.accessions.create({
+        data: {
+          name,
+        },
+      });
+  
+      console.log("New accession created ID:", newAccession.id);
+      return { error: null, file_id: newAccession.id };
+    } catch (err) {
+      console.error("Error creating accession:", err);
+      return { error: err, file_id: null };
+    }
+  };
+
+  createPlantAccessionMap = async ({
+    accession_id,
+    plant_barcode,
+    accession_file_id,
+  }: {
+    accession_id: string;
+    plant_barcode: string;
+    accession_file_id: string;
+  }): Promise<{ error: any }> => {
+    try {
+      console.log("Creating plant accession mapping:", { accession_id, plant_barcode, accession_file_id });
+      await this.prisma.plantAccessionMappings.create({
+        data: {
+          accession_id,
+          plant_barcode,
+          accession_file_id,
+        },
+      });
+  
+      return { error: null };
+    } catch (err) {
+      console.error("Error creating accession mapping:", err);
+      return { error: err };
+    }
+  };
+
+  // getAccessions = async (id: string) => {
+  //   try {
+  //     const accession = await this.prisma.accessions.findUnique({
+  //       where: { id },
+  //     });
+  
+  //     if (!accession) {
+  //       return false; 
+  //     }
+  
+  //     return accession;
+  //   } catch (err) {
+  //     console.error("Error fetching accession:", err);
+  //     throw err;
+  //   }
+  // };
+
+  getAccessions = async (id: string): Promise<Accessions | null> => {
+    try {
+      const accession = await this.prisma.accessions.findUnique({
+        where: { id },
+      });
+      return accession; 
+    } catch (err) {
+      console.error("Error fetching accession:", err);
+      throw err;
+    }
+  };
+  
+
+
+  getAccessionsID = async (plantQRcode: string, experiment_Id: string) => {
+    try {
+      // get the accesion file Id for the experiment
+      const experiment = await this.prisma.experiment.findUnique({
+        where: {
+          id: experiment_Id,
+        },
+        select: {
+          accession_id: true,
+        },
+      });
+  
+      if (!experiment || !experiment.accession_id) {
+        throw new Error("Experiment or accession ID not found.");
+      }
+  
+      // find PlantAccessionMappings
+      const mapping = await this.prisma.plantAccessionMappings.findFirst({
+        where: {
+          accession_file_id: experiment.accession_id,
+          plant_barcode: plantQRcode,
+        },
+      });
+  
+      if (!mapping) {
+        throw new Error("Mapping not found for given plant QR code.");
+      }
+
+      return mapping; 
+    } catch (err) {
+      console.error("Error in getAccessionsID:", err);
+      throw err;
+    }
+  }
+
+  getAccessionList = async(experimentId: string)=> {
+    try{
+      console.log("PLANTQRCODE");
+
+      const accessionsWithMappings = await this.prisma.accessions.findMany({
+        where: {
+          experiments: {
+            some: {
+              id: experimentId,
+            },
+          },
+        },
+        include: {
+          mappings: true,
+        },
+      });
+      const allMappings = accessionsWithMappings.flatMap(accession => accession.mappings);   
+      return allMappings;   
+    }
+    catch (err){
+      console.error("Error in getting accessions list:", err);
+      throw err;
+    }
+  }
+
+  getAccessionListwithFileID = async(accession_file_id: string)=> {
+    try {
+      const mappings = await this.prisma.plantAccessionMappings.findMany({
+        where: {
+          accession_file_id: accession_file_id, 
+        },
+      });
+      return mappings;
+    } catch (err) {
+      console.error("Error fetching accession files:", err);
+      return [];
+    }
+  }
+
+  updateAccessionFile = async (editingField:string, editingRowId:string, editingValue:string)=>{
+    try {
+
+      const updated = await this.prisma.plantAccessionMappings.update({
+        where: { id: editingRowId },
+        data: { ["accession_id"]: editingValue },
+      });
+  
+      return { success: true, data: updated };
+    } catch (err) {
+      console.error("Error updating accession file:", err);
+      return { error: err };
+    }
+  }
+
+  getAccessionFiles = async (): Promise<any[]> => {
+    try {
+      const accessionFiles = await this.prisma.accessions.findMany({
+        select: {
+          id: true,
+          name: true,
+          createdAt: true,
+          experiments: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      });
+      return accessionFiles;
+    } catch (err) {
+      console.error("Error fetching accession files:", err);
+      return [];
     }
   };
 
@@ -89,12 +275,27 @@ export class PrismaStore {
   createExperiment = async (
     name: string,
     species: string,
-    scientist_id: string
+    scientist_id: string,
+    accession_id: string,
   ) => {
-    console.log(`Creating experiment: ${name}, ${species}, ${scientist_id}`);
     try {
       await this.prisma.experiment.create({
-        data: { id: uuidv4(), name, species, scientist_id },
+        data: { id: uuidv4(), name, species, scientist_id, accession_id },
+      });
+      return { error: null };
+    } catch (err) {
+      return { error: err };
+    }
+  };
+
+  attachAccessionToExperiment = async (
+    experiment_id: string,
+    accession_id: string
+  ) => {
+    try {
+      await this.prisma.experiment.update({
+        where: { id: experiment_id },
+        data: { accession_id },
       });
       return { error: null };
     } catch (err) {
@@ -291,3 +492,5 @@ function parseCaptureDate(scan_metadata: ScanMetadata) {
     capture_date: new Date(capture_date),
   } as ScanMetadataParsed;
 }
+
+

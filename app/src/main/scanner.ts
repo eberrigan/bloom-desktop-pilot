@@ -12,6 +12,7 @@ class Scanner {
   private scanPath: string | null = null;
   private scanPartialPath: string | null = null;
   private plantId: string | null = null;
+  private accessionId: string | null = null;
   private python: string;
   private capture_scan_py: string;
   private scans_dir: string;
@@ -22,6 +23,7 @@ class Scanner {
   private cameraSettings: CameraSettings = defaultCameraSettings();
   private cameraIpAddress: string;
   private captureDate: Date | null = null;
+  
 
   public onScanUpdate: () => void = () => {};
   public onScanComplete: (scan: Scan) => void = () => {};
@@ -77,7 +79,7 @@ class Scanner {
       console.log(longStr);
       for (const str of longStr.split("\n")) {
         if (str.slice(0, 14) === "TRIGGER_CAMERA") {
-          console.log("data matches TRIGGER_CAMERA");
+          // console.log("data matches TRIGGER_CAMERA");
           options.onCaptureImage();
           this.imageCaptured();
         }
@@ -127,9 +129,21 @@ class Scanner {
     return this.plantId;
   };
 
+  getPlantQrCodeList = () => {
+    // return a list of plant IDs from the scans directory
+  }
+
   setPlantQrCode = (plantQrCode: string | null) => {
     this.plantId = plantQrCode;
   };
+
+  setAccessionId = (accessionId: string | null) => {
+    this.accessionId = accessionId;
+  }
+
+  getAccessionId = () => {
+    return this.accessionId;
+  }
 
   getExperimentId = () => {
     return this.experimentId;
@@ -179,6 +193,9 @@ class Scanner {
     if (this.plantId === null) {
       throw new Error("plantQrCode is null");
     }
+    if (this.accessionId === null) {
+      throw new Error("accessionId is null");
+    }
     if (this.captureDate === null) {
       throw new Error("captureDate is null");
     }
@@ -190,6 +207,7 @@ class Scanner {
       plant_age_days: this.plantAgeDays,
       scanner_name: this.scanner_name,
       plant_id: this.plantId,
+      accession_id : this.accessionId,
       path: this.scanPartialPath,
       capture_date: this.captureDate.toISOString(),
       ...this.cameraSettings,

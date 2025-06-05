@@ -26,11 +26,12 @@ export function BrowseScans({
   const pageSize = 10;
 
   const fetchScans = useCallback(() => {
-    getScans(showTodayOnly).then((response: ScanWithPhenotyper[]) =>
-      setScans(response)
-    );
+    getScans(showTodayOnly)
+      .then((response: ScanWithPhenotyper[]) => {
+        setScans(response);
+      });
   }, []);
-
+  
   useEffect(() => {
     fetchScans();
   }, []);
@@ -92,6 +93,9 @@ export function BrowseScans({
               <th className="text-xs text-left px-2 pb-4 align-bottom">
                 Plant ID
               </th>
+              <th className="text-xs text-left px-2 pb-4 align-bottom">
+                Accession ID
+              </th>
               <th className="text-xs text-left px-2 pb-4 align-bottom">Date</th>
               <th className="text-xs text-left px-2 pb-4 align-bottom">
                 Phenotyper
@@ -117,6 +121,7 @@ export function BrowseScans({
             </tr>
           </thead>
           <tbody>
+            
             {scans
               .slice((pageNumber - 1) * pageSize, pageNumber * pageSize)
               .map((scan) => (
@@ -129,6 +134,11 @@ export function BrowseScans({
                       >
                         {scan.plant_id || "No plant QR code"}
                       </Link>
+                    }
+                  </td>
+                  <td className="px-2 py-2">
+                    {
+                      scan.accession_id
                     }
                   </td>
                   <td className="px-2 py-2">{formatDate(scan.capture_date)}</td>

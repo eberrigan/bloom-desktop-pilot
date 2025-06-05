@@ -65,7 +65,7 @@ export class ImageUploader {
         device_name: image.scan.scanner_name,
         plant_qr_code: image.scan.plant_id,
         frame_number: image.frame_number,
-        accession_name: "Unknown",
+        accession_name: image.scan.accession_id,
       };
     });
 
