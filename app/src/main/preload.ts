@@ -47,8 +47,11 @@ const electronHandler = {
     setPhenotyperId: (phenotyperId: string | null) =>
       ipcRenderer.send("scanner:set-phenotyper-id", [phenotyperId]),
     getPlantQrCode: () => ipcRenderer.invoke("scanner:get-plant-qr-code"),
+    getPlantQrCodeList: () => ipcRenderer.invoke("scanner:get-plant-qr-code-list"),
     setPlantQrCode: (plantQrCode: string | null) =>
       ipcRenderer.invoke("scanner:set-plant-qr-code", [plantQrCode]),
+    setAccessionId: (accessionId : string | null) => 
+      ipcRenderer.invoke("scanner:set-accession-id", [accessionId]),
     getExperimentId: () => ipcRenderer.invoke("scanner:get-experiment-id"),
     setExperimentId: (experimentId: string | null) =>
       ipcRenderer.send("scanner:set-experiment-id", [experimentId]),
@@ -117,17 +120,46 @@ const electronHandler = {
     getScientists: () => ipcRenderer.invoke("electric:get-scientists"),
     createScientist: (name: string, email: string) =>
       ipcRenderer.invoke("electric:create-scientist", [name, email]),
+    createAccession: (name: string) =>
+      ipcRenderer.invoke("electric:create-accession", [name]),
+    createPlantAccessionMap: (accession_id: string, plant_barcode:string, accession_file_id:string ) =>
+      ipcRenderer.invoke("electric:create-plant-accession-map", [accession_id, plant_barcode, accession_file_id]),
+    getAccession: (id: string) =>
+      ipcRenderer.invoke("electric:get-accession", id),
+    getAccessionId : (plantQRcode : string, experiment_id : string) => 
+      ipcRenderer.invoke("electric:get-accession-id", plantQRcode, experiment_id),
+    getAccessionFiles: () =>
+      ipcRenderer.invoke("electric:get-accession-files"),
+    getAccessionIdFiles: (experiment_Id : string) =>
+      ipcRenderer.invoke("electric:get-accession-id-file",[experiment_Id]),
+    getAccessionListWithFileId: (accession_id:string) =>
+      ipcRenderer.invoke("electric:get-accession-list-with-file-id",[accession_id]),
+    updateAccessionFile: (editing_field:string, editing_row_id:string, editing_value:string) =>
+      ipcRenderer.invoke("electric:update-accession-file", editing_field, editing_row_id, editing_value),
+      // ipcRenderer.invoke("electric:update-accession-file",[editing_field, editing_row_id, editing_value]),
     getExperiments: () => ipcRenderer.invoke("electric:get-experiments"),
-    createExperiment: (name: string, species: string, scientist_id: string) =>
-      ipcRenderer.invoke("electric:create-experiment", [
+    createExperiment: (name: string, species: string, scientist_id: string, accession_id:string) =>
+    {
+      console.log("Creating experiment with accession ID:", accession_id);
+      return ipcRenderer.invoke("electric:create-experiment", [
         name,
         species,
         scientist_id,
-      ]),
+        accession_id,
+      ])
+    },
+    attachAccessionToExperiment: (experiment_id: string, accession_id: string) =>
+      {
+        return ipcRenderer.invoke("electric:attach-accession-to-experiment", [
+        experiment_id,
+        accession_id,
+      ])},
     getStatus: () => ipcRenderer.invoke("electric:get-status"),
     uploadImages: () => ipcRenderer.invoke("electric:upload-images"),
     getExperimentsWithScans: () =>
       ipcRenderer.invoke("electric:get-experiments-with-scans"),
+    getWaveNumbers: (experimentId: string) =>
+      ipcRenderer.invoke("electric:get-wave-numbers", [experimentId]),
   },
   bloom: {
     getCredentials: () =>
