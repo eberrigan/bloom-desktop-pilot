@@ -14,7 +14,9 @@ from PIL import Image
 
 import imageio.v2 as iio
 
-sample_scan = "/Users/djbutler/dev/bloom-desktop-pilot/test/sample_scan"
+
+# Test images are in "test/sample_scan" directory from the root of the repo
+sample_scan = pathlib.Path(__file__).parent.parent / "test" / "sample_scan"
 
 
 def stream_frames(camera_settings):

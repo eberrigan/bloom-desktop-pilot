@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { PersonChooser } from "./PersonChooser";
@@ -8,9 +8,14 @@ import { BrowseScans } from "./BrowseScans";
 import { ExperimentChooser } from "./ExperimentChooser";
 import { Streamer } from "./Streamer";
 import { set } from "zod";
+import { FileUploader } from "react-drag-drop-files";
+import * as XLSX from "xlsx";
 
+const getAccesionId = window.electron.electric.getAccessionId;
+const setAccessionId = window.electron.scanner.setAccessionId;
 const setScannerPlantQrCode = window.electron.scanner.setPlantQrCode;
 const getScannerPlantQrCode = window.electron.scanner.getPlantQrCode;
+const plantQRcodeList = window.electron.electric.getAccessionIdFiles;
 
 const scanner = window.electron.scanner;
 
@@ -44,6 +49,7 @@ export function CaptureScan() {
   >(undefined);
 
   const [phenotyperId, setPhenotyperId] = useState<string | null>(null);
+  const [accessionFileId, setAccessonFileId] = useState<string | null>(null);
   const [experimentId, setExperimentId] = useState<string | null>(null);
   const [waveNumber, setWaveNumber] = useState<number | null>(NaN);
   const [plantAgeDays, setPlantAgeDays] = useState<number | null>(NaN);
@@ -55,6 +61,44 @@ export function CaptureScan() {
   const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
   const [showDeletedMessage, setShowDeletedMessage] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [assgnAccesson, setAccession] = useState<string | null>(null);
+
+  const [platQRcodes, setPlantQRCodes] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+
+  // Excel file preview vars
+  const fileTypes = ["XLSX", "XLS"];
+  const [excelfile, setFile] = useState(null);
+  const [sheetNames, setSheetNames] = useState<string[]>([]);
+  const [selectedSheet, setSelectedSheet] = useState<string | null>(null);
+  const [selectedPlantId, setSelectPlantID] = useState<string | null>(null);
+  const [selectedGenotypeId, setSelectGenotypeId] = useState<string | null>(null);
+  const [columns, setColumns] = useState<string[]>([]);
+  const [data, setData] = useState<any[]>([]);
+  const [hoveredColIndex, setHoveredColIndex] = useState<number | null>(null);
+  const plantIdIndex = columns.indexOf(selectedPlantId ?? "");
+  const genotypeIdIndex = columns.indexOf(selectedGenotypeId ?? "");
+  const tableRef = useRef(null);
+
+
+  const handleChange = (file: File | null): void => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const ab = e.target?.result as ArrayBuffer;
+      const workbook = XLSX.read(ab, { type: "array" });
+
+      setSheetNames(workbook.SheetNames);
+
+      const defaultSheet = workbook.SheetNames[0];
+      const ws = workbook.Sheets[defaultSheet];
+      const jsonData = XLSX.utils.sheet_to_json(ws, { header: 1 });
+
+      setSelectedSheet(defaultSheet);
+      setColumns(jsonData[0] as string[]);
+      setData(jsonData.slice(1));
+    };
+    reader.readAsArrayBuffer(file);
+  };
 
   const successfullySaved = async () => {
     setShowSuccessMessage(true);
@@ -87,6 +131,7 @@ export function CaptureScan() {
       scanImages: ScanImages;
     };
     console.log("scanData: " + JSON.stringify(scanData));
+    console.log("CHECK SCAN DATA");
     setScanMetadata(scanData.metadata);
     setImages(scanData.scanImages);
     setIsScanning(scanData.progress.status === "capturing");
@@ -123,6 +168,31 @@ export function CaptureScan() {
       console.log("got qr code from scanner: " + qrCode);
     });
   }, []);
+
+  useEffect(() => {
+    fetchAccessionId();
+    console.log("current QR code:"+plantQrCode);
+  }, [plantQrCode, experimentId])
+
+  const fetchAccessionId = async () => {
+    if (!plantQrCode || !experimentId) return;
+    console.log("QR code set, trying to fetch accession ID...");
+    try {
+      console.log("Looking for....", plantQrCode, "...and...", experimentId);
+      const accessionMapping = await getAccesionId(plantQrCode, experimentId);
+      if (accessionMapping) {
+        console.log("Found accession:", accessionMapping.accession_id);
+        setAccession(accessionMapping.accession_id);
+        setAccessionId(accessionMapping.accession_id);
+      } else {
+        setAccession(null);
+        console.log("No accession mapping found for this QR code.");
+      }
+    } catch (err) {
+      setAccession(null);
+      console.error("Error fetching accession:", err);
+    }
+  };
 
   useEffect(() => {
     return ipcRenderer.on("streamer:streaming-stopped", () => {
@@ -162,6 +232,36 @@ export function CaptureScan() {
     setSelectedImage(parseInt(e.target.value, 10));
   };
 
+  const handleSheetChange = async (sheetName: string) => {
+    setSelectedSheet(sheetName);
+    const file = (document.querySelector('input[type="file"]') as HTMLInputElement)?.files?.[0];
+    if (!file) return;
+  
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const ab = event.target?.result as ArrayBuffer;
+      const workbook = XLSX.read(ab, { type: "array" });
+      const ws = workbook.Sheets[sheetName];
+      const jsonData = XLSX.utils.sheet_to_json(ws, { header: 1 });
+  
+      setColumns(jsonData[0] as string[]);
+      setData(jsonData.slice(1));
+    };
+    reader.readAsArrayBuffer(file);
+  };
+
+  const handlePlantId = async (plantId: string) => {
+    setSelectPlantID(plantId);
+  }
+
+  const handleGenotypeId = async (GenotypeId: string) => {
+    setSelectGenotypeId(GenotypeId);
+  }
+
+  const handleColumnClick = (colName: string) => {
+    console.log("Clicked column:", colName);
+  };
+    
   useEffect(() => {
     if (numSaved === nImages && numSaved > 0) {
       setIsScanning(false);
@@ -182,6 +282,21 @@ export function CaptureScan() {
   }, []);
 
   useEffect(() => {
+    console.log("Fetching plant QR codes for experiment ID: " + experimentId);
+    plantQRcodeList(experimentId)
+      .then((qrCodes) => {
+        const plantBarcodes = qrCodes.map((mapping: any) => mapping.plant_barcode);
+        // console.log("Got plant barcodes: ", plantBarcodes);
+        setPlantQRCodes(plantBarcodes);
+      })
+      .catch((err) => {
+        console.error("Error fetching plant QR codes: ", err);
+      });
+  
+  },[experimentId]);
+  
+
+  useEffect(() => {
     setMostRecentScanDate(undefined);
     if (experimentId && plantQrCode) {
       getMostRecentScanDate(experimentId, plantQrCode).then((date) => {
@@ -189,6 +304,13 @@ export function CaptureScan() {
       });
     }
   }, [experimentId, plantQrCode]);
+
+  useEffect(() => {
+    if (selectedPlantId && selectedGenotypeId && tableRef.current) {
+      tableRef.current.scrollTop = 0;
+      tableRef.current.scrollLeft = 0;
+    }
+  }, [selectedPlantId, selectedGenotypeId]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -215,6 +337,7 @@ export function CaptureScan() {
     experimentId === "" ||
     Number.isNaN(plantAgeDays) ||
     Number.isNaN(waveNumber) ||
+    assgnAccesson === null ||
     isScanning ||
     isSaving ||
     isStreaming ||
@@ -222,6 +345,24 @@ export function CaptureScan() {
     scannedToday;
 
   const streamingDisabled = isScanning || isSaving;
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value;
+    const cleaned = rawValue === "" ? null : rawValue.replace(/[^a-zA-Z0-9\+\-\_]/g, "");
+    setPlantQrCode(cleaned);
+    setScannerPlantQrCode(cleaned);
+  
+    // Filter suggestions
+    if (cleaned) {
+      const matches = platQRcodes.filter(code =>
+        code.toLowerCase().includes(cleaned.toLowerCase())
+      );
+      setSuggestions(matches.slice(0, 5));
+    } else {
+      setSuggestions([]);
+    }
+  };
+  
 
   return (
     <div className="min-h-0 min-w-0 flex flex-col flex-grow pr-8 pb-8">
@@ -252,6 +393,7 @@ export function CaptureScan() {
                 <div className="mt-1 flex flex-row items-center">
                   <ExperimentChooser
                     experimentIdChanged={(id: string) => {
+                      console.log("Experiment ID changed to: " + id);
                       setExperimentId(id);
                     }}
                   />
@@ -283,6 +425,19 @@ export function CaptureScan() {
             </div> */}
               </div>
             }
+            {/* {
+            <div className="mb-2 text-left">
+              <div className="block text-xs font-bold text-gray-700 text-left">
+                Accessions
+              </div>
+              <div className="mt-1 flex flex-row items-center">
+                <PersonChooser
+                  phenotyperIdChanged={(id: string) => setPhenotyperId(id)}
+                />
+                <FieldInfo info="Accesions Files, with PlantID(barcode)<->Genotype Mappings. Required Field" />
+              </div>
+            </div>
+            } */}
             {
               <div className="mb-2 text-left">
                 <div className="block text-xs font-bold text-gray-700 text-left mt-1">
@@ -342,7 +497,35 @@ export function CaptureScan() {
                 <div className="block text-xs font-bold text-gray-700 text-left mt-1">
                   Plant ID
                 </div>
-                <div className="mt-1">
+                <div className="relative w-[200px]">
+                <input
+                  type="text"
+                  className={
+                    "p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-full focus:outline-none border " +
+                    (plantQrCode === null ? "border-amber-300" : "border-gray-300")
+                  }
+                  value={plantQrCode || ""}
+                  onChange={handleInputChange}
+                />
+                {suggestions.length > 0 && (
+                  <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto">
+                    {suggestions.map((code, index) => (
+                      <li
+                        key={index}
+                        className="px-3 py-1 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => {
+                          setPlantQrCode(code);
+                          setScannerPlantQrCode(code);
+                          setSuggestions([]);
+                        }}
+                      >
+                        {code}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+                {/* <div className="mt-1">
                   <input
                     type="text"
                     className={
@@ -355,13 +538,13 @@ export function CaptureScan() {
                     onChange={(e) => {
                       const value =
                         e.target.value === "" ? null : e.target.value;
-                      const qrCode = value.replace(/[^a-zA-Z0-9\+\-\_]/g, "");
+                      const qrCode = value ? value.replace(/[^a-zA-Z0-9\+\-\_]/g, "") : null;
                       setPlantQrCode(qrCode);
                       setScannerPlantQrCode(qrCode);
                     }}
                   />
                   <FieldInfo info="Identifier for the plant (QR code or other identifier). Required field." />
-                </div>
+                </div> */}
                 {mostRecentScanDate !== undefined && (
                   <div className="block text-xs text-left mt-1">
                     {mostRecentScanDate === null ? (
@@ -385,6 +568,42 @@ export function CaptureScan() {
                 )}
               </div>
             }
+            {
+              <div className="mb-2 text-left">
+                <div className="p-1 text-xs font-bold text-gray-700">
+                  <span className="text-lime-700">Accession ID:</span>
+                </div>
+
+                <div className="flex items-center justify-between p-1 text-sm text-gray-800">
+                  <div>
+                    {assgnAccesson ? (
+                      <span className="text-lime-700">{assgnAccesson}</span>
+                    ) : (
+                      <span className="italic text-lime-700">No accession ID found.</span>
+                    )}
+                  </div>
+                  <FieldInfo info="This Accession ID is automatically taken from the file linked to this experiment.If you're unable to start the scan, please make sure the file you submitted earlier includes an Accession ID for the entered Plant QR code." />
+                  </div>
+              </div>
+            }
+            {/* {
+              <div className="mb-2 text-left">
+              <div className="block text-xs font-bold text-gray-700 text-left mt-1 p-1">
+                Plant ID ↔ Genotype ID Mapping
+                <FieldInfo info="Upload an excel file containing Plant ID to Genotype ID mapping" />
+              </div>
+              <div className="mt-1">
+                <div className="p-1 border rounded-md border-amber-300">
+                  <FileUploader 
+                  handleChange={handleChange} 
+                  name="file" 
+                  types={fileTypes} 
+                  label="Drag and drop your file here"
+                />
+                </div>
+              </div>
+            </div>
+            } */}
           </div>
         </div>
         <div className="ml-4 flex flex-col flex-grow">
@@ -445,6 +664,131 @@ export function CaptureScan() {
           </div>
         </div>
       </div>
+      {/* {
+        <>
+        <div className="block text-xs font-bold text-gray-700 text-left mb-1">
+          File Preview
+        </div>
+        <div className="border rounded-md p-4 flex flex-col min-h-0 min-w-0 overflow-scroll flex-grow">
+        {sheetNames.length > 0 && (
+        <>
+        <h2 className="font-bold text-gray-700 text-xs">Please select the Plant ID and Genotype ID columns from your file.</h2>
+        <h2 className="font-bold text-gray-700 text-xs">⚠️ Note: Once selected and uploaded, the Plant ID and Genotype ID columns <strong>cannot</strong> be changed.</h2>
+        <div className="mt-4 flex items-center gap-2">
+        
+          <div className="mt-4 flex items-center gap-2">
+            <h2 className="font-bold text-gray-700 text-xs">Select Sheet:</h2>
+            <select
+              value={selectedSheet ?? ""}
+              onChange={(e) => {
+                handleSheetChange(e.target.value);
+              }}
+            >
+              {sheetNames.map((sheet) => (
+                <option key={sheet} value={sheet}>
+                  {sheet}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="mt-4 flex items-center gap-2">
+            <h2 className="font-bold text-gray-700 text-xs">Select Plant ID (Barcode) Column:</h2>
+            <select
+              value={selectedPlantId ?? ""}
+              onChange={(e) => {
+                handlePlantId(e.target.value);
+              }}
+            >
+              <option value="" disabled>Select...</option> 
+              {columns.map((columnsNames) => (
+                <option key={columnsNames} value={columnsNames}>
+                  {columnsNames}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="mt-4 flex items-center gap-2">
+            <h2 className="font-bold text-gray-700 text-xs">Select Genotype ID Column:</h2>
+            <select
+              value={selectedGenotypeId ?? ""}
+              onChange={(e) => {
+                handleGenotypeId(e.target.value);
+              }}
+            >
+              <option value="" disabled>Select...</option> 
+              {columns.map((columnsNames) => (
+                <option key={columnsNames} value={columnsNames}>
+                  {columnsNames}
+                </option>
+              ))}
+            </select>
+          </div>
+
+        </div>
+        </>
+      )}
+
+      {columns.length > 0 && (
+          <div 
+          ref={tableRef}
+          className="mt-4 overflow-x-auto">
+            <table className="min-w-full border border-gray-300">
+            <thead>
+              <tr>
+                {columns.map((col, idx) => {
+                  const isPlant = col === selectedPlantId;
+                  const isGenotype = col === selectedGenotypeId;
+
+                  return (
+                    <th
+                      key={idx}
+                      className={`px-4 py-2 border text-sm text-left font-medium
+                        ${isPlant ? "bg-green-200" : isGenotype ? "bg-blue-200" : ""}
+                        ${hoveredColIndex === idx ? "bg-blue-200" : ""}
+                      `}
+                      onMouseEnter={() => setHoveredColIndex(idx)}
+                      onMouseLeave={() => setHoveredColIndex(null)}
+                    >
+                      {col}
+                      {isPlant && <span className="text-xs text-green-700 ml-2">🌱 Plant ID</span>}
+                      {isGenotype && <span className="text-xs text-blue-700 ml-2">🏷️ Genotype ID</span>}
+                    </th>
+                  );
+                })}
+              </tr>
+            </thead>
+              <tbody>
+                {data.map((row, rowIndex) => (
+                  <tr key={rowIndex} className="even:bg-gray-50">
+                    {columns.map((_, colIndex) => {
+                      const isPlantIdCol = colIndex === plantIdIndex;
+                      const isGenotypeCol = colIndex === genotypeIdIndex;
+
+                      return (
+                        <td 
+                          key={colIndex}
+                          className={`px-4 py-2 border text-sm
+                            ${isPlantIdCol ? "bg-green-100" : ""}
+                            ${isGenotypeCol ? "bg-blue-100" : ""}
+                            ${hoveredColIndex === colIndex ? "bg-blue-200" : ""}
+                          `}
+                        >
+                          {row[colIndex]}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+      </>
+
+      } */}
       {scannerId && (
         <div className="block text-xs font-bold text-gray-700 text-left mb-1">
           Recent scans
