@@ -55,9 +55,9 @@
   "dependencies": {
     "@prisma/client": "^5.16.1",
     "@prisma/migrate": "^5.16.1",
-    "@salk-hpi/bloom-fs": "^0.0.10",
-    "@salk-hpi/bloom-js": "^0.0.1",
-    "@supabase/supabase-js": "^2.39.6",
+    "@salk-hpi/bloom-fs":  "^0.0.10",
+    "@salk-hpi/bloom-js":  "^2.39.6",
+    "@supabase/supabase-js": "^2.50.0",
     "@types/better-sqlite3": "^7.6.9",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^20.11.20",

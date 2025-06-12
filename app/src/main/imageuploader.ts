@@ -18,6 +18,11 @@ import { SupabaseStore, SupabaseUploader } from "@salk-hpi/bloom-js";
 
 type ImageWithScanWithExperiment = Image & {
   scan: Scan & {
+    phenotyper:{
+      id: string;
+      name: string;
+      email: string | null;
+    }
     experiment: Experiment;
   };
 };
@@ -50,7 +55,6 @@ export class ImageUploader {
     // const client = await createSupabaseClient();
     const uploader = new SupabaseUploader(this.supabase);
     const store = new SupabaseStore(this.supabase);
-
     const paths = images.map((image) => path.join(this.scans_dir, image.path));
     console.log("Uploading images:", paths);
     const metadata: CylImageMetadata[] = images.map((image) => {
@@ -66,6 +70,10 @@ export class ImageUploader {
         plant_qr_code: image.scan.plant_id,
         frame_number: image.frame_number,
         accession_name: image.scan.accession_id,
+        phenotyper_name: image.scan.phenotyper.name,
+        phenotyper_email: image.scan.phenotyper.email || undefined,
+        scientist_name: image.scan.experiment.scientist.name,
+        scientist_email: image.scan.experiment.scientist.email || undefined,
       };
     });
 
