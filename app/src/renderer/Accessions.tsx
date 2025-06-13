@@ -143,7 +143,7 @@ export function Accessions() {
 
             setSelectedSheet(defaultSheet);
             setColumns(jsonData[0] as string[]);
-            setData(jsonData.slice(1, 21)); 
+            setData(jsonData.slice(1, 21).map((row:any[])=> row.map((cell) => String(cell))));
             setLoading(false);
         };
         reader.readAsArrayBuffer(file);
@@ -170,8 +170,8 @@ export function Accessions() {
 
             for (let i = 1; i < rows.length; i++) {
                 const row = rows[i];
-                const plant_barcode = (row as any[])[plantIdx];
-                const accession_id = (row as any[])[genotypeIdx];
+                const plant_barcode = String((row as any[])[plantIdx]);
+                const accession_id = String((row as any[])[genotypeIdx]);
 
                 if (plant_barcode && accession_id) {
                     console.log(`Uploading row ${i}: Plant Barcode: ${plant_barcode}, Accession ID: ${accession_id}`);
