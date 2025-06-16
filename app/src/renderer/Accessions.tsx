@@ -147,8 +147,9 @@ export function Accessions() {
             jsonData.slice(1, 21).map((row: any[]) =>
                 row.map((cell) => String(cell))
             ));
-            // setData(jsonData.slice(1, 21)); 
+            // setData(jsonData.slice(1, 21).map((row:any[]) => row.)); 
             setLoading(false);
+
         };
         reader.readAsArrayBuffer(file);
     };

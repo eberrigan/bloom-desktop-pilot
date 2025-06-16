@@ -106,7 +106,7 @@ export function Experiments() {
           ))}
       </ul> */}
   
-      <ul className="border rounded-md p-2 w-96 mb-8 text-sm">
+      <ul className="border rounded-md p-2 w-96 mb-8 text-sm h-64 overflow-y-auto">
          { experiments && experiments.map((experiment) => (
           <li key={experiment.id} className="mb-2">
             {/* <div className="flex justify-between items-center cursor-pointer" onClick={() => handleToggleWaves(experiment.id)}> */}
