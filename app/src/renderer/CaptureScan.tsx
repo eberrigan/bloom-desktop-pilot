@@ -130,8 +130,9 @@ export function CaptureScan() {
       progress: ScanProgress;
       scanImages: ScanImages;
     };
-    console.log("scanData: " + JSON.stringify(scanData));
-    console.log("CHECK SCAN DATA");
+    console.log("scanning...")
+    // console.log("scanData: " + JSON.stringify(scanData));
+    // console.log("CHECK SCAN DATA");
     setScanMetadata(scanData.metadata);
     setImages(scanData.scanImages);
     setIsScanning(scanData.progress.status === "capturing");

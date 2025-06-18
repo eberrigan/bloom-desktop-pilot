@@ -1,16 +1,10 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+generator client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
   provider = "sqlite"
   url      = env("BLOOM_DATABASE_URL")
-}
-
-generator client {
-  provider = "prisma-client-js"
 }
 
 model Phenotyper {
@@ -28,32 +22,30 @@ model Scientist {
 }
 
 model Experiment {
-  id           String     @id @default(uuid())
+  id           String      @id @default(uuid())
   name         String
   species      String
   scientist_id String?
-  scans        Scan[]
-  accession_id  String
-  scientist    Scientist? @relation(fields: [scientist_id], references: [id])
+  accession_id String?
   accession    Accessions? @relation("AccessionToExperiment", fields: [accession_id], references: [id])
+  scientist    Scientist?  @relation(fields: [scientist_id], references: [id])
+  scans        Scan[]
 }
 
-model Accessions{
-  id  String       @id @default(uuid())
-  name String
-  createdAt   DateTime     @default(now()) 
-
-  experiments  Experiment[] @relation("AccessionToExperiment")
-  mappings PlantAccessionMappings[]
+model Accessions {
+  id          String                   @id @default(uuid())
+  name        String
+  createdAt   DateTime                 @default(now())
+  experiments Experiment[]             @relation("AccessionToExperiment")
+  mappings    PlantAccessionMappings[]
 }
 
 model PlantAccessionMappings {
-  id            String  @id @default(uuid())
-  accession_id  String
-  plant_barcode String
+  id                String     @id @default(uuid())
+  accession_id      String
+  plant_barcode     String
   accession_file_id String
-
-  accession     Accessions @relation(fields: [accession_file_id], references: [id])
+  accession         Accessions @relation(fields: [accession_file_id], references: [id])
 }
 
 model Scan {
@@ -75,9 +67,9 @@ model Scan {
   wave_number     Int
   plant_age_days  Int
   deleted         Boolean    @default(false)
-  experiment      Experiment @relation(fields: [experiment_id], references: [id])
-  phenotyper      Phenotyper @relation(fields: [phenotyper_id], references: [id])
   images          Image[]
+  phenotyper      Phenotyper @relation(fields: [phenotyper_id], references: [id])
+  experiment      Experiment @relation(fields: [experiment_id], references: [id])
 }
 
 model Image {

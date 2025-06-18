@@ -210,6 +210,7 @@ export class PrismaStore {
 
   getAccessionListwithFileID = async(accession_file_id: string)=> {
     try {
+      // console.log("Fetching accession mappings for file ID:", accession_file_id);
       const mappings = await this.prisma.plantAccessionMappings.findMany({
         where: {
           accession_file_id: accession_file_id, 
@@ -422,13 +423,33 @@ export class PrismaStore {
   //   this.conn.pragma("journal_mode = WAL");
   // };
 
+  // getImagesToUpload = async () => {
+  //   return this.prisma.image.findMany({
+  //     where: { status: { not: "UPLOADED" } },
+  //     include: { scan: { include: { experiment: true } } },
+  //     orderBy: { scan: { capture_date: "asc" } },
+  //   });
+  // };
+
   getImagesToUpload = async () => {
-    return this.prisma.image.findMany({
-      where: { status: { not: "UPLOADED" } },
-      include: { scan: { include: { experiment: true } } },
-      orderBy: { scan: { capture_date: "asc" } },
-    });
-  };
+  const images = await this.prisma.image.findMany({
+    where: { status: { not: "UPLOADED" } },
+    include: {
+      scan: {
+        include: {
+          phenotyper: true,
+          experiment: {
+            include: {
+              scientist: true,
+            },
+          },
+        },
+      },
+    },
+    orderBy: { scan: { capture_date: "asc" } },
+  });
+  return images;
+};
 
   constructor(
     scansDir: string,
@@ -492,5 +513,3 @@ function parseCaptureDate(scan_metadata: ScanMetadata) {
     capture_date: new Date(capture_date),
   } as ScanMetadataParsed;
 }
-
-
