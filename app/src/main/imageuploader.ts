@@ -14,8 +14,6 @@ import { Image, Scan } from "@prisma/client";
 import { PrismaStore } from "./prismastore";
 
 import { uploadImages,uploadImages_2_0,CylImageMetadata, CylImageMetadata_2_0 } from "@salk-hpi/bloom-fs";
-const bloom_fs_1 = require("@salk-hpi/bloom-fs");
-console.log("bloomFs exports:", Object.keys(bloom_fs_1));
 
 import { SupabaseStore, SupabaseUploader } from "@salk-hpi/bloom-js";
 
