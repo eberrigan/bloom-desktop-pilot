@@ -246,7 +246,9 @@ export function Accessions() {
     }
 
     const toggleExpand = (id: string) => {
+        console.log("Open Preview for accession ID:", id);
         getAccessionFileContent(id).then((preview) => {
+            console.log("Accession preview data:", preview);
             setAccessionPreview(preview);
         });
         
