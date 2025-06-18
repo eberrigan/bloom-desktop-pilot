@@ -96,16 +96,7 @@ export function Experiments() {
   return (
     <div className="text-lg">
       <div className="text-xs font-bold">Experiments</div>
-      {/* <ul className="h-32 overflow-scroll border rounded-md p-2 w-96 mb-8 text-sm">
-        {experiments &&
-          experiments.map((experiment) => (
-            <li key={experiment.id}>
-              {experiment.species} - {experiment.name} (
-              <i>{experiment.scientist?.name || "unknown"}</i>)
-            </li>
-          ))}
-      </ul> */}
-  
+
       <ul className="border rounded-md p-2 w-96 mb-8 text-sm h-64 overflow-y-auto">
          { experiments && experiments.map((experiment) => (
           <li key={experiment.id} className="mb-2">
@@ -115,16 +106,8 @@ export function Experiments() {
                 {experiment.species} - {experiment.name} (
                 <i>{experiment.scientist?.name || "unknown"}</i>)
               </span>
-              <span className="text-gray-500">▼</span>
+              {/* <span className="text-gray-500">▼</span> */}
             </div>
-
-            {/* {expandedExperimentId === experiment.id && (
-              <ul className="ml-4 mt-2 list-disc text-xs text-gray-700">
-                {(experimentWaves[experiment.id] || []).map((wave) => (
-                  <li key={wave.id}>Wave {wave.number}</li>
-                ))}
-              </ul>
-            )} */}
           </li>
         ))}
       </ul>
