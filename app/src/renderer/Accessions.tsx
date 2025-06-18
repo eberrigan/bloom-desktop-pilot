@@ -172,8 +172,6 @@ export function Accessions() {
 
             for (let i = 1; i < rows.length; i++) {
                 const row = rows[i];
-                // const plant_barcode = (row as any[])[plantIdx];
-                // const accession_id = (row as any[])[genotypeIdx];
                 const plant_barcode = String((row as any[])[plantIdx]);
                 const accession_id = String((row as any[])[genotypeIdx]);
 
