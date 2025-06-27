@@ -78,6 +78,7 @@ type Experiment = {
   name: string;
   species: string;
   scientist_id: string;
+  scientist:Scientist
 };
 
 interface PhenotyperRetriever {

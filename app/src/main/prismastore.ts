@@ -422,13 +422,26 @@ export class PrismaStore {
   //   this.conn.pragma("journal_mode = WAL");
   // };
 
-  getImagesToUpload = async () => {
-    return this.prisma.image.findMany({
-      where: { status: { not: "UPLOADED" } },
-      include: { scan: { include: { experiment: true } } },
-      orderBy: { scan: { capture_date: "asc" } },
-    });
-  };
+ getImagesToUpload = async () => {
+ const images = await this.prisma.image.findMany({
+   where: { status: { not: "UPLOADED" } },
+   include: {
+     scan: {
+       include: {
+         phenotyper: true,
+         experiment: {
+           include: {
+             scientist: true,
+           },
+         },
+       },
+     },
+   },
+   orderBy: { scan: { capture_date: "asc" } },
+ });
+ return images;
+};
+
 
   constructor(
     scansDir: string,
