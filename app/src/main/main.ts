@@ -46,9 +46,8 @@ const createWindow = (): void => {
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
@@ -349,7 +348,8 @@ createPrismaStore(config.scans_dir, dbUpdated, "file:" + config.local_db_path)
     };
     ipcMain.handle("electric:get-status", store.getStatus);
     ipcMain.handle("scan-store:get-scans", async (event, args) => {
-      return store.getScans(args[0]);
+      const {page, pageSize, showTodayOnly} = args[0];
+      return store.getScans(page, pageSize, showTodayOnly);
     });
     ipcMain.handle("scan-store:get-scan", async (event, args) => {
       return store.getScan(args[0]);

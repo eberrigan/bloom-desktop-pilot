@@ -91,12 +91,19 @@ const electronHandler = {
     }) => ipcRenderer.invoke("streamer:set-camera-settings", [settings]),
   },
   scanStore: {
-    getScans: (showTodayOnly: boolean) =>
-      ipcRenderer.invoke("scan-store:get-scans", [showTodayOnly]) as Promise<
-        (Scan & {
-          phenotyper: Phenotyper;
-          images: Image[];
-        })[]
+    getScans: (options:{page:number, pageSize:number, showTodayOnly:boolean }) =>
+      ipcRenderer.invoke("scan-store:get-scans", [options]) as Promise<
+      { 
+        scans: (Scan & {
+        phenotyper: Phenotyper;
+        images: Image[];
+      })[];
+        totalCount: number;
+      }
+        // (Scan & {
+        //   phenotyper: Phenotyper;
+        //   images: Image[];
+        // })[]
       >,
     getScan: (scanId: string) =>
       ipcRenderer.invoke("scan-store:get-scan", [scanId]) as Promise<

@@ -303,25 +303,80 @@ export class PrismaStore {
     }
   };
 
-  getScans = async (showTodayOnly: boolean = false) => {
-    const scans = await this.prisma.scan.findMany({
-      include: { phenotyper: true, images: true },
+  getScans = async (
+    page: number = 1,
+    pageSize: number = 10,
+    showTodayOnly: boolean = false
+  ) => {
+
+    const where: any = {
+    deleted: false,
+    };
+
+    if (showTodayOnly) {
+    const today = new Date();
+    const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+
+    where.capture_date = {
+      gte: startOfDay,
+      lte: endOfDay,
+      };
+    }
+
+    const [scans, totalCount] = await Promise.all([
+    this.prisma.scan.findMany({
+      where,
       orderBy: { capture_date: "desc" },
-      where: { deleted: false },
-    });
-    return scans.filter((scan) => {
-      if (showTodayOnly) {
-        // Only show scans from today
-        const today = new Date();
-        return (
-          scan.capture_date.getDate() === today.getDate() &&
-          scan.capture_date.getMonth() === today.getMonth() &&
-          scan.capture_date.getFullYear() === today.getFullYear()
-        );
-      }
-      return true;
-    });
+      include: { phenotyper: true, images: true },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    }),
+    this.prisma.scan.count({ where }),
+    ]);
+
+    return { scans, totalCount };
+
+
+
+    // const scans = await this.prisma.scan.findMany({
+    //   include: { phenotyper: true, images: true },
+    //   orderBy: { capture_date: "desc" },
+    //   where: { deleted: false },
+    // });
+    // return scans.filter((scan) => {
+    //   if (showTodayOnly) {
+    //     // Only show scans from today
+    //     const today = new Date();
+    //     return (
+    //       scan.capture_date.getDate() === today.getDate() &&
+    //       scan.capture_date.getMonth() === today.getMonth() &&
+    //       scan.capture_date.getFullYear() === today.getFullYear()
+    //     );
+    //   }
+    //   return true;
+    // });
   };
+
+  // getScans = async (showTodayOnly: boolean = false) => {
+  //   const scans = await this.prisma.scan.findMany({
+  //     include: { phenotyper: true, images: true },
+  //     orderBy: { capture_date: "desc" },
+  //     where: { deleted: false },
+  //   });
+  //   return scans.filter((scan) => {
+  //     if (showTodayOnly) {
+  //       // Only show scans from today
+  //       const today = new Date();
+  //       return (
+  //         scan.capture_date.getDate() === today.getDate() &&
+  //         scan.capture_date.getMonth() === today.getMonth() &&
+  //         scan.capture_date.getFullYear() === today.getFullYear()
+  //       );
+  //     }
+  //     return true;
+  //   });
+  // };
 
   getScan = async (scanId: string) => {
     return this.prisma.scan.findUnique({
