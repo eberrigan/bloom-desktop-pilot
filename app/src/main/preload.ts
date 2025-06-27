@@ -133,7 +133,7 @@ const electronHandler = {
     getAccessionIdFiles: (experiment_Id : string) =>
       ipcRenderer.invoke("electric:get-accession-id-file",[experiment_Id]),
     getAccessionListWithFileId: (accession_id:string) =>
-      ipcRenderer.invoke("electric:get-accession-list-with-file-id",[accession_id]),
+      ipcRenderer.invoke("electric:get-accession-list-with-file-id",accession_id),
     updateAccessionFile: (editing_field:string, editing_row_id:string, editing_value:string) =>
       ipcRenderer.invoke("electric:update-accession-file", editing_field, editing_row_id, editing_value),
       // ipcRenderer.invoke("electric:update-accession-file",[editing_field, editing_row_id, editing_value]),

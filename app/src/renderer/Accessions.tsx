@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { FileUploader } from "react-drag-drop-files";
+import AccessionRowAdder from "./AccessionRowAdder";
 import * as XLSX from "xlsx";
 
 const ipcRenderer = window.electron.ipcRenderer;
@@ -303,9 +304,17 @@ export function Accessions() {
                                 </svg>
                                 <span className="font-semibold">{accession.name}</span>
                             </div>
-                            <span className="text-xs text-gray-500">
+
+                            <div className="flex items-center gap-4">
+                               <AccessionRowAdder file_id = {accession.id} toggleExpand={toggleExpand}/>
+                               <span className="text-xs text-gray-500">
+                                   {new Date(accession.createdAt).toLocaleDateString()}
+                               </span>
+                           </div>
+
+                            {/* <span className="text-xs text-gray-500">
                                 {new Date(accession.createdAt).toLocaleDateString()}
-                            </span>
+                            </span> */}
                             </div>
 
                             <div className="text-xs text-gray-600">ID: {accession.id}</div>

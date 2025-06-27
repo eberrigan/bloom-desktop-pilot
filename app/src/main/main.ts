@@ -296,7 +296,7 @@ createPrismaStore(config.scans_dir, dbUpdated, "file:" + config.local_db_path)
     ipcMain.handle("electric:get-accession-id-file", async (event, id, experiment_id) => {
       return await store.getAccessionList(experiment_id);
     });
-    ipcMain.handle("electric:get-accession-list-with-file-id", async (event, id, accession_file_id) => {
+    ipcMain.handle("electric:get-accession-list-with-file-id", async (event, accession_file_id) => {
       return await store.getAccessionListwithFileID(accession_file_id);
     });
     // ipcMain.handle("electric:update-accession-file", async (event, editing_field, editing_row_id, editing_value) => {
@@ -370,6 +370,7 @@ createPrismaStore(config.scans_dir, dbUpdated, "file:" + config.local_db_path)
         "getImagesToUpload() returned this many images: ",
         images.length
       );
+
       const imageUploader = await createImageUploader(store, config.scans_dir);
       await imageUploader.uploadImages(images);
     }
