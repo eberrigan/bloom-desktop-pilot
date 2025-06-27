@@ -232,39 +232,48 @@ export function BrowseScans({
 }
 
 function UploadControls() {
-  const [uploading, setUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
+ const [uploading, setUploading] = useState(false);
+ const [uploadProgress, setUploadProgress] = useState<number | null>(null);
 
-  const upload = useCallback(() => {
-    setUploading(true);
-    uploadImages()
-      .then((response) => {
-        setUploadProgress(response);
-      })
-      .finally(() => {
-        setUploading(false);
-      });
-  }, []);
 
-  return (
-    <div className="mb-4">
-      <div>
-        <button
-          onClick={upload}
-          className="bg-lime-700 text-white px-4 py-2 rounded-md opacity-80 hover:opacity-100"
-          disabled={uploading}
-        >
-          {uploading ? "Uploading in progress..." : "Start uploading"}
-        </button>
-        {uploadProgress && (
-          <span className="text-stone-400 ml-2">
-            {uploadProgress} images uploaded
-          </span>
-        )}
-      </div>
-    </div>
-  );
+ const upload = useCallback(() => {
+   setUploading(true);
+   uploadImages()
+     .then((response) => {
+       setUploadProgress(response);
+     })
+     .finally(() => {
+       setUploading(false);
+     });
+ }, []);
+
+
+ return (
+   <div >
+     <div>
+       <button
+         onClick={upload}
+         className="bg-lime-700 text-white px-4 py-2 rounded-md opacity-80 hover:opacity-100"
+         disabled={uploading}
+       >
+         {uploading ? "Uploading in progress..." : "Start uploading"}
+       </button>
+       {uploadProgress !== null && (
+         <span className="text-stone-400 ml-2">
+           {uploadProgress} images uploaded
+         </span>
+       )}
+     </div>
+
+     {uploading && (
+       <div className="relative mt-3 mr-3 h-2 overflow-hidden rounded-full bg-stone-200">
+         <div className="absolute inset-0 bg-gradient-to-r from-lime-400 via-lime-600 to-lime-400 bg-[length:200%_100%] animate-loading-bar" />
+       </div>
+     )}
+   </div>
+ );
 }
+
 
 function Phenotyper({ phenotyper }: { phenotyper: Phenotyper }) {
   return (
