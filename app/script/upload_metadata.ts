@@ -1,7 +1,11 @@
-import fs from 'fs';
-import path from 'path';
-import os from 'os';
-import yaml from 'js-yaml';
+// import fs from 'fs';
+// import path from 'path';
+// import os from 'os';
+// import yaml from 'js-yaml';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as os from 'os';
+import * as yaml from 'js-yaml';
 import { PrismaClient,Prisma } from '@prisma/client';
 import { createClient } from '@supabase/supabase-js';
 
@@ -18,6 +22,13 @@ async function loadConfig() {
     bloom_scanner_username: string;
     bloom_scanner_password: string;
   };
+
+  console.log("Prisma DB:"+config.local_db_path);
+  console.log("BLOOM CONNECTION API : "+config.bloom_api_url);
+  console.log("BLOOM KEY :"+config.bloom_anon_key);
+  console.log("SCANNER USERNAME: "+ config.bloom_scanner_username);
+  console.log("SCANNER PASSWORD: "+config.bloom_scanner_password);
+  
   return config;
 }
 
@@ -51,9 +62,9 @@ const scans = await prisma.scan.findMany({
       where: { id: scan.experiment_id },
     });
 
-    const scientist = experiment ? await prisma.scientist.findUnique({
-      where: { id: experiment.scientist_id ?? undefined },
-    }) : null;  
+    const scientist = experiment?.scientist_id
+  ? await prisma.scientist.findUnique({ where: { id: experiment.scientist_id } })
+  : null;
 
     console.log(`Processing scan for plant ID: ${scan.plant_id}`);
     console.log(`Processing scan for phenotyper: ${phenotyper?.email || 'null'}`);
@@ -96,14 +107,16 @@ const scans = await prisma.scan.findMany({
       .select('id')
       .eq('email', phenotyper_email)
       .single();
+    
+    console.log("Exists: "+ JSON.stringify(existingPhenotyper));
 
     if (existingPhenotyper) {
       phenotyperId = existingPhenotyper.id;
+      console.log("Exists: "+ phenotyperId)
     } else if (phenoError?.code === 'PGRST116') {
-      
       const { data: newPheno, error: insertError } = await supabase
       .from('phenotypers')
-      .insert({ name: phenotyper_name, email: phenotyper_email })
+      .insert({ first_name: phenotyper_name, email: phenotyper_email })
       .select('id')
       .single();
 
@@ -120,14 +133,16 @@ const scans = await prisma.scan.findMany({
     .select('id')
     .eq('email', scientist_email || null)
     .single();
+    
+    console.log("SCI"+JSON.stringify(existingScientist));
 
     if (existingScientist) {
       scientistId = existingScientist.id;
     } else if (scientistError?.code === 'PGRST116') {
       
       const { data: newScientist, error: insertError } = await supabase
-      .from('phenotypers')
-      .insert({ name: phenotyper_name || null, email: phenotyper_email || null })
+      .from('cyl_scientists')
+      .insert({ scientist_name: scientist_name || null, email: scientist_email || null })
       .select('id')
       .single();
 
@@ -159,29 +174,31 @@ const scans = await prisma.scan.findMany({
 
     console.log(`Camera settings ID: ${cameraSettingsId}`);
 
-    const { error: updateError } = await supabase
-    .from('cyl_scans')
-    .update({
-      phenotyper_id: phenotyperId,
-      scientist_id: scientistId,
-      cyl_camera_settings_id: cameraSettingsId,
-    })
-    .eq('id', scanData.id);
+    console.log("SCAN"+JSON.stringify(scanData));
 
-    if (updateError) {
-      console.error(`Failed to update scan metadata for scan ID: ${scanData.id}`, updateError.message);
-    } else {
-      console.log(`Updated metadata for scan ID: ${scanData.id}`);
+    if(scanData && scanData.id){
+        const { error: updateError } = await supabase
+        .from('cyl_scans')
+        .update({
+          phenotyper_id: phenotyperId,
+          scientist_id: scientistId,
+          cyl_camera_settings_id: cameraSettingsId,
+        })
+        .eq('id', scanData.id);
+
+        if (updateError) {
+          console.error(`Failed to update scan metadata for scan ID: ${scanData.id}`, updateError.message);
+        } else {
+          console.log(`Updated metadata for scan ID: ${scanData.id}`);
+        }
+      console.log("Supabase query result:", scanData);
+      console.log(`Processing scan for plant ID: ${plantData?.id || 'not found'}`);
     }
 
-    console.log("Supabase query result:", scanData);
-    console.log(`Processing scan for plant ID: ${plantData?.id || 'not found'}`);
   }
 
   await prisma.$disconnect();
   console.log(" Sync complete.");
-
-
 }
 
 main().catch((err) => {
