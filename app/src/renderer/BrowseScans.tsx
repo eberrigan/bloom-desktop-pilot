@@ -23,24 +23,38 @@ export function BrowseScans({
 }) {
   const [scans, setScans] = useState<ScanWithPhenotyper[]>([]);
   const [pageNumber, setPageNumber] = useState(1);
+  const [totalScans, setTotalScans] = useState(0);
   const pageSize = 10;
 
+  // const fetchScans = useCallback(() => {
+  //   getScans({ page: pageNumber, pageSize, showTodayOnly })
+  //     .then((response: ScanWithPhenotyper[]) => {
+  //       setScans(response);
+  //     });
+  // }, []);
+
   const fetchScans = useCallback(() => {
-    getScans(showTodayOnly)
-      .then((response: ScanWithPhenotyper[]) => {
-        setScans(response);
+    console.log("Data Fetched-> Page Number", pageNumber);
+    getScans({ page: pageNumber, pageSize, showTodayOnly })
+      .then(({ scans, totalCount }) => {
+        setScans(scans);
+        setTotalScans(totalCount);
+        // console.log("Fetched", scans.length, "scans (of", totalCount, ")");
       });
-  }, []);
+    console.log("Data Fetched-> response", );
+}, [pageNumber, showTodayOnly]);
   
   useEffect(() => {
     fetchScans();
-  }, []);
+  }, [pageNumber, showTodayOnly]);
 
   useEffect(() => {
     return ipcRenderer.on("electric:scans-updated", fetchScans);
   }, []);
 
-  const numPages = Math.ceil(scans.length / pageSize);
+  // const numPages = Math.ceil(scans.length / pageSize);
+
+  const numPages = Math.ceil(totalScans/pageSize);
 
   return (
     <div className="min-h-0 min-w-0 flex-grow flex flex-col items-stretch relative">
@@ -48,18 +62,29 @@ export function BrowseScans({
       <div className="bg-stone-100 border-b flex flex-row pb-1 text-sm">
         <div className="pr-4">
           <button
+            // onClick={() => {
+            //   setPageNumber(Math.max(pageNumber - 1, 1));
+            // }}
             onClick={() => {
-              setPageNumber(Math.max(pageNumber - 1, 1));
+              const newPage = Math.max(pageNumber - 1, 1);
+              // console.log("Going to previous page:", newPage);
+              setPageNumber(newPage);
             }}
+            disabled={pageNumber === 1}
           >
             &larr;
           </button>
         </div>
         <div className="pr-4">
           <button
+            // onClick={() => {
+            //   setPageNumber(Math.min(pageNumber + 1, numPages));
+            // }}
             onClick={() => {
-              setPageNumber(Math.min(pageNumber + 1, numPages));
-            }}
+              // console.log("Going to next page:", Math.min(pageNumber + 1, numPages));
+              setPageNumber(Math.min(pageNumber + 1, numPages))}
+            }
+            disabled={pageNumber === numPages}
           >
             &rarr;
           </button>
@@ -71,19 +96,23 @@ export function BrowseScans({
             value={pageNumber}
             size={3}
             onChange={(e) => {
-              if (e.target.value === "") {
-                setPageNumber(1);
-              } else {
-                const parsedPageNumber = parseInt(e.target.value) || 1;
-                const clippedPageNumber = Math.max(
-                  1,
-                  Math.min(parsedPageNumber, numPages)
-                );
-                setPageNumber(clippedPageNumber);
-              }
+              const parsed = parseInt(e.target.value) || 1;
+              const safePage = Math.min(Math.max(parsed, 1), numPages);
+              setPageNumber(safePage)
+
+              // if (e.target.value === "") {
+              //   setPageNumber(1);
+              // } else {
+              //   const parsedPageNumber = parseInt(e.target.value) || 1;
+              //   const clippedPageNumber = Math.max(
+              //     1,
+              //     Math.min(parsedPageNumber, numPages)
+              //   );
+              //   setPageNumber(clippedPageNumber);
+              // }
             }}
           />{" "}
-          of {numPages} ({scans.length} scans)
+          of {numPages} ({totalScans} scans)
         </div>
       </div>
       <div className="min-h-0 min-w-0 flex-grow overflow-scroll">
@@ -123,7 +152,7 @@ export function BrowseScans({
           <tbody>
             
             {scans
-              .slice((pageNumber - 1) * pageSize, pageNumber * pageSize)
+              // .slice((pageNumber - 1) * pageSize, pageNumber * pageSize)
               .map((scan) => (
                 <tr key={scan.id} className="odd:bg-stone-200">
                   <td className="px-2 py-2">
@@ -203,39 +232,48 @@ export function BrowseScans({
 }
 
 function UploadControls() {
-  const [uploading, setUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
+ const [uploading, setUploading] = useState(false);
+ const [uploadProgress, setUploadProgress] = useState<number | null>(null);
 
-  const upload = useCallback(() => {
-    setUploading(true);
-    uploadImages()
-      .then((response) => {
-        setUploadProgress(response);
-      })
-      .finally(() => {
-        setUploading(false);
-      });
-  }, []);
 
-  return (
-    <div className="mb-4">
-      <div>
-        <button
-          onClick={upload}
-          className="bg-lime-700 text-white px-4 py-2 rounded-md opacity-80 hover:opacity-100"
-          disabled={uploading}
-        >
-          {uploading ? "Uploading in progress..." : "Start uploading"}
-        </button>
-        {uploadProgress && (
-          <span className="text-stone-400 ml-2">
-            {uploadProgress} images uploaded
-          </span>
-        )}
-      </div>
-    </div>
-  );
+ const upload = useCallback(() => {
+   setUploading(true);
+   uploadImages()
+     .then((response) => {
+       setUploadProgress(response);
+     })
+     .finally(() => {
+       setUploading(false);
+     });
+ }, []);
+
+
+ return (
+   <div >
+     <div>
+       <button
+         onClick={upload}
+         className="bg-lime-700 text-white px-4 py-2 rounded-md opacity-80 hover:opacity-100"
+         disabled={uploading}
+       >
+         {uploading ? "Uploading in progress..." : "Start uploading"}
+       </button>
+       {uploadProgress !== null && (
+         <span className="text-stone-400 ml-2">
+           {uploadProgress} images uploaded
+         </span>
+       )}
+     </div>
+
+     {uploading && (
+       <div className="relative mt-3 mr-3 h-2 overflow-hidden rounded-full bg-stone-200">
+         <div className="absolute inset-0 bg-gradient-to-r from-lime-400 via-lime-600 to-lime-400 bg-[length:200%_100%] animate-loading-bar" />
+       </div>
+     )}
+   </div>
+ );
 }
+
 
 function Phenotyper({ phenotyper }: { phenotyper: Phenotyper }) {
   return (
