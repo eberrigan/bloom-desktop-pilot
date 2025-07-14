@@ -372,7 +372,8 @@ createPrismaStore(config.scans_dir, dbUpdated, "file:" + config.local_db_path)
       );
 
       const imageUploader = await createImageUploader(store, config.scans_dir);
-      await imageUploader.uploadImages(images);
+      // await imageUploader.uploadImages(images);
+      await imageUploader.uploadImages_2_0(images); // with metadata
     }
     ipcMain.handle("electric:upload-images", uploadImages);
   })

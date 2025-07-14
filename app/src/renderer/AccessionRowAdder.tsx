@@ -5,7 +5,6 @@ import { useState } from "react";
 const getAccession = window.electron.electric.getAccession;
 const createPlantAccessionMap = window.electron.electric.createPlantAccessionMap;
 
-
 interface AccessionRowAdderProps {
  file_id: string;
  toggleExpand: (id: string) => void;
