@@ -2,6 +2,8 @@
 // import path from 'path';
 // import os from 'os';
 // import yaml from 'js-yaml';
+
+
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
@@ -78,7 +80,7 @@ const scans = await prisma.scan.findMany({
     let scientist_email = scientist?.email || 'Unknown';
 
 
-    // // Fetch plant id 
+    // Fetch plant id 
     const { data: plantData, error: plantError } = await supabase
       .from('cyl_plants')
       .select('id')
@@ -154,18 +156,38 @@ const scans = await prisma.scan.findMany({
 
     // Camera Info:
     let cameraSettingsId: string;
+    // const { data: newSettings, error: insertError } = await supabase
+    //   .from('cyl_camera_settings')
+    //   .insert({
+    //     exposure_time: scan.exposure_time,
+    //     gain: scan.gain,
+    //     brightness: scan.brightness,
+    //     contrast: scan.contrast,
+    //     gamma: scan.gamma,
+    //     seconds_per_rot: scan.seconds_per_rot,
+    //   })
+    //   .select('id')
+    //   .single();
+
     const { data: newSettings, error: insertError } = await supabase
-      .from('cyl_camera_settings')
-      .insert({
-        exposure_time: scan.exposure_time,
-        gain: scan.gain,
-        brightness: scan.brightness,
-        contrast: scan.contrast,
-        gamma: scan.gamma,
-        seconds_per_rot: scan.seconds_per_rot,
-      })
-      .select('id')
-      .single();
+    .from('cyl_camera_settings')
+    .upsert(
+    {
+      scanner_exposure_time: scan.exposure_time,
+      scanner_gain: scan.gain,
+      scanner_brightness: scan.brightness,
+      scanner_contrast: scan.contrast,
+      scanner_gamma: scan.gamma,
+      scanner_seconds_per_rot: scan.seconds_per_rot,
+    },
+    {
+      onConflict: 'scanner_exposure_time,scanner_gain,scanner_brightness,scanner_contrast,scanner_gamma,scanner_seconds_per_rot',
+    }
+    )
+    .select('id')
+    .single();
+
+    console.log("New Settings: "+JSON.stringify(newSettings));
 
     if (insertError) {
       throw new Error("Insert failed: " + insertError.message);
@@ -196,7 +218,6 @@ const scans = await prisma.scan.findMany({
     }
 
   }
-
   await prisma.$disconnect();
   console.log(" Sync complete.");
 }
