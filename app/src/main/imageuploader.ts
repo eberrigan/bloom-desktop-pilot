@@ -89,6 +89,9 @@ export class ImageUploader {
     exposure_time: image.scan.exposure_time || 0,
     gain: image.scan.gain || 0,
     brightness: image.scan.brightness || 0, 
+    contrast: image.scan.contrast || 0,
+    gamma: image.scan.gamma || 0,
+    seconds_per_rot: image.scan.seconds_per_rot || 0,
   }));
 
   await uploadImages(paths, metadata, uploader, store, {
