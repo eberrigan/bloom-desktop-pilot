@@ -34,14 +34,11 @@ export function BrowseScans({
   // }, []);
 
   const fetchScans = useCallback(() => {
-    console.log("Data Fetched-> Page Number", pageNumber);
     getScans({ page: pageNumber, pageSize, showTodayOnly })
       .then(({ scans, totalCount }) => {
         setScans(scans);
         setTotalScans(totalCount);
-        // console.log("Fetched", scans.length, "scans (of", totalCount, ")");
       });
-    console.log("Data Fetched-> response", );
 }, [pageNumber, showTodayOnly]);
   
   useEffect(() => {
@@ -150,10 +147,14 @@ export function BrowseScans({
             </tr>
           </thead>
           <tbody>
-            
-            {scans
-              // .slice((pageNumber - 1) * pageSize, pageNumber * pageSize)
-              .map((scan) => (
+            {scans?.length == 0 && 
+                <tr>
+              <td colSpan={8} className="text-center text-black-600 py-4">
+                Failed to load scans. The app may have been idle too long.
+              </td>
+            </tr>
+            }
+            { scans?.length > 0 && scans.map((scan) => (
                 <tr key={scan.id} className="odd:bg-stone-200">
                   <td className="px-2 py-2">
                     {

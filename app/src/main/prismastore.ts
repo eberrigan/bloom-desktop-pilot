@@ -308,37 +308,38 @@ export class PrismaStore {
     pageSize: number = 10,
     showTodayOnly: boolean = false
   ) => {
-
-    const where: any = {
-    deleted: false,
-    };
-
-    if (showTodayOnly) {
-    const today = new Date();
-    const startOfDay = new Date(today.setHours(0, 0, 0, 0));
-    const endOfDay = new Date(today.setHours(23, 59, 59, 999));
-
-    where.capture_date = {
-      gte: startOfDay,
-      lte: endOfDay,
+    try {
+      const where: any = {
+      deleted: false,
       };
+
+      if (showTodayOnly) {
+      const today = new Date();
+      const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+      const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+
+      where.capture_date = {
+        gte: startOfDay,
+        lte: endOfDay,
+        };
+      }
+
+      const [scans, totalCount] = await Promise.all([
+      this.prisma.scan.findMany({
+        where,
+        orderBy: { capture_date: "desc" },
+        include: { phenotyper: true, images: true },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+      }),
+      this.prisma.scan.count({ where }),
+      ]);
+
+      return { scans, totalCount };
+    } catch (err) {
+      console.error("Error fetching scans:", err);
+      return { scans: [], totalCount: 0 };
     }
-
-    const [scans, totalCount] = await Promise.all([
-    this.prisma.scan.findMany({
-      where,
-      orderBy: { capture_date: "desc" },
-      include: { phenotyper: true, images: true },
-      skip: (page - 1) * pageSize,
-      take: pageSize,
-    }),
-    this.prisma.scan.count({ where }),
-    ]);
-
-    return { scans, totalCount };
-
-
-
     // const scans = await this.prisma.scan.findMany({
     //   include: { phenotyper: true, images: true },
     //   orderBy: { capture_date: "desc" },

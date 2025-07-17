@@ -85,6 +85,10 @@ export class ImageUploader {
     phenotyper_email: image.scan.phenotyper?.email || "unknown",
     scientist_name: image.scan.experiment?.scientist?.name || "unknown",
     scientist_email: image.scan.experiment?.scientist?.email || "unknown",
+    num_frames: image.scan.num_frames || 0,
+    exposure_time: image.scan.exposure_time || 0,
+    gain: image.scan.gain || 0,
+    brightness: image.scan.brightness || 0, 
   }));
 
   await uploadImages(paths, metadata, uploader, store, {
