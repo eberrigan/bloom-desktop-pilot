@@ -96,8 +96,17 @@ export function Experiments() {
   return (
     <div className="text-lg">
       <div className="text-xs font-bold">Experiments</div>
-
-      <ul className="border rounded-md p-2 w-96 mb-8 text-sm h-64 overflow-y-auto">
+      {/* <ul className="h-32 overflow-scroll border rounded-md p-2 w-96 mb-8 text-sm">
+        {experiments &&
+          experiments.map((experiment) => (
+            <li key={experiment.id}>
+              {experiment.species} - {experiment.name} (
+              <i>{experiment.scientist?.name || "unknown"}</i>)
+            </li>
+          ))}
+      </ul> */}
+  
+      <ul className="border rounded-md max-w-full mr-10 mb-10 text-sm h-64 overflow-y-auto">
          { experiments && experiments.map((experiment) => (
           <li key={experiment.id} className="mb-2">
             {/* <div className="flex justify-between items-center cursor-pointer" onClick={() => handleToggleWaves(experiment.id)}> */}

@@ -141,11 +141,7 @@ export function Accessions() {
 
             setSelectedSheet(defaultSheet);
             setColumns(jsonData[0] as string[]);
-            setData(
-            jsonData.slice(1, 21).map((row: any[]) =>
-                row.map((cell) => String(cell))
-            ));
-            // setData(jsonData.slice(1, 21).map((row:any[]) => row.)); 
+            setData(jsonData.slice(1, 21).map((row:any[])=> row.map((cell) => String(cell))));
             setLoading(false);
 
         };
@@ -290,12 +286,17 @@ export function Accessions() {
                                 </svg>
                                 <span className="font-semibold">{accession.name}</span>
                             </div>
+
                             <div className="flex items-center gap-4">
-                                <AccessionRowAdder file_id = {accession.id} toggleExpand={toggleExpand}/>
-                                <span className="text-xs text-gray-500">
-                                    {new Date(accession.createdAt).toLocaleDateString()}
-                                </span>
-                            </div>
+                               <AccessionRowAdder file_id = {accession.id} toggleExpand={toggleExpand}/>
+                               <span className="text-xs text-gray-500">
+                                   {new Date(accession.createdAt).toLocaleDateString()}
+                               </span>
+                           </div>
+
+                            {/* <span className="text-xs text-gray-500">
+                                {new Date(accession.createdAt).toLocaleDateString()}
+                            </span> */}
                             </div>
 
                             <div className="text-xs text-gray-600">ID: {accession.id}</div>
