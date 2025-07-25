@@ -210,6 +210,7 @@ export class PrismaStore {
 
   getAccessionListwithFileID = async(accession_file_id: string)=> {
     try {
+      // console.log("Fetching accession mappings for file ID:", accession_file_id);
       const mappings = await this.prisma.plantAccessionMappings.findMany({
         where: {
           accession_file_id: accession_file_id, 
@@ -561,5 +562,3 @@ function parseCaptureDate(scan_metadata: ScanMetadata) {
     capture_date: new Date(capture_date),
   } as ScanMetadataParsed;
 }
-
-

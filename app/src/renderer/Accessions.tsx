@@ -5,7 +5,7 @@ import * as XLSX from "xlsx";
 
 const ipcRenderer = window.electron.ipcRenderer;
 
-const getAccession = window.electron.electric.getAccession;
+// const getAccession = window.electron.electric.getAccession;
 const getAccessionFiles = window.electron.electric.getAccessionFiles;
 const createAccession = window.electron.electric.createAccession;
 const createPlantAccessionMap = window.electron.electric.createPlantAccessionMap;
@@ -83,9 +83,6 @@ export function Accessions() {
 
     const saveInlineEdit = async () => {
         if (!editingRowId || !editingField) return;
-        console.log("Editing Field"+editingField);
-        console.log("Editing Value"+editingValue);
-        console.log("Editing Row"+editingRowId);
 
         await updateAccessionFile(editingField,editingRowId, editingValue);
 
@@ -146,9 +143,9 @@ export function Accessions() {
             setColumns(jsonData[0] as string[]);
             setData(jsonData.slice(1, 21).map((row:any[])=> row.map((cell) => String(cell))));
             setLoading(false);
+
         };
         reader.readAsArrayBuffer(file);
-
     };
 
     const handleUpload = async () => {
@@ -210,7 +207,6 @@ export function Accessions() {
             fetchFiles();
             setMessage("Done uploading!");
         }
-
     }
 
     const handleSheetChange = async (sheetName: string) => {
@@ -244,9 +240,9 @@ export function Accessions() {
     }
 
     const toggleExpand = (id: string) => {
-        console.log(id);
-        
+        console.log("Open Preview for accession ID:", id);
         getAccessionFileContent(id).then((preview) => {
+            console.log("Accession preview data:", preview);
             setAccessionPreview(preview);
         });
         
@@ -260,21 +256,7 @@ export function Accessions() {
 
     return (
         <div className="p-4 min-h-screen bg-gray-100 ">
-            {/* List of all the uploaded accession files */}
             <div className="text-xs font-bold">Accession Files:</div>
-
-            {/* {accession_list} */}
-            {/* <ul className="h-32 overflow-scroll border rounded-md p-2 w mb-8 text-sm">
-            {accession_list &&
-                accession_list.map((accession_file, index) => (
-                <li
-                    key={accession_file.id}
-                    className="bg-gray-100 p-2 rounded-md mb-2 shadow-sm"
-                >
-                    {accession_file.name} (ID: {accession_file.id})
-                  </li>
-                ))}
-            </ul> */}
 
             <ul className="max-h-64 overflow-scroll border rounded-md p-2 mb-8 text-sm">
                 {accession_list &&
