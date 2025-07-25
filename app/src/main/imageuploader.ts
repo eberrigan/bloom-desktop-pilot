@@ -105,8 +105,8 @@ export class ImageUploader {
         console.error(`Error uploading image ${index + 1}: ${JSON.stringify(error)}`);
         return;
       }
-
       if (created) {
+        console.log("Uploaded Image")
         const imageId = images[index].id;
         console.log(`Uploaded image ${index + 1}, queuing update for ID ${imageId}`);
 
@@ -125,6 +125,22 @@ export class ImageUploader {
           })
         );
       }
+
+      if (created === null && error === null) {
+        const imageId = images[index].id;
+        const { error: dbError } = await this.prismaStore.updateImageMetadata(imageId, {
+          status: "UPLOADED", 
+        });
+
+        if (dbError) {
+          console.error(`Error updating metadata for already-uploaded image ${imageId}:`, dbError);
+        } else {
+          console.log(`Marked image ${imageId} as UPLOADED (already uploaded in previous run).`);
+        }
+      }
+
+
+
     },
   });
 

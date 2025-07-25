@@ -147,13 +147,13 @@ export function BrowseScans({
             </tr>
           </thead>
           <tbody>
-            {scans?.length == 0 && 
+            {/* {scans?.length == 0 && 
                 <tr>
               <td colSpan={8} className="text-center text-black-600 py-4">
-                Failed to load scans. The app may have been idle too long.
+                No Scans
               </td>
             </tr>
-            }
+            } */}
             { scans?.length > 0 && scans.map((scan) => (
                 <tr key={scan.id} className="odd:bg-stone-200">
                   <td className="px-2 py-2">
