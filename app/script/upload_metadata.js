@@ -220,7 +220,7 @@ function main() {
                             brightness: scan.brightness,
                             contrast: scan.contrast,
                             gamma: scan.gamma,
-                            seconds_per_rot: scan.seconds_per_rot
+                            scanner_seconds_per_rot: scan.seconds_per_rot
                         }, {
                             scanner_brightness: scan.brightness,
                             contrast: scan.contrast,
