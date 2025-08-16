@@ -3,13 +3,14 @@ import path from "path";
 import * as os from "os";
 import * as yaml from "js-yaml";
 import { createClient } from "@supabase/supabase-js";
+import pLimit from "p-limit";
 
 import sharp from "sharp";
 // import { LocalStorage } from './local-storage';
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { StorageError } from "@supabase/storage-js";
 
-import { Database } from "../types/database.types";
+import { Database } from "@salk-hpi/bloom-fs/dist/types/database.types";
 import { Image, Scan } from "@prisma/client";
 import { PrismaStore } from "./prismastore";
 
@@ -19,12 +20,22 @@ import { SupabaseStore, SupabaseUploader } from "@salk-hpi/bloom-js";
 
 type ImageWithScanWithExperiment = Image & {
   scan: Scan & {
-    phenotyper:{
-      id: string;
-      name: string;
+    phenotyper : {
+      id:string;
+      name:string;
       email: string | null;
-    }
-    experiment: Experiment;
+    };
+    experiment: {
+        id: string;
+        name: string;
+        species: string;
+        scientist_id: string;
+        scientist:{
+          id: string;
+          name: string;
+          email: string;
+        }
+    };
   };
 };
 
@@ -49,72 +60,187 @@ export class ImageUploader {
   }
 
   init = async () => {
-    this.supabase = await getSupabaseClient(); // this.localStorage);
+    this.supabase = await getSupabaseClient(); 
   };
 
   uploadImages = async (images: ImageWithScanWithExperiment[]) => {
-    // const client = await createSupabaseClient();
-    const uploader = new SupabaseUploader(this.supabase);
-    const store = new SupabaseStore(this.supabase);
-    const paths = images.map((image) => path.join(this.scans_dir, image.path));
-    console.log("Uploading images:", paths);
-    const metadata: CylImageMetadata[] = images.map((image) => {
-      return {
-        species: image.scan.experiment.species,
-        experiment: image.scan.experiment.name,
-        wave_number: image.scan.wave_number,
-        germ_day: 0,
-        germ_day_color: "none",
-        plant_age_days: image.scan.plant_age_days,
-        date_scanned: image.scan.capture_date.toISOString(),
-        device_name: image.scan.scanner_name,
-        plant_qr_code: image.scan.plant_id,
-        frame_number: image.frame_number,
-        accession_name: image.scan.accession_id,
-        phenotyper_name: image.scan.phenotyper.name,
-        phenotyper_email: image.scan.phenotyper.email || undefined,
-        scientist_name: image.scan.experiment.scientist.name,
-        scientist_email: image.scan.experiment.scientist.email || undefined,
-      };
-    });
+  const uploader = new SupabaseUploader(this.supabase);
+  const store = new SupabaseStore(this.supabase);
+  const limit = pLimit(10);
+  const updateTasks: Promise<void>[] = [];
 
-    console.log("Uploading images:", metadata);
+  const paths = images.map((image) => path.join(this.scans_dir, image.path));
+  const metadata: CylImageMetadata[] = images.map((image) => ({
+    species: image.scan.experiment.species,
+    experiment: image.scan.experiment.name,
+    wave_number: image.scan.wave_number,
+    germ_day: 0,
+    germ_day_color: "none",
+    plant_age_days: image.scan.plant_age_days,
+    date_scanned: image.scan.capture_date.toISOString(),
+    device_name: image.scan.scanner_name,
+    plant_qr_code: image.scan.plant_id,
+    frame_number: image.frame_number,
+    accession_name: image.scan.accession_id,
+    phenotyper_name: image.scan.phenotyper?.name || "unknown",
+    phenotyper_email: image.scan.phenotyper?.email || "unknown",
+    scientist_name: image.scan.experiment?.scientist?.name || "unknown",
+    scientist_email: image.scan.experiment?.scientist?.email || "unknown",
+    num_frames: image.scan.num_frames || 0,
+    exposure_time: image.scan.exposure_time || 0,
+    gain: image.scan.gain || 0,
+    brightness: image.scan.brightness || 0, 
+    contrast: image.scan.contrast || 0,
+    gamma: image.scan.gamma || 0,
+    seconds_per_rot: image.scan.seconds_per_rot || 0,
+  }));
 
-    await uploadImages(paths, metadata, uploader, store, {
-      nWorkers: this.nWorkers,
-      pngCompression: this.pngCompression,
-      before: (index, m) => {
-        console.log(`Uploading image ${index + 1}/${images.length}`);
-      },
-      result: async (index, m, created, error) => {
-        if (error) {
-          console.error(
-            `Error uploading image ${index + 1}: ${JSON.stringify(error)}`
-          );
-        }
-        if (created) {
-          console.log(`Uploaded image ${index + 1}`);
-          // update image metadata in prisma
-          console.log("Updating image " + images[index].id);
-          const { error: dbError } = await this.prismaStore.updateImageMetadata(
-            images[index].id,
-            {
+  await uploadImages(paths, metadata, uploader, store, {
+    nWorkers: this.nWorkers,
+    pngCompression: this.pngCompression,
+    before: (index, m) => {
+      console.log(`Uploading image ${index + 1}/${images.length}`);
+    },
+    result: async (index, m, created, error) => {
+      if (error) {
+        console.error(`Error uploading image ${index + 1}: ${JSON.stringify(error)}`);
+        return;
+      }
+      if (created) {
+        console.log("Uploaded Image")
+        const imageId = images[index].id;
+        console.log(`Uploaded image ${index + 1}, queuing update for ID ${imageId}`);
+
+        updateTasks.push(
+          limit(async () => {
+            console.log("Updating image " + imageId);
+            const { error: dbError } = await this.prismaStore.updateImageMetadata(imageId, {
               status: "UPLOADED",
+            });
+
+            if (dbError) {
+              console.error(`Error updating image metadata: ${JSON.stringify(dbError)}`);
+            } else {
+              console.log(`Updated image metadata in prisma`);
             }
-          );
-          if (dbError) {
-            console.error(
-              `Error updating image metadata in prisma: ${JSON.stringify(
-                dbError
-              )}`
-            );
-          } else {
-            console.log(`Updated image metadata in prisma`);
-          }
+          })
+        );
+      }
+
+      if (created === null && error === null) {
+        const imageId = images[index].id;
+        const { error: dbError } = await this.prismaStore.updateImageMetadata(imageId, {
+          status: "UPLOADED", 
+        });
+
+        if (dbError) {
+          console.error(`Error updating metadata for already-uploaded image ${imageId}:`, dbError);
+        } else {
+          console.log(`Marked image ${imageId} as UPLOADED (already uploaded in previous run).`);
         }
-      },
-    });
-  };
+      }
+
+
+
+    },
+  });
+
+  // Wait for all the queued Prisma update calls to finish
+  await Promise.all(updateTasks);
+};
+
+  // uploadImages = async (images: ImageWithScanWithExperiment[]) => {
+  //   // const client = await createSupabaseClient();
+  //   const uploader = new SupabaseUploader(this.supabase);
+  //   const store = new SupabaseStore(this.supabase);
+  //   const limit = pLimit(10);
+
+  //   const paths = images.map((image) => path.join(this.scans_dir, image.path));
+  //   // console.log("Uploading images:", paths);
+  //   const metadata: CylImageMetadata[] = images.map((image) => {
+  //     return {
+  //       species: image.scan.experiment.species,
+  //       experiment: image.scan.experiment.name,
+  //       wave_number: image.scan.wave_number,
+  //       germ_day: 0,
+  //       germ_day_color: "none",
+  //       plant_age_days: image.scan.plant_age_days,
+  //       date_scanned: image.scan.capture_date.toISOString(),
+  //       device_name: image.scan.scanner_name,
+  //       plant_qr_code: image.scan.plant_id,
+  //       frame_number: image.frame_number,
+  //       accession_name: image.scan.accession_id,
+  //       phenotyper_name: image.scan.phenotyper?.name || "unkown",
+  //       phenotyper_email: image.scan.phenotyper?.email || "unkown",
+  //       scientist_name: image.scan.experiment?.scientist?.name || "unkown",
+  //       scientist_email: image.scan.experiment?.scientist?.email || "unkown",
+  //     };
+  //   });
+
+  //   console.log("Uploading images:", metadata);
+
+  //   const updateTasks: (() => Promise<void>)[] = [];
+
+  //   await uploadImages(paths, metadata, uploader, store, {
+  //     nWorkers: this.nWorkers,
+  //     pngCompression: this.pngCompression,
+  //     before: (index, m) => {
+  //       console.log(`Uploading image ${index + 1}/${images.length}`);
+  //     },
+  //     result: async (index, m, created, error) => {
+  //       if (error) {
+  //         console.error(
+  //           `Error uploading image ${index + 1}: ${JSON.stringify(error)}`
+  //         );
+  //       }
+
+  //       if (created) {
+  //       const imageId = images[index].id;
+  //       console.log(`Uploaded image ${index + 1}, queuing update for ID ${imageId}`);
+
+  //       // Push a throttled DB update task
+  //       updateTasks.push(
+  //         limit(async () => {
+  //           console.log("Updating image " + imageId);
+  //           const { error: dbError } = await this.prismaStore.updateImageMetadata(imageId, {
+  //             status: "UPLOADED",
+  //           });
+
+  //           if (dbError) {
+  //             console.error(`Error updating image metadata: ${JSON.stringify(dbError)}`);
+  //           } else {
+  //             console.log(`Updated image metadata in prisma`);
+  //           }
+  //         })
+  //       );
+  //     }
+
+  //     },
+  //   });
+  //   await Promise.all(updateTasks.map((task) => task()));
+  // };
+
+          // if (created) {
+        //   console.log(`Uploaded image ${index + 1}`);
+
+        //   // update image metadata in prisma
+        //   console.log("Updating image " + images[index].id);
+        //   const { error: dbError } = await this.prismaStore.updateImageMetadata(
+        //     images[index].id,
+        //     {
+        //       status: "UPLOADED",
+        //     }
+        //   );
+        //   if (dbError) {
+        //     console.error(
+        //       `Error updating image metadata in prisma: ${JSON.stringify(
+        //         dbError
+        //       )}`
+        //     );
+        //   } else {
+        //     console.log(`Updated image metadata in prisma`);
+        //   }
+        // }
 
 // New function to handle the new metadata structure
   uploadImages_2_0 = async (images: ImageWithScanWithExperiment[]) => {
