@@ -222,7 +222,12 @@ function main() {
                             gamma: scan.gamma,
                             seconds_per_rot: scan.seconds_per_rot
                         }, {
-                            onConflict: 'scanner_exposure_time,scanner_gain,brightness,contrast,gamma,seconds_per_rot'
+                            scanner_brightness: scan.brightness,
+                            contrast: scan.contrast,
+                            gamma: scan.gamma,
+                            seconds_per_rot: scan.seconds_per_rot
+                        }, {
+                            onConflict: 'scanner_exposure_time,scanner_gain,scanner_brightness,contrast,gamma,seconds_per_rot'
                         })
                             .select('id')
                             .single()];
