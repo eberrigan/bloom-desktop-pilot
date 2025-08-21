@@ -96,4 +96,3 @@ export default function AccessionRowAdder({file_id, toggleExpand}: AccessionRowA
    </div>
    </>
  );
-}

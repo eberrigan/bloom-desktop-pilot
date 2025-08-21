@@ -14,7 +14,8 @@ import { Database } from "@salk-hpi/bloom-fs/dist/types/database.types";
 import { Image, Scan } from "@prisma/client";
 import { PrismaStore } from "./prismastore";
 
-import { uploadImages, CylImageMetadata } from "@salk-hpi/bloom-fs";
+import { uploadImages,uploadImages_2_0,CylImageMetadata, CylImageMetadata_2_0 } from "@salk-hpi/bloom-fs";
+
 import { SupabaseStore, SupabaseUploader } from "@salk-hpi/bloom-js";
 
 type ImageWithScanWithExperiment = Image & {
