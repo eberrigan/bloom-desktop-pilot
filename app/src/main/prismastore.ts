@@ -303,25 +303,81 @@ export class PrismaStore {
     }
   };
 
-  getScans = async (showTodayOnly: boolean = false) => {
-    const scans = await this.prisma.scan.findMany({
-      include: { phenotyper: true, images: true },
-      orderBy: { capture_date: "desc" },
-      where: { deleted: false },
-    });
-    return scans.filter((scan) => {
+  getScans = async (
+    page: number = 1,
+    pageSize: number = 10,
+    showTodayOnly: boolean = false
+  ) => {
+    try {
+      const where: any = {
+      deleted: false,
+      };
+
       if (showTodayOnly) {
-        // Only show scans from today
-        const today = new Date();
-        return (
-          scan.capture_date.getDate() === today.getDate() &&
-          scan.capture_date.getMonth() === today.getMonth() &&
-          scan.capture_date.getFullYear() === today.getFullYear()
-        );
+      const today = new Date();
+      const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+      const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+
+      where.capture_date = {
+        gte: startOfDay,
+        lte: endOfDay,
+        };
       }
-      return true;
-    });
+
+      const [scans, totalCount] = await Promise.all([
+      this.prisma.scan.findMany({
+        where,
+        orderBy: { capture_date: "desc" },
+        include: { phenotyper: true, images: true },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+      }),
+      this.prisma.scan.count({ where }),
+      ]);
+
+      return { scans, totalCount };
+    } catch (err) {
+      console.error("Error fetching scans:", err);
+      return { scans: [], totalCount: 0 };
+    }
+    // const scans = await this.prisma.scan.findMany({
+    //   include: { phenotyper: true, images: true },
+    //   orderBy: { capture_date: "desc" },
+    //   where: { deleted: false },
+    // });
+    // return scans.filter((scan) => {
+    //   if (showTodayOnly) {
+    //     // Only show scans from today
+    //     const today = new Date();
+    //     return (
+    //       scan.capture_date.getDate() === today.getDate() &&
+    //       scan.capture_date.getMonth() === today.getMonth() &&
+    //       scan.capture_date.getFullYear() === today.getFullYear()
+    //     );
+    //   }
+    //   return true;
+    // });
   };
+
+  // getScans = async (showTodayOnly: boolean = false) => {
+  //   const scans = await this.prisma.scan.findMany({
+  //     include: { phenotyper: true, images: true },
+  //     orderBy: { capture_date: "desc" },
+  //     where: { deleted: false },
+  //   });
+  //   return scans.filter((scan) => {
+  //     if (showTodayOnly) {
+  //       // Only show scans from today
+  //       const today = new Date();
+  //       return (
+  //         scan.capture_date.getDate() === today.getDate() &&
+  //         scan.capture_date.getMonth() === today.getMonth() &&
+  //         scan.capture_date.getFullYear() === today.getFullYear()
+  //       );
+  //     }
+  //     return true;
+  //   });
+  // };
 
   getScan = async (scanId: string) => {
     return this.prisma.scan.findUnique({
@@ -422,13 +478,26 @@ export class PrismaStore {
   //   this.conn.pragma("journal_mode = WAL");
   // };
 
-  getImagesToUpload = async () => {
-    return this.prisma.image.findMany({
-      where: { status: { not: "UPLOADED" } },
-      include: { scan: { include: { experiment: true } } },
-      orderBy: { scan: { capture_date: "asc" } },
-    });
-  };
+ getImagesToUpload = async () => {
+ const images = await this.prisma.image.findMany({
+   where: { status: { not: "UPLOADED" } },
+   include: {
+     scan: {
+       include: {
+         phenotyper: true,
+         experiment: {
+           include: {
+             scientist: true,
+           },
+         },
+       },
+     },
+   },
+   orderBy: { scan: { capture_date: "asc" } },
+ });
+ return images;
+};
+
 
   constructor(
     scansDir: string,

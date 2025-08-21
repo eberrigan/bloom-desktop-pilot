@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { FileUploader } from "react-drag-drop-files";
+import AccessionRowAdder from "./AccessionRowAdder";
 import * as XLSX from "xlsx";
 
 const ipcRenderer = window.electron.ipcRenderer;
@@ -143,7 +144,7 @@ export function Accessions() {
 
             setSelectedSheet(defaultSheet);
             setColumns(jsonData[0] as string[]);
-            setData(jsonData.slice(1, 21)); 
+            setData(jsonData.slice(1, 21).map((row:any[])=> row.map((cell) => String(cell))));
             setLoading(false);
         };
         reader.readAsArrayBuffer(file);
@@ -170,8 +171,8 @@ export function Accessions() {
 
             for (let i = 1; i < rows.length; i++) {
                 const row = rows[i];
-                const plant_barcode = (row as any[])[plantIdx];
-                const accession_id = (row as any[])[genotypeIdx];
+                const plant_barcode = String((row as any[])[plantIdx]);
+                const accession_id = String((row as any[])[genotypeIdx]);
 
                 if (plant_barcode && accession_id) {
                     console.log(`Uploading row ${i}: Plant Barcode: ${plant_barcode}, Accession ID: ${accession_id}`);
@@ -303,9 +304,17 @@ export function Accessions() {
                                 </svg>
                                 <span className="font-semibold">{accession.name}</span>
                             </div>
-                            <span className="text-xs text-gray-500">
+
+                            <div className="flex items-center gap-4">
+                               <AccessionRowAdder file_id = {accession.id} toggleExpand={toggleExpand}/>
+                               <span className="text-xs text-gray-500">
+                                   {new Date(accession.createdAt).toLocaleDateString()}
+                               </span>
+                           </div>
+
+                            {/* <span className="text-xs text-gray-500">
                                 {new Date(accession.createdAt).toLocaleDateString()}
-                            </span>
+                            </span> */}
                             </div>
 
                             <div className="text-xs text-gray-600">ID: {accession.id}</div>
