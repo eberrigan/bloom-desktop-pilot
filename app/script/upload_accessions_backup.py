@@ -21,10 +21,13 @@ from sqlalchemy import create_engine, text
 
 file_path = sys.argv[1]
 
-supabase_url_prod = os.environ['SUPABASE_URL']
-supabase_key_prod = os.environ['SUPABASE_KEY']
-database_string_prod = os.environ['DATABASE_URL']
+# supabase_url_prod = os.environ['SUPABASE_URL']
+# supabase_key_prod = os.environ['SUPABASE_KEY']
+# database_string_prod = os.environ['DATABASE_URL']
 
+supabase_url_prod = "https://api.bloom.salk.edu/proxy"
+supabase_key_prod = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgInJvbGUiOiAiYW5vbiIsCiAgICAiaXNzIjogInN1cGFiYXNlIiwKICAgICJpYXQiOiAxNjg3NTkwMDAwLAogICAgImV4cCI6IDE4NDU0NDI4MDAKfQ.ev7gXAhB8Uv6pgRF9B5oEpmlYI6l15DUIlAQBWSGxPU"
+database_string_prod = "postgresql://postgres:mC3aiTpb0KPOWJGJ-xjooOAVbKWgQy1WXXlI7AfH@52.25.90.47:5432/postgres"
 
 df = pd.read_excel(file_path, sheet_name='Sheet1', header=0)
 df.columns = ['ACCESSION', 'BARCODE']
