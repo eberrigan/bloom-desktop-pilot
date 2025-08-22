@@ -1,6 +1,5 @@
-function FieldInfo({ info }: { info: string }) {
 
-
+export default function FieldInfo({ info }: { info: string }) {
     return (
     
     <div className="-mt-1 ml-2 inline-block group relative">

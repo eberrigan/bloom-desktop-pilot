@@ -46,8 +46,7 @@ const createWindow = (): void => {
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-
-  // Open the DevTools.
+  // // Open the DevTools.
   // mainWindow.webContents.openDevTools();
 };
 
@@ -296,7 +295,7 @@ createPrismaStore(config.scans_dir, dbUpdated, "file:" + config.local_db_path)
     ipcMain.handle("electric:get-accession-id-file", async (event, id, experiment_id) => {
       return await store.getAccessionList(experiment_id);
     });
-    ipcMain.handle("electric:get-accession-list-with-file-id", async (event, id, accession_file_id) => {
+    ipcMain.handle("electric:get-accession-list-with-file-id", async (event, accession_file_id) => {
       return await store.getAccessionListwithFileID(accession_file_id);
     });
     // ipcMain.handle("electric:update-accession-file", async (event, editing_field, editing_row_id, editing_value) => {
@@ -349,7 +348,8 @@ createPrismaStore(config.scans_dir, dbUpdated, "file:" + config.local_db_path)
     };
     ipcMain.handle("electric:get-status", store.getStatus);
     ipcMain.handle("scan-store:get-scans", async (event, args) => {
-      return store.getScans(args[0]);
+      const {page, pageSize, showTodayOnly} = args[0];
+      return store.getScans(page, pageSize, showTodayOnly);
     });
     ipcMain.handle("scan-store:get-scan", async (event, args) => {
       return store.getScan(args[0]);
@@ -370,6 +370,7 @@ createPrismaStore(config.scans_dir, dbUpdated, "file:" + config.local_db_path)
         "getImagesToUpload() returned this many images: ",
         images.length
       );
+
       const imageUploader = await createImageUploader(store, config.scans_dir);
       await imageUploader.uploadImages(images);
     }
