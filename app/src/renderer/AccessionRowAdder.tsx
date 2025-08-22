@@ -57,7 +57,9 @@ export default function AccessionRowAdder({file_id, toggleExpand}: AccessionRowA
 
 
      {active && (
-       <div className="absolute right-full translate-x-[-180px] mt-2 left-0 z-10 bg-white border rounded shadow-lg p-3 w-64 space-y-2">
+       <div className="absolute right-full translate-x-[-180px] mt-2 left-0 z-10 bg-white border rounded shadow-lg p-3 w-64 space-y-2"
+       onClick={(e) => e.stopPropagation()} 
+       >
          <p className="text-sm text-gray-600 text-center">
            Add a new <strong>Accession ID</strong> and <strong>Plant QR Code</strong> to the existing accession file.
          </p>

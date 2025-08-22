@@ -258,7 +258,7 @@ export function Accessions() {
         <div className="p-4 min-h-screen bg-gray-100 ">
             <div className="text-xs font-bold">Accession Files:</div>
 
-            <ul className="max-h-64 overflow-scroll border rounded-md p-2 mb-8 text-sm">
+            <ul className="max-h-96 overflow-scroll border rounded-md p-2 mb-8 text-sm">
                 {accession_list &&
                     accession_list.map((accession) => (
                         <li
