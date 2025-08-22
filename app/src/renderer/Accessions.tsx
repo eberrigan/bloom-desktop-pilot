@@ -241,17 +241,21 @@ export function Accessions() {
         setSelectGenotypeId(GenotypeId);
     }
 
+    const refreshPreview = async (id: string) => {
+        const preview = await getAccessionFileContent(id);
+        setAccessionPreview(preview);
+    };
+
     const toggleExpand = (id: string) => {
-        console.log("Open Preview for accession ID:", id);
-        getAccessionFileContent(id).then((preview) => {
-            console.log("Accession preview data:", preview);
-            setAccessionPreview(preview);
-        });
-        
-        setExpandedAccessionIds(prev => {
+
+          setExpandedAccessionIds(prev => {
             const newSet = new Set(prev);
-            if (newSet.has(id)) newSet.delete(id);
-            else newSet.add(id);
+            if (newSet.has(id)) {
+            newSet.delete(id); // collapse
+            } else {
+            newSet.add(id); // expand
+            refreshPreview(id);
+            }
             return newSet;
         });
     };
