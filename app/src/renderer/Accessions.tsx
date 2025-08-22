@@ -68,7 +68,7 @@ export function Accessions() {
     const [loading, setLoading] = useState(false);
 
     const [editingRowId, setEditingRowId] = useState<string | null>(null);
-    const [editingField, setEditingField] = useState<'id'|null>(null);
+    const [editingField, setEditingField] = useState<'accession_id'|null>(null);
     const [editingValue, setEditingValue] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const workbookRef = useRef<XLSX.WorkBook | null>(null);
@@ -85,20 +85,26 @@ export function Accessions() {
 
     const saveInlineEdit = async () => {
         if (!editingRowId || !editingField) return;
+        const newValue = (editingValue ?? '').trim();
 
-        await updateAccessionFile(editingField,editingRowId, editingValue);
+        try {
+                await updateAccessionFile(editingField, editingRowId, newValue);
 
-        setAccessionPreview(prev =>
-          prev.map((row) =>
-            row.id === editingRowId
-              ? { ...row, [editingField]: editingValue }
-              : row
-          )
-        );
-      
-        setEditingRowId(null);
-        setEditingField(null);
-        setEditingValue('');
+                setAccessionPreview(prev =>
+                prev.map(row =>
+                    row.id === editingRowId
+                    ? { ...row, [editingField]: newValue }
+                    : row
+                )
+                );
+            } catch (err) {
+                console.error('Failed to update accession file:', err);
+                setErrorMessage('Failed to save change. Please try again.');
+            } finally {
+                setEditingRowId(null);
+                setEditingField(null);
+                setEditingValue('');
+        }
     };
 
     useEffect(() => {
@@ -351,8 +357,8 @@ export function Accessions() {
                                                     e.stopPropagation();
                                                     if (isEditable) {
                                                     setEditingRowId(row.id);
-                                                    setEditingField(key as 'id');
-                                                    setEditingValue(value as string);
+                                                    setEditingField('accession_id');
+                                                    setEditingValue((value ?? '') as string);
                                                     }
                                                 }}
                                                 >
