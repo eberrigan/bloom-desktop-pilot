@@ -24,12 +24,6 @@ async function loadConfig() {
     bloom_scanner_username: string;
     bloom_scanner_password: string;
   };
-
-  console.log("Prisma DB:"+config.local_db_path);
-  console.log("BLOOM CONNECTION API : "+config.bloom_api_url);
-  console.log("BLOOM KEY :"+config.bloom_anon_key);
-  console.log("SCANNER USERNAME: "+ config.bloom_scanner_username);
-  console.log("SCANNER PASSWORD: "+config.bloom_scanner_password);
   
   return config;
 }
