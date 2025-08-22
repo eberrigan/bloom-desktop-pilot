@@ -23,12 +23,22 @@ const getAccessionFiles = window.electron.electric.getAccessionFiles;
 // const createWaveNumber = window.electron.electric.createWaveNumber;
 
 const species = [
+  "Amaranth",
   "Arabidopsis",
+  "Canola",
+  "Lotus",
+  "Maize",
+  "Pennycress",
   "Rice",
   "Soybean",
   "Sorghum",
   "Pennycress",
   "Canola",
+  "Soybean",
+  "Spinach",
+  "Sugar_Beet",
+  "Tomato",
+  "Wheat",
 ];
 
 export function Experiments() {
