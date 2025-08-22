@@ -294,7 +294,7 @@ export function Accessions() {
                             </div>
 
                             <div className="flex items-center gap-4">
-                               <AccessionRowAdder file_id = {accession.id} toggleExpand={toggleExpand}/>
+                               <AccessionRowAdder file_id = {accession.id} toggleExpand={refreshPreview}/>
                                <span className="text-xs text-gray-500">
                                    {new Date(accession.createdAt).toLocaleDateString()}
                                </span>
