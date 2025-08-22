@@ -299,7 +299,6 @@ export function Experiments() {
         </div>
         </div>
       </div>
-
       {/* <div className="text-xs font-bold">Add New Wave (Existing Experiment)</div> */}
       {/* <div className="border rounded text-lg p-2 w-96 mb-8" >
       <div className="text-xs font-bold mt-2">Experiment</div>

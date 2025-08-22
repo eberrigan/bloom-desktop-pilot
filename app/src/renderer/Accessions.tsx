@@ -1,9 +1,11 @@
 import { useEffect, useState, useRef } from "react";
 import { FileUploader } from "react-drag-drop-files";
+
 import AccessionRowAdder from "./AccessionRowAdder";
 import * as XLSX from "xlsx";
 
 const ipcRenderer = window.electron.ipcRenderer;
+
 
 // const getAccession = window.electron.electric.getAccession;
 const getAccessionFiles = window.electron.electric.getAccessionFiles;

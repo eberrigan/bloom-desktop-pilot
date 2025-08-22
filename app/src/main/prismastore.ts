@@ -68,12 +68,13 @@ export class PrismaStore {
       await this.prisma.scientist.create({
         data: { id: uuidv4(), name, email },
       });
-
       return { error: null };
     } catch (err) {
+      console.error("Error creating accession mapping:", err);
       return { error: err };
     }
   };
+
 
   createAccessions = async (name: string): Promise<{ error: any; file_id: string | null }> => {
     try {
@@ -210,6 +211,7 @@ export class PrismaStore {
 
   getAccessionListwithFileID = async(accession_file_id: string)=> {
     try {
+
       // console.log("Fetching accession mappings for file ID:", accession_file_id);
       const mappings = await this.prisma.plantAccessionMappings.findMany({
         where: {
