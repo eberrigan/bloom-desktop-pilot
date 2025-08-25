@@ -1,0 +1,10 @@
+node_modules/
+.webpack/
+dist/
+coverage/
+*.min.js
+*.min.css
+package-lock.json
+prisma/migrations/
+.env
+*.log
