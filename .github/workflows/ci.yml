@@ -39,20 +39,15 @@ jobs:
         run: npm run lint
         continue-on-error: true # Don't fail the build on lint errors for now
       
-      - name: Run tests
-        working-directory: ./app
-        run: npm run test -- --run
-      
       - name: Run tests with coverage
-        if: matrix.os == 'ubuntu-latest'
         working-directory: ./app
         run: npm run test:coverage
       
       - name: Upload coverage reports
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-latest' && matrix.node-version == '18.x'
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-report-node-${{ matrix.node-version }}
+          name: coverage-report
           path: app/coverage/
       
       - name: Comment coverage on PR
