@@ -4,6 +4,10 @@
   "version": "1.0.0",
   "description": "My Electron application description",
   "main": ".webpack/main",
+  "engines": {
+    "node": ">=18.0.0 <21.0.0",
+    "npm": ">=8.0.0"
+  },
   "scripts": {
     "gen-types": "supabase gen types typescript --local > src/types/database.types.ts",
     "start": "electron-forge start",
