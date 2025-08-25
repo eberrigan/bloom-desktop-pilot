@@ -37,18 +37,31 @@ export const cameraFixtures = {
 
 export const scannerFixtures = {
   defaultConfig: {
-    scanner_id: 'test-scanner-001',
-    camera_ip_address: '10.0.0.23', // Production camera IP from pylon.py
+    python: 'python',
+    capture_scan_py: 'pylon/pylon_stream_forever.py',
+    stream_scans_py: 'pylon/pylon_stream.py',
     scans_dir: 'test/sample_scan',
-    db_path: ':memory:', // Use in-memory DB for tests
-  },
+    scanner_name: 'test-scanner-001',
+    camera_ip_address: '10.0.0.23', // Production camera IP from pylon.py
+  } as ScannerConfig,
   
   fakeCameraConfig: {
-    scanner_id: 'test-scanner-fake',
-    camera_ip_address: 'fake', // Triggers fake camera mode
+    python: 'python',
+    capture_scan_py: 'pylon/pylon_stream_forever_fake.py',
+    stream_scans_py: 'pylon/pylon_stream_fake.py',
     scans_dir: 'test/sample_scan',
-    db_path: ':memory:',
-  },
+    scanner_name: 'test-scanner-fake',
+    camera_ip_address: 'fake', // Triggers fake camera mode
+  } as ScannerConfig,
+  
+  testConfig: {
+    python: 'python',
+    capture_scan_py: 'test/mock_capture.py',
+    stream_scans_py: 'test/mock_stream.py',
+    scans_dir: 'test/output',
+    scanner_name: 'test-scanner',
+    camera_ip_address: '127.0.0.1',
+  } as ScannerConfig,
 };
 
 export const scanDataFixtures = {
