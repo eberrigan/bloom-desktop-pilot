@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+export function FieldInfo({ info }: { info: string }) {
+
+>>>>>>> 74158c7 (export fieldinfo)
 
 export default function FieldInfo({ info }: { info: string }) {
     return (
@@ -17,6 +22,7 @@ export default function FieldInfo({ info }: { info: string }) {
           strokeWidth={1.5}
           stroke="currentColor"
           className="w-6 h-6 inline-block z-0"
+          data-testid="info-icon"
         >
         
           <path
