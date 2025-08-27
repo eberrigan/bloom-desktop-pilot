@@ -58,12 +58,6 @@ type Phenotyper = {
   email: string;
 };
 
-type Scientist = {
-  id: string;
-  name: string;
-  email: string;
-};
-
 type Accessions = {
   id : string,
   name : string
@@ -78,7 +72,14 @@ type Experiment = {
   name: string;
   species: string;
   scientist_id: string;
+  scientist:Scientist
 };
+
+type Scientist = {
+  id: string;
+  name: string;
+  email: string;
+}
 
 interface PhenotyperRetriever {
   getPhenotypers: () => [Phenotyper];

@@ -68,12 +68,13 @@ export class PrismaStore {
       await this.prisma.scientist.create({
         data: { id: uuidv4(), name, email },
       });
-
       return { error: null };
     } catch (err) {
+      console.error("Error creating accession mapping:", err);
       return { error: err };
     }
   };
+
 
   createAccessions = async (name: string): Promise<{ error: any; file_id: string | null }> => {
     try {
@@ -186,6 +187,13 @@ export class PrismaStore {
   getAccessionList = async(experimentId: string)=> {
     try{
       console.log("PLANTQRCODE");
+      console.log("getAccessionList called with experimentId:", experimentId);
+      
+      // Return empty array if experimentId is null or undefined
+      if (!experimentId) {
+        console.log("No experimentId provided, returning empty array");
+        return [];
+      }
 
       const accessionsWithMappings = await this.prisma.accessions.findMany({
         where: {
@@ -210,6 +218,8 @@ export class PrismaStore {
 
   getAccessionListwithFileID = async(accession_file_id: string)=> {
     try {
+
+      // console.log("Fetching accession mappings for file ID:", accession_file_id);
       const mappings = await this.prisma.plantAccessionMappings.findMany({
         where: {
           accession_file_id: accession_file_id, 
@@ -303,25 +313,81 @@ export class PrismaStore {
     }
   };
 
-  getScans = async (showTodayOnly: boolean = false) => {
-    const scans = await this.prisma.scan.findMany({
-      include: { phenotyper: true, images: true },
-      orderBy: { capture_date: "desc" },
-      where: { deleted: false },
-    });
-    return scans.filter((scan) => {
+  getScans = async (
+    page: number = 1,
+    pageSize: number = 10,
+    showTodayOnly: boolean = false
+  ) => {
+    try {
+      const where: any = {
+      deleted: false,
+      };
+
       if (showTodayOnly) {
-        // Only show scans from today
-        const today = new Date();
-        return (
-          scan.capture_date.getDate() === today.getDate() &&
-          scan.capture_date.getMonth() === today.getMonth() &&
-          scan.capture_date.getFullYear() === today.getFullYear()
-        );
+      const today = new Date();
+      const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+      const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+
+      where.capture_date = {
+        gte: startOfDay,
+        lte: endOfDay,
+        };
       }
-      return true;
-    });
+
+      const [scans, totalCount] = await Promise.all([
+      this.prisma.scan.findMany({
+        where,
+        orderBy: { capture_date: "desc" },
+        include: { phenotyper: true, images: true },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+      }),
+      this.prisma.scan.count({ where }),
+      ]);
+
+      return { scans, totalCount };
+    } catch (err) {
+      console.error("Error fetching scans:", err);
+      return { scans: [], totalCount: 0 };
+    }
+    // const scans = await this.prisma.scan.findMany({
+    //   include: { phenotyper: true, images: true },
+    //   orderBy: { capture_date: "desc" },
+    //   where: { deleted: false },
+    // });
+    // return scans.filter((scan) => {
+    //   if (showTodayOnly) {
+    //     // Only show scans from today
+    //     const today = new Date();
+    //     return (
+    //       scan.capture_date.getDate() === today.getDate() &&
+    //       scan.capture_date.getMonth() === today.getMonth() &&
+    //       scan.capture_date.getFullYear() === today.getFullYear()
+    //     );
+    //   }
+    //   return true;
+    // });
   };
+
+  // getScans = async (showTodayOnly: boolean = false) => {
+  //   const scans = await this.prisma.scan.findMany({
+  //     include: { phenotyper: true, images: true },
+  //     orderBy: { capture_date: "desc" },
+  //     where: { deleted: false },
+  //   });
+  //   return scans.filter((scan) => {
+  //     if (showTodayOnly) {
+  //       // Only show scans from today
+  //       const today = new Date();
+  //       return (
+  //         scan.capture_date.getDate() === today.getDate() &&
+  //         scan.capture_date.getMonth() === today.getMonth() &&
+  //         scan.capture_date.getFullYear() === today.getFullYear()
+  //       );
+  //     }
+  //     return true;
+  //   });
+  // };
 
   getScan = async (scanId: string) => {
     return this.prisma.scan.findUnique({
@@ -422,13 +488,26 @@ export class PrismaStore {
   //   this.conn.pragma("journal_mode = WAL");
   // };
 
-  getImagesToUpload = async () => {
-    return this.prisma.image.findMany({
-      where: { status: { not: "UPLOADED" } },
-      include: { scan: { include: { experiment: true } } },
-      orderBy: { scan: { capture_date: "asc" } },
-    });
-  };
+ getImagesToUpload = async () => {
+ const images = await this.prisma.image.findMany({
+   where: { status: { not: "UPLOADED" } },
+   include: {
+     scan: {
+       include: {
+         phenotyper: true,
+         experiment: {
+           include: {
+             scientist: true,
+           },
+         },
+       },
+     },
+   },
+   orderBy: { scan: { capture_date: "asc" } },
+ });
+ return images;
+};
+
 
   constructor(
     scansDir: string,
@@ -492,5 +571,3 @@ function parseCaptureDate(scan_metadata: ScanMetadata) {
     capture_date: new Date(capture_date),
   } as ScanMetadataParsed;
 }
-
-

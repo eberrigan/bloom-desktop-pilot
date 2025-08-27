@@ -1,10 +1,13 @@
 import { useEffect, useState, useRef } from "react";
 import { FileUploader } from "react-drag-drop-files";
+
+import AccessionRowAdder from "./AccessionRowAdder";
 import * as XLSX from "xlsx";
 
 const ipcRenderer = window.electron.ipcRenderer;
 
-const getAccession = window.electron.electric.getAccession;
+
+// const getAccession = window.electron.electric.getAccession;
 const getAccessionFiles = window.electron.electric.getAccessionFiles;
 const createAccession = window.electron.electric.createAccession;
 const createPlantAccessionMap = window.electron.electric.createPlantAccessionMap;
@@ -65,7 +68,7 @@ export function Accessions() {
     const [loading, setLoading] = useState(false);
 
     const [editingRowId, setEditingRowId] = useState<string | null>(null);
-    const [editingField, setEditingField] = useState<'id'|null>(null);
+    const [editingField, setEditingField] = useState<'accession_id'|null>(null);
     const [editingValue, setEditingValue] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const workbookRef = useRef<XLSX.WorkBook | null>(null);
@@ -82,23 +85,26 @@ export function Accessions() {
 
     const saveInlineEdit = async () => {
         if (!editingRowId || !editingField) return;
-        console.log("Editing Field"+editingField);
-        console.log("Editing Value"+editingValue);
-        console.log("Editing Row"+editingRowId);
+        const newValue = (editingValue ?? '').trim();
 
-        await updateAccessionFile(editingField,editingRowId, editingValue);
+        try {
+                await updateAccessionFile(editingField, editingRowId, newValue);
 
-        setAccessionPreview(prev =>
-          prev.map((row) =>
-            row.id === editingRowId
-              ? { ...row, [editingField]: editingValue }
-              : row
-          )
-        );
-      
-        setEditingRowId(null);
-        setEditingField(null);
-        setEditingValue('');
+                setAccessionPreview(prev =>
+                prev.map(row =>
+                    row.id === editingRowId
+                    ? { ...row, [editingField]: newValue }
+                    : row
+                )
+                );
+            } catch (err) {
+                console.error('Failed to update accession file:', err);
+                setErrorMessage('Failed to save change. Please try again.');
+            } finally {
+                setEditingRowId(null);
+                setEditingField(null);
+                setEditingValue('');
+        }
     };
 
     useEffect(() => {
@@ -143,11 +149,11 @@ export function Accessions() {
 
             setSelectedSheet(defaultSheet);
             setColumns(jsonData[0] as string[]);
-            setData(jsonData.slice(1, 21)); 
+            setData(jsonData.slice(1, 21).map((row:any[])=> row.map((cell) => String(cell))));
             setLoading(false);
+
         };
         reader.readAsArrayBuffer(file);
-
     };
 
     const handleUpload = async () => {
@@ -170,8 +176,8 @@ export function Accessions() {
 
             for (let i = 1; i < rows.length; i++) {
                 const row = rows[i];
-                const plant_barcode = (row as any[])[plantIdx];
-                const accession_id = (row as any[])[genotypeIdx];
+                const plant_barcode = String((row as any[])[plantIdx]);
+                const accession_id = String((row as any[])[genotypeIdx]);
 
                 if (plant_barcode && accession_id) {
                     console.log(`Uploading row ${i}: Plant Barcode: ${plant_barcode}, Accession ID: ${accession_id}`);
@@ -209,7 +215,6 @@ export function Accessions() {
             fetchFiles();
             setMessage("Done uploading!");
         }
-
     }
 
     const handleSheetChange = async (sheetName: string) => {
@@ -242,40 +247,30 @@ export function Accessions() {
         setSelectGenotypeId(GenotypeId);
     }
 
+    const refreshPreview = async (id: string) => {
+        const preview = await getAccessionFileContent(id);
+        setAccessionPreview(preview);
+    };
+
     const toggleExpand = (id: string) => {
-        console.log(id);
-        
-        getAccessionFileContent(id).then((preview) => {
-            setAccessionPreview(preview);
-        });
-        
-        setExpandedAccessionIds(prev => {
+
+          setExpandedAccessionIds(prev => {
             const newSet = new Set(prev);
-            if (newSet.has(id)) newSet.delete(id);
-            else newSet.add(id);
+            if (newSet.has(id)) {
+            newSet.delete(id); // collapse
+            } else {
+            newSet.add(id); // expand
+            refreshPreview(id);
+            }
             return newSet;
         });
     };
 
     return (
         <div className="p-4 min-h-screen bg-gray-100 ">
-            {/* List of all the uploaded accession files */}
             <div className="text-xs font-bold">Accession Files:</div>
 
-            {/* {accession_list} */}
-            {/* <ul className="h-32 overflow-scroll border rounded-md p-2 w mb-8 text-sm">
-            {accession_list &&
-                accession_list.map((accession_file, index) => (
-                <li
-                    key={accession_file.id}
-                    className="bg-gray-100 p-2 rounded-md mb-2 shadow-sm"
-                >
-                    {accession_file.name} (ID: {accession_file.id})
-                  </li>
-                ))}
-            </ul> */}
-
-            <ul className="max-h-64 overflow-scroll border rounded-md p-2 mb-8 text-sm">
+            <ul className="max-h-96 overflow-scroll border rounded-md p-2 mb-8 text-sm">
                 {accession_list &&
                     accession_list.map((accession) => (
                         <li
@@ -303,9 +298,17 @@ export function Accessions() {
                                 </svg>
                                 <span className="font-semibold">{accession.name}</span>
                             </div>
-                            <span className="text-xs text-gray-500">
+
+                            <div className="flex items-center gap-4">
+                               <AccessionRowAdder file_id = {accession.id} toggleExpand={refreshPreview}/>
+                               <span className="text-xs text-gray-500">
+                                   {new Date(accession.createdAt).toLocaleDateString()}
+                               </span>
+                           </div>
+
+                            {/* <span className="text-xs text-gray-500">
                                 {new Date(accession.createdAt).toLocaleDateString()}
-                            </span>
+                            </span> */}
                             </div>
 
                             <div className="text-xs text-gray-600">ID: {accession.id}</div>
@@ -354,8 +357,8 @@ export function Accessions() {
                                                     e.stopPropagation();
                                                     if (isEditable) {
                                                     setEditingRowId(row.id);
-                                                    setEditingField(key as 'id');
-                                                    setEditingValue(value as string);
+                                                    setEditingField('accession_id');
+                                                    setEditingValue((value ?? '') as string);
                                                     }
                                                 }}
                                                 >
