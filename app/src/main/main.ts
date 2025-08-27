@@ -292,8 +292,15 @@ createPrismaStore(config.scans_dir, dbUpdated, "file:" + config.local_db_path)
     ipcMain.handle("electric:get-accession-id", async (event, id, experiment_id) => {
       return await store.getAccessionsID(id, experiment_id);
     });
-    ipcMain.handle("electric:get-accession-id-file", async (event, id, experiment_id) => {
-      return await store.getAccessionList(experiment_id);
+    ipcMain.handle("electric:get-accession-id-file", async (event, experimentIdArray) => {
+      // Fixed: Extract experiment ID from the array sent by preload
+      const experimentId = Array.isArray(experimentIdArray) ? experimentIdArray[0] : experimentIdArray;
+      
+      console.log('=== electric:get-accession-id-file handler ===');
+      console.log('Received array from preload:', experimentIdArray);
+      console.log('Extracted experimentId:', experimentId);
+      
+      return await store.getAccessionList(experimentId);
     });
     ipcMain.handle("electric:get-accession-list-with-file-id", async (event, accession_file_id) => {
       return await store.getAccessionListwithFileID(accession_file_id);
