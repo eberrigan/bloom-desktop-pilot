@@ -259,4 +259,156 @@ describe('Scanner', () => {
       expect(scanner.getPlantAgeDays()).toBe(14);
     });
   });
+
+  describe('Additional coverage tests', () => {
+    beforeEach(() => {
+      scanner.setPhenotyperId('test-phenotyper');
+      scanner.setPlantQrCode('QR123');
+      scanner.setExperimentId('exp-001');
+      scanner.setAccessionId('acc-001');
+    });
+
+    // Image capture and saving flow
+    describe('Image capture flow', () => {
+      it('tracks image capture progress', () => {
+        scanner.setCameraSettings({ ...defaultCameraSettings(), num_frames: 3 });
+        scanner.startScan('scan-capture');
+        
+        expect(scanner.getScanData().progress.nImagesCaptured).toBe(0);
+        
+        scanner.imageCaptured();
+        expect(scanner.getScanData().progress.nImagesCaptured).toBe(1);
+        expect(scanner.getScanData().progress.status).toBe('capturing');
+        
+        scanner.imageCaptured();
+        expect(scanner.getScanData().progress.nImagesCaptured).toBe(2);
+      });
+
+      it('handles image save and completion', () => {
+        const onComplete = vi.fn();
+        scanner.onScanComplete = onComplete;
+        scanner.setCameraSettings({ ...defaultCameraSettings(), num_frames: 2 });
+        scanner.startScan('scan-complete');
+        
+        scanner.imageSaved('/path/frame_0.png');
+        expect(scanner.getScanData().progress.nImagesSaved).toBe(1);
+        expect(scanner.getScanData().progress.status).toBe('saving');
+        
+        scanner.imageSaved('/path/frame_1.png');
+        expect(scanner.getScanData().progress.nImagesSaved).toBe(2);
+        expect(scanner.getScanData().progress.status).toBe('complete');
+        expect(onComplete).toHaveBeenCalled();
+      });
+
+      it('throws error if imageCaptured without scan', () => {
+        scanner.scanProgress = null;
+        expect(() => scanner.imageCaptured()).toThrow('scanProgress is null');
+      });
+
+      it('throws error if imageSaved without metadata', () => {
+        scanner.scanMetadata = null;
+        expect(() => scanner.imageSaved('/path/image.png')).toThrow('scanMetadata is null');
+      });
+
+      it('throws error if imageSaved without progress', () => {
+        scanner.startScan('test-scan');
+        scanner.scanProgress = null;
+        expect(() => scanner.imageSaved('/path/image.png')).toThrow('scanProgress is null');
+      });
+    });
+
+    // Save and delete operations
+    describe('Save and delete operations', () => {
+      it('saves current scan successfully', async () => {
+        const saveToDb = vi.fn().mockResolvedValue({ id: 'saved' });
+        scanner.saveToDb = saveToDb;
+        
+        scanner.startScan('scan-save');
+        scanner.imageSaved('/path/img.png');
+        
+        await scanner.saveCurrentScan();
+        
+        expect(saveToDb).toHaveBeenCalledWith(
+          expect.objectContaining({
+            id: 'scan-save',
+            phenotyper_id: 'test-phenotyper'
+          }),
+          ['/path/img.png']
+        );
+      });
+
+      it('throws when saving without scan data', async () => {
+        scanner.scanMetadata = null;
+        await expect(scanner.saveCurrentScan()).rejects.toThrow('No scan data to save');
+      });
+
+      it('deletes current scan and files', async () => {
+        const fs = await import('fs');
+        const mockRmSync = vi.spyOn(fs.default, 'rmSync' as any);
+        const mockExistsSync = vi.spyOn(fs.default, 'existsSync' as any);
+        mockExistsSync.mockReturnValue(true);
+        
+        scanner.startScan('scan-delete');
+        scanner.imageSaved('/scans/scan-delete/img.png');
+        
+        await scanner.deleteCurrentScan();
+        
+        expect(mockRmSync).toHaveBeenCalled();
+        expect(scanner.getScanData().metadata).toBeNull();
+      });
+
+      it('handles delete when directory missing', async () => {
+        const fs = await import('fs');
+        vi.spyOn(fs.default, 'existsSync' as any).mockReturnValue(false);
+        
+        scanner.startScan('scan-missing');
+        await scanner.deleteCurrentScan();
+        
+        expect(scanner.getScanData().metadata).toBeNull();
+      });
+    });
+
+    // Error handling
+    describe('Validation errors', () => {
+      it('throws when experiment ID not set', () => {
+        const testScanner = createScanner('/test', 'Scanner1');
+        testScanner.setPhenotyperId('pheno');
+        testScanner.setPlantQrCode('QR');
+        testScanner.setAccessionId('acc');
+        
+        expect(() => testScanner.startScan('test')).toThrow('Experiment ID is not set');
+      });
+
+      it('throws when wave number not set', () => {
+        scanner.setWaveNumber(null);
+        expect(() => scanner.startScan('test')).toThrow('Wave number is not set');
+      });
+
+      it('throws when plant age days not set', () => {
+        scanner.setPlantAgeDays(null);
+        expect(() => scanner.startScan('test')).toThrow('Plant age days is not set');
+      });
+    });
+
+    // Reset operations
+    describe('Reset operations', () => {
+      it('resets progress when null', () => {
+        scanner.scanProgress = null;
+        scanner.resetProgress();
+        expect(scanner.scanProgress).not.toBeNull();
+        expect(scanner.scanProgress.status).toBe('capturing');
+      });
+
+      it('clears all scan data on reset', () => {
+        scanner.startScan('test-reset');
+        scanner.imageSaved('/path/img.png');
+        
+        scanner.resetScanner();
+        
+        expect(scanner.scanMetadata).toBeNull();
+        expect(scanner.scanProgress).toBeNull();
+        expect(scanner.images).toEqual([]);
+      });
+    });
+  });
 });
