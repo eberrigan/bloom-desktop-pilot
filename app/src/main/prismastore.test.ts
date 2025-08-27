@@ -415,4 +415,270 @@ describe('PrismaStore', () => {
       expect(result).toEqual(mockImages);
     });
   });
+
+  describe('Additional coverage for uncovered lines', () => {
+    // Lines 62-100: Scientist operations
+    it('handles scientist creation error properly', async () => {
+      const error = new Error('Duplicate email');
+      mockPrisma.scientist.create.mockRejectedValue(error);
+      
+      const result = await prismaStore.createScientist('Dr. Dup', 'dup@test.com');
+      
+      expect(result.error).toBe(error);
+    });
+
+    // Lines 121-168: More accession operations
+    it('gets accession ID with full flow', async () => {
+      const mockMapping = {
+        plant_barcode: 'QR123',
+        accession_id: 'acc-1',
+        accession: { id: 'acc-1', name: 'Test Accession' }
+      };
+      mockPrisma.plantAccessionMappings.findFirst.mockResolvedValue(mockMapping);
+
+      const result = await prismaStore.getAccessionsID('QR123', 'exp-1');
+
+      expect(result).toEqual({
+        plant_barcode: 'QR123',
+        accession_id: 'acc-1',
+        accession_name: 'Test Accession'
+      });
+    });
+
+    it('throws when mapping not found', async () => {
+      mockPrisma.plantAccessionMappings.findFirst.mockResolvedValue(null);
+
+      await expect(prismaStore.getAccessionsID('INVALID', 'exp-1'))
+        .rejects.toThrow('Mapping not found for given plant QR code');
+    });
+
+    it('gets accession list for experiment ID', async () => {
+      const mockAccessions = [
+        {
+          id: 'acc-1',
+          name: 'Accession 1',
+          mappings: [
+            { plant_barcode: 'QR1', accession_id: 'acc-1' },
+            { plant_barcode: 'QR2', accession_id: 'acc-1' }
+          ]
+        }
+      ];
+      mockPrisma.accessions.findMany.mockResolvedValue(mockAccessions);
+
+      const result = await prismaStore.getAccessionList('exp-1');
+
+      expect(result).toEqual([
+        { plant_barcode: 'QR1', accession_id: 'acc-1' },
+        { plant_barcode: 'QR2', accession_id: 'acc-1' }
+      ]);
+    });
+
+    it('returns empty array when no experiment ID', async () => {
+      const result = await prismaStore.getAccessionList(null);
+      expect(result).toEqual([]);
+      expect(mockPrisma.accessions.findMany).not.toHaveBeenCalled();
+    });
+
+    it('gets accession list with file ID', async () => {
+      const mockMappings = [
+        { plant_barcode: 'QR1', accession_file_id: 'file-1' }
+      ];
+      mockPrisma.plantAccessionMappings.findMany.mockResolvedValue(mockMappings);
+
+      const result = await prismaStore.getAccessionListwithFileID('file-1');
+
+      expect(result).toEqual(mockMappings);
+    });
+
+    // Lines 239-285: Experiment operations
+    it('attaches accession to experiment', async () => {
+      mockPrisma.experiment.update.mockResolvedValue({
+        id: 'exp-1',
+        accession_id: 'acc-1'
+      });
+
+      const result = await prismaStore.attachAccessionToExperiment('exp-1', 'acc-1');
+
+      expect(result.error).toBeNull();
+    });
+
+    it('handles attachment error', async () => {
+      const error = new Error('Update failed');
+      mockPrisma.experiment.update.mockRejectedValue(error);
+
+      const result = await prismaStore.attachAccessionToExperiment('exp-1', 'acc-1');
+      
+      expect(result.error).toBe(error);
+    });
+
+    it('gets wave numbers for experiment', async () => {
+      const mockScans = [
+        { wave_number: 1 },
+        { wave_number: 2 },
+        { wave_number: 3 }
+      ];
+      mockPrisma.scan.findMany.mockResolvedValue(mockScans);
+
+      const result = await prismaStore.getWaveNumbers('exp-1');
+
+      expect(result).toEqual([1, 2, 3]);
+    });
+
+    // Lines 316-335: Scan filtering
+    it('filters scans for today only', async () => {
+      const today = new Date();
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+
+      const mockScans = [
+        { 
+          id: 'scan1',
+          capture_date: today,
+          deleted: false,
+          phenotyper: { name: 'John' },
+          images: []
+        },
+        { 
+          id: 'scan2',
+          capture_date: yesterday,
+          deleted: false,
+          phenotyper: { name: 'Jane' },
+          images: []
+        }
+      ];
+      mockPrisma.scan.findMany.mockResolvedValue(mockScans);
+
+      const result = await prismaStore.getScans(true);
+
+      expect(result).toHaveLength(1);
+      expect(result[0].id).toBe('scan1');
+    });
+
+    // Lines 343-379: Scan operations
+    it('adds scan with images', async () => {
+      const scan = {
+        metadata: {
+          id: 'scan-1',
+          phenotyper_id: 'pheno-1',
+          experiment_id: 'exp-1',
+          plant_id: 'plant-1',
+          capture_date: '2024-01-01T00:00:00Z',
+          wave_number: 1,
+          plant_age_days: 14,
+          accession_id: 'acc-1',
+          scanner_name: 'Scanner1',
+          path: '/scans/scan-1',
+          exposure_time: 100,
+          gain: 50,
+          brightness: 75,
+          contrast: 50,
+          gamma: 1.0,
+          seconds_per_rot: 10,
+          num_frames: 36
+        },
+        images: ['/path/image1.png', '/path/image2.png']
+      };
+
+      mockPrisma.scan.create.mockResolvedValue({ 
+        id: 'scan-1',
+        images: []
+      });
+
+      await prismaStore.addScan(scan);
+
+      expect(mockPrisma.scan.create).toHaveBeenCalledWith({
+        data: expect.objectContaining({
+          id: 'scan-1',
+          phenotyper_id: 'pheno-1',
+          experiment_id: 'exp-1',
+          plant_id: 'plant-1',
+          images: {
+            create: expect.arrayContaining([
+              expect.objectContaining({
+                path: '/path/image1.png',
+                frame_number: 1,
+                status: 'CAPTURED'
+              })
+            ])
+          }
+        })
+      });
+    });
+
+    it('returns null for missing scan date', async () => {
+      mockPrisma.scan.findFirst.mockResolvedValue(null);
+
+      const result = await prismaStore.getMostRecentScanDate('exp-1', 'plant-1');
+
+      expect(result).toBeNull();
+    });
+
+    // Lines 487-494: Image operations
+    it('updates image metadata', async () => {
+      mockPrisma.image.update.mockResolvedValue({ 
+        id: 'img-1',
+        status: 'UPLOADED' 
+      });
+
+      const result = await prismaStore.updateImageMetadata('img-1', { status: 'UPLOADED' });
+
+      expect(result.error).toBeNull();
+      expect(mockPrisma.image.update).toHaveBeenCalledWith({
+        where: { id: 'img-1' },
+        data: { status: 'UPLOADED' }
+      });
+    });
+
+    it('handles image update error', async () => {
+      const error = new Error('Update failed');
+      mockPrisma.image.update.mockRejectedValue(error);
+
+      const result = await prismaStore.updateImageMetadata('img-1', { status: 'UPLOADED' });
+
+      expect(result.error).toBe(error);
+    });
+
+    // Accession file operations
+    it('gets accession files from database', async () => {
+      const mockAccessionFiles = [
+        {
+          id: 'acc-1',
+          name: 'Accession 1',
+          createdAt: new Date(),
+          experiments: [{ name: 'Exp 1' }]
+        },
+        {
+          id: 'acc-2',
+          name: 'Accession 2',
+          createdAt: new Date(),
+          experiments: []
+        }
+      ];
+      mockPrisma.accessions.findMany.mockResolvedValue(mockAccessionFiles);
+
+      const result = await prismaStore.getAccessionFiles();
+
+      expect(result).toEqual(mockAccessionFiles);
+      expect(mockPrisma.accessions.findMany).toHaveBeenCalledWith({
+        select: {
+          id: true,
+          name: true,
+          createdAt: true,
+          experiments: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      });
+    });
+
+    it('returns empty array when getAccessionFiles fails', async () => {
+      mockPrisma.accessions.findMany.mockRejectedValue(new Error('Database error'));
+
+      const result = await prismaStore.getAccessionFiles();
+
+      expect(result).toEqual([]);
+    });
+  });
 });
