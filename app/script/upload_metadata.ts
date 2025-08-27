@@ -40,7 +40,6 @@ async function getSupabaseClient(config: Awaited<ReturnType<typeof loadConfig>>)
 async function main() {
   const config = await loadConfig();
   process.env.BLOOM_DATABASE_URL = `file:${config.local_db_path}`;
-;
   const prisma = new PrismaClient();
   const supabase = await getSupabaseClient(config);
 
