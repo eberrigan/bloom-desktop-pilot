@@ -187,6 +187,13 @@ export class PrismaStore {
   getAccessionList = async(experimentId: string)=> {
     try{
       console.log("PLANTQRCODE");
+      console.log("getAccessionList called with experimentId:", experimentId);
+      
+      // Return empty array if experimentId is null or undefined
+      if (!experimentId) {
+        console.log("No experimentId provided, returning empty array");
+        return [];
+      }
 
       const accessionsWithMappings = await this.prisma.accessions.findMany({
         where: {
