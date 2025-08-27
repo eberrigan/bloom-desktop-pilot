@@ -63,11 +63,6 @@ type Accessions = {
   name : string
 }
 
-type Accessions = {
-  id : string,
-  name : string
-}
-
 type ExperimentWithScientist = Experiment & {
   scientist: Scientist;
 };
