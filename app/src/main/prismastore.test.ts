@@ -51,17 +51,20 @@ describe('PrismaStore', () => {
       plantAccessionMappings: {
         create: vi.fn(),
         findMany: vi.fn(),
+        findFirst: vi.fn(),
       },
       experiment: {
         findMany: vi.fn(),
         create: vi.fn(),
         findUnique: vi.fn(),
+        update: vi.fn(),
       },
       image: {  // Note: singular 'image', not 'images'
         findMany: vi.fn(),
         create: vi.fn(),
         createMany: vi.fn(),
         findFirst: vi.fn(),
+        update: vi.fn(),
         updateMany: vi.fn(),
         deleteMany: vi.fn(),
       },
@@ -70,6 +73,8 @@ describe('PrismaStore', () => {
         create: vi.fn(),
         update: vi.fn(),
         findMany: vi.fn(),
+        findFirst: vi.fn(),
+        count: vi.fn(),
         upsert: vi.fn(),
         delete: vi.fn(),
       },
@@ -240,9 +245,10 @@ describe('PrismaStore', () => {
         name: 'New Experiment',
         species: 'Tomato',
         scientist_id: 'sci-001',
+        accession_id: 'acc-001',
       });
 
-      const result = await prismaStore.createExperiment('New Experiment', 'Tomato', 'sci-001');
+      const result = await prismaStore.createExperiment('New Experiment', 'Tomato', 'sci-001', 'acc-001');
       
       expect(mockPrisma.experiment.create).toHaveBeenCalledWith({
         data: {
@@ -250,6 +256,7 @@ describe('PrismaStore', () => {
           name: 'New Experiment',
           species: 'Tomato',
           scientist_id: 'sci-001',
+          accession_id: 'acc-001',
         },
       });
       expect(result.error).toBeNull();
@@ -297,17 +304,49 @@ describe('PrismaStore', () => {
       expect(result).toEqual(mockScan);
     });
 
-    it('gets all scans', async () => {
+    it('gets all scans with pagination', async () => {
       const mockScans = [
         { id: 'scan-1', plant_id: 'PLANT-001' },
         { id: 'scan-2', plant_id: 'PLANT-002' },
       ];
       mockPrisma.scan.findMany.mockResolvedValue(mockScans);
+      mockPrisma.scan.count.mockResolvedValue(2);
 
-      const result = await prismaStore.getScans();
+      const result = await prismaStore.getScans(1, 10, false);
       
-      expect(mockPrisma.scan.findMany).toHaveBeenCalled();
-      expect(result).toEqual(mockScans);
+      expect(mockPrisma.scan.findMany).toHaveBeenCalledWith({
+        where: { deleted: false },
+        orderBy: { capture_date: 'desc' },
+        include: { phenotyper: true, images: true },
+        skip: 0,
+        take: 10
+      });
+      expect(mockPrisma.scan.count).toHaveBeenCalledWith({
+        where: { deleted: false }
+      });
+      expect(result).toEqual({ scans: mockScans, totalCount: 2 });
+    });
+
+    it('gets today\'s scans only', async () => {
+      const mockScans = [
+        { id: 'scan-1', plant_id: 'PLANT-001', capture_date: new Date() },
+      ];
+      mockPrisma.scan.findMany.mockResolvedValue(mockScans);
+      mockPrisma.scan.count.mockResolvedValue(1);
+      
+      const result = await prismaStore.getScans(1, 10, true);
+      
+      expect(mockPrisma.scan.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: expect.objectContaining({
+            deleted: false,
+            capture_date: expect.any(Object)
+          }),
+          skip: 0,
+          take: 10
+        })
+      );
+      expect(result).toEqual({ scans: mockScans, totalCount: 1 });
     });
 
     it('deletes a scan and its images - FIXED', async () => {
@@ -409,7 +448,18 @@ describe('PrismaStore', () => {
       
       expect(mockPrisma.image.findMany).toHaveBeenCalledWith({
         where: { status: { not: 'UPLOADED' } },
-        include: { scan: { include: { experiment: true } } },
+        include: {
+          scan: {
+            include: {
+              phenotyper: true,
+              experiment: {
+                include: {
+                  scientist: true,
+                },
+              },
+            },
+          },
+        },
         orderBy: { scan: { capture_date: 'asc' } },
       });
       expect(result).toEqual(mockImages);
@@ -511,18 +561,7 @@ describe('PrismaStore', () => {
       expect(result.error).toBe(error);
     });
 
-    it('gets wave numbers for experiment', async () => {
-      const mockScans = [
-        { wave_number: 1 },
-        { wave_number: 2 },
-        { wave_number: 3 }
-      ];
-      mockPrisma.scan.findMany.mockResolvedValue(mockScans);
-
-      const result = await prismaStore.getWaveNumbers('exp-1');
-
-      expect(result).toEqual([1, 2, 3]);
-    });
+    // Removed test for non-existent getWaveNumbers method
 
     // Lines 316-335: Scan filtering
     it('filters scans for today only', async () => {
@@ -546,11 +585,12 @@ describe('PrismaStore', () => {
           images: []
         }
       ];
-      mockPrisma.scan.findMany.mockResolvedValue(mockScans);
+      mockPrisma.scan.findMany.mockResolvedValue([mockScans[0]]); // Only return today's scan
+      mockPrisma.scan.count.mockResolvedValue(1);
 
-      const result = await prismaStore.getScans(true);
+      const result = await prismaStore.getScans(1, 10, true); // Use correct signature
 
-      expect(result).toHaveLength(1);
+      expect(result.scans).toHaveLength(1);
       expect(result[0].id).toBe('scan1');
     });
 
