@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-=======
-export function FieldInfo({ info }: { info: string }) {
-
->>>>>>> 74158c7 (export fieldinfo)
 
 export default function FieldInfo({ info }: { info: string }) {
     return (
