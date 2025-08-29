@@ -1,0 +1,151 @@
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { cameraFixtures } from '../test/fixtures';
+
+// Setup mocks before any imports that use window.electron
+const mockGetScannerSettings = vi.fn();
+const mockSetScannerSettings = vi.fn();
+
+// Mock window.electron globally before module evaluation
+(globalThis as any).window = {
+  electron: {
+    scanner: {
+      getScannerSettings: mockGetScannerSettings,
+      setScannerSettings: mockSetScannerSettings,
+    },
+  },
+};
+
+// Now import component - it will use the mocked window.electron
+import { CameraSettings } from './CameraSettings';
+
+describe('CameraSettings', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockGetScannerSettings.mockResolvedValue(cameraFixtures.defaultSettings);
+  });
+
+  it('loads settings on mount', async () => {
+    render(<CameraSettings />);
+    
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    
+    await waitFor(() => {
+      expect(mockGetScannerSettings).toHaveBeenCalled();
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+    });
+  });
+
+  it('displays loaded settings', async () => {
+    render(<CameraSettings />);
+    
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('100')).toBeInTheDocument(); // gain
+      expect(screen.getByDisplayValue('10000')).toBeInTheDocument(); // exposure time
+      expect(screen.getByDisplayValue('7')).toBeInTheDocument(); // seconds_per_rot
+      expect(screen.getByDisplayValue('72')).toBeInTheDocument(); // num_frames
+      expect(screen.getByDisplayValue('1')).toBeInTheDocument(); // gamma
+    });
+  });
+
+  it('marks form as dirty when settings change', async () => {
+    render(<CameraSettings />);
+    
+    await waitFor(() => {
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+    });
+
+    const saveButton = screen.getByText('Save');
+    expect(saveButton).toBeDisabled();
+
+    const gainInput = screen.getByDisplayValue('100');
+    fireEvent.change(gainInput, { target: { value: '150' } });
+
+    expect(saveButton).not.toBeDisabled();
+  });
+
+  it('resets settings to original values', async () => {
+    render(<CameraSettings />);
+    
+    await waitFor(() => {
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+    });
+
+    const gainInput = screen.getByDisplayValue('100');
+    fireEvent.change(gainInput, { target: { value: '150' } });
+    
+    expect(gainInput).toHaveValue(150);
+
+    const resetButton = screen.getByText('Reset');
+    fireEvent.click(resetButton);
+
+    await waitFor(() => {
+      expect(gainInput).toHaveValue(100);
+    });
+  });
+
+  it('saves new settings', async () => {
+    render(<CameraSettings />);
+    
+    await waitFor(() => {
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+    });
+
+    const gainInput = screen.getByDisplayValue('100');
+    fireEvent.change(gainInput, { target: { value: '150' } });
+
+    const saveButton = screen.getByText('Save');
+    fireEvent.click(saveButton);
+
+    expect(mockSetScannerSettings).toHaveBeenCalledWith({
+      ...cameraFixtures.defaultSettings,
+      gain: 150,
+    });
+    
+    // After save, button should be disabled again
+    await waitFor(() => {
+      expect(saveButton).toBeDisabled();
+    });
+  });
+
+  it('disables save and reset buttons when not dirty', async () => {
+    render(<CameraSettings />);
+    
+    await waitFor(() => {
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+    });
+    
+    const saveButton = screen.getByText('Save');
+    const resetButton = screen.getByText('Reset');
+    
+    expect(saveButton).toBeDisabled();
+    expect(resetButton).toBeDisabled();
+  });
+
+  it('handles null settings gracefully', async () => {
+    mockGetScannerSettings.mockResolvedValue(null);
+    
+    render(<CameraSettings />);
+    
+    await waitFor(() => {
+      expect(mockGetScannerSettings).toHaveBeenCalled();
+    });
+    
+    // Should still show loading since settings are null
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+  });
+
+  it('handles different camera configurations', async () => {
+    mockGetScannerSettings.mockResolvedValue(cameraFixtures.minimalSettings);
+    
+    render(<CameraSettings />);
+    
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('0')).toBeInTheDocument(); // gain
+      expect(screen.getByDisplayValue('1000')).toBeInTheDocument(); // exposure time
+      expect(screen.getByDisplayValue('4')).toBeInTheDocument(); // seconds_per_rot
+      expect(screen.getByDisplayValue('36')).toBeInTheDocument(); // num_frames
+      expect(screen.getByDisplayValue('0.5')).toBeInTheDocument(); // gamma
+    });
+  });
+});

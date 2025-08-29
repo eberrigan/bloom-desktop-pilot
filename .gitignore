@@ -50,3 +50,5 @@ Desktop.ini             # Windows folder settings
 # /path/to/file.txt      # Exclude a specific file
 # /some_temp_directory/  # Exclude a specific directory
 /app/script/upload_metadata.js
+/.serena
+/.claude

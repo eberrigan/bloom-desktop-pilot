@@ -17,6 +17,7 @@ export default function FieldInfo({ info }: { info: string }) {
           strokeWidth={1.5}
           stroke="currentColor"
           className="w-6 h-6 inline-block z-0"
+          data-testid="info-icon"
         >
         
           <path
