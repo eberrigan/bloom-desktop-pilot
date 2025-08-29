@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import userEvent from '@testing-library/user-event';
-import { FieldInfo } from './FieldInfo';
+import FieldInfo from './FieldInfo';
 
 describe('FieldInfo', () => {
   it('renders the info icon', () => {

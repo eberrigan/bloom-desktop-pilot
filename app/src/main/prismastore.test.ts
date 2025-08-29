@@ -479,23 +479,31 @@ describe('PrismaStore', () => {
 
     // Lines 121-168: More accession operations
     it('gets accession ID with full flow', async () => {
+      // First mock the experiment lookup
+      mockPrisma.experiment.findUnique.mockResolvedValue({
+        id: 'exp-1',
+        accession_id: 'acc-file-1'
+      });
+      
       const mockMapping = {
         plant_barcode: 'QR123',
         accession_id: 'acc-1',
-        accession: { id: 'acc-1', name: 'Test Accession' }
+        accession_file_id: 'acc-file-1'
       };
       mockPrisma.plantAccessionMappings.findFirst.mockResolvedValue(mockMapping);
 
       const result = await prismaStore.getAccessionsID('QR123', 'exp-1');
 
-      expect(result).toEqual({
-        plant_barcode: 'QR123',
-        accession_id: 'acc-1',
-        accession_name: 'Test Accession'
-      });
+      expect(result).toEqual(mockMapping);
     });
 
     it('throws when mapping not found', async () => {
+      // First mock the experiment lookup
+      mockPrisma.experiment.findUnique.mockResolvedValue({
+        id: 'exp-1',
+        accession_id: 'acc-file-1'
+      });
+      
       mockPrisma.plantAccessionMappings.findFirst.mockResolvedValue(null);
 
       await expect(prismaStore.getAccessionsID('INVALID', 'exp-1'))
@@ -591,7 +599,7 @@ describe('PrismaStore', () => {
       const result = await prismaStore.getScans(1, 10, true); // Use correct signature
 
       expect(result.scans).toHaveLength(1);
-      expect(result[0].id).toBe('scan1');
+      expect(result.scans[0].id).toBe('scan1');
     });
 
     // Lines 343-379: Scan operations
@@ -646,7 +654,7 @@ describe('PrismaStore', () => {
     });
 
     it('returns null for missing scan date', async () => {
-      mockPrisma.scan.findFirst.mockResolvedValue(null);
+      mockPrisma.scan.findMany.mockResolvedValue([]);
 
       const result = await prismaStore.getMostRecentScanDate('exp-1', 'plant-1');
 
