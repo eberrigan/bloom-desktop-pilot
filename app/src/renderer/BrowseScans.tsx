@@ -26,13 +26,6 @@ export function BrowseScans({
   const [totalScans, setTotalScans] = useState(0);
   const pageSize = 10;
 
-  // const fetchScans = useCallback(() => {
-  //   getScans({ page: pageNumber, pageSize, showTodayOnly })
-  //     .then((response: ScanWithPhenotyper[]) => {
-  //       setScans(response);
-  //     });
-  // }, []);
-
   const fetchScans = useCallback(() => {
     getScans({ page: pageNumber, pageSize, showTodayOnly })
       .then(({ scans, totalCount }) => {
@@ -49,8 +42,6 @@ export function BrowseScans({
     return ipcRenderer.on("electric:scans-updated", fetchScans);
   }, []);
 
-  // const numPages = Math.ceil(scans.length / pageSize);
-
   const numPages = Math.ceil(totalScans/pageSize);
 
   return (
@@ -59,12 +50,9 @@ export function BrowseScans({
       <div className="bg-stone-100 border-b flex flex-row pb-1 text-sm">
         <div className="pr-4">
           <button
-            // onClick={() => {
-            //   setPageNumber(Math.max(pageNumber - 1, 1));
-            // }}
+            data-testid="leftbutton"
             onClick={() => {
               const newPage = Math.max(pageNumber - 1, 1);
-              // console.log("Going to previous page:", newPage);
               setPageNumber(newPage);
             }}
             disabled={pageNumber === 1}
@@ -74,11 +62,8 @@ export function BrowseScans({
         </div>
         <div className="pr-4">
           <button
-            // onClick={() => {
-            //   setPageNumber(Math.min(pageNumber + 1, numPages));
-            // }}
+            data-testid="rightbutton"
             onClick={() => {
-              // console.log("Going to next page:", Math.min(pageNumber + 1, numPages));
               setPageNumber(Math.min(pageNumber + 1, numPages))}
             }
             disabled={pageNumber === numPages}
@@ -96,17 +81,6 @@ export function BrowseScans({
               const parsed = parseInt(e.target.value) || 1;
               const safePage = Math.min(Math.max(parsed, 1), numPages);
               setPageNumber(safePage)
-
-              // if (e.target.value === "") {
-              //   setPageNumber(1);
-              // } else {
-              //   const parsedPageNumber = parseInt(e.target.value) || 1;
-              //   const clippedPageNumber = Math.max(
-              //     1,
-              //     Math.min(parsedPageNumber, numPages)
-              //   );
-              //   setPageNumber(clippedPageNumber);
-              // }
             }}
           />{" "}
           of {numPages} ({totalScans} scans)
@@ -147,13 +121,6 @@ export function BrowseScans({
             </tr>
           </thead>
           <tbody>
-            {/* {scans?.length == 0 && 
-                <tr>
-              <td colSpan={8} className="text-center text-black-600 py-4">
-                No Scans
-              </td>
-            </tr>
-            } */}
             { scans?.length > 0 && scans.map((scan) => (
 
                 <tr key={scan.id} className="odd:bg-stone-200">
@@ -199,6 +166,7 @@ export function BrowseScans({
                   {showTodayOnly && (
                     <td>
                       <button
+                        data-testid = "delete-on-capture"
                         onClick={() => {
                           console.log(`Deleting scan ${scan.id}`);
                           deleteScan(scan.id).then(() => {
@@ -302,28 +270,7 @@ function ProgressBar({ value, max }: { value: number; max: number }) {
     <div>
       {value == 0 ? (
         <div className="text-xs">Not uploaded</div>
-      ) : // <div className="text-amber-700 text-center">
-      //   <svg
-      //     xmlns="http://www.w3.org/2000/svg"
-      //     fill="none"
-      //     viewBox="0 0 24 24"
-      //     strokeWidth={1.5}
-      //     stroke="currentColor"
-      //     className="inline w-6 h-6"
-      //   >
-      //     <path
-      //       strokeLinecap="round"
-      //       strokeLinejoin="round"
-      //       d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15Z"
-      //     />
-      //     {/* <path strokeLinecap="round" strokeLinejoin="round" d="M4 4l18 18" /> */}
-      //     <path
-      //       strokeLinecap="round"
-      //       strokeLinejoin="round"
-      //       d="M10 11v4.5 M13 11v4.5"
-      //     />
-      //   </svg>
-      // </div>
+      ) : 
       value < max ? (
         <div className="flex flex-col">
           <div className="text-lime-700 text-center">
