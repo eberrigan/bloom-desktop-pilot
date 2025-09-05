@@ -1,6 +1,19 @@
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
 import { afterEach, vi } from 'vitest';
+
+afterEach(() => cleanup());
+
+// Clipboard polyfill for jsdom
+if (!(navigator as any).clipboard) {
+  Object.defineProperty(navigator, 'clipboard', {
+    value: {
+      writeText: vi.fn().mockResolvedValue(undefined),
+      readText: vi.fn().mockResolvedValue(''),
+    },
+    configurable: true,
+  });
+}
 
 // Ensure window exists with proper properties for React
 if (typeof window === 'undefined') {

@@ -30,10 +30,7 @@ const species = [
   "Maize",
   "Pennycress",
   "Rice",
-  "Soybean",
   "Sorghum",
-  "Pennycress",
-  "Canola",
   "Soybean",
   "Spinach",
   "Sugar_Beet",
@@ -64,6 +61,7 @@ export function Experiments() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [createExperimentError, setCreateExperimentError] = useState<string | null>(null);
   // const [experimentWaves, setExperimentWaves] = useState<Record<string, WaveNumber[]>>({});
 
 
@@ -72,7 +70,7 @@ export function Experiments() {
       .then((response) => {
         const experiments = response as ExperimentWithScientist[];
         setExperiments(experiments);
-        setExistingExperiment(experiments[0]?.id);
+        // setExistingExperiment(experiments[0]?.id);
       })
       .catch((err) => {
         console.error(err);
@@ -96,7 +94,7 @@ export function Experiments() {
     .then((response) => {
       const accessionFiles = response as Accessions[];
       setAccessionList(accessionFiles);
-      setNewExperimentAccession(accessionFiles[0].id);
+      // setNewExperimentAccession(accessionFiles[0].id);
     })
     .catch((err) => {
       console.error(err);
@@ -135,6 +133,7 @@ export function Experiments() {
       <div className="border rounded text-lg p-2 w-96 mb-8" >
         <div className="text-xs font-bold">Name</div>
         <input
+          data-testid="experiment-name-input"
           type="text"
           value={newExperimentName}
           className="p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none w-[200px] border border-gray-300"
@@ -143,6 +142,7 @@ export function Experiments() {
 
         <div className="text-xs font-bold mt-2">Species</div>
         <select
+          data-testid="experiment-species-select"
           className="p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none w-[200px] border border-gray-300"
           value={newExperimentSpecies}
           onChange={(e) => setNewExperimentSpecies(e.target.value)}
@@ -156,6 +156,7 @@ export function Experiments() {
 
         <div className="text-xs font-bold mt-2">Scientist</div>
         <select
+          data-testid="experiment-scientist-select"
           className="p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none w-[200px] border border-gray-300"
           value={newExperimentScientistId}
           onChange={(e) => setNewExperimentScientistId(e.target.value)}
@@ -169,6 +170,7 @@ export function Experiments() {
 
         <div className="text-xs font-bold mt-2">Accession File</div>
         <select
+          data-testid="experiment-accession-select"
           className="p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none w-[200px] border border-gray-300"
           value={newExperimentAccession}
           onChange={(e) => {
@@ -200,6 +202,7 @@ export function Experiments() {
         
         <div className="flex justify-center">
         <button
+          data-testid="create-experiment-button"
           className={
             "block p-2 rounded-md bg-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 mt-4 focus:outline-none border border-gray-300"
           }
@@ -207,33 +210,47 @@ export function Experiments() {
             console.log(
               `Creating experiment: ${newExperimentName}, ${newExperimentSpecies}, ${newExperimentScientistId}, ${newExperimentAccession}`
             );
+            if (!newExperimentName || !newExperimentScientistId || !newExperimentAccession) {
+              setCreateExperimentError("Please fill in all required fields.");
+              console.error("Missing required fields while creating experiment");
+              return;
+            }
+
             createExperiment(
               newExperimentName,
               newExperimentSpecies,
               newExperimentScientistId,
               newExperimentAccession,
             ).then((result) => {
-                result.error && console.error(result.error);
+                if (result.error) {
+                console.error(result.error);
+                setCreateExperimentError("Failed to create experiment.");
+                return;
+                }
                 return getExperiments();
               })
               .then((response) => {
                 const experiments = response as ExperimentWithScientist[];
                 setExperiments(experiments);
+                setCreateExperimentError("Successfully created experiment.");
               })
               .catch((err) => {
                 console.error(err);
+                setCreateExperimentError("Unexpected error while creating experiment.");
               });
           }}
         >
           Create
         </button>
         </div>
+        <div className="mt-2 text-sm text-red-600 text-center" data-testid="experiment-error-msg">{createExperimentError}</div>
       </div>
 
       <div className="text-xs font-bold">Attach Accession File to Existing Experiment</div>
       <div className="border rounded text-lg p-2 w-96 mb-8" >
         <div className="text-xs font-bold mt-2">Select Experiment:</div>
         <select
+          data-testid="select-existing-experiment"
           className="p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none w-[200px] border border-gray-300"
           value={existingExperiment}
           onChange={(e) => {
@@ -249,6 +266,7 @@ export function Experiments() {
         </select>
         <div className="text-xs font-bold mt-2">Select Accession File:</div>
         <select
+          data-testid="select-accession-for-existing-experiment"
           className="p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none w-[200px] border border-gray-300"
           value={newExperimentAccession}
           onChange={(e) => {
@@ -271,6 +289,12 @@ export function Experiments() {
             console.log(
               `Attaching accession: ${newExperimentAccession} to experiment: ${existingExperiment}`
             );
+
+            if (!existingExperiment || !newExperimentAccession) {
+              setErrorMessage("Please make selection for experiment and an accession file.");
+              console.error("Missing required fields while attaching accession");
+              return;
+            }
 
             setLoading(true);
             setErrorMessage(null);
@@ -295,90 +319,19 @@ export function Experiments() {
           >
           Attach Accession
         </button>
-
+        </div>
         <div className="mt-2">
           {loading && (
             <p className="text-sm text-gray-500 animate-pulse">Attaching accession...</p>
           )}
           {errorMessage && (
-            <p className="text-sm text-red-600">{errorMessage}</p>
+            <p className="text-sm text-red-600 text-center">{errorMessage}</p>
           )}
           {successMessage && (
-            <p className="text-sm text-green-600">{successMessage}</p>
+            <p className="text-sm text-green-600 text-center">{successMessage}</p>
           )}
         </div>
-        </div>
       </div>
-      {/* <div className="text-xs font-bold">Add New Wave (Existing Experiment)</div> */}
-      {/* <div className="border rounded text-lg p-2 w-96 mb-8" >
-      <div className="text-xs font-bold mt-2">Experiment</div>
-        <select
-          className="p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none w-full border border-gray-300"
-          value={selectedExperiment || ""}
-          onChange={(e) => setSelectedExperiment(e.target.value)}
-        >
-          {experiments &&
-          experiments.map((experiment) => (
-            <option key={experiment.id} value={experiment.id}>
-            {experiment.species} - {experiment.name} (
-             <i>{experiment.scientist?.name || "unknown"}</i>)
-            </option>
-          ))} 
-        </select>
-        <div className="text-xs font-bold mt-2">Wave Number</div>
-        <input
-          type="number"
-          className={
-            "p-2 rounded-md border bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none" +
-            (waveNumber === null
-              ? " border-amber-300"
-              : " border-gray-300")
-          }
-          value={waveNumber}
-          onChange={(e) => {
-            const value =
-              e.target.value === "" ? null : parseInt(e.target.value);
-            setWaveNumber(value);
-          }}
-          min={0}
-        />
-        <button
-          className={
-            "block p-2 rounded-md bg-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 mt-4 focus:outline-none border border-gray-300"
-          }
-          onClick={() => {
-            // console.log(
-            //   `Creating Wave : ${newExperimentName}, ${newExperimentSpecies}, ${newExperimentScientistId}, ${waveNumber}`
-            // );
-
-            console.log("CREATING WAVE", waveNumber);
-
-            const experiment = experiments.find((exp) => exp.id === selectedExperiment);
-            console.log("SELECTED EXPERIMENT", experiment);
-
-            if (!experiment) {
-              console.error("Experiment not found");
-              //TODO : Wave not created
-              return;
-            }
-            
-            createWaveNumber(
-              waveNumber,
-              Number(waveNumber),
-              null,
-            )
-            .then((result) => {
-              console.log("Wave created successfully", result);
-            })
-            .catch((err) => {
-              console.error(err);
-            });                 
-          }}
-        >
-          Create Wave
-        </button>
-      </div> */}
-
     </div>
   );
 }
