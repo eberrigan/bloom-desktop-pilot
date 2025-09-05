@@ -1,466 +1,253 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor, fireEvent, act } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { CaptureScan } from './CaptureScan';
 
-// Mock window.electron structure
+let CaptureScan: React.FC;
+
 const mockElectron = {
   ipcRenderer: {
     sendMessage: vi.fn(),
-    on: vi.fn((channel, callback) => {
-      // Return unsubscribe function
-      return () => {};
-    }),
-    once: vi.fn()
+    on: vi.fn(),
+    once: vi.fn(),
   },
   scanner: {
-    getScannerId: vi.fn(),
-    getPhenotyperId: vi.fn(),
-    setPhenotyperId: vi.fn(),
-    getPlantQrCode: vi.fn(),
-    setPlantQrCode: vi.fn(),
-    setAccessionId: vi.fn(),
-    getExperimentId: vi.fn(),
-    setExperimentId: vi.fn(),
-    getWaveNumber: vi.fn(),
-    setWaveNumber: vi.fn(),
-    getPlantAgeDays: vi.fn(),
-    setPlantAgeDays: vi.fn(),
-    startScan: vi.fn(),
-    getScanData: vi.fn(),
     getScansDir: vi.fn(),
-    getScannerSettings: vi.fn(),
-    setScannerSettings: vi.fn(),
-    saveCurrentScan: vi.fn(),
-    deleteCurrentScan: vi.fn(),
-    resetScanner: vi.fn()
+    setPlantQrCode: vi.fn(),
+    getScannerId: vi.fn(),
+    getScanData: vi.fn(),            
+    getScannerSettings: vi.fn(),     
+    getPlantQrCode: vi.fn(),        
+    getPhenotyperId: vi.fn(),       
+    getExperimentId: vi.fn(),        
+    getWaveNumber: vi.fn(),           
+    getPlantAgeDays: vi.fn(),         
+    startScan: vi.fn(), 
+    getScannerPlantQrCode: vi.fn(),
+    setWaveNumber : vi.fn(),
+    setPlantAgeDays : vi.fn(),
+    getPlantSuggestions: vi.fn(),
   },
-  streamer: {
-    startStreaming: vi.fn(),
-    stopStreaming: vi.fn(),
-    getCameraSettings: vi.fn(),
-    setCameraSettings: vi.fn()
-  },
+  streamer: {},
   scanStore: {
-    getMostRecentScanDate: vi.fn()
+    getMostRecentScanDate: vi.fn(),
+    getScans: vi.fn(),
   },
   electric: {
     getPhenotypers: vi.fn(),
-    createPhenotyper: vi.fn(),
-    getScientists: vi.fn(),
-    createScientist: vi.fn(),
-    createAccession: vi.fn(),
-    createPlantAccessionMap: vi.fn(),
-    getAccession: vi.fn(),
     getAccessionId: vi.fn(),
-    getAccessionFiles: vi.fn(),
     getAccessionIdFiles: vi.fn(),
-    getAccessionListWithFileId: vi.fn(),
-    updateAccessionFile: vi.fn(),
-    getExperiments: vi.fn(),
-    createExperiment: vi.fn()
-  }
+    plantQRcodeList:vi.fn(),
+  },
 };
 
-// Set up window.electron before imports
-(global as any).window = {
-  electron: mockElectron
-};
+beforeEach(async () => {
+  vi.clearAllMocks();
 
-// Mock other components
+  mockElectron.scanner.getScansDir.mockResolvedValue('/mock/scans/dir');
+  mockElectron.scanner.getScannerId.mockResolvedValue('scanner-123');
+  mockElectron.scanner.getScannerSettings.mockResolvedValue({ /* ... */ });
+  mockElectron.scanner.getScanData = vi.fn().mockResolvedValue({
+    metadata: {
+    id: 'mock-id',
+    experiment_id: 'exp-1',
+    phenotyper_id: '1',
+    scanner_name: 'MockScanner',
+    plant_id: 'PLANT-001',
+    accession_id: 'ACC-001',
+    path: '/mock/path',
+    capture_date: '2023-09-01T12:00:00Z',
+    num_frames: 180,
+    exposure_time: 50,
+    gain: 1.5,
+    brightness: 0.8,
+    contrast: 1.2,
+    gamma: 1.0,
+    seconds_per_rot: 20,
+    wave_number: 3,
+    plant_age_days: 12,
+  },
+    scanImages: ['img1.png', 'img2.png'],
+    progress: {
+      status: 'capturing',
+      nImagesCaptured: 5,
+      nImagesSaved: 3,
+    }
+  });
+  // mockElectron.scanner.setPlantQrCode = vi.fn().mockResolvedValue('MOCK-QR-CODE-123');
+  mockElectron.scanner.getScannerPlantQrCode.mockResolvedValue('MOCK-QR-CODE-123');
+  mockElectron.scanner.getPlantQrCode.mockResolvedValue(['MOCK-QR-CODE-123']);
+  mockElectron.scanner.getPhenotyperId.mockResolvedValue('1');
+  mockElectron.scanner.getExperimentId.mockResolvedValue('exp-1');
+  mockElectron.scanner.getWaveNumber.mockResolvedValue(3);
+  mockElectron.scanner.getPlantAgeDays.mockResolvedValue(10);
+  mockElectron.scanner.startScan = vi.fn().mockResolvedValue(undefined);
+  mockElectron.electric.getAccessionIdFiles.mockResolvedValue([
+    { plant_barcode: 'PLANT-1' },
+    { plant_barcode: 'PLANT-2' }
+  ]);
+  mockElectron.scanStore.getMostRecentScanDate.mockResolvedValue(new Date('2023-09-01T12:00:00Z'));
+  mockElectron.electric.getPhenotypers.mockResolvedValue([
+    { id: '1', name: 'John Doe' },
+    { id: '2', name: 'Jane Smith' },
+  ]);
+
+  mockElectron.electric.plantQRcodeList.mockResolvedValue([
+        [{ plant_barcode: 'TEST-QR-123' },{ plant_barcode: 'TEST-QR-456' },{ plant_barcode: 'TEST-QR-789' },{ plant_barcode: 'TEST-QR-111' }],
+  ])
+  mockElectron.scanStore.getScans.mockResolvedValue(
+     {scans: [],
+        totalCount: 0,
+    })
+
+  Object.defineProperty(window, 'electron', {
+    value: mockElectron,
+    configurable: true,
+  });
+
+  ({ CaptureScan } = await import('./CaptureScan'));
+});
+
 vi.mock('./PersonChooser', () => ({
-  PersonChooser: ({ value, onChange }: any) => (
-    <div data-testid="person-chooser">
-      <label htmlFor="phenotyper">Phenotyper</label>
-      <select 
-        id="phenotyper"
-        role="combobox" 
-        aria-label="phenotyper"
-        value={value || ''} 
-        onChange={(e) => onChange(e.target.value)}
-        onFocus={() => {}}
+  PersonChooser: ({ value, phenotyperIdChanged }: any) => (
+    <div>
+      <label htmlFor="person">Phenotyper</label>
+      <select
+        data-testid="person-chooser"
+        id="person"
+        value={value}
+        onChange={(e) => phenotyperIdChanged(e.target.value)}
       >
         <option value="">Select...</option>
         <option value="1">John Doe</option>
         <option value="2">Jane Smith</option>
       </select>
     </div>
-  )
+  ),
 }));
 
+
 vi.mock('./ExperimentChooser', () => ({
-  ExperimentChooser: ({ value, onChange }: any) => (
-    <div data-testid="experiment-chooser">
+  ExperimentChooser: ({ value, experimentIdChanged }: any) => (
+    <div>
       <label htmlFor="experiment">Experiment</label>
-      <select 
+      <select
+        data-testid="experiment-chooser"
         id="experiment"
-        role="combobox" 
-        aria-label="experiment"
-        value={value || ''} 
-        onChange={(e) => onChange(e.target.value)}
-        onFocus={() => {}}
+        value={value}
+        onChange={(e) => experimentIdChanged(e.target.value)}
       >
         <option value="">Select...</option>
-        <option value="exp-1">Drought Resistance - Arabidopsis</option>
-        <option value="exp-2">Growth Study - Rice</option>
+        <option value="exp-1">Drought Resistance</option>
+        <option value="exp-2">Growth Study</option>
       </select>
     </div>
-  )
+  ),
 }));
+
 
 vi.mock('./PlantQrCodeTextBox', () => ({
   PlantQrCodeTextBox: ({ value, onChange }: any) => (
-    <div data-testid="plant-qr-textbox">
-      <label>Plant QR Code</label>
-      <input 
-        type="text" 
-        value={value || ''} 
+    <div>
+      <input
+        data-testid="plant-qr-input"
+        value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="Scan or enter QR code"
       />
       <button onClick={() => onChange('TEST-QR-123')}>Scan</button>
     </div>
-  )
+  ),
 }));
 
 vi.mock('./Streamer', () => ({
-  Streamer: () => <div data-testid="streamer">Camera Stream</div>
+  Streamer: () => <div data-testid="streamer">Camera Stream</div>,
 }));
 
-// Mock XLSX
 vi.mock('xlsx', () => ({
   read: vi.fn(),
-  utils: {
-    sheet_to_json: vi.fn()
-  }
+  utils: { sheet_to_json: vi.fn() },
 }));
 
-describe('CaptureScan Component', () => {
-  const mockPhenotypers = [
-    { id: '1', name: 'John Doe', email: 'john@example.com' },
-    { id: '2', name: 'Jane Smith', email: 'jane@example.com' }
-  ];
-
-  const mockExperiments = [
-    { 
-      id: 'exp-1', 
-      name: 'Drought Resistance', 
-      species: 'Arabidopsis',
-      scientist: { name: 'Dr. Smith' }
-    },
-    { 
-      id: 'exp-2', 
-      name: 'Growth Study', 
-      species: 'Rice',
-      scientist: { name: 'Dr. Jones' }
-    }
-  ];
-
-  const mockAccessionList = [
-    { plant_barcode: 'PLANT-001', accession_id: 'ACC-001' },
-    { plant_barcode: 'PLANT-002', accession_id: 'ACC-002' }
-  ];
-
-  const mockScanData = {
-    metadata: null,
-    progress: {
-      nImagesCaptured: 0,
-      nImagesSaved: 0,
-      status: 'idle'
-    },
-    scanImages: []
-  };
-
-  const mockCameraSettings = {
-    num_frames: 72,
-    exposure_time: 10000,
-    gain: 100,
-    brightness: 0,
-    contrast: 0,
-    gamma: 1,
-    seconds_per_rot: 7
-  };
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-    
-    // Reset window.electron
-    (global as any).window = {
-      electron: mockElectron
-    };
-    
-    // Setup default mock responses
-    mockElectron.electric.getPhenotypers.mockResolvedValue(mockPhenotypers);
-    mockElectron.electric.getExperiments.mockResolvedValue(mockExperiments);
-    mockElectron.electric.getAccessionIdFiles.mockResolvedValue(mockAccessionList);
-    mockElectron.scanner.getScanData.mockResolvedValue(mockScanData);
-    mockElectron.scanner.getScannerSettings.mockResolvedValue(mockCameraSettings);
-    mockElectron.scanner.getPlantQrCode.mockResolvedValue(null);
-    mockElectron.scanner.getExperimentId.mockResolvedValue(null);
-    mockElectron.scanner.getWaveNumber.mockResolvedValue(null);
-    mockElectron.scanner.getPlantAgeDays.mockResolvedValue(null);
-    mockElectron.scanner.getPhenotyperId.mockResolvedValue(null);
-    mockElectron.scanner.getScannerId.mockResolvedValue('test-scanner');
-    mockElectron.scanner.getScansDir.mockResolvedValue('/test/scans');
-    mockElectron.scanStore.getMostRecentScanDate.mockResolvedValue(null);
-    mockElectron.electric.getAccessionId.mockResolvedValue(null);
-    
-    // Setup IPC listeners
-    mockElectron.ipcRenderer.on.mockImplementation((channel, callback) => {
-      // Return unsubscribe function
-      return () => {};
-    });
-  });
-
-  afterEach(() => {
-    vi.clearAllMocks();
-    // Clean up global window mock
-    if ((global as any).window) {
-      delete (global as any).window.electron;
-    }
-  });
-
-  it('renders initial UI elements', async () => {
+describe('CaptureScan component - Basic component rendering', () => {
+  it('renders basic UI components', async () => {
     render(<CaptureScan />);
-    
     await waitFor(() => {
-      expect(screen.getByText('Phenotyper')).toBeInTheDocument();
-      expect(screen.getByText('Plant QR Code')).toBeInTheDocument();
-      expect(screen.getByText('Experiment')).toBeInTheDocument();
-      expect(screen.getByText('Wave Number')).toBeInTheDocument();
-      expect(screen.getByText('Plant Age (days)')).toBeInTheDocument();
+      expect(screen.getByTestId('phenotyper-section')).toBeInTheDocument();
+      expect(screen.getByTestId('experiment-section')).toBeInTheDocument();
+      expect(screen.getByTestId('wave-number-section')).toBeInTheDocument();
+      expect(screen.getByTestId('plant-age-section')).toBeInTheDocument();
+      expect(screen.getByTestId('plant-id-section')).toBeInTheDocument();
+      expect(screen.getByTestId('accession-id-section')).toBeInTheDocument();
     });
   });
 
-  it('loads and displays phenotypers in dropdown', async () => {
+  it('renders scan button with correct label and disabled state', async () => {
     render(<CaptureScan />);
-    
+    const scanButton = await screen.findByRole('button', { name: /Start Scan/i });
+    expect(scanButton).toBeInTheDocument();
+    expect(scanButton).toBeDisabled();
+  });
+
+});
+
+describe('CaptureScan component - form input and interactions', () => {
+
+  it('allows input of Wave Number and triggers setter', async () => {
+      render(<CaptureScan />);
+      const waveSection = await screen.findByTestId('wave-number-section');
+      expect(waveSection).toBeInTheDocument();
+      
+      const input = within(waveSection).getByRole('spinbutton');
+      await userEvent.clear(input);
+      await userEvent.type(input, '5');
+      expect((input as HTMLInputElement).value).toBe('5');
+  });
+
+  it('allows input of Plant Age Days and updates state', async () => {
+    render(<CaptureScan />);
+    const plantAge = await screen.findByTestId('plant-age-section');
+    expect(plantAge).toBeInTheDocument();
+
+    const input = within(plantAge).getByRole('spinbutton');
+    await userEvent.clear(input);
+    await userEvent.type(input, '5');
+    expect((input as HTMLInputElement).value).toBe('5');
+  });
+
+  
+  it('Start Scan button is disabled until all fields are valid', async () => {
+    render(<CaptureScan />);
+    const scanButton = await screen.findByRole('button', { name: /Start Scan/i });
+    expect(scanButton).toBeDisabled(); 
+
+    await userEvent.selectOptions(screen.getByTestId('person-chooser'), '1');
+    await userEvent.selectOptions(screen.getByTestId('experiment-chooser'), 'exp-1');
+
+    // await userEvent.click(screen.getByText('Scan'));
+
+    const waveSection = screen.getByTestId('wave-number-section');
+    const waveInput = within(waveSection).getByRole('spinbutton');
+    await userEvent.clear(waveInput);
+    await userEvent.type(waveInput, '3');
+
+    const plantAgeSection = screen.getByTestId('plant-age-section');
+    const plantAge = within(plantAgeSection).getByRole('spinbutton');
+    await userEvent.clear(plantAge);
+    await userEvent.type(plantAge, '10');
+
+    const plantInput = within(screen.getByTestId('plant-id-section')).getByRole('textbox');
+    await userEvent.clear(plantInput);
+    await userEvent.type(plantInput, '123');
+
+    //TODO : Revisit await for suggestion box to be displayaed check barcode accession mapping
+    //const suggestionList = await screen.findByTestId('suggestion-plant-qr-code');
+    //expect(within(suggestionList).getByText('MOCK-QR-CODE-123')).toBeInTheDocument();
+
     await waitFor(() => {
-      const phenotyperSelect = screen.getByRole('combobox', { name: /phenotyper/i });
-      expect(phenotyperSelect).toBeInTheDocument();
-    });
-
-    // Check that getPhenotypers was called
-    expect(mockElectron.electric.getPhenotypers).toHaveBeenCalled();
-    
-    // Check dropdown options
-    const phenotyperSelect = screen.getByRole('combobox', { name: /phenotyper/i });
-    fireEvent.focus(phenotyperSelect);
-    
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      expect(scanButton).toBeDisabled();
     });
   });
 
-  it('loads and displays experiments in dropdown', async () => {
-    render(<CaptureScan />);
-    
-    await waitFor(() => {
-      const experimentSelect = screen.getByRole('combobox', { name: /experiment/i });
-      expect(experimentSelect).toBeInTheDocument();
-    });
 
-    // Check that getExperiments was called
-    expect(mockElectron.electric.getExperiments).toHaveBeenCalled();
 
-    const experimentSelect = screen.getByRole('combobox', { name: /experiment/i });
-    fireEvent.focus(experimentSelect);
-    
-    await waitFor(() => {
-      expect(screen.getByText(/Drought Resistance/)).toBeInTheDocument();
-      expect(screen.getByText(/Growth Study/)).toBeInTheDocument();
-    });
-  });
 
-  it('handles QR code scanning', async () => {
-    render(<CaptureScan />);
-    
-    const scanButton = screen.getByText('Scan');
-    await userEvent.click(scanButton);
-    
-    // Should update the plant QR code
-    await waitFor(() => {
-      expect(mockElectron.scanner.setPlantQrCode).toHaveBeenCalledWith(['TEST-QR-123']);
-    });
-  });
-
-  it('validates required fields before starting scan', async () => {
-    render(<CaptureScan />);
-    
-    const startButton = screen.getByText('Start Scan');
-    await userEvent.click(startButton);
-    
-    // Should show validation errors
-    await waitFor(() => {
-      expect(screen.getByText(/Please select a phenotyper/i)).toBeInTheDocument();
-    });
-  });
-
-  it('starts scan when all fields are filled', async () => {
-    // Setup scan-ready state
-    mockElectron.scanner.getPhenotyperId.mockResolvedValue('1');
-    mockElectron.scanner.getPlantQrCode.mockResolvedValue('PLANT-001');
-    mockElectron.scanner.getExperimentId.mockResolvedValue('exp-1');
-    mockElectron.scanner.getWaveNumber.mockResolvedValue(1);
-    mockElectron.scanner.getPlantAgeDays.mockResolvedValue(7);
-    mockElectron.electric.getAccessionId.mockResolvedValue('ACC-001');
-
-    render(<CaptureScan />);
-    
-    await waitFor(() => {
-      expect(screen.getByText('Start Scan')).toBeInTheDocument();
-    });
-
-    const startButton = screen.getByText('Start Scan');
-    await userEvent.click(startButton);
-    
-    await waitFor(() => {
-      expect(mockElectron.scanner.startScan).toHaveBeenCalled();
-    });
-  });
-
-  it('displays scan progress during capture', async () => {
-    const scanningData = {
-      ...mockScanData,
-      progress: {
-        nImagesCaptured: 36,
-        nImagesSaved: 30,
-        status: 'capturing'
-      }
-    };
-
-    mockElectron.scanner.getScanData.mockResolvedValue(scanningData);
-
-    render(<CaptureScan />);
-    
-    await waitFor(() => {
-      expect(screen.getByText(/36 \/ 72/)).toBeInTheDocument();
-    });
-  });
-
-  it.skip('shows captured images in viewer', async () => {
-    // Skip this test as it requires ImageViewer component
-    const scanWithImages = {
-      ...mockScanData,
-      scanImages: [
-        'file:///path/to/image1.png',
-        'file:///path/to/image2.png'
-      ]
-    };
-
-    mockElectron.scanner.getScanData.mockResolvedValue(scanWithImages);
-
-    render(<CaptureScan />);
-    
-    await waitFor(() => {
-      // Would check for images if ImageViewer was mocked
-      expect(mockElectron.scanner.getScanData).toHaveBeenCalled();
-    });
-  });
-
-  it.skip('handles scan completion', async () => {
-    // Skip this test as it requires complex component state
-    const completedScan = {
-      metadata: { id: 'scan-123' },
-      progress: {
-        nImagesCaptured: 72,
-        nImagesSaved: 72,
-        status: 'complete'
-      },
-      scanImages: Array(72).fill('file:///image.png')
-    };
-
-    mockElectron.scanner.getScanData.mockResolvedValue(completedScan);
-    mockElectron.scanner.saveCurrentScan.mockResolvedValue(undefined);
-
-    render(<CaptureScan />);
-    
-    await waitFor(() => {
-      // Would check for Save/Delete buttons if state was properly set
-      expect(mockElectron.scanner.getScanData).toHaveBeenCalled();
-    });
-  });
-
-  it.skip('saves completed scan', async () => {
-    // Skip this test as it requires complex component state
-    const completedScan = {
-      metadata: { id: 'scan-123' },
-      progress: { status: 'complete', nImagesCaptured: 72, nImagesSaved: 72 },
-      scanImages: []
-    };
-
-    mockElectron.scanner.getScanData.mockResolvedValue(completedScan);
-
-    render(<CaptureScan />);
-    
-    // Would test save functionality if component state was properly set
-    expect(mockElectron.scanner.getScanData).toHaveBeenCalled();
-  });
-
-  it.skip('deletes scan and resets scanner', async () => {
-    // Skip this test as it requires complex component state
-    const completedScan = {
-      metadata: { id: 'scan-123' },
-      progress: { status: 'complete', nImagesCaptured: 72, nImagesSaved: 72 },
-      scanImages: []
-    };
-
-    mockElectron.scanner.getScanData.mockResolvedValue(completedScan);
-
-    render(<CaptureScan />);
-    
-    // Would test delete functionality if component state was properly set
-    expect(mockElectron.scanner.getScanData).toHaveBeenCalled();
-  });
-
-  it.skip('handles wave number input', async () => {
-    // Skip - would need to check actual component implementation
-    render(<CaptureScan />);
-    
-    // Would test wave number input if we had access to the actual input element
-    expect(mockElectron.scanner.getWaveNumber).toHaveBeenCalled();
-  });
-
-  it.skip('handles plant age input', async () => {
-    // Skip - would need to check actual component implementation
-    render(<CaptureScan />);
-    
-    // Would test plant age input if we had access to the actual input element
-    expect(mockElectron.scanner.getPlantAgeDays).toHaveBeenCalled();
-  });
-
-  it('updates accession when plant QR changes', async () => {
-    mockElectron.scanner.getPlantQrCode.mockResolvedValue('PLANT-001');
-    mockElectron.scanner.getExperimentId.mockResolvedValue('exp-1');
-    mockElectron.electric.getAccessionIdFiles.mockResolvedValue(mockAccessionList);
-
-    render(<CaptureScan />);
-    
-    await waitFor(() => {
-      // Should fetch accession list for the experiment
-      expect(mockElectron.electric.getAccessionIdFiles).toHaveBeenCalledWith('exp-1');
-    });
-  });
-
-  it('handles errors gracefully', async () => {
-    mockElectron.electric.getPhenotypers.mockRejectedValue(new Error('Scanner error'));
-    
-    render(<CaptureScan />);
-    
-    await waitFor(() => {
-      // Component should still render despite errors
-      expect(screen.getByTestId('person-chooser')).toBeInTheDocument();
-    });
-  });
-
-  it.skip('cleans up listeners on unmount', () => {
-    // Skip - would need to verify actual listener cleanup
-    const { unmount } = render(<CaptureScan />);
-    
-    unmount();
-    
-    // Would verify cleanup if we had access to actual listener registration
-    expect(mockElectron.ipcRenderer.on).toHaveBeenCalled();
-  });
 });

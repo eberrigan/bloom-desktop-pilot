@@ -131,8 +131,6 @@ export function CaptureScan() {
       scanImages: ScanImages;
     };
     console.log("scanning...")
-    // console.log("scanData: " + JSON.stringify(scanData));
-    // console.log("CHECK SCAN DATA");
     setScanMetadata(scanData.metadata);
     setImages(scanData.scanImages);
     setIsScanning(scanData.progress.status === "capturing");
@@ -287,7 +285,6 @@ export function CaptureScan() {
     plantQRcodeList(experimentId)
       .then((qrCodes) => {
         const plantBarcodes = qrCodes.map((mapping: any) => mapping.plant_barcode);
-        // console.log("Got plant barcodes: ", plantBarcodes);
         setPlantQRCodes(plantBarcodes);
       })
       .catch((err) => {
@@ -374,11 +371,11 @@ export function CaptureScan() {
           </div>
           <div className="border rounded-md flex flex-col p-4">
             {
-              <div className="mb-2 text-left">
+              <div className="mb-2 text-left" data-testid="phenotyper-section">
                 <div className="block text-xs font-bold text-gray-700 text-left">
                   Phenotyper
                 </div>
-                <div className="mt-1 flex flex-row items-center">
+                <div className="mt-1 flex flex-row items-center" >
                   <PersonChooser
                     phenotyperIdChanged={(id: string) => setPhenotyperId(id)}
                   />
@@ -387,7 +384,7 @@ export function CaptureScan() {
               </div>
             }
             {
-              <div className="mb-2 text-left">
+              <div className="mb-2 text-left" data-testid="experiment-section">
                 <div className="block text-xs font-bold text-gray-700 text-left mt-1">
                   Experiment
                 </div>
@@ -400,47 +397,10 @@ export function CaptureScan() {
                   />
                   <FieldInfo info="Name of the experiment. Required field." />
                 </div>
-                {/* <input
-                  type="text"
-                  className={
-                    "p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none w-[200px] border border-gray-300"
-                  }
-                  value={experimentName || ""}
-                  onChange={(e) => setExperimentName(e.target.value)}
-                /> */}
-                {/* <div className="mt-1">
-              <select
-                className="p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                value={experimentName || ""}
-                onChange={(e) => setExperimentName(e.target.value)}
-              >
-                <option value="" disabled>
-                  Select an experiment
-                </option>
-                {experiments.map((experiment) => (
-                  <option key={experiment.id} value={experiment.name}>
-                    {experiment.name}
-                  </option>
-                ))}
-              </select>
-            </div> */}
               </div>
             }
-            {/* {
-            <div className="mb-2 text-left">
-              <div className="block text-xs font-bold text-gray-700 text-left">
-                Accessions
-              </div>
-              <div className="mt-1 flex flex-row items-center">
-                <PersonChooser
-                  phenotyperIdChanged={(id: string) => setPhenotyperId(id)}
-                />
-                <FieldInfo info="Accesions Files, with PlantID(barcode)<->Genotype Mappings. Required Field" />
-              </div>
-            </div>
-            } */}
             {
-              <div className="mb-2 text-left">
+              <div className="mb-2 text-left" data-testid="wave-number-section">
                 <div className="block text-xs font-bold text-gray-700 text-left mt-1">
                   Wave Number
                 </div>
@@ -467,7 +427,7 @@ export function CaptureScan() {
               </div>
             }
             {
-              <div className="mb-2 text-left">
+              <div className="mb-2 text-left" data-testid="plant-age-section">
                 <div className="block text-xs font-bold text-gray-700 text-left mt-1">
                   Plant Age (Days)
                 </div>
@@ -494,8 +454,8 @@ export function CaptureScan() {
               </div>
             }
             {
-              <div className="mb-2 text-left">
-                <div className="block text-xs font-bold text-gray-700 text-left mt-1">
+              <div className="mb-2 text-left" data-testid="plant-id-section">
+                <div className="block text-xs font-bold text-gray-700 text-left mt-1" >
                   Plant ID
                 </div>
                 <div className="relative w-[200px]">
@@ -509,7 +469,7 @@ export function CaptureScan() {
                   onChange={handleInputChange}
                 />
                 {suggestions.length > 0 && (
-                  <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto">
+                  <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto" data-testid="suggestion-plant-qr-code">
                     {suggestions.map((code, index) => (
                       <li
                         key={index}
@@ -526,26 +486,6 @@ export function CaptureScan() {
                   </ul>
                 )}
               </div>
-                {/* <div className="mt-1">
-                  <input
-                    type="text"
-                    className={
-                      "p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none border" +
-                      (plantQrCode === null
-                        ? " border-amber-300"
-                        : " border-gray-300")
-                    }
-                    value={plantQrCode || ""}
-                    onChange={(e) => {
-                      const value =
-                        e.target.value === "" ? null : e.target.value;
-                      const qrCode = value ? value.replace(/[^a-zA-Z0-9\+\-\_]/g, "") : null;
-                      setPlantQrCode(qrCode);
-                      setScannerPlantQrCode(qrCode);
-                    }}
-                  />
-                  <FieldInfo info="Identifier for the plant (QR code or other identifier). Required field." />
-                </div> */}
                 {mostRecentScanDate !== undefined && (
                   <div className="block text-xs text-left mt-1">
                     {mostRecentScanDate === null ? (
@@ -570,7 +510,7 @@ export function CaptureScan() {
               </div>
             }
             {
-              <div className="mb-2 text-left">
+              <div className="mb-2 text-left" data-testid="accession-id-section">
                 <div className="p-1 text-xs font-bold text-gray-700">
                   <span className="text-lime-700">Accession ID:</span>
                 </div>
@@ -587,24 +527,6 @@ export function CaptureScan() {
                   </div>
               </div>
             }
-            {/* {
-              <div className="mb-2 text-left">
-              <div className="block text-xs font-bold text-gray-700 text-left mt-1 p-1">
-                Plant ID ↔ Genotype ID Mapping
-                <FieldInfo info="Upload an excel file containing Plant ID to Genotype ID mapping" />
-              </div>
-              <div className="mt-1">
-                <div className="p-1 border rounded-md border-amber-300">
-                  <FileUploader 
-                  handleChange={handleChange} 
-                  name="file" 
-                  types={fileTypes} 
-                  label="Drag and drop your file here"
-                />
-                </div>
-              </div>
-            </div>
-            } */}
           </div>
         </div>
         <div className="ml-4 flex flex-col flex-grow">
@@ -665,131 +587,6 @@ export function CaptureScan() {
           </div>
         </div>
       </div>
-      {/* {
-        <>
-        <div className="block text-xs font-bold text-gray-700 text-left mb-1">
-          File Preview
-        </div>
-        <div className="border rounded-md p-4 flex flex-col min-h-0 min-w-0 overflow-scroll flex-grow">
-        {sheetNames.length > 0 && (
-        <>
-        <h2 className="font-bold text-gray-700 text-xs">Please select the Plant ID and Genotype ID columns from your file.</h2>
-        <h2 className="font-bold text-gray-700 text-xs">⚠️ Note: Once selected and uploaded, the Plant ID and Genotype ID columns <strong>cannot</strong> be changed.</h2>
-        <div className="mt-4 flex items-center gap-2">
-        
-          <div className="mt-4 flex items-center gap-2">
-            <h2 className="font-bold text-gray-700 text-xs">Select Sheet:</h2>
-            <select
-              value={selectedSheet ?? ""}
-              onChange={(e) => {
-                handleSheetChange(e.target.value);
-              }}
-            >
-              {sheetNames.map((sheet) => (
-                <option key={sheet} value={sheet}>
-                  {sheet}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="mt-4 flex items-center gap-2">
-            <h2 className="font-bold text-gray-700 text-xs">Select Plant ID (Barcode) Column:</h2>
-            <select
-              value={selectedPlantId ?? ""}
-              onChange={(e) => {
-                handlePlantId(e.target.value);
-              }}
-            >
-              <option value="" disabled>Select...</option> 
-              {columns.map((columnsNames) => (
-                <option key={columnsNames} value={columnsNames}>
-                  {columnsNames}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="mt-4 flex items-center gap-2">
-            <h2 className="font-bold text-gray-700 text-xs">Select Genotype ID Column:</h2>
-            <select
-              value={selectedGenotypeId ?? ""}
-              onChange={(e) => {
-                handleGenotypeId(e.target.value);
-              }}
-            >
-              <option value="" disabled>Select...</option> 
-              {columns.map((columnsNames) => (
-                <option key={columnsNames} value={columnsNames}>
-                  {columnsNames}
-                </option>
-              ))}
-            </select>
-          </div>
-
-        </div>
-        </>
-      )}
-
-      {columns.length > 0 && (
-          <div 
-          ref={tableRef}
-          className="mt-4 overflow-x-auto">
-            <table className="min-w-full border border-gray-300">
-            <thead>
-              <tr>
-                {columns.map((col, idx) => {
-                  const isPlant = col === selectedPlantId;
-                  const isGenotype = col === selectedGenotypeId;
-
-                  return (
-                    <th
-                      key={idx}
-                      className={`px-4 py-2 border text-sm text-left font-medium
-                        ${isPlant ? "bg-green-200" : isGenotype ? "bg-blue-200" : ""}
-                        ${hoveredColIndex === idx ? "bg-blue-200" : ""}
-                      `}
-                      onMouseEnter={() => setHoveredColIndex(idx)}
-                      onMouseLeave={() => setHoveredColIndex(null)}
-                    >
-                      {col}
-                      {isPlant && <span className="text-xs text-green-700 ml-2">🌱 Plant ID</span>}
-                      {isGenotype && <span className="text-xs text-blue-700 ml-2">🏷️ Genotype ID</span>}
-                    </th>
-                  );
-                })}
-              </tr>
-            </thead>
-              <tbody>
-                {data.map((row, rowIndex) => (
-                  <tr key={rowIndex} className="even:bg-gray-50">
-                    {columns.map((_, colIndex) => {
-                      const isPlantIdCol = colIndex === plantIdIndex;
-                      const isGenotypeCol = colIndex === genotypeIdIndex;
-
-                      return (
-                        <td 
-                          key={colIndex}
-                          className={`px-4 py-2 border text-sm
-                            ${isPlantIdCol ? "bg-green-100" : ""}
-                            ${isGenotypeCol ? "bg-blue-100" : ""}
-                            ${hoveredColIndex === colIndex ? "bg-blue-200" : ""}
-                          `}
-                        >
-                          {row[colIndex]}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-      </>
-
-      } */}
       {scannerId && (
         <div className="block text-xs font-bold text-gray-700 text-left mb-1">
           Recent scans
