@@ -111,13 +111,6 @@ export function Accessions() {
         fetchFiles();
     }, []);
 
-    // useEffect(() => {
-    //     if (selectedPlantId && selectedGenotypeId && tableRef.current) {
-    //         tableRef.current.scrollTop = 0;
-    //         tableRef.current.scrollLeft = 0;
-    //     }
-    // }, [selectedPlantId, selectedGenotypeId]);
-
     const handleChange = (file: File | null): void => {
         setErrorMessage(null);
         setSheetNames([]);
@@ -193,19 +186,6 @@ export function Accessions() {
                 }
             }
 
-            // for (const row of data) {
-            //     console.log("Uploading accession : ", row);
-            //     const plant_barcode = row[columns.indexOf(selectedPlantId)];
-            //     const accession_id = row[columns.indexOf(selectedGenotypeId)];
-
-            //     if (plant_barcode && accession_id) {
-            //         try {
-            //             await createPlantAccessionMap(accession_id, plant_barcode, file_id);
-            //         } catch (err) {
-            //             console.error("Error uploading accession entry:", err);
-            //         }
-            //     }
-            // }
             setMessage(" Done uploading!");
         } catch (err) {
             console.error("Error uploading accession entry:", err);
@@ -305,10 +285,6 @@ export function Accessions() {
                                    {new Date(accession.createdAt).toLocaleDateString()}
                                </span>
                            </div>
-
-                            {/* <span className="text-xs text-gray-500">
-                                {new Date(accession.createdAt).toLocaleDateString()}
-                            </span> */}
                             </div>
 
                             <div className="text-xs text-gray-600">ID: {accession.id}</div>

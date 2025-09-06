@@ -26,7 +26,6 @@ async function loadConfig() {
 let Experiments: React.FC;
 let prisma: PrismaClient;
 
-// Mock window.electron structure
 const mockElectron = {
   ipcRenderer: {
     sendMessage: vi.fn(),
@@ -43,7 +42,7 @@ const mockElectron = {
   }
 };
 
-  beforeEach(async () => {
+beforeEach(async () => {
   vi.clearAllMocks();
 
   Object.defineProperty(window as any, "electron", {
@@ -224,17 +223,14 @@ describe('Experiments component  - Basic Componnet Rendering', () => {
     expect(items).toHaveLength(mockExperiments.length);
 
     await waitFor(() => {
-    // Check for Experiment Names 
     expect(within(items[0]).getByText(/Drought Resistance Study/)).toBeInTheDocument();
     expect(within(items[1]).getByText(/Growth Rate Analysis/)).toBeInTheDocument();
     expect(within(items[2]).getByText(/Nutrient Deficiency/)).toBeInTheDocument();
 
-    // Check for Speceis 
     expect(within(items[0]).getByText(/Arabidopsis/)).toBeInTheDocument();
     expect(within(items[1]).getByText(/Canola/)).toBeInTheDocument();
     expect(within(items[2]).getByText(/Lotus/)).toBeInTheDocument();
 
-    // Check for Scientists 
     expect(within(items[0]).getByText(/Jane/)).toBeInTheDocument();
     expect(within(items[1]).getByText(/John/)).toBeInTheDocument();
     });
