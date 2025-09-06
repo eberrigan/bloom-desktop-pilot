@@ -1,41 +1,38 @@
-import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
-import userEvent from '@testing-library/user-event';
-import { FieldInfo } from './FieldInfo';
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import FieldInfo from "./FieldInfo";
 
-describe('FieldInfo', () => {
-  it('renders the info icon', () => {
-    render(<FieldInfo info="Test information" />);
-    const icon = screen.getByTestId('info-icon');
+describe("FieldInfo", () => {
+  it("renders the info icon and the tooltip content in the DOM", () => {
+    render(<FieldInfo info="Upload an Excel file mapping Plant ID to Genotype ID." />);
+
+    const icon = screen.getByTestId("info-icon");
     expect(icon).toBeInTheDocument();
+
+    expect(
+      screen.getByText(/Upload an Excel file mapping Plant ID to Genotype ID\./i)
+    ).toBeInTheDocument();
   });
 
-  it('displays the info text', () => {
-    const infoText = 'This is helpful information about the field';
-    render(<FieldInfo info={infoText} />);
-    expect(screen.getByText(infoText)).toBeInTheDocument();
+  it("applies Tailwind classes so the tooltip is hidden by default and shown on group-hover", () => {
+    render(<FieldInfo info="Some helpful hint" />);
+
+    const tooltip = screen.getByText(/Some helpful hint/i);
+
+    expect(tooltip).toHaveClass("hidden");
+    expect(tooltip).toHaveClass("group-hover:block");
   });
 
-  it('initially hides the tooltip', () => {
-    render(<FieldInfo info="Hidden tooltip" />);
-    const tooltip = screen.getByText('Hidden tooltip');
-    expect(tooltip).toHaveClass('hidden');
-  });
-
-  it('shows tooltip on hover', async () => {
+  it("supports hover/focus interactions without throwing", async () => {
     const user = userEvent.setup();
-    render(<FieldInfo info="Hover tooltip" />);
-    
-    const container = screen.getByTestId('info-icon').parentElement;
-    const tooltip = screen.getByText('Hover tooltip');
-    
-    expect(tooltip).toHaveClass('hidden');
-    
-    if (container) {
-      await user.hover(container);
-      // Note: CSS hover effects aren't fully simulated in jsdom
-      // but we can verify the structure is correct
-      expect(tooltip).toHaveClass('group-hover:block');
-    }
+    render(<FieldInfo info="Hover to see me" />);
+
+    const icon = screen.getByTestId("info-icon");
+
+    await user.hover(icon);
+    await user.unhover(icon);
+
+    expect(screen.getByText(/Hover to see me/i)).toBeInTheDocument();
   });
 });
