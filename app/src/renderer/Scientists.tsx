@@ -50,6 +50,7 @@ export function Scientists() {
       <div>
         <div className="text-xs font-bold">Name</div>
         <input
+          data-testid="create-scientists-name"
           type="text"
           value={newScientistName}
           className="p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none w-[200px] border border-gray-300"
@@ -57,12 +58,14 @@ export function Scientists() {
         />
         <div className="text-xs font-bold mt-2">Email</div>
         <input
+          data-testid="create-scientists-email"
           type="email"
           className="p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mt-1 focus:outline-none w-[200px] border border-gray-300"
           value={newScientistEmail}
           onChange={(e) => setNewScientistEmail(e.target.value)}
         />
         <button
+          data-testid="create-scientists-button"
           className="block p-2 rounded-md bg-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 mt-4 focus:outline-none border border-gray-300"
           onClick={() => {
             if (!newScientistName || !newScientistEmail) {

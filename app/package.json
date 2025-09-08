@@ -22,6 +22,7 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest watch",
+    "test:e2e": "playwright test",
     "client:generate": "npx prisma generate",
     "client:watch": "npm run client:generate --watch",
     "db:generate": "npx prisma migrate dev --create-only",
