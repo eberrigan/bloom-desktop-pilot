@@ -94,6 +94,7 @@ export function ExperimentChooser({
         ) : (
           <div className="flex flex-row items-center">
             <select
+              data-testid="experiment-select-list"
               value={selectedExperimentId || ""}
               onChange={onChange}
               className={

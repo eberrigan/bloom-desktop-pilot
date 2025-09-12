@@ -375,7 +375,7 @@ export function CaptureScan() {
                 <div className="block text-xs font-bold text-gray-700 text-left">
                   Phenotyper
                 </div>
-                <div className="mt-1 flex flex-row items-center" >
+                <div className="mt-1 flex flex-row items-center ">
                   <PersonChooser
                     phenotyperIdChanged={(id: string) => setPhenotyperId(id)}
                   />
@@ -406,6 +406,7 @@ export function CaptureScan() {
                 </div>
                 <div className="mt-1">
                   <input
+                    data-testid="wavenumber-input-field"
                     type="number"
                     className={
                       "p-2 rounded-md border bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-[200px] focus:outline-none" +
@@ -433,6 +434,7 @@ export function CaptureScan() {
                 </div>
                 <div className="mt-1">
                   <input
+                    data-testid="plant-age-input"
                     type="number"
                     min={0}
                     className={
@@ -460,6 +462,7 @@ export function CaptureScan() {
                 </div>
                 <div className="relative w-[200px]">
                 <input
+                  data-testid="plant-qrcode-input"
                   type="text"
                   className={
                     "p-2 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-full focus:outline-none border " +
@@ -514,9 +517,8 @@ export function CaptureScan() {
                 <div className="p-1 text-xs font-bold text-gray-700">
                   <span className="text-lime-700">Accession ID:</span>
                 </div>
-
                 <div className="flex items-center justify-between p-1 text-sm text-gray-800">
-                  <div>
+                  <div data-testid="genotype-value">
                     {assgnAccesson ? (
                       <span className="text-lime-700">{assgnAccesson}</span>
                     ) : (

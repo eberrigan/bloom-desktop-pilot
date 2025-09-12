@@ -94,6 +94,7 @@ export function PersonChooser({
         ) : (
           <div className="flex flex-row items-center">
             <select
+              data-testid="pehnotyper-select-list"
               value={selectedPhenotyperId || ""}
               onChange={onChange}
               className={
