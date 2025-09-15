@@ -553,9 +553,10 @@ export function CaptureScan() {
             ) : null}
             {
               <div className="flex-grow flex flex-col">
-                <div className="flex-grow text-center flex flex-col ">
+                <div className="flex-grow text-center flex flex-col " data-testid="start-scan-message">
                   <div className="my-auto mb-4">
                     <button
+                      data-testid="start-scan-button"
                       className={
                         "rounded-md border border-gray-300 px-4 py-2 bg-white text-xl font-medium " +
                         (scanDisabled

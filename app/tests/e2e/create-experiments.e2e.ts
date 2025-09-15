@@ -13,18 +13,6 @@ let app : any;
 //const electronPath: string = (await import('electron')).default as unknown as string;
 
 //Setiing global test params used in test
-const test_values = {
-    phenotyper_name : 'Playwright_Phenotyper',
-    phenotyper_email : 'pehnotyper@salk.edu',
-    scientists_name : 'Playwright_Scientists',
-    scientists_email : 'playwrightscientists@salk.edu',
-    fileName : `accession-${Date.now()}.xlsx`,
-    exp_name : 'Playwright Integration Test 2',
-    accession_file_rows : [
-        ['PLANT-001', 'GENO-AAA'],
-        ['PLANT-002', 'GENO-BBB'],
-    ]
-}
 
 // the db records created
 const created = {
@@ -33,12 +21,27 @@ const created = {
     accessionId:  null as string | null,
     experimentId: null as string | null,
     tmpFilePath:  '' as string,
+    // accessionfileName : null as string | null, 
+    // accession_file_rows: [] as [string, string][]
   };
+
+const runID = Date.now()
+const test_values = {
+    phenotyper_name : 'Playwright_Phenotyper',
+    phenotyper_email : 'pehnotyper@salk.edu',
+    scientists_name : 'Playwright_Scientists',
+    scientists_email : 'playwrightscientists@salk.edu',
+    accesssionFileName : `Playwright_accession-${runID}.xlsx`,
+    exp_name : `Playwright_Integration_Test-${runID}`,
+    accession_file_rows : [
+    [`PLANT-001-${runID}`, 'GENO-AAA'],
+    [`PLANT-002-${runID}`, 'GENO-BBB'],
+    ]
+  }
 
 test.beforeAll(async () => {
   const electronPath = require('electron') as unknown as string;
   const appCwd = path.resolve(__dirname, '..', '..');
-  console.log(appCwd)
 
   app = await electron.launch({
     executablePath: electronPath,
@@ -53,27 +56,61 @@ test.beforeAll(async () => {
 })
 
 test.afterAll(async () => {
-  // Clearing all the testing variables crated on prisma
-  console.log("CLEAR : Removing all the testing data written to primsa")
+  console.log("CLEANUP : Deleting all test data written to Prisma");
+
   if (created.experimentId) {
-    await prisma.experiment.delete({ where: { id: created.experimentId } }).catch(() => {});
+    const scans = await prisma.scan.findMany({
+      where: { experiment_id: created.experimentId },
+      select: { id: true },
+    });
+
+    const scanIds = scans.map((scan) => scan.id);
+
+    if (scanIds.length > 0) {
+      await prisma.image.deleteMany({
+        where: { scan_id: { in: scanIds } },
+      }).catch(() => {});
+
+      await prisma.scan.deleteMany({
+        where: { id: { in: scanIds } },
+      }).catch(() => {});
+    }
+
+    await prisma.experiment.delete({
+      where: { id: created.experimentId },
+    }).catch(() => {});
   }
+
   if (created.accessionId) {
-    await prisma.plantAccessionMappings.deleteMany({ where: { accession_file_id: created.accessionId } }).catch(() => {});
-    await prisma.accessions.delete({ where: { id: created.accessionId } }).catch(() => {});
+    await prisma.plantAccessionMappings.deleteMany({
+      where: { accession_file_id: created.accessionId },
+    }).catch(() => {});
+
+    await prisma.accessions.delete({
+      where: { id: created.accessionId },
+    }).catch(() => {});
   }
+
   if (created.scientistId) {
-    await prisma.scientist.delete({ where: { id: created.scientistId } }).catch(() => {});
+    await prisma.scientist.delete({
+      where: { id: created.scientistId },
+    }).catch(() => {});
   }
+
   if (created.phenotyperId) {
-    await prisma.phenotyper.delete({ where: { id: created.phenotyperId } }).catch(() => {});
+    await prisma.phenotyper.delete({
+      where: { id: created.phenotyperId },
+    }).catch(() => {});
   }
+
   if (created.tmpFilePath && fs.existsSync(created.tmpFilePath)) {
     fs.unlinkSync(created.tmpFilePath);
   }
+
   await prisma.$disconnect();
   await app.close();
 });
+
 
 
 test('create new phenotyper check if persists in DB', async () => {
@@ -103,7 +140,7 @@ test('create new phenotyper check if persists in DB', async () => {
     });
     const phenotyper_id = phenotyper_row!.id;
     expect(phenotyper_id).toBeTruthy();
-    console.log("TEST: Created Phenotyper Successfully. (Prisma)")
+    // console.log("TEST: Created Phenotyper Successfully. (Prisma)")
 })
 
 test('create new scientists check if persists in DB', async () => {
@@ -137,19 +174,23 @@ test('create new scientists check if persists in DB', async () => {
     });
     const scientists_id = scientist_row!.id;
     expect(scientists_id).toBeTruthy();
-    console.log("TEST: Created Scientist Successfully (Prisma).")
+    // console.log("TEST: Created Scientist Successfully (Prisma).")
 })
 
 test('upload new accession file, check slection of excel fiels, check upload preview, check if persists in DB', async () => {
     //TEST : Create Sample Excel File
     const headers = ['PlantBarcode', 'GenotypeID'];
-    const rows = test_values.accession_file_rows;
+    const rows: [string, string][] = test_values.accession_file_rows as [string, string][];
+    // created.accession_file_rows = rows;
+
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
     const buf = XLSX.write(wb, { bookType: 'xlsx', type: 'buffer' });
-    const fileName = test_values.fileName
+    const fileName = test_values.accesssionFileName
+    // created.accessionfileName = fileName
+    
     const filePath = test.info().outputPath(fileName);
     fs.writeFileSync(filePath, buf);
 
@@ -173,12 +214,10 @@ test('upload new accession file, check slection of excel fiels, check upload pre
     await expect(window.getByText('🏷️ Genotype ID')).toBeVisible();
     await expect(window.getByText('PLANT-001')).toBeVisible();
     await expect(window.getByText('GENO-AAA')).toBeVisible();
-
-    console.log("TEST: Upload Accession preview Successfully.")
+    //console.log("TEST: Upload Accession preview Successfully.")
 
     await window.getByRole('button', { name: 'Upload Accession Files' }).click();
-    
-    console.log("TEST: Upload Accession button click Successfully.")
+    //console.log("TEST: Upload Accession button click Successfully.")
 
     //Check accession file on prisma
     let accessionFileId: string | null = null;
@@ -195,7 +234,7 @@ test('upload new accession file, check slection of excel fiels, check upload pre
     .toBe(true);
 
     expect(accessionFileId).toBeTruthy();
-    console.log("TEST: Retrieved Accession file id Successfully (Prisma):",accessionFileId)
+    //console.log("TEST: Retrieved Accession file id Successfully (Prisma):",accessionFileId)
 
     await expect
     .poll(async () => {
@@ -220,7 +259,7 @@ test('upload new accession file, check slection of excel fiels, check upload pre
     }, { timeout: 30_000, intervals: [250, 500, 1000] })
     .toBe(true);
 
-    console.log("TEST: Checked excel file content Successfully (Prisma):",accessionFileId)
+    // console.log("TEST: Checked excel file content Successfully (Prisma):",accessionFileId)
 })
 
 test('create new experiment, check species selection, check scientist selection, check accessionfile selection, check if persists in DB', async () => {
@@ -256,7 +295,7 @@ test('create new experiment, check species selection, check scientist selection,
     .poll(async () => await accessionSelector.locator('option').count(), { timeout: 10_000 })
     .toBeGreaterThan(0);
 
-    const label = `${test_values.fileName} - ${created.accessionId}`;
+    const label = `${test_values.accesssionFileName} - ${created.accessionId}`;
     await expect(accessionSelector.locator('option', { hasText: label })).toHaveCount(1, { timeout: 10_000 });
     await accessionSelector.selectOption({ label });
 
@@ -269,8 +308,8 @@ test('create new experiment, check species selection, check scientist selection,
         where: { name: test_values.exp_name },        
         select: { id: true },
         });
-        created.experimentId
         experimentId = row?.id ?? null;
+        created.experimentId = experimentId
         return !!experimentId;
     }, { timeout: 30_000, intervals: [250, 500, 1000] })
     .toBe(true);
@@ -281,8 +320,7 @@ test('create new experiment, check species selection, check scientist selection,
     const rowById = list.locator(`li[data-exp-id="${experimentId}"]`);
     await rowById.scrollIntoViewIfNeeded();
     await expect(rowById).toBeVisible();
-
-    console.log("TEST: Created experiment and verified on prisma Successfully (Prisma)");
+    // console.log("TEST: Created experiment and verified on prisma Successfully (Prisma)");
 })
 
 test('displays correct plant QR code suggestions and maps to expected accession ID', async() => {
@@ -290,15 +328,19 @@ test('displays correct plant QR code suggestions and maps to expected accession 
     const captureScan = window.getByRole('link', { name: /^Capture$/ });
     await expect(captureScan).toBeVisible();
     await captureScan.click();
-
     const inputValue = test_values.accession_file_rows[0][0];
 
     //Choose eperiment
     const experimentSelector = window.getByTestId('experiment-select-list')
-    await expect.poll(async () => {const options = await experimentSelector.locator('option').allTextContents();return options.includes(test_values.exp_name);}, { timeout: 10_000 }).toBe(true);
-    await experimentSelector.selectOption({ label: test_values.exp_name });
-    const selectedIdExp = await experimentSelector.inputValue();
-    expect(selectedIdExp).toBeTruthy();
+    await expect.poll(async () => {
+    const values = await experimentSelector
+        .locator('option')
+        .evaluateAll((opts) => opts.map((o: HTMLOptionElement) => o.value));
+    return values.includes(created.experimentId!);
+    }, { timeout: 10_000 }).toBe(true);
+
+    await experimentSelector.selectOption({ value: created.experimentId! });
+    await expect(experimentSelector).toHaveValue(created.experimentId!);
 
     //Check the qrcode selector
     const qrInput = window.getByTestId('plant-qrcode-input');
@@ -318,3 +360,106 @@ test('displays correct plant QR code suggestions and maps to expected accession 
 
     expect(accessionMapping).toContain(genotype); 
 })
+
+test('Capture page, fills form, starts scan, and verifies scan appears in Recent Scans', async () => {
+  test.setTimeout(60_000);
+
+  const captureScan = window.getByRole('link', { name: /^Capture$/ });
+  await expect(captureScan).toBeVisible();
+  await captureScan.click();
+
+  //Choose phenotyper
+  const phenotyperSelector = window.getByTestId('pehnotyper-select-list')
+  await expect.poll(async () => {const options = await phenotyperSelector.locator('option').allTextContents();return options.includes(test_values.phenotyper_name);}, { timeout: 10_000 }).toBe(true);
+  await phenotyperSelector.selectOption({ label: test_values.phenotyper_name });
+  const selectedIdPhenotyper = await phenotyperSelector.inputValue();
+  expect(selectedIdPhenotyper).toBeTruthy();
+
+  //Choose eperiment
+  const experimentSelector = window.getByTestId('experiment-select-list')
+  await expect.poll(async () => {const options = await experimentSelector.locator('option').allTextContents();return options.includes(test_values.exp_name);}, { timeout: 10_000 }).toBe(true);
+  await experimentSelector.selectOption({ label: test_values.exp_name });
+  const selectedIdExp = await experimentSelector.inputValue();
+  expect(selectedIdExp).toBeTruthy();
+
+  //Input Wave Number
+  const waveNumberInput = window.getByTestId('wavenumber-input-field')
+  await waveNumberInput.fill('1');
+
+  //Input plant age
+  const ageInput = window.getByTestId('plant-age-input')
+  await ageInput.fill('6');
+
+  //Select Plant ID
+  const inputValue = test_values.accession_file_rows[0][0]
+  const qrInput = window.getByTestId('plant-qrcode-input')
+  await qrInput.fill('');
+  await qrInput.fill(inputValue);
+  const suggestionList = window.getByTestId('suggestion-plant-qr-code');
+  await expect(suggestionList).toBeVisible({ timeout: 10_000 });
+  const suggestionItems = await suggestionList.locator('li')
+  await expect(suggestionItems.first()).toContainText(inputValue);
+  await suggestionItems.first().click();
+    
+  //Make sure accession is loaded
+  const genotype = test_values.accession_file_rows[0][1];
+  const accessionMapping = await window
+    .getByTestId('genotype-value')
+    .locator('span')
+    .allTextContents();
+
+  expect(accessionMapping).toContain(genotype); 
+
+  //Check if start Scan button is enabled 
+  const button = window.getByTestId("start-scan-button");
+  expect(button).toBeEnabled();
+  await button.click()
+  const startScanDiv = window.getByTestId("start-scan-message");
+  await expect(startScanDiv).toHaveText(/Start scan/);
+  await expect(startScanDiv).toHaveText(/📷 Scanning.../);
+  await expect(startScanDiv).toHaveText(/📷 Scanning... 72 \/ 72/, { timeout: 60_000 });
+
+  const table = window.getByTestId('browse-scans-page-table');
+  await expect(table).toBeVisible({ timeout: 10_000 });
+  const rows = table.locator('tbody tr');
+
+  await expect.poll(async () => {
+  const allRowTexts = await rows.allTextContents();
+  //   console.log("Table rows text:", allRowTexts);
+  return allRowTexts.some(row => row.includes(test_values.accession_file_rows[0][0]));
+  }, { timeout: 30_000 }).toBe(true);
+
+})
+
+test("Verifies that 72 scans were saved to Prisma after scan completion", async () => {
+    //Get Experiment Id,from scan Table check if 72 images are present
+    const expName = test_values.exp_name;
+    const exp = await prisma.experiment.findFirst({
+        where: { name: expName },
+        include: {
+            scans: {
+            },
+            scientist: true,
+            accession: true,
+    },
+    });
+
+    if (!created.experimentId) throw new Error("ExperimentId missing");
+    const scan = await prisma.scan.findFirst({
+    where: { 
+        plant_id: test_values.accession_file_rows[0][0], 
+        experiment_id: created.experimentId 
+    },
+    include: {
+        images: true,
+    },
+    });
+    // console.log(scan)
+    expect(exp).not.toBeNull();
+    expect(exp?.accession?.name).toContain(test_values.accesssionFileName)
+    expect(exp?.scientist?.name).toContain(test_values.scientists_name)
+    expect(scan?.images.length).toBe(72)
+});
+
+
+

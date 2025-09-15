@@ -45,7 +45,7 @@ export function BrowseScans({
   const numPages = Math.ceil(totalScans/pageSize);
 
   return (
-    <div className="min-h-0 min-w-0 flex-grow flex flex-col items-stretch relative">
+    <div className="min-h-0 min-w-0 flex-grow flex flex-col items-stretch relative " data-testid="browse-scans-page">
       {showUploadButton && <UploadControls />}
       <div className="bg-stone-100 border-b flex flex-row pb-1 text-sm">
         <div className="pr-4">
@@ -87,7 +87,7 @@ export function BrowseScans({
         </div>
       </div>
       <div className="min-h-0 min-w-0 flex-grow overflow-scroll">
-        <table className="rounded-md mb-8">
+        <table className="rounded-md mb-8" data-testid="browse-scans-page-table">
           <thead>
             <tr>
               <th className="text-xs text-left px-2 pb-4 align-bottom">
