@@ -1,9 +1,3 @@
-// import fs from 'fs';
-// import path from 'path';
-// import os from 'os';
-// import yaml from 'js-yaml';
-
-
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
@@ -43,9 +37,9 @@ async function main() {
   const prisma = new PrismaClient();
   const supabase = await getSupabaseClient(config);
 
-const scans = await prisma.scan.findMany({
-  where: { deleted: false },
-});
+  const scans = await prisma.scan.findMany({
+    where: { deleted: false },
+  });
 
   for (const scan of scans) {
 
@@ -71,7 +65,6 @@ const scans = await prisma.scan.findMany({
     let phenotyper_email = phenotyper?.email || 'Unknown';
     let scientist_name = scientist?.name || 'Unknown';
     let scientist_email = scientist?.email || 'Unknown';
-
 
     // Fetch plant id 
     const { data: plantData, error: plantError } = await supabase
@@ -103,11 +96,9 @@ const scans = await prisma.scan.findMany({
       .eq('email', phenotyper_email)
       .single();
     
-    console.log("Exists: "+ JSON.stringify(existingPhenotyper));
-
     if (existingPhenotyper) {
       phenotyperId = existingPhenotyper.id;
-      console.log("Exists: "+ phenotyperId)
+      console.log("Phenotyper Exists: "+ phenotyperId)
     } else if (phenoError?.code === 'PGRST116') {
       const { data: newPheno, error: insertError } = await supabase
       .from('phenotypers')
@@ -129,10 +120,10 @@ const scans = await prisma.scan.findMany({
     .eq('email', scientist_email || null)
     .single();
     
-    console.log("SCI"+JSON.stringify(existingScientist));
 
     if (existingScientist) {
       scientistId = existingScientist.id;
+      console.log("Existing Scientists ID :", scientistId)
     } else if (scientistError?.code === 'PGRST116') {
       
       const { data: newScientist, error: insertError } = await supabase
@@ -149,19 +140,6 @@ const scans = await prisma.scan.findMany({
 
     // Camera Info:
     let cameraSettingsId: string;
-    // const { data: newSettings, error: insertError } = await supabase
-    //   .from('cyl_camera_settings')
-    //   .insert({
-    //     exposure_time: scan.exposure_time,
-    //     gain: scan.gain,
-    //     brightness: scan.brightness,
-    //     contrast: scan.contrast,
-    //     gamma: scan.gamma,
-    //     seconds_per_rot: scan.seconds_per_rot,
-    //   })
-    //   .select('id')
-    //   .single();
-
     const { data: newSettings, error: insertError } = await supabase
     .from('cyl_camera_settings')
     .upsert(
@@ -180,16 +158,12 @@ const scans = await prisma.scan.findMany({
     .select('id')
     .single();
 
-    console.log("New Settings: "+JSON.stringify(newSettings));
+    console.log("New Camera Setting Record: "+JSON.stringify(newSettings));
 
     if (insertError) {
       throw new Error("Insert failed: " + insertError.message);
     }
     cameraSettingsId = newSettings.id;
-
-    console.log(`Camera settings ID: ${cameraSettingsId}`);
-
-    console.log("SCAN"+JSON.stringify(scanData));
 
     if(scanData && scanData.id){
         const { error: updateError } = await supabase

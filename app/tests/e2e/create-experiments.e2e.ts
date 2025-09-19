@@ -416,8 +416,8 @@ test('Capture page, fills form, starts scan, and verifies scan appears in Recent
   await button.click()
   const startScanDiv = window.getByTestId("start-scan-message");
   await expect(startScanDiv).toHaveText(/Start scan/);
-  await expect(startScanDiv).toHaveText(/📷 Scanning.../);
-  await expect(startScanDiv).toHaveText(/📷 Scanning... 72 \/ 72/, { timeout: 60_000 });
+  await expect(startScanDiv).toHaveText(/Scanning.../);
+  await expect(startScanDiv).toHaveText(/Scanning... 72 \/ 72/, { timeout: 60_000 });
 
   const table = window.getByTestId('browse-scans-page-table');
   await expect(table).toBeVisible({ timeout: 10_000 });
@@ -432,7 +432,6 @@ test('Capture page, fills form, starts scan, and verifies scan appears in Recent
 })
 
 test("Verifies that 72 scans were saved to Prisma after scan completion", async () => {
-    //Get Experiment Id,from scan Table check if 72 images are present
     const expName = test_values.exp_name;
     const exp = await prisma.experiment.findFirst({
         where: { name: expName },
