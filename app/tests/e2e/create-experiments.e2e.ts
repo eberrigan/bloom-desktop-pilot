@@ -1,20 +1,27 @@
 // app/tests/e2e/create-experiment.e2e.ts
 import path from 'node:path';
+import { createClient } from '@supabase/supabase-js';
 import { test, expect, _electron as electron } from '@playwright/test';
 import { PrismaClient,Prisma } from '@prisma/client';
 import * as fs from 'fs';
 import * as XLSX from 'xlsx';
+import * as os from 'os';
+import * as yaml from 'js-yaml';
 
 const prisma = new PrismaClient();
+async function loadConfig() {
+  const configPath = path.join(os.homedir(), '.bloom', 'desktop-config.yaml');
+  const config = yaml.load(fs.readFileSync(configPath, 'utf8')) as {
+    bloom_api_url: string;
+    bloom_anon_key: string;
+  };
+  return config;
+}
+
+let supabase: ReturnType<typeof createClient>;
 let window: any;
 let app : any;
-// Use Electron binary and point cwd at app/
 
-//const electronPath: string = (await import('electron')).default as unknown as string;
-
-//Setiing global test params used in test
-
-// the db records created
 const created = {
     phenotyperId: null as string | null,
     scientistId:  null as string | null,
@@ -40,8 +47,11 @@ const test_values = {
   }
 
 test.beforeAll(async () => {
+  const config = await loadConfig();
   const electronPath = require('electron') as unknown as string;
   const appCwd = path.resolve(__dirname, '..', '..');
+  supabase = createClient(config.bloom_api_url, config.bloom_anon_key);
+
 
   app = await electron.launch({
     executablePath: electronPath,
@@ -123,7 +133,6 @@ test('create new phenotyper check if persists in DB', async () => {
   await window.fill('[data-testid="create-phenotyper-email"]', phenotyper_email);
   await window.click('[data-testid="create-phenotyper-button"]');
 
-  //connect to db and verify
   await expect
     .poll(async () => {
         const row = await prisma.phenotyper.findFirst({
@@ -140,11 +149,9 @@ test('create new phenotyper check if persists in DB', async () => {
     });
     const phenotyper_id = phenotyper_row!.id;
     expect(phenotyper_id).toBeTruthy();
-    // console.log("TEST: Created Phenotyper Successfully. (Prisma)")
 })
 
 test('create new scientists check if persists in DB', async () => {
-    //TEST : Create Scientist
     const scientistsLink = window.getByRole('link', { name: /^Scientists$/ });
     await expect(scientistsLink).toBeVisible();
     await scientistsLink.click();
@@ -174,14 +181,11 @@ test('create new scientists check if persists in DB', async () => {
     });
     const scientists_id = scientist_row!.id;
     expect(scientists_id).toBeTruthy();
-    // console.log("TEST: Created Scientist Successfully (Prisma).")
 })
 
 test('upload new accession file, check slection of excel fiels, check upload preview, check if persists in DB', async () => {
-    //TEST : Create Sample Excel File
     const headers = ['PlantBarcode', 'GenotypeID'];
     const rows: [string, string][] = test_values.accession_file_rows as [string, string][];
-    // created.accession_file_rows = rows;
 
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
@@ -189,7 +193,6 @@ test('upload new accession file, check slection of excel fiels, check upload pre
 
     const buf = XLSX.write(wb, { bookType: 'xlsx', type: 'buffer' });
     const fileName = test_values.accesssionFileName
-    // created.accessionfileName = fileName
     
     const filePath = test.info().outputPath(fileName);
     fs.writeFileSync(filePath, buf);
@@ -209,17 +212,12 @@ test('upload new accession file, check slection of excel fiels, check upload pre
     await expect(selects.nth(2)).toBeVisible();
     await selects.nth(2).selectOption('GenotypeID');
 
-    // Check: preview table should render the data
     await expect(window.getByText('🌱 Plant ID')).toBeVisible();
     await expect(window.getByText('🏷️ Genotype ID')).toBeVisible();
     await expect(window.getByText('PLANT-001')).toBeVisible();
     await expect(window.getByText('GENO-AAA')).toBeVisible();
-    //console.log("TEST: Upload Accession preview Successfully.")
 
     await window.getByRole('button', { name: 'Upload Accession Files' }).click();
-    //console.log("TEST: Upload Accession button click Successfully.")
-
-    //Check accession file on prisma
     let accessionFileId: string | null = null;
     await expect
     .poll(async () => {
@@ -234,7 +232,6 @@ test('upload new accession file, check slection of excel fiels, check upload pre
     .toBe(true);
 
     expect(accessionFileId).toBeTruthy();
-    //console.log("TEST: Retrieved Accession file id Successfully (Prisma):",accessionFileId)
 
     await expect
     .poll(async () => {
@@ -259,7 +256,6 @@ test('upload new accession file, check slection of excel fiels, check upload pre
     }, { timeout: 30_000, intervals: [250, 500, 1000] })
     .toBe(true);
 
-    // console.log("TEST: Checked excel file content Successfully (Prisma):",accessionFileId)
 })
 
 test('create new experiment, check species selection, check scientist selection, check accessionfile selection, check if persists in DB', async () => {
@@ -271,24 +267,20 @@ test('create new experiment, check species selection, check scientist selection,
 
     await window.fill('[data-testid="experiment-name-input"]', exp_name);
 
-    //Select Species
     const speciesSelector = window.getByTestId('experiment-species-select');
     if (await speciesSelector.count()) {
     await speciesSelector.selectOption({ value: 'Amaranth' });
     await expect(speciesSelector).toHaveValue('Amaranth');
     }
     
-    //Select Scientist
     const scientistSelector = window.getByTestId('experiment-scientist-select');
     await scientistSelector.click();
     await window.mouse.wheel(0, 500);
-    //await expect.poll(async () => await scientistSelector.locator('option').count(), { timeout: 20_000 }).toBeGreaterThan(0);
     await expect.poll(async () => {const options = await scientistSelector.locator('option').allTextContents();return options.includes(test_values.scientists_name);}, { timeout: 10_000 }).toBe(true);
     await scientistSelector.selectOption({ label: test_values.scientists_name });
     const selectedId = await scientistSelector.inputValue();
     expect(selectedId).toBeTruthy();
 
-    //Select Accession File
     const accessionSelector = window.getByTestId('experiment-accession-select');
     await expect(accessionSelector).toBeVisible();
     await expect
@@ -320,7 +312,6 @@ test('create new experiment, check species selection, check scientist selection,
     const rowById = list.locator(`li[data-exp-id="${experimentId}"]`);
     await rowById.scrollIntoViewIfNeeded();
     await expect(rowById).toBeVisible();
-    // console.log("TEST: Created experiment and verified on prisma Successfully (Prisma)");
 })
 
 test('displays correct plant QR code suggestions and maps to expected accession ID', async() => {
@@ -330,7 +321,6 @@ test('displays correct plant QR code suggestions and maps to expected accession 
     await captureScan.click();
     const inputValue = test_values.accession_file_rows[0][0];
 
-    //Choose eperiment
     const experimentSelector = window.getByTestId('experiment-select-list')
     await expect.poll(async () => {
     const values = await experimentSelector
@@ -342,7 +332,6 @@ test('displays correct plant QR code suggestions and maps to expected accession 
     await experimentSelector.selectOption({ value: created.experimentId! });
     await expect(experimentSelector).toHaveValue(created.experimentId!);
 
-    //Check the qrcode selector
     const qrInput = window.getByTestId('plant-qrcode-input');
     await qrInput.fill(inputValue);
     const suggestionList = window.getByTestId('suggestion-plant-qr-code');
@@ -351,7 +340,6 @@ test('displays correct plant QR code suggestions and maps to expected accession 
     await expect(suggestionItems.first()).toContainText(inputValue);
     await suggestionItems.first().click();
 
-    //Check the accession mapping
     const genotype = test_values.accession_file_rows[0][1];
     const accessionMapping = await window
       .getByTestId('genotype-value')
@@ -401,7 +389,6 @@ test('Capture page, fills form, starts scan, and verifies scan appears in Recent
   await expect(suggestionItems.first()).toContainText(inputValue);
   await suggestionItems.first().click();
     
-  //Make sure accession is loaded
   const genotype = test_values.accession_file_rows[0][1];
   const accessionMapping = await window
     .getByTestId('genotype-value')
@@ -410,7 +397,6 @@ test('Capture page, fills form, starts scan, and verifies scan appears in Recent
 
   expect(accessionMapping).toContain(genotype); 
 
-  //Check if start Scan button is enabled 
   const button = window.getByTestId("start-scan-button");
   expect(button).toBeEnabled();
   await button.click()
@@ -425,7 +411,6 @@ test('Capture page, fills form, starts scan, and verifies scan appears in Recent
 
   await expect.poll(async () => {
   const allRowTexts = await rows.allTextContents();
-  //   console.log("Table rows text:", allRowTexts);
   return allRowTexts.some(row => row.includes(test_values.accession_file_rows[0][0]));
   }, { timeout: 30_000 }).toBe(true);
 
@@ -453,12 +438,38 @@ test("Verifies that 72 scans were saved to Prisma after scan completion", async 
         images: true,
     },
     });
-    // console.log(scan)
     expect(exp).not.toBeNull();
     expect(exp?.accession?.name).toContain(test_values.accesssionFileName)
     expect(exp?.scientist?.name).toContain(test_values.scientists_name)
     expect(scan?.images.length).toBe(72)
 });
+
+test('Browse page: start uploading updates status and persists to Supabase', async () => {
+  test.setTimeout(90_000);
+
+  const browseLink = window.getByRole('link', { name: /^Browse$/ });
+  await expect(browseLink).toBeVisible();
+  await browseLink.click();
+
+  const table = window.getByTestId('browse-scans-page-table');
+  await expect(table).toBeVisible();
+
+  const startUploadBtn = window.getByRole('button', { name: /Start uploading/i });
+  await expect(startUploadBtn).toBeEnabled();
+  await startUploadBtn.click();
+
+  await expect.poll(async () => {
+  const cellTexts = await table.allTextContents();
+  return cellTexts.some((text: string | string[]) => text.includes('uploaded')) || cellTexts.some((text: string | string[]) => text.includes('%'));
+  }, { timeout: 30_000 }).toBe(true);
+
+  const barcode = test_values.accession_file_rows[0][0];
+  const row = table.locator('tbody tr', { hasText: barcode });
+  const statusCell = row.locator('td').nth(8);
+  await expect(statusCell).toHaveText(/Not uploaded/);
+  await window.getByRole('button', { name: /Start uploading/i }).click();
+});
+
 
 
 

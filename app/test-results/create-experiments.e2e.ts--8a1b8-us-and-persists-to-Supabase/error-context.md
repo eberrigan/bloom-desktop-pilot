@@ -1,0 +1,127 @@
+# Page snapshot
+
+```yaml
+- main [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - img [ref=e6]
+      - list [ref=e7]:
+        - listitem [ref=e8]:
+          - link "Capture" [ref=e9] [cursor=pointer]:
+            - /url: /
+            - img [ref=e10] [cursor=pointer]
+            - text: Capture
+        - listitem [ref=e13]:
+          - link "Browse" [ref=e14] [cursor=pointer]:
+            - /url: /browse-scans
+            - img [ref=e15] [cursor=pointer]
+            - text: Browse
+        - listitem [ref=e17]:
+          - link "Settings" [ref=e18] [cursor=pointer]:
+            - /url: /camera-settings
+            - img [ref=e19] [cursor=pointer]
+            - text: Settings
+        - listitem [ref=e22]:
+          - link "Phenotyping Scientists" [ref=e23] [cursor=pointer]:
+            - /url: /phenotypers
+            - img [ref=e24] [cursor=pointer]
+            - text: Phenotyping Scientists
+        - listitem [ref=e26]:
+          - link "Scientists" [ref=e27] [cursor=pointer]:
+            - /url: /scientists
+            - img [ref=e28] [cursor=pointer]
+            - text: Scientists
+        - listitem [ref=e30]:
+          - link "Accessions" [ref=e31] [cursor=pointer]:
+            - /url: /accessions
+            - img [ref=e32] [cursor=pointer]
+            - text: Accessions
+        - listitem [ref=e36]:
+          - link "Experiments" [ref=e37] [cursor=pointer]:
+            - /url: /experiments
+            - img [ref=e38] [cursor=pointer]
+            - text: Experiments
+        - listitem [ref=e40]:
+          - link "Export" [ref=e41] [cursor=pointer]:
+            - /url: /export
+            - img [ref=e42] [cursor=pointer]
+            - text: Export
+      - generic [ref=e45]:
+        - generic [ref=e46]: Device
+        - generic [ref=e47]: Unknown
+    - generic [ref=e49]:
+      - generic [ref=e51]:
+        - button "Start uploading" [ref=e52] [cursor=pointer]
+        - generic [ref=e53]: images uploaded
+      - generic [ref=e54]:
+        - button "←" [disabled] [ref=e56]
+        - button "→" [disabled] [ref=e58]
+        - generic [ref=e59]:
+          - text: Page
+          - textbox [ref=e60]: "1"
+          - text: of 1 (3 scans)
+      - table [ref=e62]:
+        - rowgroup [ref=e63]:
+          - row "Plant ID Accession ID Date Phenotyper Device Exposure Gain Preview Upload status" [ref=e64]:
+            - cell "Plant ID" [ref=e65]
+            - cell "Accession ID" [ref=e66]
+            - cell "Date" [ref=e67]
+            - cell "Phenotyper" [ref=e68]
+            - cell "Device" [ref=e69]
+            - cell "Exposure" [ref=e70]
+            - cell "Gain" [ref=e71]
+            - cell "Preview" [ref=e72]
+            - cell "Upload status" [ref=e73]
+        - rowgroup [ref=e74]:
+          - row "PLANT-001-1758908935484 GENO-AAA Sep 26, 2025 Playwright_Phenotyper Unknown 10000 100 2025-09-26/PLANT-001-1758908935484/01d2b11a-1de7-4925-9729-dfe170f97231/1.png Not uploaded" [ref=e75]:
+            - cell "PLANT-001-1758908935484" [ref=e76]:
+              - link "PLANT-001-1758908935484" [ref=e77] [cursor=pointer]:
+                - /url: /browse-scans/01d2b11a-1de7-4925-9729-dfe170f97231
+            - cell "GENO-AAA" [ref=e78]
+            - cell "Sep 26, 2025" [ref=e79]
+            - cell "Playwright_Phenotyper" [ref=e80]:
+              - generic [ref=e82]: Playwright_Phenotyper
+            - cell "Unknown" [ref=e83]
+            - cell "10000" [ref=e84]
+            - cell "100" [ref=e85]
+            - cell "2025-09-26/PLANT-001-1758908935484/01d2b11a-1de7-4925-9729-dfe170f97231/1.png" [ref=e86]:
+              - link "2025-09-26/PLANT-001-1758908935484/01d2b11a-1de7-4925-9729-dfe170f97231/1.png" [ref=e88] [cursor=pointer]:
+                - /url: /browse-scans/01d2b11a-1de7-4925-9729-dfe170f97231
+                - img "2025-09-26/PLANT-001-1758908935484/01d2b11a-1de7-4925-9729-dfe170f97231/1.png" [ref=e90] [cursor=pointer]
+            - cell "Not uploaded" [ref=e91]:
+              - generic [ref=e93]: Not uploaded
+          - row "test_qr_1 test_genotype_1 Sep 26, 2025 Test_Scientist_1 Unknown 10000 100 2025-09-26/test_qr_1/e5c7fd99-53ba-4a5b-a286-bff60fe7c684/1.png" [ref=e94]:
+            - cell "test_qr_1" [ref=e95]:
+              - link "test_qr_1" [ref=e96] [cursor=pointer]:
+                - /url: /browse-scans/e5c7fd99-53ba-4a5b-a286-bff60fe7c684
+            - cell "test_genotype_1" [ref=e97]
+            - cell "Sep 26, 2025" [ref=e98]
+            - cell "Test_Scientist_1" [ref=e99]:
+              - generic [ref=e101]: Test_Scientist_1
+            - cell "Unknown" [ref=e102]
+            - cell "10000" [ref=e103]
+            - cell "100" [ref=e104]
+            - cell "2025-09-26/test_qr_1/e5c7fd99-53ba-4a5b-a286-bff60fe7c684/1.png" [ref=e105]:
+              - link "2025-09-26/test_qr_1/e5c7fd99-53ba-4a5b-a286-bff60fe7c684/1.png" [ref=e107] [cursor=pointer]:
+                - /url: /browse-scans/e5c7fd99-53ba-4a5b-a286-bff60fe7c684
+                - img "2025-09-26/test_qr_1/e5c7fd99-53ba-4a5b-a286-bff60fe7c684/1.png" [ref=e109] [cursor=pointer]
+            - cell [ref=e110]:
+              - img [ref=e113]
+          - row "test_qr_1 test_genotype_1 Sep 24, 2025 Test_Scientist_1 Unknown 10000 100 2025-09-24/test_qr_1/b1f346fc-bd3b-46e9-bd42-095ef64ee9de/1.png" [ref=e116]:
+            - cell "test_qr_1" [ref=e117]:
+              - link "test_qr_1" [ref=e118] [cursor=pointer]:
+                - /url: /browse-scans/b1f346fc-bd3b-46e9-bd42-095ef64ee9de
+            - cell "test_genotype_1" [ref=e119]
+            - cell "Sep 24, 2025" [ref=e120]
+            - cell "Test_Scientist_1" [ref=e121]:
+              - generic [ref=e123]: Test_Scientist_1
+            - cell "Unknown" [ref=e124]
+            - cell "10000" [ref=e125]
+            - cell "100" [ref=e126]
+            - cell "2025-09-24/test_qr_1/b1f346fc-bd3b-46e9-bd42-095ef64ee9de/1.png" [ref=e127]:
+              - link "2025-09-24/test_qr_1/b1f346fc-bd3b-46e9-bd42-095ef64ee9de/1.png" [ref=e129] [cursor=pointer]:
+                - /url: /browse-scans/b1f346fc-bd3b-46e9-bd42-095ef64ee9de
+                - img "2025-09-24/test_qr_1/b1f346fc-bd3b-46e9-bd42-095ef64ee9de/1.png" [ref=e131] [cursor=pointer]
+            - cell [ref=e132]:
+              - img [ref=e135]
+```
