@@ -1,71 +1,106 @@
-'''
-DESC : 
+"""
+DESC:
+  Expects an Excel file with:
+    Column A → ACCESSION
+    Column B → BARCODE
 
-Expects excel file with: 
-    A col -->  ACCESSION
-    B col --> BARCODE
+  Script checks if a barcode in cyl_plants is linked to the accession
+  labelled as "Unknown" (7737034) OR NULL, and updates it.
 
-Script checks if barcode is linked the accession laballed as "Unkown" and updates it.
+TO RUN:
+  1. Set DATABASE_URL environment variable pointing to your database, e.g.:
+       export DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:54322/postgres"
 
-TO DO : set env variable pointing to database
-
-TO RUN: python upload_accession_backup.py "excel_filepath"
-
-'''
+  2. Run the script:
+       python upload_accession_backup.py "excel_filepath"
+"""
 
 import os
 import sys
-import json
 import pandas as pd
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text, bindparam
 
-file_path = sys.argv[1]
+UNKNOWN_ACCESSION_ID = 7737034 
 
-supabase_url_prod = os.environ['SUPABASE_URL']
-supabase_key_prod = os.environ['SUPABASE_KEY']
-database_string_prod = os.environ['DATABASE_URL']
 
-df = pd.read_excel(file_path, sheet_name='Sheet1', header=0)
-df.columns = ['ACCESSION', 'BARCODE']
-df[['ACCESSION', 'BARCODE']] = df[['ACCESSION', 'BARCODE']].astype(str)
-engine = create_engine(database_string_prod)
+def main():
+    if len(sys.argv) < 2:
+        print("Usage: python upload_accession_backup.py <excel_filepath>")
+        sys.exit(1)
 
-for index, row in df.iterrows():
+    file_path = sys.argv[1]
+    db_url = os.environ.get("DATABASE_URL")
+    if not db_url:
+        print("ERROR: DATABASE_URL is not set.")
+        sys.exit(1)
+
+    df = pd.read_excel(file_path, sheet_name="Sheet1", header=0)
+    df.columns = ["ACCESSION", "BARCODE"]
+    df["ACCESSION"] = df["ACCESSION"].astype(str).str.strip()
+    df["BARCODE"] = df["BARCODE"].astype(str).str.strip()
+
+    barcodes = sorted(df["BARCODE"].dropna().unique().tolist())
+    accessions = sorted(df["ACCESSION"].dropna().unique().tolist())
+
+    engine = create_engine(db_url, future=True)
+
     with engine.begin() as conn:
-        result = conn.execute(
-            text("SELECT qr_code, accession_id FROM cyl_plants WHERE qr_code = :barcode"),
-            {"barcode": row["BARCODE"]}
-        ).fetchone()
+        plant_map = {}
+        if barcodes:
+            plant_rows = conn.execute(
+                text("SELECT qr_code, accession_id FROM cyl_plants WHERE qr_code IN :barcodes")
+                .bindparams(bindparam("barcodes", expanding=True)),
+                {"barcodes": barcodes},
+            ).fetchall()
+            plant_map = {qr: acc_id for qr, acc_id in plant_rows}
 
-        if result is None:
-            print(f"Barcode {row["BARCODE"]} is not found")
-        else:
-            qr_code, accession_id = result
-            if accession_id == 7737034:
-                print(f"Barcode {qr_code} is mapped to {accession_id}: Unknown")
-                print(f"{qr_code}: Updating Accesion...")
-                '''
-                Check if the accession record alreay exists in the accessions table, 
-                if not make new entry and link with the barcode 
-                else link bacrdoe to exitsing accessions
-                '''
-                existing_accession = conn.execute(
-                    text("SELECT * FROM accessions WHERE name = :accession"), {"accession":row["ACCESSION"]}
-                ).fetchone()
+        accession_map = {}
+        if accessions:
+            acc_rows = conn.execute(
+                text("SELECT id, name FROM accessions WHERE name IN :names")
+                .bindparams(bindparam("names", expanding=True)),
+                {"names": accessions},
+            ).fetchall()
+            accession_map = {name: acc_id for acc_id, name in acc_rows}
 
-                if existing_accession is None:
-                    accession_id = conn.execute(
-                        text("INSERT INTO accessions (name) VALUES (:accession) RETURNING id"),{"accession":row["ACCESSION"]}
-                    ).scalar()
+        updated, skipped, not_found = 0, 0, 0
 
-                else:
-                    accession_id, accession_name, created_at = existing_accession
+        for _, row in df.iterrows():
+            accession = row["ACCESSION"]
+            barcode = row["BARCODE"]
+
+            current_acc_id = plant_map.get(barcode)
+
+            if current_acc_id is None and barcode not in plant_map:
+                print(f" Barcode {barcode} is not found")
+                not_found += 1
+                continue
+
+            if current_acc_id == UNKNOWN_ACCESSION_ID or current_acc_id is None:
+                acc_id = accession_map.get(accession)
+                if acc_id is None:
+                    acc_id = conn.execute(
+                        text("INSERT INTO accessions (name) VALUES (:name) RETURNING id"),
+                        {"name": accession},
+                    ).scalar_one()
+                    accession_map[accession] = acc_id
 
                 conn.execute(
-                        text("UPDATE cyl_plants SET accession_id = :accession_id WHERE qr_code = :barcode"),{"accession_id": accession_id, "barcode": row["BARCODE"]}
+                    text("UPDATE cyl_plants SET accession_id = :acc_id WHERE qr_code = :qr"),
+                    {"acc_id": acc_id, "qr": barcode},
                 )
-                print(f"Updated accession_id {accession_id} for barcode {row['BARCODE']}")
+                plant_map[barcode] = acc_id
+                updated += 1
+                print(f"Updated {barcode} → accession {acc_id}")
             else:
-                print(f"Barcode {qr_code} is mapped to {accession_id}")
-                print(f"Valid Accession already present : {qr_code} Skip update")
+                skipped += 1
+                print(f" Barcode {barcode} already mapped to {current_acc_id}, skipping")
 
+        print("\nSummary:")
+        print(f" Updated: {updated}")
+        print(f" Skipped: {skipped}")
+        print(f" Not found: {not_found}")
+
+
+if __name__ == "__main__":
+    main()
