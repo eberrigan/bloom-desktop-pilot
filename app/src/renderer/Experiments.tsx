@@ -24,10 +24,12 @@ const getAccessionFiles = window.electron.electric.getAccessionFiles;
 
 const species = [
   "Amaranth",
+  "Alfalfa",
   "Arabidopsis",
   "Canola",
   "Lotus",
   "Maize",
+  "Medicago",
   "Pennycress",
   "Rice",
   "Soybean",
