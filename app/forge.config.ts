@@ -16,6 +16,9 @@ const config: ForgeConfig = {
       unpack: ["**/node_modules/sharp/**/*", "**/node_modules/@img/**/*"],
     },
     icon: "./src/assets/icon",
+    // Bundles Caddy's root CA so Node can validate bloom-dev's self-signed TLS
+    // until Let's Encrypt is wired up. Loaded via NODE_EXTRA_CA_CERTS in main.ts.
+    extraResource: ["./src/assets/bloom-caddy-root.crt"],
   },
   rebuildConfig: {},
   makers: [

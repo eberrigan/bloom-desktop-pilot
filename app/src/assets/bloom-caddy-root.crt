@@ -1,0 +1,15 @@
+PLACEHOLDER — REPLACE BEFORE BUILDING THE APP
+
+This file must contain Caddy's root CA certificate (PEM format,
+starting with `-----BEGIN CERTIFICATE-----`).
+
+To populate it, run on a machine with SSH access to bloom-dev:
+
+    ssh <user>@bloom-dev.salk.edu \
+      "docker exec bloom_v2_prod-caddy-1 cat /data/caddy/pki/authorities/local/root.crt" \
+      > app/src/assets/bloom-caddy-root.crt
+
+The cert is used by NODE_EXTRA_CA_CERTS in main.ts to trust Caddy's
+self-signed TLS endpoint at bloom-dev.salk.edu. Once Let's Encrypt
+is wired up on bloom-dev, this file (and the NODE_EXTRA_CA_CERTS
+line in main.ts) can be removed.
