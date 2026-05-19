@@ -1,0 +1,9 @@
+PLACEHOLDER — REPLACE BEFORE BUILDING THE APP
+
+This file must contain Caddy's root CA certificate (PEM format,
+starting with `-----BEGIN CERTIFICATE-----`).
+
+The cert is used by NODE_EXTRA_CA_CERTS in main.ts to trust Caddy's
+self-signed TLS endpoint at bloom-dev.salk.edu. Once Let's Encrypt
+is wired up on bloom-dev, this file (and the NODE_EXTRA_CA_CERTS
+line in main.ts) can be removed.

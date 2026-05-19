@@ -1,6 +1,14 @@
 import { app, BrowserWindow, dialog, ipcMain } from "electron";
 
 import path from "path";
+
+// Trust Caddy's self-signed root CA when talking to bloom-dev's TLS endpoints
+// (until Let's Encrypt is wired up). Must run before any HTTPS call.
+const caddyRootCertPath = app.isPackaged
+  ? path.join(process.resourcesPath, "bloom-caddy-root.crt")
+  : path.join(__dirname, "..", "..", "src", "assets", "bloom-caddy-root.crt");
+process.env.NODE_EXTRA_CA_CERTS = caddyRootCertPath;
+
 import { resolveHtmlPath } from "./util";
 // import { createBloomRetriever, getSupabaseJWT } from "./bloom";
 import * as os from "node:os";
