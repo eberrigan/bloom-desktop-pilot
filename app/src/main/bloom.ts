@@ -3,6 +3,7 @@ import path from "path";
 import * as os from "os";
 import * as yaml from "js-yaml";
 import { createClient } from "@supabase/supabase-js";
+import ws from "ws";
 // import { LocalStorage } from './local-storage';
 import type { SupabaseClient } from "@supabase/supabase-js";
 
@@ -71,7 +72,10 @@ async function getSupabaseClient() {
 
   const supabase = createClient<Database>(
     config.bloom_api_url,
-    config.bloom_anon_key
+    config.bloom_anon_key,
+    {
+      realtime: { transport: ws as any },
+    }
   );
   await supabase.auth.signInWithPassword(clientCredentials);
 
